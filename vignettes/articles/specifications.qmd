@@ -7,9 +7,9 @@ date-modified: today
 code-links: repo
 
 format: 
-  # esqlabs-typst: default
+  esqlabs-typst: default
   # esqlabs-docx: default
-  esqlabs-html: default
+  # esqlabs-html: default
 
 mermaid-format: svg
 ---
@@ -124,19 +124,19 @@ compound_1
 # -----------
 # - Parameters: ...
 
-coumpound_2 <- compound("Compound 2 Name")
+compound_2 <- compound("Compound 2 Name")
 ```
 
 
 ### Create and review DDI simulation
 
 ```r
-myDDI <- create_ddi("coumpound_1", "coumpound_2", [options])
+myDDI <- create_ddi("compound_1", "compound_2", [options])
 
 myDDI
 # DDI Simulation
 # --------------
-# - Compound 1: Coumpound 1 Name
+# - Compound 1: compound 1 Name
 # - Compound 2: Compound 2 Name
 # - Parameters: ...
 ```
