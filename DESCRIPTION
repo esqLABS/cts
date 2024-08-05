@@ -12,5 +12,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports: 
     ospsuite (>= 12.1.0)
-Remotes:  
+Remotes: 
     ospsuite=Open-Systems-Pharmacology/OSPSuite-R
+Config/Needs/website: rmarkdown
