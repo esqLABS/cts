@@ -15,7 +15,7 @@ editor:
     wrap: 72
 ---
 
-# add a setup chunk
+
 ```{r setup, include=FALSE}
 library(lobstr)
 library(jsonlite)
@@ -27,12 +27,12 @@ library(jsonlite)
 
 <!-- Briefly describe the project and its objectives. -->
 
-The project aims to develop a clinical trial simulator (**CTS**) for drug-drug
-interactions (DDI) for contraceptives using physiologically based
-pharmacokinetic (PBPK) models. The simulator will allow researchers to
-design and evaluate clinical DDI trials for contraceptive drugs in
-silico, reducing the time, cost, and ethical issues associated with
-human trials.
+The project aims to develop a clinical trial simulator (**CTS**) for
+drug-drug interactions (DDI) for contraceptives using physiologically
+based pharmacokinetic (PBPK) models. The simulator will allow
+researchers to design and evaluate clinical DDI trials for contraceptive
+drugs in silico, reducing the time, cost, and ethical issues associated
+with human trials.
 
 # Purpose
 
@@ -69,22 +69,21 @@ user interface (GUI) such as a shiny application.
 ## Inputs
 
 As inputs, the users select two compounds models available in the OSP
-model library.
-These compound model snapshots are standardised json files generated from PKSim
-and has this default structure:
+model library. These compound model snapshots are standardised json
+files generated from PKSim and has this default structure:
 
 ```{r, echo = FALSE}
 lobstr::tree(jsonlite::fromJSON("../../inst/extdata/model-snapshots/Rifampicin-Model.json", simplifyDataFrame = F), max_depth = 1)
 ```
 
-
 ## Outputs
 
-As outputs, the user will be able to get: 
+As outputs, the user will be able to get:
 
-- A snapshot of the DDI model, 
-- The results of the simulation, 
-- a simulation project file (.pkml) that can be used to run the simulation in PKSim.
+-   A snapshot of the DDI model,
+-   The results of the simulation,
+-   a simulation project file (.pkml) that can be used to run the
+    simulation in PKSim.
 
 ## Conditions
 
@@ -93,7 +92,8 @@ model library hosted on GitHub.
 
 ## Concept Map
 
-![Schematic representation of the {cts} concept](img/CTS-concept-map.png)
+![Schematic representation of the {cts}
+concept](img/CTS-concept-map.png)
 
 # Requirements
 
