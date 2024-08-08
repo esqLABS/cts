@@ -9,6 +9,7 @@
 get_buildingblocks_data <- function(url = buildingblocks_url) {
   check_internet()
 
+  # If the data is not already cached in `the` package environment, download it
   if (is.null(the$buildingblocks_data)) {
     cli_process_start(msg = "Listing Compounds Building Blocks from OSP")
     buildingblocks_data_raw <- jsonlite::fromJSON(url, simplifyDataFrame = FALSE)$Templates
