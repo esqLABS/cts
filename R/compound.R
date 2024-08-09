@@ -17,23 +17,28 @@
 #' }
 compound <- function(input) {
   if (is_file(input)) {
+
     source <- input
+
   } else if (is_url(input)) {
+
     check_internet()
 
     source <- input
-  } else {
-    rlang::arg_match(input, list_compounds(display = FALSE))
+
+  } else if (input %in% list_compounds(display = FALSE)) {
+
+    check_internet()
 
     source <- get_buildingblocks_data()[[input]]
 
-    check_internet()
+  } else {
 
-    cli_process_start("Downloading Compound Building Block")
+    cli_abort(message = c(x = "Invalid input type.", i = "Please provide a valid compound name, URL or path to a local file."))
+
   }
 
   snapshot <- jsonlite::fromJSON(source, simplifyDataFrame = FALSE)
-
 
   return(snapshot)
 }
