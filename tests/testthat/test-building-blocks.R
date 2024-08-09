@@ -14,9 +14,3 @@ test_that("available componds building blocks are listed", {
     expect_true(length(list_compounds()) > 0)
   })
 })
-
-test_that("download building block works", {
-  suppressMessages({
-    expect_true(is.list(compound("Rifampicin")))
-  })
-})

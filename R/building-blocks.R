@@ -11,7 +11,7 @@ get_buildingblocks_data <- function(url = buildingblocks_url) {
 
   # If the data is not already cached in `the` package environment, download it
   if (is.null(the$buildingblocks_data)) {
-    cli_process_start(msg = "Listing Compounds Building Blocks from OSP")
+    cli_process_start(msg = "Listing Compounds Building Blocks from OSP repositories")
     buildingblocks_data_raw <- jsonlite::fromJSON(url, simplifyDataFrame = FALSE)$Templates
     the$buildingblocks_data <-
       purrr::map(buildingblocks_data_raw, ~ .x$Url) %>%
@@ -33,32 +33,9 @@ list_compounds <- function(...) {
   compounds_names <- names(get_buildingblocks_data())
 
   args <- list(...)
-  if(!isFALSE(args$display)){
+  if (!isFALSE(args$display)) {
     cli_ul(compounds_names)
   }
 
   invisible(compounds_names)
-}
-
-
-#' Get an OSP Compound Building Block
-#'
-#' @param name character string with the name of the compound.
-#'
-#' @return a compound building block as a list
-#' @export
-#'
-#' @examples
-#' compound("Rifampicin")
-compound <- function(name) {
-  rlang::arg_match(name, list_compounds(display=FALSE))
-
-  url <- get_buildingblocks_data()[[name]]
-
-  check_internet()
-
-  cli_process_start("Downloading Compound Building Block")
-  snapshot <- jsonlite::fromJSON(url, simplifyDataFrame = FALSE)
-
-  return(snapshot)
 }
