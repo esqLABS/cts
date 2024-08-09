@@ -51,7 +51,7 @@ The project will focus on the development of an R package that will
 provide the features necessary to design and run DDI simulations between
 two compounds.
 
-This package is purely programmatic and will not include a graphical
+This package is purely a programming interface and will not include a graphical
 user interface (GUI) such as a shiny application.
 
 # Deliverables
@@ -69,7 +69,7 @@ user interface (GUI) such as a shiny application.
 ## Inputs
 
 As inputs, the users select two compounds models available in the OSP
-model library. These compound model snapshots are standardised json
+model library. These compound model snapshots are standardized json
 files generated from PKSim and has this default structure:
 
 ```{r, echo = FALSE}
@@ -92,8 +92,7 @@ model library hosted on GitHub.
 
 ## Concept Map
 
-![Schematic representation of the {cts}
-concept](img/CTS-concept-map.png)
+![Schematic representation of the {cts} concept](img/CTS-concept-map.png)
 
 # Requirements
 
