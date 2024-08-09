@@ -20,33 +20,45 @@ pak::pak("esqLABS/cts")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+### List available compounds building blocks
 
 ``` r
 library(cts)
-## basic example code
+
+# List available compounds building blocks
+list_compounds()
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+### Import compound snapshot
+
+#### From OSP qualified building blocks
 
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+rifampicin <- compound("Rifampicin")
+
+midazolam <- compound("Midazolam")
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
+#### From URL
 
-You can also embed plots, for example:
+``` r
+compound("https://raw.githubusercontent.com/Open-Systems-Pharmacology/Alfentanil-Model/v2.2/Alfentanil-Model.json")
+```
 
-<img src="man/figures/README-pressure-1.png" width="100%" />
+#### From File
 
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+``` r
+compound("path/to/Alfentanil-Model.json")
+```
+
+### Explore Compound
+
+``` r
+rifampicin$Formulations
+#> [[1]]
+#> [[1]]$Name
+#> [1] "Oral solution"
+#> 
+#> [[1]]$FormulationType
+#> [1] "Formulation_Dissolved"
+```
