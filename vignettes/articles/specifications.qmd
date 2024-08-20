@@ -1,20 +1,21 @@
 ---
 title: "Software Technical Specifications"
+subtitle: "Contraceptives DDI Trial Simulation Platform"
 author: "Félix MIL"
 institute: "ESQlabs Gmbh"
 date: 2024-08-01
 date-modified: today
 code-links: repo
 format: 
-  # esqlabs-typst: default
+  esqlabs-typst: default
   # esqlabs-docx: default
-  esqlabs-html: default
+  # esqlabs-html: default
+toc-depth: 2
 mermaid-format: svg
 editor: 
   markdown: 
     wrap: 72
 ---
-
 
 ```{r setup, include=FALSE}
 library(lobstr)
@@ -51,7 +52,7 @@ The project will focus on the development of an R package that will
 provide the features necessary to design and run DDI simulations between
 two compounds.
 
-This package is purely a programming interface and will not include a graphical
+This package is purely programmatic and will not include a graphical
 user interface (GUI) such as a shiny application.
 
 # Deliverables
@@ -68,9 +69,10 @@ user interface (GUI) such as a shiny application.
 
 ## Inputs
 
-As inputs, the users select two compounds models available in the OSP
-model library. These compound model snapshots are standardized json
-files generated from PKSim and has this default structure:
+As inputs, the users select two compounds models snapshot files (from
+the OSP model library or provided by the user). These compound model
+snapshots are standardised `.json` files generated from PKSim and have
+this default structure:
 
 ```{r, echo = FALSE}
 lobstr::tree(jsonlite::fromJSON("../../inst/extdata/model-snapshots/Rifampicin-Model.json", simplifyDataFrame = F), max_depth = 1)
@@ -80,19 +82,26 @@ lobstr::tree(jsonlite::fromJSON("../../inst/extdata/model-snapshots/Rifampicin-M
 
 As outputs, the user will be able to get:
 
--   A snapshot of the DDI model,
+-   A snapshot of the DDI model in json format,
 -   The results of the simulation,
--   a simulation project file (.pkml) that can be used to run the
-    simulation in PKSim.
-
-## Conditions
-
-The user needs an internet connection to retrieve models from the OSP
-model library hosted on GitHub.
+-   A set of essential PK statistics and figures that describe the DDI
+    simulation results,
+-   a simulation project file (.pkml) that can be opened PKSim.
 
 ## Concept Map
 
-![Schematic representation of the {cts} concept](img/CTS-concept-map.png)
+![Schematic representation of the {cts}
+concept](img/CTS-concept-map.png)
+
+## Conditions
+
+The user needs:
+
+-   A working R environment,
+-   An internet connection to install package and dependencies from
+    github and CRAN,
+-   An internet connection to retrieve models from the OSP model library
+    hosted on GitHub.
 
 # Requirements
 
@@ -102,10 +111,14 @@ As a user, I want to be able to:
 
 -   Easily install the package,
 -   Browse and select compounds from the OSP model library,
+-   Import compounds snapshots from a json file path or a url,
+-   Review the compound model parameters,
 -   Review the DDI model parameters,
+-   Parameterize some aspects of the DDI simulation
 -   Export the DDI model as a Project Snapshot,
--   Export the result of the DDI simulation,
--   Import a DDI model snapshot.
+-   Import a DDI model snapshot,
+-   Run the DDI simulation and export the results,
+-   Get a PK statistics summary from the simulation results.
 
 ## Technical requirements
 
@@ -144,13 +157,14 @@ compound_1
 # -----------
 # - Parameters: ...
 
-compound_2 <- compound("Compound 2 Name")
+compound_2 <- compound("path/to/local/snapshot.json")
+# compound_2 <- compound("https://url/to/snapshot.json")
 ```
 
 ### Create and review DDI simulation
 
 ``` r
-myDDI <- create_ddi("compound_1", "compound_2", [options])
+myDDI <- create_ddi(compound_1, compound_2, [options])
 
 myDDI
 # DDI Simulation
@@ -160,16 +174,36 @@ myDDI
 # - Parameters: ...
 ```
 
-### Export the DDI simulation as snapshot/project
+### Parameterize DDI simulation
 
 ``` r
-export_ddi(myDDI, name = "myDDI", format = "snapshot")
+protocol_1 <- protocol(dose = 250, dose_unit = "mg", start = 0, end = 30, interval = 1, time_unit = "days")
+
+set_protocol(myDDI, compound = "Compound 1 Name", protocol = protocol_1)
+
+individual <- individual(sex, age, weight, height, ...)
+
+set_individual(myDDI, individual = individual)
 ```
 
-### Run the DDI simulation
+### Run the DDI simulation and export results in several formats
 
 ``` r
-run_ddi(myDDI, path = "path/to/output", format = "csv", pkml = TRUE)
+run_ddi(myDDI, path = "path/to/output", 
+        format = "csv", # export format
+        pkml = TRUE, # export simulations as pkml files
+        plots = TRUE,  # generate plots
+        stats = TRUE # computes PK statistics
+        )
+```
+
+### Export the DDI simulation as snapshot and/or project
+
+``` r
+export_ddi(myDDI, name = "myDDI", 
+           snapshot = TRUE, # exports snapshot .json file
+           project = TRUE # exports .pksim5 file
+           )
 ```
 
 # Architecture
@@ -203,6 +237,7 @@ charge of:
 -   Interacting with the OSP model library and retrieve the available
     models,
 -   Merging model snapshots (json files) into one.
+-   Generating figures and pk statistics from the simulation results.
 
 ### `{ospsuite}` R package
 
@@ -213,10 +248,10 @@ for this project can benefit the whole {ospsuite} package and its users.
 
 Thus, the `{ospsuite}` package will be extended in order to provide:
 
--   A convenient interface with PKSimCore for running simulations from
-    snapshot files,
--   A convenient interface with PKSimCore to export simulations files
-    (.pkml) from a snapshots.
+-   A convenient interface with PKSimCore for running simulations and export 
+    results from snapshot files,
+-   A convenient interface with PKSimCore to export project file `.pksim5` files
+    from snapshot files.
 
 ### `{rSharp}`
 
@@ -232,11 +267,6 @@ will be modified to be exposed and be in charge of:
 -   Running the simulation from snapshot files,
 -   Exporting simulations files (.pkml) from a snapshot file.
 
-```{=html}
-<!-- ## Data Flow
-
-Outline how data will flow through the system. -->
-```
 # Dependencies
 
 ## R Version
@@ -251,8 +281,8 @@ required version.
 <!-- List any external R packages or system dependencies. -->
 
 There is no predefined list or restrictions in using other R packages so
-any required packaged will be added as dependency while keeping their
-number as low as possible.
+any required packages will be added as dependency. Although, keeping a number of
+dependency as low as possible will be an important consideration.
 
 Except for the OSP and ESQlabs R packages, all other dependencies must
 be available on CRAN.
@@ -314,26 +344,76 @@ roxygen2 and will only be accessible from the source code.
 ## Anticipations of future developments
 
 The proposed architecture and workflow have been designed to be flexible
-and extensible with anticipated features in mind. These include:
-
--   Picking some parameters from one compound or another during the
-    snapshot merging process,
--   Designing custom administration protocols,
--   Including figure generation in the simulation results.
+and extensible for other features like advanced model parameterization or 
+administration protocols.
 
 ## Graphical User Interface
 
-The `{cts}` package is first thought as a standalone programing
-interface concentrating all the business logic. This both enable code
-only approach and the possibility to integrate the package in a shiny
-application that would provide a convenient graphical user interface.
+The `{cts}` package is first thought as a standalone programming
+interface concentrating the logic and scientific basis of the project. 
+This both enable code-based usage of the package and the possibility to 
+integrate it in a shiny application that would provide a convenient 
+graphical user interface.
 
-# Work
+# Work Organization
 
-## Estimates and Timeline
+## Feature Implementation Matrix
 
-<!-- Provide a high-level project timeline with major milestones. -->
+The following matrix aims to prioritize the features to be implemented
+based on their resulting value, complexity and uncertainty. A priority
+score is obtained by summing these three values.
+
+| Feature                                      | Value | Complexity | Uncertainty | Priority Score |
+|:-------------------|------------:|------------:|------------:|------------:|
+| Merge snapshots                              |     3 |          3 |           3 |              9 |
+| PKSIM Core integration and {ospsuite} update |     3 |          3 |           2 |              8 |
+| Review and modify merged snapshot            |     2 |          3 |           2 |              7 |
+| Export simulation results                    |     2 |          2 |           2 |              6 |
+| Run DDI simulations                          |     3 |          1 |           1 |              5 |
+| Browse and import json snapshots             |     3 |          0 |           1 |              4 |
+| Export and Import DDI snapshots              |     3 |          1 |           0 |              4 |
+| Create Figures from Results                  |     1 |          2 |           0 |              3 |
+| Create PK summary from Results               |     1 |          2 |           0 |              3 |
+| Review input snapshots parameters            |     2 |          1 |           0 |              2 |
 
 ## Phases
 
 <!-- Break down the development process into phases (e.g., planning, development, testing, deployment). -->
+
+Development phases are organized based on the priority score and feature
+dependencies. Event if they are planned sequentially, some tasks will be
+worked on in parallel.
+
+### Phase 1: Foundations (Total score: 21)
+
+-   Snapshot Import
+-   PKSim Core integration and {ospsuite} update
+-   Snapshot merge
+
+### Phase 2: Output generations (Total score: 15)
+
+-   Run and export results
+-   Export and import DDI snapshot
+
+### Phase 3: Review and Customization (Total score: 9)
+
+-   Review input snapshots parameters
+-   Review DDI parameters
+-   Parameterize DDI
+
+### Phase 4: Reporting (Total score: 6)
+
+-   Figures
+-   PK statistics
+
+## Milestones and Deadline
+
+<!-- Provide a high-level project timeline with major milestones. -->
+
+Milestones are set at each phase completion. Each time a milestone is
+reached, a meeting will be proposed to the client to demo the new
+features, discuss and gather feedback.
+
+There are no time estimates for each phase completion.
+
+The project is planned to be completed 31th of October 2024.
