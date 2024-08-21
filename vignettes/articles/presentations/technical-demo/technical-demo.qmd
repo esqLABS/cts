@@ -6,8 +6,14 @@ date-modified: today
 author: Felix MIL
 institute: |
   ![](https://esqlabs.com/wp-content/uploads/2018/05/ESQLABS_final_600px.png){height=100}
+embed-resources: true
 format: esqlabs-revealjs
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+library(cts)
+```
 
 # 🚩 Introduction
 
@@ -23,7 +29,6 @@ format: esqlabs-revealjs
 ![Rob M. - C# Dev](img/Rob.png){style="border-radius: 50%;" width="40%"}
 
 ![Rudolf E. - R Dev](img/Rudolf.png){style="border-radius: 50%;" width="40%"}
-
 :::
 
 ## 🌐 Project Overview
@@ -53,7 +58,7 @@ Develop a clinical trial simulator (**CTS**) for drug-drug interactions (DDI) fo
 
 # Concept {.smaller}
 
----
+------------------------------------------------------------------------
 
 ### 📥 Inputs
 
@@ -91,7 +96,6 @@ Compound models snapshots (`.json` files) from:
 -   Run the DDI simulation and export the results,
 -   Get a PK statistics summary from the simulation results.
 
-
 ## ⚙️ Technical requirements
 
 -   The package must be testable on different environments,
@@ -113,17 +117,33 @@ library(cts)
 
 ## Browse, get and review OSP Model Library
 
-``` r
+```{r, eval = FALSE}
 list_compounds()
-# [1] "Compound 1 Name" "Compound 2 Name" "Compound 3 Name"
+```
 
-compound_1 <- compound("Compound 1 Name")
+```{r, echo=FALSE}
+cat("
+      • Alfentanil
+      • Alprazolam
+      • Amikacin
+      • Atazanavir
+      • Carbamazepine
+      • Cimetidine
+      • Clarithromycin
+      • Dapagliflozin
+      • Efavirenz
+      ...")
+```
 
-compound_1
-# Compound 1 Name
-# -----------
-# - Parameters: ...
+## Import compounds from OSP model library or file
 
+```{r}
+rifampicin <- compound("Rifampicin")
+
+str(rifampicin,max.level = 1)
+```
+
+``` r
 compound_2 <- compound("path/to/local/snapshot.json")
 # compound_2 <- compound("https://url/to/snapshot.json")
 ```
@@ -131,7 +151,7 @@ compound_2 <- compound("path/to/local/snapshot.json")
 ## Create and review DDI simulation
 
 ``` r
-myDDI <- create_ddi(compound_1, compound_2, [options])
+myDDI <- create_ddi(rifampicin, compound_2, [options])
 
 myDDI
 # DDI Simulation
@@ -164,7 +184,6 @@ run_ddi(myDDI, path = "path/to/output",
         )
 ```
 
-
 ## Export the DDI simulation as snapshot and/or project
 
 ``` r
@@ -173,3 +192,11 @@ export_ddi(myDDI, name = "myDDI",
            project = TRUE # exports .pksim5 file
            )
 ```
+
+# 📄 Technical Specifications Document
+
+------------------------------------------------------------------------
+
+![](img/tech-specs-doc.png){fig-align="center" width="40%"}
+
+# ❓Q&A
