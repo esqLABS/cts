@@ -1,0 +1,175 @@
+---
+title: "Technical Demo"
+subtitle: "Contraceptives DDI Trial Simulation Platform"
+date: 2024-08-27
+date-modified: today
+author: Felix MIL
+institute: |
+  ![](https://esqlabs.com/wp-content/uploads/2018/05/ESQLABS_final_600px.png){height=100}
+format: esqlabs-revealjs
+---
+
+# 🚩 Introduction
+
+## 👥 Presentations
+
+::: {layout-ncol="3"}
+![Pavel B. - Lead Scientist](img/Pavel.png){style="border-radius: 50%;" width="40%"}
+
+![Felix M. - Project Lead/R Dev.](img/Felix.png){style="border-radius: 50%;" width="40%"}
+
+![Diane L. - Scientist/R Dev](img/Diane.png){style="border-radius: 50%;" width="40%"}
+
+![Rob M. - C# Dev](img/Rob.png){style="border-radius: 50%;" width="40%"}
+
+![Rudolf E. - R Dev](img/Rudolf.png){style="border-radius: 50%;" width="40%"}
+
+:::
+
+## 🌐 Project Overview
+
+### 🎯 Goal
+
+Develop a clinical trial simulator (**CTS**) for drug-drug interactions (DDI) for contraceptives using physiologically based pharmacokinetic (PBPK) models snapshots.
+
+### 📍 Scope
+
+-   R package
+-   Programming Interface
+
+### 📅 Deadline
+
+31th October 2024
+
+------------------------------------------------------------------------
+
+### 📦 Deliverables
+
+-   R package
+-   User documentation
+-   Test suite
+-   Continuous integration workflows (GitHub Actions)
+-   Git repository with entire history
+
+# Concept {.smaller}
+
+---
+
+### 📥 Inputs
+
+Compound models snapshots (`.json` files) from:
+
+-   OSP model library (hosted on GitHub)
+-   Local file or url
+
+### 📤 Outputs
+
+-   DDI model snapshot (`.json`) or project (`.pksim5`)
+-   Simulation results (`.csv`)
+-   Simulation file (`.pkml`)
+-   PK statistics summary
+-   Figures
+
+------------------------------------------------------------------------
+
+### 🗺️ Concept Map
+
+![](../../img/CTS-concept-map.png){fig-align="center"}
+
+# ✅Requirements {.smaller}
+
+## 👥 User Requirements
+
+-   Easily install the package,
+-   Browse and select compounds from the OSP model library,
+-   Import compounds snapshots from a json file path or a url,
+-   Review the compound model parameters,
+-   Review the DDI model parameters,
+-   Parameterize some aspects of the DDI simulation
+-   Export the DDI model as a Project Snapshot,
+-   Import a DDI model snapshot,
+-   Run the DDI simulation and export the results,
+-   Get a PK statistics summary from the simulation results.
+
+
+## ⚙️ Technical requirements
+
+-   The package must be testable on different environments,
+-   The codebase must be versioned, revertable and tracable.
+-   The development environment must be reproducable.
+
+# 🧑‍💻 User Experience
+
+## Install and load the package
+
+The package can be installed from GitHub using the following command:
+
+``` r
+install.packages("pak")
+pak::pak("esqlabs/cts")
+
+library(cts)
+```
+
+## Browse, get and review OSP Model Library
+
+``` r
+list_compounds()
+# [1] "Compound 1 Name" "Compound 2 Name" "Compound 3 Name"
+
+compound_1 <- compound("Compound 1 Name")
+
+compound_1
+# Compound 1 Name
+# -----------
+# - Parameters: ...
+
+compound_2 <- compound("path/to/local/snapshot.json")
+# compound_2 <- compound("https://url/to/snapshot.json")
+```
+
+## Create and review DDI simulation
+
+``` r
+myDDI <- create_ddi(compound_1, compound_2, [options])
+
+myDDI
+# DDI Simulation
+# --------------
+# - Compound 1: compound 1 Name
+# - Compound 2: Compound 2 Name
+# - Parameters: ...
+```
+
+## Parameterize DDI simulation
+
+``` r
+protocol_1 <- protocol(dose = 250, dose_unit = "mg", start = 0, end = 30, interval = 1, time_unit = "days")
+
+set_protocol(myDDI, compound = "Compound 1 Name", protocol = protocol_1)
+
+individual <- individual(sex, age, weight, height, ...)
+
+set_individual(myDDI, individual = individual)
+```
+
+## Run the DDI simulation and export results in several formats
+
+``` r
+run_ddi(myDDI, path = "path/to/output", 
+        format = "csv", # export format
+        pkml = TRUE, # export simulations as pkml files
+        plots = TRUE,  # generate plots
+        stats = TRUE # computes PK statistics
+        )
+```
+
+
+## Export the DDI simulation as snapshot and/or project
+
+``` r
+export_ddi(myDDI, name = "myDDI", 
+           snapshot = TRUE, # exports snapshot .json file
+           project = TRUE # exports .pksim5 file
+           )
+```
