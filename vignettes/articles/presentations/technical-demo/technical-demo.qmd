@@ -22,19 +22,24 @@ library(cts)
 ```{css, echo=FALSE}
 .portrait {
   border-radius: 50%;
+  width: 150px;
 }
 ```
 
-::: {layout-ncol="3"}
-![Pavel B. - Lead Scientist](img/Pavel.png){.portrait width="50%"}
+::: {layout-ncol="4"}
+![Pavel B. \| Lead Scientist](img/Pavel.png){.portrait}
 
-![Felix M. - Project Lead/R Dev](img/Felix.png){.portrait width="50%"}
+![Felix M. \| Project Lead, R Dev](img/Felix.png){.portrait}
 
-![Diane L. - Scientist/R Dev](img/Diane.png){.portrait width="50%"}
+![Laura K. \| Operations Manager](img/Laura.png){.portrait}
 
-![Rob M. - C# Dev](img/Rob.png){.portrait width="50%"}
+![Jérémy P. \| Senior Scientist](img/jeremy.png){.portrait}
 
-![Rudolf E. - R Dev](img/Rudolf.png){.portrait width="50%"}
+![Diane L. \| Scientist, R Dev](img/Diane.png){.portrait}
+
+![Robert M. \| C# Dev](img/Rob.png){.portrait}
+
+![Rudolf E. \| R Dev](img/Rudolf.png){.portrait}
 :::
 
 ## 🌐 Project Overview
@@ -108,6 +113,12 @@ Compound models snapshots (`.json` files) from:
 -   The package must be testable on different environments,
 -   The codebase must be versioned, revertable and tracable.
 -   The development environment must be reproducable.
+
+# 🏛️ Architecture
+
+------------------------------------------------------------------------
+
+![](../../img/CTS-architecture.png){fig-align="center"}
 
 # 🧑‍💻 User Experience
 
@@ -231,16 +242,16 @@ export_ddi(myDDI, name = "myDDI",
 -   Figures
 -   PK statistics
 
-#  🔄 Feedback Loop
+# 🔄 Feedback Loop
 
 ------------------------------------------------------------------------
 
 ### Agile Software Development
 
-- Iterative and incrementatl implementation
-- Early and continuous deliveries,
-- Flexible planning and adaptive scope,
-- Continuous feedback and improvement through client collaboration.
+-   Iterative and incrementatl implementation
+-   Early and continuous deliveries,
+-   Flexible planning and adaptive scope,
+-   Continuous feedback and improvement through client collaboration.
 
 ➡️ Technical Demo will be proposed at each phase end.
 
@@ -249,6 +260,5 @@ export_ddi(myDDI, name = "myDDI",
 ------------------------------------------------------------------------
 
 ![](img/tech-specs-doc.png){fig-align="center" width="40%"}
-
 
 # ❓Q&A
