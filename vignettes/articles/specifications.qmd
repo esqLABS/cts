@@ -53,7 +53,7 @@ provide the features necessary to design and run DDI simulations between
 two compounds.
 
 This package is purely programmatic and will not include a graphical
-user interface (GUI) such as a shiny application.
+user interface (GUI) such as a Shiny application.
 
 # Deliverables
 
@@ -63,15 +63,15 @@ user interface (GUI) such as a shiny application.
 -   User documentation
 -   Test suite
 -   Continuous integration workflows (GitHub Actions)
--   Git repository with entire history
+-   Git repository with the entire history
 
 # Concept
 
 ## Inputs
 
-As inputs, the users select two compounds models snapshot files (from
-the OSP model library or provided by the user). These compound model
-snapshots are standardised `.json` files generated from PKSim and have
+As inputs, the users select two compound model snapshot files (from the
+OSP model library or provided by the user). These compound model
+snapshots are standardized `.json` files generated from PKSim and have
 this default structure:
 
 ```{r, echo = FALSE}
@@ -86,7 +86,7 @@ As outputs, the user will be able to get:
 -   The results of the simulation,
 -   A set of essential PK statistics and figures that describe the DDI
     simulation results,
--   a simulation project file (.pkml) that can be opened PKSim.
+-   A simulation project file (.pkml) that can be opened in PKSim.
 
 ## Concept Map
 
@@ -98,8 +98,8 @@ concept](img/CTS-concept-map.png)
 The user needs:
 
 -   A working R environment,
--   An internet connection to install package and dependencies from
-    github and CRAN,
+-   An internet connection to install packages and dependencies from
+    GitHub and CRAN,
 -   An internet connection to retrieve models from the OSP model library
     hosted on GitHub.
 
@@ -111,10 +111,10 @@ As a user, I want to be able to:
 
 -   Easily install the package,
 -   Browse and select compounds from the OSP model library,
--   Import compounds snapshots from a json file path or a url,
+-   Import compound snapshots from a json file path or a URL,
 -   Review the compound model parameters,
 -   Review the DDI model parameters,
--   Parameterize some aspects of the DDI simulation
+-   Parameterize some aspects of the DDI simulation,
 -   Export the DDI model as a Project Snapshot,
 -   Import a DDI model snapshot,
 -   Run the DDI simulation and export the results,
@@ -123,13 +123,13 @@ As a user, I want to be able to:
 ## Technical requirements
 
 -   The package must be testable on different environments,
--   The codebase must be versioned, revertable and tracable.
--   The development environment must be reproducable.
+-   The codebase must be versioned, revertible, and traceable,
+-   The development environment must be reproducible.
 
 # User Experience
 
 ::: callout-note
-The pseudo code snippets below are illustrative and do not represent the
+The pseudocode snippets below are illustrative and do not represent the
 final implementation as technical details can impact it.
 :::
 
@@ -205,6 +205,7 @@ export_ddi(myDDI, name = "myDDI",
            project = TRUE # exports .pksim5 file
            )
 ```
+### Export the DDI simulation as a snapshot and/or project
 
 # Architecture
 
@@ -234,29 +235,30 @@ charge of:
 -   Being the main interface between the user and the workflow,
 -   Orchestrating the different components to provide a complete
     workflow,
--   Interacting with the OSP model library and retrieve the available
+-   Interacting with the OSP model library and retrieving the available
     models,
--   Merging model snapshots (json files) into one.
--   Generating figures and pk statistics from the simulation results.
+-   Merging model snapshots (json files) into one,
+-   Generating figures and PK statistics from the simulation results.
 
 ### `{ospsuite}` R package
 
 The `{ospsuite}` package already contains the necessary tools to
-interact with the `{rSharp}` package wich will be necessary to interact
-with the PKSim Core. Moreover, the features that need to be implemented
-for this project can benefit the whole {ospsuite} package and its users.
+interact with the `{rSharp}` package, which will be necessary to
+interact with the PKSim Core. Moreover, the features that need to be
+implemented for this project can benefit the whole `{ospsuite}` package
+and its users.
 
 Thus, the `{ospsuite}` package will be extended in order to provide:
 
--   A convenient interface with PKSimCore for running simulations and export 
-    results from snapshot files,
--   A convenient interface with PKSimCore to export project file `.pksim5` files
-    from snapshot files.
+-   A convenient interface with PKSimCore for running simulations and
+    exporting results from snapshot files,
+-   A convenient interface with PKSimCore to export project file
+    `.pksim5` files from snapshot files.
 
 ### `{rSharp}`
 
-The `{rSharp}` already contains all the necessary tools act as a bridge
-between R and the C# core of PKSim.
+The `{rSharp}` already contains all the necessary tools to act as a
+bridge between R and the C# core of PKSim.
 
 ### PKSim Core
 
@@ -265,7 +267,7 @@ actions. However, as they were not planned to be used this way, they
 will be modified to be exposed and be in charge of:
 
 -   Running the simulation from snapshot files,
--   Exporting simulations files (.pkml) from a snapshot file.
+-   Exporting simulation files (.pkml) from a snapshot file.
 
 # Dependencies
 
@@ -273,30 +275,31 @@ will be modified to be exposed and be in charge of:
 
 <!-- Specify the minimum R version required. -->
 
-Development will start with R version 4.4.0 and is set as minimum
+Development will start with R version 4.4.0 and is set as the minimum
 required version.
 
 ## Other R packages
 
 <!-- List any external R packages or system dependencies. -->
 
-There is no predefined list or restrictions in using other R packages so
-any required packages will be added as dependency. Although, keeping a number of
-dependency as low as possible will be an important consideration.
+There is no predefined list or restriction in using other R packages, so
+any required packages will be added as a dependency. Although, keeping
+the number of dependencies as low as possible will be an important
+consideration.
 
 Except for the OSP and ESQlabs R packages, all other dependencies must
 be available on CRAN.
 
 ## External Dependencies
 
-As the framework is based on {ospsuite} and {rSharp}, two external
+As the framework is based on `{ospsuite}` and `{rSharp}`, two external
 dependencies are required:
 
 -   DotNet Runtime
--   C++ redisttributable
+-   C++ redistributable
 
 Instructions for installing these dependencies on Windows and Ubuntu can
-be foud
+be found
 [here](https://github.com/Open-Systems-Pharmacology/OSPSuite-R?tab=readme-ov-file#installation).
 
 # Testing and Quality Assurance
@@ -305,7 +308,7 @@ be foud
 
 <!-- Describe the overall testing strategy, including types of tests to be performed. -->
 
--   Create Unit tests for all objects and functions defined in the
+-   Create unit tests for all objects and functions defined in the
     package,
 -   Minimum test coverage: 80%
 
@@ -325,8 +328,8 @@ be foud
 
 User documentation will be provided in two forms:
 
--   Function references describing the functions purpose, arguments and
-    return values using the roxygen2 format.
+-   Function references describing the function's purpose, arguments,
+    and return values using the roxygen2 format,
 -   Vignettes describing the package usage and workflow.
 
 All documentation will be accessible directly from R using the `help()`
@@ -336,7 +339,7 @@ function.
 
 <!-- Specify any internal documentation for developers (e.g., API documentation). -->
 
-Functions and classes that are not exported will be documented using the
+Functions and classes that are not exported will be documented using
 roxygen2 and will only be accessible from the source code.
 
 # Further Considerations
@@ -344,15 +347,15 @@ roxygen2 and will only be accessible from the source code.
 ## Anticipations of future developments
 
 The proposed architecture and workflow have been designed to be flexible
-and extensible for other features like advanced model parameterization or 
-administration protocols.
+and extensible for other features like advanced model parameterization
+or administration protocols.
 
 ## Graphical User Interface
 
-The `{cts}` package is first thought as a standalone programming
-interface concentrating the logic and scientific basis of the project. 
-This both enable code-based usage of the package and the possibility to 
-integrate it in a shiny application that would provide a convenient 
+The `{cts}` package is first thought of as a standalone programming
+interface concentrating the logic and scientific basis of the project.
+This both enables code-based usage of the package and the possibility to
+integrate it in a Shiny application that would provide a convenient
 graphical user interface.
 
 # Work Organization
@@ -360,34 +363,34 @@ graphical user interface.
 ## Feature Implementation Matrix
 
 The following matrix aims to prioritize the features to be implemented
-based on their resulting value, complexity and uncertainty. A priority
+based on their resulting value, complexity, and uncertainty. A priority
 score is obtained by summing these three values.
 
-| Feature                                      | Value | Complexity | Uncertainty | Priority Score |
-|:-------------------|------------:|------------:|------------:|------------:|
-| Merge snapshots                              |     3 |          3 |           3 |              9 |
-| PKSIM Core integration and {ospsuite} update |     3 |          3 |           2 |              8 |
-| Review and modify merged snapshot            |     2 |          3 |           2 |              7 |
-| Export simulation results                    |     2 |          2 |           2 |              6 |
-| Run DDI simulations                          |     3 |          1 |           1 |              5 |
-| Browse and import json snapshots             |     3 |          0 |           1 |              4 |
-| Export and Import DDI snapshots              |     3 |          1 |           0 |              4 |
-| Create Figures from Results                  |     1 |          2 |           0 |              3 |
-| Create PK summary from Results               |     1 |          2 |           0 |              3 |
-| Review input snapshots parameters            |     2 |          1 |           0 |              2 |
+| Feature                                        | Value | Complexity | Uncertainty | Priority Score |
+|:--------------------------|----------:|----------:|----------:|----------:|
+| Merge snapshots                                |     3 |          3 |           3 |              9 |
+| PKSim Core integration and `{ospsuite}` update |     3 |          3 |           2 |              8 |
+| Review and modify merged snapshot              |     2 |          3 |           2 |              7 |
+| Export simulation results                      |     2 |          2 |           2 |              6 |
+| Run DDI simulations                            |     3 |          1 |           1 |              5 |
+| Browse and import json snapshots               |     3 |          0 |           1 |              4 |
+| Export and Import DDI snapshots                |     3 |          1 |           0 |              4 |
+| Create Figures from Results                    |     1 |          2 |           0 |              3 |
+| Create PK summary from Results                 |     1 |          2 |           0 |              3 |
+| Review input snapshot parameters               |     2 |          1 |           0 |              2 |
 
 ## Phases
 
 <!-- Break down the development process into phases (e.g., planning, development, testing, deployment). -->
 
 Development phases are organized based on the priority score and feature
-dependencies. Event if they are planned sequentially, some tasks will be
+dependencies. Even if they are planned sequentially, some tasks will be
 worked on in parallel.
 
 ### Phase 1: Foundations (Total score: 21)
 
 -   Snapshot Import
--   PKSim Core integration and {ospsuite} update
+-   PKSim Core integration and `{ospsuite}` update
 -   Snapshot merge
 
 ### Phase 2: Output generations (Total score: 15)
@@ -397,7 +400,7 @@ worked on in parallel.
 
 ### Phase 3: Review and Customization (Total score: 9)
 
--   Review input snapshots parameters
+-   Review input snapshot parameters
 -   Review DDI parameters
 -   Parameterize DDI
 
@@ -411,10 +414,10 @@ worked on in parallel.
 The project will be carried out using the Agile approach for software
 development. This implies:
 
-- Iterative and incremental implementations
-- Early and continuous deliveries,
-- Flexible planning and adaptive scope,
-- Continuous feedback and improvement through client collaboration.
+-   Iterative and incremental implementations,
+-   Early and continuous deliveries,
+-   Flexible planning and adaptive scope,
+-   Continuous feedback and improvement through client collaboration.
 
 ## Milestones and Deadline
 
@@ -426,4 +429,4 @@ features, discuss and gather feedback.
 
 There are no time estimates for each phase completion.
 
-The project is planned to be completed 31th of October 2024.
+The project is planned to be completed by the 31st of October 2024.
