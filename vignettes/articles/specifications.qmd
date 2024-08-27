@@ -406,6 +406,16 @@ worked on in parallel.
 -   Figures
 -   PK statistics
 
+## Methodology
+
+The project will be carried out using the Agile approach for software
+development. This implies:
+
+- Iterative and incremental implementations
+- Early and continuous deliveries,
+- Flexible planning and adaptive scope,
+- Continuous feedback and improvement through client collaboration.
+
 ## Milestones and Deadline
 
 <!-- Provide a high-level project timeline with major milestones. -->
