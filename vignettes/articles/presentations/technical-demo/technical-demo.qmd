@@ -19,16 +19,22 @@ library(cts)
 
 ## 👥 Presentations
 
+```{css, echo=FALSE}
+.portrait {
+  border-radius: 50%;
+}
+```
+
 ::: {layout-ncol="3"}
-![Pavel B. - Lead Scientist](img/Pavel.png){style="border-radius: 50%;" width="40%"}
+![Pavel B. - Lead Scientist](img/Pavel.png){.portrait width="50%"}
 
-![Felix M. - Project Lead/R Dev.](img/Felix.png){style="border-radius: 50%;" width="40%"}
+![Felix M. - Project Lead/R Dev](img/Felix.png){.portrait width="50%"}
 
-![Diane L. - Scientist/R Dev](img/Diane.png){style="border-radius: 50%;" width="40%"}
+![Diane L. - Scientist/R Dev](img/Diane.png){.portrait width="50%"}
 
-![Rob M. - C# Dev](img/Rob.png){style="border-radius: 50%;" width="40%"}
+![Rob M. - C# Dev](img/Rob.png){.portrait width="50%"}
 
-![Rudolf E. - R Dev](img/Rudolf.png){style="border-radius: 50%;" width="40%"}
+![Rudolf E. - R Dev](img/Rudolf.png){.portrait width="50%"}
 :::
 
 ## 🌐 Project Overview
@@ -83,14 +89,15 @@ Compound models snapshots (`.json` files) from:
 
 # ✅Requirements {.smaller}
 
-## 👥 User Requirements
+## 👤 User Requirements
 
 -   Easily install the package,
 -   Browse and select compounds from the OSP model library,
 -   Import compounds snapshots from a json file path or a url,
 -   Review the compound model parameters,
 -   Review the DDI model parameters,
--   Parameterize some aspects of the DDI simulation
+-   Parameterize some aspects of the DDI simulation,
+-   Define Study Design,
 -   Export the DDI model as a Project Snapshot,
 -   Import a DDI model snapshot,
 -   Run the DDI simulation and export the results,
@@ -122,6 +129,7 @@ list_compounds()
 ```
 
 ```{r, echo=FALSE}
+#| output-location: default
 cat("
       • Alfentanil
       • Alprazolam
@@ -142,6 +150,8 @@ rifampicin <- compound("Rifampicin")
 
 str(rifampicin,max.level = 1)
 ```
+
+. . .
 
 ``` r
 compound_2 <- compound("path/to/local/snapshot.json")
@@ -193,10 +203,52 @@ export_ddi(myDDI, name = "myDDI",
            )
 ```
 
+# 🔢 Development Phases
+
+------------------------------------------------------------------------
+
+### 🏗️ Phase 1: Foundations
+
+-   Snapshot Import
+-   PKSim Core integration and {ospsuite} update
+-   Snapshot merge
+
+### 🚀️ Phase 2: Output generations
+
+-   Run and export results
+-   Export and import DDI snapshot
+
+------------------------------------------------------------------------
+
+### ✏️ Phase 3: Review and Customization
+
+-   Review input snapshots parameters
+-   Review DDI parameters
+-   Parameterize DDI
+
+### 📊 Phase 4: Reporting
+
+-   Figures
+-   PK statistics
+
+#  🔄 Feedback Loop
+
+------------------------------------------------------------------------
+
+### Agile Software Development
+
+- Iterative and incrementatl implementation
+- Early and continuous deliveries,
+- Flexible planning and adaptive scope,
+- Continuous feedback and improvement through client collaboration.
+
+➡️ Technical Demo will be proposed at each phase end.
+
 # 📄 Technical Specifications Document
 
 ------------------------------------------------------------------------
 
 ![](img/tech-specs-doc.png){fig-align="center" width="40%"}
+
 
 # ❓Q&A
