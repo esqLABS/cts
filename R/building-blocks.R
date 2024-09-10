@@ -6,13 +6,13 @@
 #'
 #' @noRd
 #' @keywords internal
-get_buildingblocks_data <- function(url = buildingblocks_url) {
+get_buildingblocks_data <- function() {
   check_internet()
 
   # If the data is not already cached in `the` package environment, download it
   if (is.null(the$buildingblocks_data)) {
-    cli_process_start(msg = "Listing Compounds Building Blocks from OSP repositories")
-    buildingblocks_data_raw <- jsonlite::fromJSON(url, simplifyDataFrame = FALSE)$Templates
+    cli_process_start(msg = "Listing Compounds Building Blocks available in {cli::style_hyperlink(text = 'OSP repositories', url = buildingblocks_url)}")
+    buildingblocks_data_raw <- jsonlite::fromJSON(buildingblocks_url, simplifyDataFrame = FALSE)$Templates
     the$buildingblocks_data <-
       purrr::map(buildingblocks_data_raw, ~ .x$Url) %>%
       purrr::set_names(purrr::map_vec(buildingblocks_data_raw, ~ .x$Name))

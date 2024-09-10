@@ -32,13 +32,15 @@ compound <- function(input) {
 
     source <- get_buildingblocks_data()[[input]]
 
+    cli_process_start(msg = "Downloading {input} Building Block Data")
+
   } else {
 
     cli_abort(message = c(x = "Invalid input type.", i = "Please provide a valid compound name, URL or path to a local file."))
 
   }
 
-  snapshot <- jsonlite::fromJSON(source, simplifyDataFrame = FALSE)
+  snapshot <- jsonlite::fromJSON(source, flatten = TRUE)
 
   return(snapshot)
 }
