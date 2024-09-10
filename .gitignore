@@ -1,2 +1,7 @@
 .Rproj.user
+.Rhistory
 docs
+vignettes/**/*.pdf
+vignettes/**/*.html
+vignettes/**/*.docx
+vignettes/**/*.zip
