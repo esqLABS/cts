@@ -30,7 +30,7 @@ compound <- function(input) {
 
     check_internet()
 
-    source <- get_buildingblocks_data()[[input]]
+    source <- get_osp_model_library()[[input]]
 
     cli_process_start(msg = "Downloading {input} Building Block Data")
 
