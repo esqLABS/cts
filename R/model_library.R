@@ -10,11 +10,11 @@ get_osp_model_library <- function() {
 
   # If the data is not already cached in `the` package environment, download it
   if (is.null(the$ model_library_data)) {
-    cli_process_start(msg = "Listing Compounds Building Blocks available in {cli::style_hyperlink(text = 'OSP repositories', url = model_library_url)}")
+    cli_process_start(msg = "Listing Compounds Building Blocks available in {style_hyperlink(text = 'OSP repositories', url = model_library_url)}")
     model_library_data_raw <- jsonlite::fromJSON(model_library_url, simplifyDataFrame = FALSE)$Templates
     the$model_library_data <-
-      purrr::map(model_library_data_raw, ~ .x$Url) %>%
-      purrr::set_names(purrr::map_vec(model_library_data_raw, ~ .x$Name))
+      map(model_library_data_raw, ~ .x$Url) %>%
+      set_names(map_vec(model_library_data_raw, ~ .x$Name))
   }
 
   return(the$model_library_data)
