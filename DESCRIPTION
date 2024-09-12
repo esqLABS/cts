@@ -16,7 +16,9 @@ Imports:
     jsonlite,
     ospsuite (>= 12.1.0),
     purrr,
-    rlang
+    R6,
+    rlang,
+    snakecase
 Suggests: 
     devtools,
     testthat (>= 3.0.0)
