@@ -1886,7 +1886,7 @@
       "Type": "OtherProtein",
       "Species": "Human",
       "Molecule": "ATP1A2",
-      "Category": "Bayer Study 19604 - DDI Rifampicin",
+      "Category": "Bayer Study 19604",
       "Parameters": [
         {
           "Path": "ATP1A2|Fraction expressed on plasma-side membrane of vascular endothelium",
