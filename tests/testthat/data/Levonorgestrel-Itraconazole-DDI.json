@@ -1,5 +1,2261 @@
 {
   "Version": 79,
+  "Compounds": [
+    {
+      "Name": "Itraconazole",
+      "IsSmallMolecule": true,
+      "PlasmaProteinBindingPartner": "Albumin",
+      "Lipophilicity": [
+        {
+          "Name": "Fit",
+          "Parameters": [
+            {
+              "Name": "Lipophilicity",
+              "Value": 4.624270461,
+              "Unit": "Log Units"
+            }
+          ],
+          "Description": "Itra logP Merck Index 14: 5.66 "
+        }
+      ],
+      "FractionUnbound": [
+        {
+          "Name": "Templeton, 2008",
+          "Species": "Human",
+          "Parameters": [
+            {
+              "Name": "Fraction unbound (plasma, reference value)",
+              "Value": 0.6016197247,
+              "Unit": "%"
+            }
+          ]
+        }
+      ],
+      "Solubility": [
+        {
+          "Name": "Solution fasted (Taupitz et al. 2013)",
+          "Parameters": [
+            {
+              "Name": "Solubility at reference pH",
+              "Value": 8.0,
+              "Unit": "mg/l"
+            },
+            {
+              "Name": "Reference pH",
+              "Value": 6.5
+            }
+          ],
+          "Description": "Taupitz 2013: \r\nFaSSIF pH 6.5 --> 8 mg/L\r\nFeSSIF pH 5.0 --> 4 mg/L"
+        },
+        {
+          "Name": "Solution fed",
+          "IsDefault": false,
+          "Parameters": [
+            {
+              "Name": "Solubility at reference pH",
+              "Value": 1.58,
+              "Unit": "mg/l"
+            },
+            {
+              "Name": "Reference pH",
+              "Value": 6.5
+            }
+          ]
+        },
+        {
+          "Name": "Capsule fasted",
+          "IsDefault": false,
+          "Parameters": [
+            {
+              "Name": "Solubility at reference pH",
+              "Value": 0.69,
+              "Unit": "mg/l"
+            },
+            {
+              "Name": "Reference pH",
+              "Value": 6.5
+            }
+          ]
+        },
+        {
+          "Name": "Capsule fed",
+          "IsDefault": false,
+          "Parameters": [
+            {
+              "Name": "Solubility at reference pH",
+              "Value": 0.7,
+              "Unit": "mg/l"
+            },
+            {
+              "Name": "Reference pH",
+              "Value": 6.5
+            }
+          ]
+        }
+      ],
+      "IntestinalPermeability": [
+        {
+          "Name": "Fit"
+        }
+      ],
+      "Permeability": [
+        {
+          "Name": "Fit",
+          "IsDefault": false
+        }
+      ],
+      "PkaTypes": [
+        {
+          "Type": "Base",
+          "Pka": 3.7
+        }
+      ],
+      "Processes": [
+        {
+          "InternalName": "GlomerularFiltration",
+          "DataSource": "GFR",
+          "Species": "Human"
+        },
+        {
+          "InternalName": "rCYP450_MM",
+          "DataSource": "Isoherranen 2004",
+          "Molecule": "CYP3A4",
+          "Metabolite": "Hydroxy-Itraconazole",
+          "Parameters": [
+            {
+              "Name": "In vitro Vmax/recombinant enzyme",
+              "Value": 0.27,
+              "Unit": "pmol/min/pmol rec. enzyme"
+            },
+            {
+              "Name": "Km",
+              "Value": 2.0688492598,
+              "Unit": "nmol/l"
+            },
+            {
+              "Name": "kcat",
+              "Value": 0.0402937875,
+              "Unit": "1/min"
+            }
+          ],
+          "Description": "Metabolic enzyme activity is described as saturable process following Michaelis-Menten kinetics. Specific Vmax is calculated from Vmax determined in an in vitro assay using recombinant CYPs / enzymes.\r\n"
+        },
+        {
+          "InternalName": "CompetitiveInhibition",
+          "DataSource": "Isoherranen, 2004",
+          "Molecule": "CYP3A4",
+          "Parameters": [
+            {
+              "Name": "Ki",
+              "Value": 1.3,
+              "Unit": "nmol/l"
+            }
+          ]
+        },
+        {
+          "InternalName": "CompetitiveInhibition",
+          "DataSource": "Shityakov 2014",
+          "Molecule": "ABCB1",
+          "Parameters": [
+            {
+              "Name": "Ki",
+              "Value": 0.008,
+              "Unit": "µmol/l"
+            }
+          ]
+        }
+      ],
+      "CalculationMethods": [
+        "Cellular partition coefficient method - Rodgers and Rowland",
+        "Cellular permeability - PK-Sim Standard"
+      ],
+      "Parameters": [
+        {
+          "Name": "Molecular weight",
+          "Value": 705.633,
+          "Unit": "g/mol"
+        }
+      ],
+      "Description": "Version 1"
+    },
+    {
+      "Name": "Hydroxy-Itraconazole",
+      "IsSmallMolecule": true,
+      "PlasmaProteinBindingPartner": "Albumin",
+      "Lipophilicity": [
+        {
+          "Name": "Fit",
+          "Parameters": [
+            {
+              "Name": "Lipophilicity",
+              "Value": 3.7178121898,
+              "Unit": "Log Units"
+            }
+          ],
+          "Description": "PubChem XLogP3"
+        }
+      ],
+      "FractionUnbound": [
+        {
+          "Name": "Templeton, 2008",
+          "Species": "Human",
+          "Parameters": [
+            {
+              "Name": "Fraction unbound (plasma, reference value)",
+              "Value": 1.7,
+              "Unit": "%"
+            }
+          ]
+        }
+      ],
+      "Solubility": [
+        {
+          "Name": "No value available",
+          "Parameters": [
+            {
+              "Name": "Solubility at reference pH",
+              "Value": 1.0,
+              "Unit": "mg/l"
+            }
+          ],
+          "Description": "Expected low; No value available"
+        }
+      ],
+      "PkaTypes": [
+        {
+          "Type": "Base",
+          "Pka": 3.7
+        }
+      ],
+      "Processes": [
+        {
+          "InternalName": "GlomerularFiltration",
+          "DataSource": "GFR",
+          "Species": "Human"
+        },
+        {
+          "InternalName": "rCYP450_MM",
+          "DataSource": "Isoherranen 2004",
+          "Molecule": "CYP3A4",
+          "Metabolite": "Keto-Itraconazole",
+          "Parameters": [
+            {
+              "Name": "In vitro Vmax/recombinant enzyme",
+              "Value": 0.543,
+              "Unit": "pmol/min/pmol rec. enzyme"
+            },
+            {
+              "Name": "Km",
+              "Value": 4.1716224833,
+              "Unit": "nmol/l"
+            },
+            {
+              "Name": "kcat",
+              "Value": 0.0203370845,
+              "Unit": "1/min"
+            }
+          ]
+        },
+        {
+          "InternalName": "CompetitiveInhibition",
+          "DataSource": "Isoherranen, 2004",
+          "Molecule": "CYP3A4",
+          "Parameters": [
+            {
+              "Name": "Ki",
+              "Value": 14.4,
+              "Unit": "nmol/l"
+            }
+          ]
+        }
+      ],
+      "CalculationMethods": [
+        "Cellular partition coefficient method - Rodgers and Rowland",
+        "Cellular permeability - PK-Sim Standard"
+      ],
+      "Parameters": [
+        {
+          "Name": "Molecular weight",
+          "Value": 721.633,
+          "Unit": "g/mol"
+        }
+      ]
+    },
+    {
+      "Name": "Keto-Itraconazole",
+      "IsSmallMolecule": true,
+      "PlasmaProteinBindingPartner": "Albumin",
+      "Lipophilicity": [
+        {
+          "Name": "Fit",
+          "Parameters": [
+            {
+              "Name": "Lipophilicity",
+              "Value": 4.2109086248,
+              "Unit": "Log Units"
+            }
+          ],
+          "Description": "PubChem XLogP3"
+        }
+      ],
+      "FractionUnbound": [
+        {
+          "Name": "Templeton, 2008",
+          "Species": "Human",
+          "Parameters": [
+            {
+              "Name": "Fraction unbound (plasma, reference value)",
+              "Value": 1.0,
+              "Unit": "%"
+            }
+          ]
+        }
+      ],
+      "Solubility": [
+        {
+          "Name": "No value available",
+          "Parameters": [
+            {
+              "Name": "Solubility at reference pH",
+              "Value": 1.0,
+              "Unit": "mg/l"
+            }
+          ],
+          "Description": "Expected low; No value available"
+        }
+      ],
+      "PkaTypes": [
+        {
+          "Type": "Base",
+          "Pka": 3.7
+        }
+      ],
+      "Processes": [
+        {
+          "InternalName": "GlomerularFiltration",
+          "DataSource": "GFR",
+          "Species": "Human"
+        },
+        {
+          "InternalName": "rCYP450_MM",
+          "DataSource": "Isoherranen 2004",
+          "Molecule": "CYP3A4",
+          "Metabolite": "N-desalkyl-Itraconazole",
+          "Parameters": [
+            {
+              "Name": "In vitro Vmax/recombinant enzyme",
+              "Value": 0.0869,
+              "Unit": "pmol/min/pmol rec. enzyme"
+            },
+            {
+              "Name": "Km",
+              "Value": 2.2214874285,
+              "Unit": "nmol/l"
+            },
+            {
+              "Name": "kcat",
+              "Value": 0.3933927416,
+              "Unit": "1/min"
+            }
+          ]
+        },
+        {
+          "InternalName": "CompetitiveInhibition",
+          "DataSource": "Isoherranen, 2004",
+          "Molecule": "CYP3A4",
+          "Parameters": [
+            {
+              "Name": "Ki",
+              "Value": 5.12,
+              "Unit": "nmol/l"
+            }
+          ]
+        }
+      ],
+      "CalculationMethods": [
+        "Cellular partition coefficient method - Rodgers and Rowland",
+        "Cellular permeability - PK-Sim Standard"
+      ],
+      "Parameters": [
+        {
+          "Name": "Molecular weight",
+          "Value": 719.617,
+          "Unit": "g/mol"
+        }
+      ]
+    },
+    {
+      "Name": "N-desalkyl-Itraconazole",
+      "IsSmallMolecule": true,
+      "PlasmaProteinBindingPartner": "Albumin",
+      "Lipophilicity": [
+        {
+          "Name": "Fit",
+          "Parameters": [
+            {
+              "Name": "Lipophilicity",
+              "Value": 5.1837535822,
+              "Unit": "Log Units"
+            }
+          ],
+          "Description": "PubChem XLogP3"
+        }
+      ],
+      "FractionUnbound": [
+        {
+          "Name": "Templeton, 2008",
+          "Species": "Human",
+          "Parameters": [
+            {
+              "Name": "Fraction unbound (plasma, reference value)",
+              "Value": 1.1,
+              "Unit": "%"
+            }
+          ]
+        }
+      ],
+      "Solubility": [
+        {
+          "Name": "No value available",
+          "Parameters": [
+            {
+              "Name": "Solubility at reference pH",
+              "Value": 1.0,
+              "Unit": "mg/l"
+            }
+          ],
+          "Description": "Expected low; No value available"
+        }
+      ],
+      "PkaTypes": [
+        {
+          "Type": "Base",
+          "Pka": 3.5
+        },
+        {
+          "Type": "Acid",
+          "Pka": 10.96
+        }
+      ],
+      "Processes": [
+        {
+          "InternalName": "GlomerularFiltration",
+          "DataSource": "GFR",
+          "Species": "Human"
+        },
+        {
+          "InternalName": "rCYP450_MM",
+          "DataSource": "Isoherranen 2004",
+          "Molecule": "CYP3A4",
+          "Parameters": [
+            {
+              "Name": "Km",
+              "Value": 0.6284266369,
+              "Unit": "nmol/l"
+            },
+            {
+              "Name": "kcat",
+              "Value": 0.0605873508,
+              "Unit": "1/min"
+            }
+          ]
+        },
+        {
+          "InternalName": "CompetitiveInhibition",
+          "DataSource": "Isoherranen, 2004",
+          "Molecule": "CYP3A4",
+          "Parameters": [
+            {
+              "Name": "Ki",
+              "Value": 0.32,
+              "Unit": "nmol/l"
+            }
+          ]
+        }
+      ],
+      "CalculationMethods": [
+        "Cellular partition coefficient method - Rodgers and Rowland",
+        "Cellular permeability - PK-Sim Standard"
+      ],
+      "Parameters": [
+        {
+          "Name": "Molecular weight",
+          "Value": 649.527,
+          "Unit": "g/mol"
+        }
+      ]
+    },
+    {
+      "Name": "Levonorgestrel 1",
+      "IsSmallMolecule": true,
+      "Lipophilicity": [
+        {
+          "Name": "logP",
+          "Parameters": [
+            {
+              "Name": "Lipophilicity",
+              "Value": 4.0,
+              "Unit": "Log Units",
+              "ValueOrigin": {
+                "Source": "Database",
+                "Method": "ManualFit"
+              }
+            }
+          ]
+        }
+      ],
+      "FractionUnbound": [
+        {
+          "Name": "fu",
+          "Species": "Human",
+          "Parameters": [
+            {
+              "Name": "Fraction unbound (plasma, reference value)",
+              "Value": 1.0,
+              "ValueOrigin": {
+                "Source": "Other",
+                "Method": "Other",
+                "Description": "Binding kinetics operating in mechanistic mode"
+              }
+            }
+          ]
+        }
+      ],
+      "Solubility": [
+        {
+          "Name": "Estimated FaSSIF",
+          "Parameters": [
+            {
+              "Name": "Solubility at reference pH",
+              "Value": 14.0,
+              "Unit": "mg/l",
+              "ValueOrigin": {
+                "Source": "Other",
+                "Method": "Assumption",
+                "Description": "Biorelevant solubility estimated using Simcyp"
+              }
+            },
+            {
+              "Name": "Reference pH",
+              "Value": 6.5,
+              "ValueOrigin": {
+                "Source": "Other",
+                "Method": "Assumption",
+                "Description": "Biorelevant solubility estimated using Simcyp"
+              }
+            }
+          ]
+        }
+      ],
+      "IntestinalPermeability": [
+        {
+          "Name": "Fitted",
+          "Parameters": [
+            {
+              "Name": "Specific intestinal permeability (transcellular)",
+              "Value": 0.0002,
+              "Unit": "cm/min"
+            }
+          ]
+        }
+      ],
+      "Permeability": [
+        {
+          "Name": "Parameter Estimation",
+          "IsDefault": false,
+          "Parameters": [
+            {
+              "Name": "Permeability",
+              "Value": 0.31,
+              "Unit": "cm/min"
+            }
+          ]
+        }
+      ],
+      "Processes": [
+        {
+          "InternalName": "LiverClearance",
+          "DataSource": "Parameter identification",
+          "Species": "Human",
+          "Parameters": [
+            {
+              "Name": "Body weight",
+              "Value": 60.0,
+              "Unit": "kg",
+              "ValueOrigin": {
+                "Source": "Unknown"
+              }
+            },
+            {
+              "Name": "Hematocrit",
+              "Value": 0.41,
+              "ValueOrigin": {
+                "Source": "Unknown"
+              }
+            },
+            {
+              "Name": "Fraction unbound (experiment)",
+              "Value": 0.014
+            },
+            {
+              "Name": "Lipophilicity (experiment)",
+              "Value": 3.65,
+              "Unit": "Log Units"
+            },
+            {
+              "Name": "Plasma clearance",
+              "Value": 0.1,
+              "Unit": "l/h/kg",
+              "ValueOrigin": {
+                "Source": "ParameterIdentification",
+                "Method": "ParameterIdentification",
+                "Description": "Value updated from 'Parameter Identification 1' on 2019-01-22 13:07"
+              }
+            }
+          ],
+          "Description": "Total hepatic clearance is described as first order process in the liver, which eliminates the compound from plasma. Specific clearance is calculated from plasma clearance as input value. Cliv = 5.79 +/- 2.56 L/h. BW = 60 kg"
+        },
+        {
+          "InternalName": "rCYP450_FirstOrder",
+          "DataSource": "Parameter Identification",
+          "Molecule": "CYP3A4",
+          "Metabolite": "Metabolite",
+          "Parameters": [
+            {
+              "Name": "In vitro CL/recombinant enzyme",
+              "Value": 1.45,
+              "Unit": "µl/min/pmol rec. enzyme",
+              "ValueOrigin": {
+                "Source": "ParameterIdentification"
+              }
+            }
+          ]
+        },
+        {
+          "InternalName": "SpecificBinding",
+          "DataSource": "Qi-Gui & Humpel 1990",
+          "Molecule": "SHBG",
+          "Parameters": [
+            {
+              "Name": "koff",
+              "Value": 17.4,
+              "Unit": "1/min"
+            },
+            {
+              "Name": "Kd",
+              "Value": 0.0005,
+              "Unit": "µM"
+            }
+          ]
+        },
+        {
+          "InternalName": "SpecificBinding",
+          "DataSource": "Bayer report",
+          "Molecule": "ALB",
+          "Parameters": [
+            {
+              "Name": "koff",
+              "Value": 6.5,
+              "Unit": "1/min"
+            },
+            {
+              "Name": "Kd",
+              "Value": 6.0,
+              "Unit": "µmol/l"
+            }
+          ]
+        }
+      ],
+      "CalculationMethods": [
+        "Cellular partition coefficient method - Rodgers and Rowland",
+        "Cellular permeability - PK-Sim Standard"
+      ],
+      "Parameters": [
+        {
+          "Name": "Molecular weight",
+          "Value": 312.44,
+          "Unit": "g/mol"
+        },
+        {
+          "Name": "Density (drug)",
+          "Value": 1.2,
+          "Unit": "g/cm³",
+          "ValueOrigin": {
+            "Id": 32,
+            "Source": "Unknown"
+          }
+        }
+      ]
+    }
+  ],
+  "Individuals": [
+    {
+      "Name": "Woman",
+      "Seed": 11243912,
+      "OriginData": {
+        "CalculationMethods": [
+          "Body surface area - Mosteller",
+          "SurfaceAreaPlsInt_VAR1"
+        ],
+        "Species": "Human",
+        "Population": "European_ICRP_2002",
+        "Gender": "FEMALE",
+        "Age": {
+          "Value": 30.0,
+          "Unit": "year(s)"
+        }
+      },
+      "ExpressionProfiles": [
+        "SHBG|Human|Woman",
+        "CYP3A4|Human|Woman",
+        "CYP2C9|Human|Woman",
+        "ALB|Human|Woman"
+      ]
+    },
+    {
+      "Name": "Woman SHBG 40% less",
+      "Seed": 11243912,
+      "OriginData": {
+        "CalculationMethods": [
+          "Body surface area - Mosteller",
+          "SurfaceAreaPlsInt_VAR1"
+        ],
+        "Species": "Human",
+        "Population": "European_ICRP_2002",
+        "Gender": "FEMALE",
+        "Age": {
+          "Value": 30.0,
+          "Unit": "year(s)"
+        }
+      },
+      "ExpressionProfiles": [
+        "SHBG|Human|Woman SHBG 40% less",
+        "CYP3A4|Human|Woman SHBG 40% less",
+        "CYP2C9|Human|Woman SHBG 40% less",
+        "ALB|Human|Woman SHBG 40% less"
+      ]
+    },
+    {
+      "Name": "Woman SHBG 40% more",
+      "Seed": 11243912,
+      "OriginData": {
+        "CalculationMethods": [
+          "Body surface area - Mosteller",
+          "SurfaceAreaPlsInt_VAR1"
+        ],
+        "Species": "Human",
+        "Population": "European_ICRP_2002",
+        "Gender": "FEMALE",
+        "Age": {
+          "Value": 30.0,
+          "Unit": "year(s)"
+        }
+      },
+      "ExpressionProfiles": [
+        "SHBG|Human|Woman SHBG 40% more",
+        "CYP3A4|Human|Woman SHBG 40% more",
+        "CYP2C9|Human|Woman SHBG 40% more",
+        "ALB|Human|Woman SHBG 40% more"
+      ]
+    }
+  ],
+  "Populations": [
+    {
+      "Name": "Women",
+      "Seed": 92950625,
+      "Settings": {
+        "NumberOfIndividuals": 18,
+        "ProportionOfFemales": 100,
+        "Age": {
+          "Min": 25.0,
+          "Max": 40.0,
+          "Unit": "year(s)"
+        },
+        "Weight": {
+          "Min": 45.0,
+          "Max": 90.0,
+          "Unit": "kg"
+        },
+        "Height": {
+          "Min": 140.0,
+          "Max": 180.0,
+          "Unit": "cm"
+        },
+        "Individual": {
+          "Name": "Woman",
+          "Seed": 11243912,
+          "OriginData": {
+            "CalculationMethods": [
+              "Body surface area - Mosteller",
+              "SurfaceAreaPlsInt_VAR1"
+            ],
+            "Species": "Human",
+            "Population": "European_ICRP_2002",
+            "Gender": "FEMALE",
+            "Age": {
+              "Value": 30.0,
+              "Unit": "year(s)"
+            }
+          },
+          "ExpressionProfiles": [
+            "CYP3A4|Human|Women",
+            "SHBG|Human|Women",
+            "CYP2C9|Human|Women",
+            "ALB|Human|Women"
+          ]
+        }
+      },
+      "AdvancedParameters": [
+        {
+          "Name": "CYP3A4|Reference concentration",
+          "Seed": 181552656,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 4.32,
+              "Unit": "µmol/l"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "µmol/l"
+            }
+          ]
+        },
+        {
+          "Name": "SHBG|t1/2 (liver)",
+          "Seed": 250536500,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 7.0,
+              "Unit": "day(s)"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "SHBG|t1/2 (intestine)",
+          "Seed": 250541515,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 7.0,
+              "Unit": "day(s)"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "SHBG|Reference concentration",
+          "Seed": 250572718,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 76.1,
+              "Unit": "nmol/l"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 21.5,
+              "Unit": "nmol/l"
+            }
+          ]
+        },
+        {
+          "Name": "CYP2C9|Reference concentration",
+          "Seed": 406521578,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 3.84,
+              "Unit": "µmol/l"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "µmol/l"
+            }
+          ]
+        },
+        {
+          "Name": "CYP2C9|t1/2 (liver)",
+          "Seed": 406521687,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 104.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "ALB|Reference concentration",
+          "Seed": 16955984,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 0.7,
+              "Unit": "mmol/l"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.2,
+              "Unit": "mmol/l"
+            }
+          ]
+        },
+        {
+          "Name": "CYP3A4|t1/2 (liver)",
+          "Seed": 16960531,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 37.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "ALB|t1/2 (liver)",
+          "Seed": 16962843,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 20.0,
+              "Unit": "day(s)"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "CYP3A4|t1/2 (intestine)",
+          "Seed": 16967843,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 23.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "CYP2C9|t1/2 (intestine)",
+          "Seed": 16969171,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 23.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "ALB|t1/2 (intestine)",
+          "Seed": 16969796,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 20.0,
+              "Unit": "day(s)"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "Natavio et al 2019 - Class I and II BMI",
+      "Seed": 2703406,
+      "Settings": {
+        "NumberOfIndividuals": 11,
+        "ProportionOfFemales": 100,
+        "Age": {
+          "Min": 18.0,
+          "Max": 31.0,
+          "Unit": "year(s)"
+        },
+        "Weight": {
+          "Min": 81.8,
+          "Max": 108.6,
+          "Unit": "kg"
+        },
+        "BMI": {
+          "Min": 30.0,
+          "Max": 37.2,
+          "Unit": "kg/m²"
+        },
+        "Individual": {
+          "Name": "Woman Class III BMI (above 40)",
+          "Seed": 18233187,
+          "OriginData": {
+            "CalculationMethods": [
+              "SurfaceAreaPlsInt_VAR1",
+              "Body surface area - Mosteller"
+            ],
+            "Species": "Human",
+            "Population": "European_ICRP_2002",
+            "Gender": "FEMALE",
+            "Age": {
+              "Value": 30.0,
+              "Unit": "year(s)"
+            },
+            "Weight": {
+              "Value": 110.0,
+              "Unit": "kg"
+            }
+          },
+          "ExpressionProfiles": [
+            "CYP3A4|Human|Natavio et al 2019 - Class I and II BMI",
+            "CYP2C9|Human|Natavio et al 2019 - Class I and II BMI",
+            "SHBG|Human|Natavio et al 2019 - Class I and II BMI",
+            "ALB|Human|Natavio et al 2019 - Class I and II BMI"
+          ]
+        }
+      },
+      "AdvancedParameters": [
+        {
+          "Name": "CYP3A4|t1/2 (liver)",
+          "Seed": 2704031,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 37.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "CYP3A4|t1/2 (intestine)",
+          "Seed": 2704031,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 23.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "CYP2C9|t1/2 (liver)",
+          "Seed": 2704031,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 104.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "SHBG|Reference concentration",
+          "Seed": 2713312,
+          "DistributionType": "LogNormal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 27.6,
+              "Unit": "nmol/l"
+            },
+            {
+              "Name": "GeometricDeviation",
+              "Value": 1.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "Bayer Study 19604",
+      "Seed": 7858171,
+      "Settings": {
+        "NumberOfIndividuals": 12,
+        "ProportionOfFemales": 100,
+        "Age": {
+          "Min": 55.0,
+          "Max": 70.0,
+          "Unit": "year(s)"
+        },
+        "Individual": {
+          "Name": "European (P-gp modified, CYP3A4 36 h)",
+          "Seed": 30344955,
+          "OriginData": {
+            "CalculationMethods": [
+              "SurfaceAreaPlsInt_VAR1",
+              "Body surface area - Mosteller"
+            ],
+            "Species": "Human",
+            "Population": "European_ICRP_2002",
+            "Gender": "MALE",
+            "Age": {
+              "Value": 30.0,
+              "Unit": "year(s)"
+            }
+          },
+          "Parameters": [
+            {
+              "Path": "CYP3A4|Ontogeny factor GI",
+              "Value": 0.9741260583
+            },
+            {
+              "Path": "Organism|Liver|EHC continuous fraction",
+              "Value": 1.0
+            }
+          ],
+          "ExpressionProfiles": [
+            "ABCB1|Human|Bayer Study 19604",
+            "CYP3A4|Human|Bayer Study 19604",
+            "AADAC|Human|Bayer Study 19604",
+            "OATP1B1|Human|Bayer Study 19604",
+            "ATP1A2|Human|Bayer Study 19604",
+            "CYP2C9|Human|Bayer Study 19604",
+            "SHBG|Human|Bayer Study 19604",
+            "ALB|Human|Bayer Study 19604"
+          ]
+        }
+      },
+      "AdvancedParameters": [
+        {
+          "Name": "CYP3A4|t1/2 (liver)",
+          "Seed": 7858687,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 36.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "CYP3A4|t1/2 (intestine)",
+          "Seed": 7858687,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 23.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "CYP2C9|t1/2 (liver)",
+          "Seed": 7858687,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 104.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "AADAC|Reference concentration",
+          "Seed": 7891687,
+          "DistributionType": "LogNormal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 1.0,
+              "Unit": "µmol/l"
+            },
+            {
+              "Name": "GeometricDeviation",
+              "Value": 1.4,
+              "ValueOrigin": {
+                "Source": "Publication",
+                "Method": "Assumption",
+                "Description": "Nina Hanke, Sebastian Frechen, Daniel Moj et al. CPT: Pharmacometrics & Systems Pharmacology (2018) https://doi.org/10.1002/psp4.12343"
+              }
+            }
+          ]
+        },
+        {
+          "Name": "ABCB1|Reference concentration",
+          "Seed": 7893218,
+          "DistributionType": "LogNormal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 1.41,
+              "Unit": "µmol/l"
+            },
+            {
+              "Name": "GeometricDeviation",
+              "Value": 1.6,
+              "ValueOrigin": {
+                "Source": "Publication",
+                "Method": "Assumption",
+                "Description": "Nina Hanke, Sebastian Frechen, Daniel Moj et al. CPT: Pharmacometrics & Systems Pharmacology (2018) https://doi.org/10.1002/psp4.12343"
+              }
+            }
+          ]
+        },
+        {
+          "Name": "OATP1B1|Reference concentration",
+          "Seed": 7894875,
+          "DistributionType": "LogNormal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 1.0,
+              "Unit": "µmol/l"
+            },
+            {
+              "Name": "GeometricDeviation",
+              "Value": 1.54,
+              "ValueOrigin": {
+                "Source": "Publication",
+                "Method": "Assumption",
+                "Description": "Nina Hanke, Sebastian Frechen, Daniel Moj et al. CPT: Pharmacometrics & Systems Pharmacology (2018) https://doi.org/10.1002/psp4.12343"
+              }
+            }
+          ]
+        },
+        {
+          "Name": "ATP1A2|Reference concentration",
+          "Seed": 7900640,
+          "DistributionType": "LogNormal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 0.47661714,
+              "Unit": "µmol/l"
+            },
+            {
+              "Name": "GeometricDeviation",
+              "Value": 1.4,
+              "ValueOrigin": {
+                "Source": "Publication",
+                "Method": "Assumption",
+                "Description": "Nina Hanke, Sebastian Frechen, Daniel Moj et al. CPT: Pharmacometrics & Systems Pharmacology (2018) https://doi.org/10.1002/psp4.12343"
+              }
+            }
+          ]
+        },
+        {
+          "Name": "SHBG|Reference concentration",
+          "Seed": 8028921,
+          "DistributionType": "LogNormal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 60.0,
+              "Unit": "nmol/l",
+              "ValueOrigin": {
+                "Source": "Other",
+                "Method": "InVivo",
+                "Description": "Bayer Study 19604"
+              }
+            },
+            {
+              "Name": "GeometricDeviation",
+              "Value": 1.2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "Praditpan et al 2017 - Class I and II BMI",
+      "Seed": 2703406,
+      "Settings": {
+        "NumberOfIndividuals": 11,
+        "ProportionOfFemales": 100,
+        "Age": {
+          "Min": 18.0,
+          "Max": 31.0,
+          "Unit": "year(s)"
+        },
+        "Weight": {
+          "Min": 81.8,
+          "Max": 108.6,
+          "Unit": "kg"
+        },
+        "BMI": {
+          "Min": 30.0,
+          "Max": 37.2,
+          "Unit": "kg/m²"
+        },
+        "Individual": {
+          "Name": "Woman Class III BMI (above 40)",
+          "Seed": 18233187,
+          "OriginData": {
+            "CalculationMethods": [
+              "SurfaceAreaPlsInt_VAR1",
+              "Body surface area - Mosteller"
+            ],
+            "Species": "Human",
+            "Population": "European_ICRP_2002",
+            "Gender": "FEMALE",
+            "Age": {
+              "Value": 30.0,
+              "Unit": "year(s)"
+            },
+            "Weight": {
+              "Value": 110.0,
+              "Unit": "kg"
+            }
+          },
+          "ExpressionProfiles": [
+            "CYP3A4|Human|Praditpan et al 2017 - Class I and II BMI",
+            "CYP2C9|Human|Praditpan et al 2017 - Class I and II BMI",
+            "SHBG|Human|Praditpan et al 2017 - Class I and II BMI",
+            "ALB|Human|Praditpan et al 2017 - Class I and II BMI"
+          ]
+        }
+      },
+      "AdvancedParameters": [
+        {
+          "Name": "CYP3A4|Reference concentration",
+          "Seed": 2704031,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 4.32,
+              "Unit": "µmol/l"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 1.4,
+              "Unit": "µmol/l"
+            }
+          ]
+        },
+        {
+          "Name": "CYP3A4|t1/2 (liver)",
+          "Seed": 2704031,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 37.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "CYP3A4|t1/2 (intestine)",
+          "Seed": 2704031,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 23.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "CYP2C9|Reference concentration",
+          "Seed": 2704031,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 3.84,
+              "Unit": "µmol/l"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "µmol/l"
+            }
+          ]
+        },
+        {
+          "Name": "CYP2C9|t1/2 (liver)",
+          "Seed": 2704031,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 104.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "SHBG|Reference concentration",
+          "Seed": 2713312,
+          "DistributionType": "LogNormal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 38.5,
+              "Unit": "nmol/l"
+            },
+            {
+              "Name": "GeometricDeviation",
+              "Value": 1.15
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "Healthy women",
+      "Seed": 632939968,
+      "Settings": {
+        "NumberOfIndividuals": 20,
+        "ProportionOfFemales": 100,
+        "Age": {
+          "Min": 18.0,
+          "Max": 30.0,
+          "Unit": "year(s)"
+        },
+        "BMI": {
+          "Min": 20.0,
+          "Max": 24.9,
+          "Unit": "kg/m²"
+        },
+        "Individual": {
+          "Name": "European (P-gp modified, CYP3A4 36 h)",
+          "Seed": 30344955,
+          "OriginData": {
+            "CalculationMethods": [
+              "SurfaceAreaPlsInt_VAR1",
+              "Body surface area - Mosteller"
+            ],
+            "Species": "Human",
+            "Population": "European_ICRP_2002",
+            "Gender": "MALE",
+            "Age": {
+              "Value": 30.0,
+              "Unit": "year(s)"
+            }
+          },
+          "Parameters": [
+            {
+              "Path": "CYP3A4|Ontogeny factor GI",
+              "Value": 0.9741260583
+            },
+            {
+              "Path": "Organism|Liver|EHC continuous fraction",
+              "Value": 1.0
+            }
+          ],
+          "ExpressionProfiles": [
+            "ABCB1|Human|Healthy women",
+            "CYP3A4|Human|Healthy women",
+            "AADAC|Human|Healthy women",
+            "OATP1B1|Human|Healthy women",
+            "ATP1A2|Human|Healthy women",
+            "CYP2C9|Human|Healthy women",
+            "SHBG|Human|Healthy women",
+            "ALB|Human|Healthy women"
+          ]
+        }
+      },
+      "AdvancedParameters": [
+        {
+          "Name": "CYP3A4|t1/2 (liver)",
+          "Seed": 632941125,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 36.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "CYP3A4|t1/2 (intestine)",
+          "Seed": 632941140,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 23.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "CYP2C9|t1/2 (liver)",
+          "Seed": 632941140,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 104.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "SHBG|Reference concentration",
+          "Seed": 633010187,
+          "DistributionType": "LogNormal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 60.0,
+              "Unit": "nmol/l"
+            },
+            {
+              "Name": "GeometricDeviation",
+              "Value": 1.2
+            }
+          ]
+        },
+        {
+          "Name": "OATP1B1|Reference concentration",
+          "Seed": 633021390,
+          "DistributionType": "LogNormal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 1.0,
+              "Unit": "µmol/l"
+            },
+            {
+              "Name": "GeometricDeviation",
+              "Value": 1.54
+            }
+          ]
+        },
+        {
+          "Name": "ATP1A2|Reference concentration",
+          "Seed": 633022046,
+          "DistributionType": "LogNormal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 0.47661714,
+              "Unit": "µmol/l"
+            },
+            {
+              "Name": "GeometricDeviation",
+              "Value": 1.4
+            }
+          ]
+        },
+        {
+          "Name": "AADAC|Reference concentration",
+          "Seed": 633022562,
+          "DistributionType": "LogNormal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 1.0,
+              "Unit": "µmol/l"
+            },
+            {
+              "Name": "GeometricDeviation",
+              "Value": 1.4
+            }
+          ]
+        },
+        {
+          "Name": "ABCB1|Reference concentration",
+          "Seed": 633023000,
+          "DistributionType": "LogNormal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 1.41,
+              "Unit": "µmol/l"
+            },
+            {
+              "Name": "GeometricDeviation",
+              "Value": 1.6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "Obese Women",
+      "Seed": 183953171,
+      "Settings": {
+        "NumberOfIndividuals": 20,
+        "ProportionOfFemales": 100,
+        "Age": {
+          "Min": 18.0,
+          "Max": 30.0,
+          "Unit": "year(s)"
+        },
+        "BMI": {
+          "Min": 30.0,
+          "Max": 34.9,
+          "Unit": "kg/m²"
+        },
+        "Individual": {
+          "Name": "European (P-gp modified, CYP3A4 36 h)",
+          "Seed": 30344955,
+          "OriginData": {
+            "CalculationMethods": [
+              "SurfaceAreaPlsInt_VAR1",
+              "Body surface area - Mosteller"
+            ],
+            "Species": "Human",
+            "Population": "European_ICRP_2002",
+            "Gender": "MALE",
+            "Age": {
+              "Value": 30.0,
+              "Unit": "year(s)"
+            }
+          },
+          "Parameters": [
+            {
+              "Path": "CYP3A4|Ontogeny factor GI",
+              "Value": 0.9741260583
+            },
+            {
+              "Path": "Organism|Liver|EHC continuous fraction",
+              "Value": 1.0
+            }
+          ],
+          "ExpressionProfiles": [
+            "ABCB1|Human|Obese Women",
+            "CYP3A4|Human|Obese Women",
+            "AADAC|Human|Obese Women",
+            "OATP1B1|Human|Obese Women",
+            "ATP1A2|Human|Obese Women",
+            "CYP2C9|Human|Obese Women",
+            "SHBG|Human|Obese Women",
+            "ALB|Human|Obese Women"
+          ]
+        }
+      },
+      "AdvancedParameters": [
+        {
+          "Name": "CYP3A4|t1/2 (liver)",
+          "Seed": 183987078,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 36.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "CYP3A4|t1/2 (intestine)",
+          "Seed": 183987078,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 23.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "CYP2C9|t1/2 (liver)",
+          "Seed": 183987093,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 104.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        },
+        {
+          "Name": "SHBG|Reference concentration",
+          "Seed": 184034078,
+          "DistributionType": "LogNormal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 27.6,
+              "Unit": "nmol/l"
+            },
+            {
+              "Name": "GeometricDeviation",
+              "Value": 1.5
+            }
+          ]
+        },
+        {
+          "Name": "OATP1B1|Reference concentration",
+          "Seed": 184129640,
+          "DistributionType": "Normal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 1.0,
+              "Unit": "µmol/l"
+            },
+            {
+              "Name": "Deviation",
+              "Value": 0.0,
+              "Unit": "µmol/l"
+            }
+          ]
+        },
+        {
+          "Name": "ATP1A2|Reference concentration",
+          "Seed": 184134062,
+          "DistributionType": "LogNormal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 0.47661714,
+              "Unit": "µmol/l"
+            },
+            {
+              "Name": "GeometricDeviation",
+              "Value": 1.0
+            }
+          ]
+        },
+        {
+          "Name": "AADAC|Reference concentration",
+          "Seed": 184163062,
+          "DistributionType": "LogNormal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 1.0,
+              "Unit": "µmol/l"
+            },
+            {
+              "Name": "GeometricDeviation",
+              "Value": 1.4
+            }
+          ]
+        },
+        {
+          "Name": "ABCB1|Reference concentration",
+          "Seed": 184169000,
+          "DistributionType": "LogNormal",
+          "Parameters": [
+            {
+              "Name": "Mean",
+              "Value": 1.41,
+              "Unit": "µmol/l"
+            },
+            {
+              "Name": "GeometricDeviation",
+              "Value": 1.6
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "Formulations": [
+    {
+      "Name": "IR Dissolved",
+      "FormulationType": "Formulation_Dissolved"
+    },
+    {
+      "Name": "Microlut",
+      "FormulationType": "Formulation_Tablet_Lint80",
+      "Parameters": [
+        {
+          "Name": "Dissolution time (80% dissolved)",
+          "Value": 30.0,
+          "Unit": "min"
+        },
+        {
+          "Name": "Lag time",
+          "Value": 10.0,
+          "Unit": "min"
+        },
+        {
+          "Name": "Use as suspension",
+          "Value": 0.0
+        }
+      ]
+    },
+    {
+      "Name": "Plan B One Step",
+      "FormulationType": "Formulation_Tablet_Lint80",
+      "Parameters": [
+        {
+          "Name": "Dissolution time (80% dissolved)",
+          "Value": 180.0,
+          "Unit": "min"
+        },
+        {
+          "Name": "Lag time",
+          "Value": 0.0,
+          "Unit": "min"
+        },
+        {
+          "Name": "Use as suspension",
+          "Value": 0.0
+        }
+      ]
+    }
+  ],
+  "Protocols": [
+    {
+      "Name": "ITR 200 mg 28 days",
+      "ApplicationType": "Oral",
+      "DosingInterval": "DI_24",
+      "Parameters": [
+        {
+          "Name": "Start time",
+          "Value": 0.0,
+          "Unit": "h"
+        },
+        {
+          "Name": "InputDose",
+          "Value": 200.0,
+          "Unit": "mg"
+        },
+        {
+          "Name": "End time",
+          "Value": 29.0,
+          "Unit": "day(s)",
+          "ValueOrigin": {
+            "Source": "Unknown"
+          }
+        },
+        {
+          "Name": "Volume of water/body weight",
+          "Value": 3.5,
+          "Unit": "ml/kg"
+        }
+      ]
+    },
+        {
+      "Name": "ITZ 200mg 21 days",
+      "ApplicationType": "Oral",
+      "DosingInterval": "DI_24",
+      "Parameters": [
+        {
+          "Name": "Start time",
+          "Value": 0.0,
+          "Unit": "h"
+        },
+        {
+          "Name": "InputDose",
+          "Value": 200.0,
+          "Unit": "mg"
+        },
+        {
+          "Name": "End time",
+          "Value": 22.0,
+          "Unit": "day(s)",
+          "ValueOrigin": {
+            "Source": "Unknown"
+          }
+        },
+        {
+          "Name": "Volume of water/body weight",
+          "Value": 3.5,
+          "Unit": "ml/kg"
+        }
+      ]
+    },
+    {
+      "Name": "ITZ 100mg 21 days",
+      "ApplicationType": "Oral",
+      "DosingInterval": "DI_24",
+      "Parameters": [
+        {
+          "Name": "Start time",
+          "Value": 0.0,
+          "Unit": "h"
+        },
+        {
+          "Name": "InputDose",
+          "Value": 100.0,
+          "Unit": "mg"
+        },
+        {
+          "Name": "End time",
+          "Value": 22.0,
+          "Unit": "day(s)",
+          "ValueOrigin": {
+            "Source": "Unknown"
+          }
+        },
+        {
+          "Name": "Volume of water/body weight",
+          "Value": 3.5,
+          "Unit": "ml/kg"
+        }
+      ]
+    },
+    {
+      "Name": "PO_0.27",
+      "ApplicationType": "Oral",
+      "DosingInterval": "Single",
+      "Parameters": [
+        {
+          "Name": "Start time",
+          "Value": 0.0,
+          "Unit": "h"
+        },
+        {
+          "Name": "InputDose",
+          "Value": 0.27,
+          "Unit": "mg"
+        },
+        {
+          "Name": "Volume of water/body weight",
+          "Value": 3.5,
+          "Unit": "ml/kg"
+        }
+      ]
+    },
+    {
+      "Name": "PO_0.03",
+      "ApplicationType": "Oral",
+      "DosingInterval": "DI_24",
+      "Parameters": [
+        {
+          "Name": "Start time",
+          "Value": 0.0,
+          "Unit": "h"
+        },
+        {
+          "Name": "InputDose",
+          "Value": 0.03,
+          "Unit": "mg"
+        },
+        {
+          "Name": "Volume of water/body weight",
+          "Value": 4.0,
+          "Unit": "ml/kg"
+        }
+      ]
+    },
+    {
+      "Name": "IV_0.09",
+      "ApplicationType": "IntravenousBolus",
+      "DosingInterval": "Single",
+      "Parameters": [
+        {
+          "Name": "Start time",
+          "Value": 0.0,
+          "Unit": "h"
+        },
+        {
+          "Name": "InputDose",
+          "Value": 0.09,
+          "Unit": "mg"
+        }
+      ]
+    },
+    {
+      "Name": "PO_0.09",
+      "ApplicationType": "Oral",
+      "DosingInterval": "DI_24",
+      "Parameters": [
+        {
+          "Name": "Start time",
+          "Value": 0.0,
+          "Unit": "h"
+        },
+        {
+          "Name": "InputDose",
+          "Value": 0.09,
+          "Unit": "mg"
+        },
+        {
+          "Name": "Volume of water/body weight",
+          "Value": 3.5,
+          "Unit": "ml/kg"
+        }
+      ]
+    },
+    {
+      "Name": "LNG 0.03 mg 28 days",
+      "ApplicationType": "Oral",
+      "DosingInterval": "DI_24",
+      "Parameters": [
+        {
+          "Name": "Start time",
+          "Value": 0.0,
+          "Unit": "h"
+        },
+        {
+          "Name": "InputDose",
+          "Value": 0.03,
+          "Unit": "mg"
+        },
+        {
+          "Name": "End time",
+          "Value": 29.0,
+          "Unit": "day(s)",
+          "ValueOrigin": {
+            "Source": "Unknown"
+          }
+        },
+        {
+          "Name": "Volume of water/body weight",
+          "Value": 3.5,
+          "Unit": "ml/kg"
+        }
+      ]
+    },
+    {
+      "Name": "LNG 0.75 mg on day 14th",
+      "DosingInterval": "Single",
+      "Schemas": [
+        {
+          "Name": "Schema 1",
+          "SchemaItems": [
+            {
+              "Name": "Schema Item 1",
+              "ApplicationType": "Oral",
+              "FormulationKey": "Formulation",
+              "Parameters": [
+                {
+                  "Name": "Start time",
+                  "Value": 0.0,
+                  "Unit": "h"
+                },
+                {
+                  "Name": "InputDose",
+                  "Value": 0.75,
+                  "Unit": "mg"
+                },
+                {
+                  "Name": "Volume of water/body weight",
+                  "Value": 3.5,
+                  "Unit": "ml/kg"
+                }
+              ]
+            }
+          ],
+          "Parameters": [
+            {
+              "Name": "Start time",
+              "Value": 14.0,
+              "Unit": "day(s)",
+              "ValueOrigin": {
+                "Source": "Unknown"
+              }
+            },
+            {
+              "Name": "NumberOfRepetitions",
+              "Value": 1.0
+            },
+            {
+              "Name": "TimeBetweenRepetitions",
+              "Value": 0.0,
+              "Unit": "h"
+            }
+          ]
+        }
+      ],
+      "TimeUnit": "day(s)"
+    },
+    {
+      "Name": "Natavio et al 2019 - Plan B One Step - Normal BMI",
+      "ApplicationType": "Oral",
+      "DosingInterval": "Single",
+      "Parameters": [
+        {
+          "Name": "Start time",
+          "Value": 0.0,
+          "Unit": "h"
+        },
+        {
+          "Name": "InputDose",
+          "Value": 1.5,
+          "Unit": "mg"
+        },
+        {
+          "Name": "Volume of water/body weight",
+          "Value": 3.6,
+          "Unit": "ml/kg"
+        }
+      ]
+    },
+    {
+      "Name": "Bayer Study 19604 - Levonorgestrel 0.03 mg single dose day 1",
+      "ApplicationType": "Oral",
+      "DosingInterval": "Single",
+      "Parameters": [
+        {
+          "Name": "Start time",
+          "Value": 0.0,
+          "Unit": "h"
+        },
+        {
+          "Name": "InputDose",
+          "Value": 0.03,
+          "Unit": "mg"
+        },
+        {
+          "Name": "End time",
+          "Value": 8.0,
+          "Unit": "day(s)",
+          "ValueOrigin": {
+            "Source": "Unknown"
+          }
+        },
+        {
+          "Name": "Volume of water/body weight",
+          "Value": 3.5,
+          "Unit": "ml/kg"
+        }
+      ]
+    },
+    {
+      "Name": "LNG_150 ug_21 Days",
+      "ApplicationType": "Oral",
+      "DosingInterval": "DI_24",
+      "Parameters": [
+        {
+          "Name": "Start time",
+          "Value": 0.0,
+          "Unit": "h"
+        },
+        {
+          "Name": "InputDose",
+          "Value": 0.15,
+          "Unit": "mg"
+        },
+        {
+          "Name": "End time",
+          "Value": 22.0,
+          "Unit": "day(s)",
+          "ValueOrigin": {
+            "Source": "Unknown"
+          }
+        },
+        {
+          "Name": "Volume of water/body weight",
+          "Value": 3.5,
+          "Unit": "ml/kg"
+        }
+      ]
+    }
+  ],
   "ExpressionProfiles": [
     {
       "Type": "OtherProtein",
@@ -4860,1684 +7116,6 @@
         }
       ],
       "Localization": "Interstitial, BloodCellsIntracellular, VascMembraneTissueSide"
-    }
-  ],
-  "Individuals": [
-    {
-      "Name": "Woman",
-      "Seed": 11243912,
-      "OriginData": {
-        "CalculationMethods": [
-          "Body surface area - Mosteller",
-          "SurfaceAreaPlsInt_VAR1"
-        ],
-        "Species": "Human",
-        "Population": "European_ICRP_2002",
-        "Gender": "FEMALE",
-        "Age": {
-          "Value": 30.0,
-          "Unit": "year(s)"
-        }
-      },
-      "ExpressionProfiles": [
-        "SHBG|Human|Woman",
-        "CYP3A4|Human|Woman",
-        "CYP2C9|Human|Woman",
-        "ALB|Human|Woman"
-      ]
-    },
-    {
-      "Name": "Woman SHBG 40% less",
-      "Seed": 11243912,
-      "OriginData": {
-        "CalculationMethods": [
-          "Body surface area - Mosteller",
-          "SurfaceAreaPlsInt_VAR1"
-        ],
-        "Species": "Human",
-        "Population": "European_ICRP_2002",
-        "Gender": "FEMALE",
-        "Age": {
-          "Value": 30.0,
-          "Unit": "year(s)"
-        }
-      },
-      "ExpressionProfiles": [
-        "SHBG|Human|Woman SHBG 40% less",
-        "CYP3A4|Human|Woman SHBG 40% less",
-        "CYP2C9|Human|Woman SHBG 40% less",
-        "ALB|Human|Woman SHBG 40% less"
-      ]
-    },
-    {
-      "Name": "Woman SHBG 40% more",
-      "Seed": 11243912,
-      "OriginData": {
-        "CalculationMethods": [
-          "Body surface area - Mosteller",
-          "SurfaceAreaPlsInt_VAR1"
-        ],
-        "Species": "Human",
-        "Population": "European_ICRP_2002",
-        "Gender": "FEMALE",
-        "Age": {
-          "Value": 30.0,
-          "Unit": "year(s)"
-        }
-      },
-      "ExpressionProfiles": [
-        "SHBG|Human|Woman SHBG 40% more",
-        "CYP3A4|Human|Woman SHBG 40% more",
-        "CYP2C9|Human|Woman SHBG 40% more",
-        "ALB|Human|Woman SHBG 40% more"
-      ]
-    }
-  ],
-  "Populations": [
-    {
-      "Name": "Women",
-      "Seed": 92950625,
-      "Settings": {
-        "NumberOfIndividuals": 18,
-        "ProportionOfFemales": 100,
-        "Age": {
-          "Min": 25.0,
-          "Max": 40.0,
-          "Unit": "year(s)"
-        },
-        "Weight": {
-          "Min": 45.0,
-          "Max": 90.0,
-          "Unit": "kg"
-        },
-        "Height": {
-          "Min": 140.0,
-          "Max": 180.0,
-          "Unit": "cm"
-        },
-        "Individual": {
-          "Name": "Woman",
-          "Seed": 11243912,
-          "OriginData": {
-            "CalculationMethods": [
-              "Body surface area - Mosteller",
-              "SurfaceAreaPlsInt_VAR1"
-            ],
-            "Species": "Human",
-            "Population": "European_ICRP_2002",
-            "Gender": "FEMALE",
-            "Age": {
-              "Value": 30.0,
-              "Unit": "year(s)"
-            }
-          },
-          "ExpressionProfiles": [
-            "CYP3A4|Human|Women",
-            "SHBG|Human|Women",
-            "CYP2C9|Human|Women",
-            "ALB|Human|Women"
-          ]
-        }
-      },
-      "AdvancedParameters": [
-        {
-          "Name": "CYP3A4|Reference concentration",
-          "Seed": 181552656,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 4.32,
-              "Unit": "µmol/l"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "µmol/l"
-            }
-          ]
-        },
-        {
-          "Name": "SHBG|t1/2 (liver)",
-          "Seed": 250536500,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 7.0,
-              "Unit": "day(s)"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "SHBG|t1/2 (intestine)",
-          "Seed": 250541515,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 7.0,
-              "Unit": "day(s)"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "SHBG|Reference concentration",
-          "Seed": 250572718,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 76.1,
-              "Unit": "nmol/l"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 21.5,
-              "Unit": "nmol/l"
-            }
-          ]
-        },
-        {
-          "Name": "CYP2C9|Reference concentration",
-          "Seed": 406521578,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 3.84,
-              "Unit": "µmol/l"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "µmol/l"
-            }
-          ]
-        },
-        {
-          "Name": "CYP2C9|t1/2 (liver)",
-          "Seed": 406521687,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 104.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "ALB|Reference concentration",
-          "Seed": 16955984,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 0.7,
-              "Unit": "mmol/l"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.2,
-              "Unit": "mmol/l"
-            }
-          ]
-        },
-        {
-          "Name": "CYP3A4|t1/2 (liver)",
-          "Seed": 16960531,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 37.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "ALB|t1/2 (liver)",
-          "Seed": 16962843,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 20.0,
-              "Unit": "day(s)"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "CYP3A4|t1/2 (intestine)",
-          "Seed": 16967843,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 23.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "CYP2C9|t1/2 (intestine)",
-          "Seed": 16969171,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 23.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "ALB|t1/2 (intestine)",
-          "Seed": 16969796,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 20.0,
-              "Unit": "day(s)"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Name": "Natavio et al 2019 - Class I and II BMI",
-      "Seed": 2703406,
-      "Settings": {
-        "NumberOfIndividuals": 11,
-        "ProportionOfFemales": 100,
-        "Age": {
-          "Min": 18.0,
-          "Max": 31.0,
-          "Unit": "year(s)"
-        },
-        "Weight": {
-          "Min": 81.8,
-          "Max": 108.6,
-          "Unit": "kg"
-        },
-        "BMI": {
-          "Min": 30.0,
-          "Max": 37.2,
-          "Unit": "kg/m²"
-        },
-        "Individual": {
-          "Name": "Woman Class III BMI (above 40)",
-          "Seed": 18233187,
-          "OriginData": {
-            "CalculationMethods": [
-              "SurfaceAreaPlsInt_VAR1",
-              "Body surface area - Mosteller"
-            ],
-            "Species": "Human",
-            "Population": "European_ICRP_2002",
-            "Gender": "FEMALE",
-            "Age": {
-              "Value": 30.0,
-              "Unit": "year(s)"
-            },
-            "Weight": {
-              "Value": 110.0,
-              "Unit": "kg"
-            }
-          },
-          "ExpressionProfiles": [
-            "CYP3A4|Human|Natavio et al 2019 - Class I and II BMI",
-            "CYP2C9|Human|Natavio et al 2019 - Class I and II BMI",
-            "SHBG|Human|Natavio et al 2019 - Class I and II BMI",
-            "ALB|Human|Natavio et al 2019 - Class I and II BMI"
-          ]
-        }
-      },
-      "AdvancedParameters": [
-        {
-          "Name": "CYP3A4|t1/2 (liver)",
-          "Seed": 2704031,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 37.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "CYP3A4|t1/2 (intestine)",
-          "Seed": 2704031,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 23.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "CYP2C9|t1/2 (liver)",
-          "Seed": 2704031,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 104.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "SHBG|Reference concentration",
-          "Seed": 2713312,
-          "DistributionType": "LogNormal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 27.6,
-              "Unit": "nmol/l"
-            },
-            {
-              "Name": "GeometricDeviation",
-              "Value": 1.5
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Name": "Bayer Study 19604",
-      "Seed": 7858171,
-      "Settings": {
-        "NumberOfIndividuals": 12,
-        "ProportionOfFemales": 100,
-        "Age": {
-          "Min": 55.0,
-          "Max": 70.0,
-          "Unit": "year(s)"
-        },
-        "Individual": {
-          "Name": "European (P-gp modified, CYP3A4 36 h)",
-          "Seed": 30344955,
-          "OriginData": {
-            "CalculationMethods": [
-              "SurfaceAreaPlsInt_VAR1",
-              "Body surface area - Mosteller"
-            ],
-            "Species": "Human",
-            "Population": "European_ICRP_2002",
-            "Gender": "MALE",
-            "Age": {
-              "Value": 30.0,
-              "Unit": "year(s)"
-            }
-          },
-          "Parameters": [
-            {
-              "Path": "CYP3A4|Ontogeny factor GI",
-              "Value": 0.9741260583
-            },
-            {
-              "Path": "Organism|Liver|EHC continuous fraction",
-              "Value": 1.0
-            }
-          ],
-          "ExpressionProfiles": [
-            "ABCB1|Human|Bayer Study 19604",
-            "CYP3A4|Human|Bayer Study 19604",
-            "AADAC|Human|Bayer Study 19604",
-            "OATP1B1|Human|Bayer Study 19604",
-            "ATP1A2|Human|Bayer Study 19604 - DDI Rifampicin",
-            "CYP2C9|Human|Bayer Study 19604",
-            "SHBG|Human|Bayer Study 19604",
-            "ALB|Human|Bayer Study 19604"
-          ]
-        }
-      },
-      "AdvancedParameters": [
-        {
-          "Name": "CYP3A4|t1/2 (liver)",
-          "Seed": 7858687,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 36.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "CYP3A4|t1/2 (intestine)",
-          "Seed": 7858687,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 23.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "CYP2C9|t1/2 (liver)",
-          "Seed": 7858687,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 104.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "AADAC|Reference concentration",
-          "Seed": 7891687,
-          "DistributionType": "LogNormal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 1.0,
-              "Unit": "µmol/l"
-            },
-            {
-              "Name": "GeometricDeviation",
-              "Value": 1.4,
-              "ValueOrigin": {
-                "Source": "Publication",
-                "Method": "Assumption",
-                "Description": "Nina Hanke, Sebastian Frechen, Daniel Moj et al. CPT: Pharmacometrics & Systems Pharmacology (2018) https://doi.org/10.1002/psp4.12343"
-              }
-            }
-          ]
-        },
-        {
-          "Name": "ABCB1|Reference concentration",
-          "Seed": 7893218,
-          "DistributionType": "LogNormal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 1.41,
-              "Unit": "µmol/l"
-            },
-            {
-              "Name": "GeometricDeviation",
-              "Value": 1.6,
-              "ValueOrigin": {
-                "Source": "Publication",
-                "Method": "Assumption",
-                "Description": "Nina Hanke, Sebastian Frechen, Daniel Moj et al. CPT: Pharmacometrics & Systems Pharmacology (2018) https://doi.org/10.1002/psp4.12343"
-              }
-            }
-          ]
-        },
-        {
-          "Name": "OATP1B1|Reference concentration",
-          "Seed": 7894875,
-          "DistributionType": "LogNormal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 1.0,
-              "Unit": "µmol/l"
-            },
-            {
-              "Name": "GeometricDeviation",
-              "Value": 1.54,
-              "ValueOrigin": {
-                "Source": "Publication",
-                "Method": "Assumption",
-                "Description": "Nina Hanke, Sebastian Frechen, Daniel Moj et al. CPT: Pharmacometrics & Systems Pharmacology (2018) https://doi.org/10.1002/psp4.12343"
-              }
-            }
-          ]
-        },
-        {
-          "Name": "ATP1A2|Reference concentration",
-          "Seed": 7900640,
-          "DistributionType": "LogNormal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 0.47661714,
-              "Unit": "µmol/l"
-            },
-            {
-              "Name": "GeometricDeviation",
-              "Value": 1.4,
-              "ValueOrigin": {
-                "Source": "Publication",
-                "Method": "Assumption",
-                "Description": "Nina Hanke, Sebastian Frechen, Daniel Moj et al. CPT: Pharmacometrics & Systems Pharmacology (2018) https://doi.org/10.1002/psp4.12343"
-              }
-            }
-          ]
-        },
-        {
-          "Name": "SHBG|Reference concentration",
-          "Seed": 8028921,
-          "DistributionType": "LogNormal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 60.0,
-              "Unit": "nmol/l",
-              "ValueOrigin": {
-                "Source": "Other",
-                "Method": "InVivo",
-                "Description": "Bayer Study 19604"
-              }
-            },
-            {
-              "Name": "GeometricDeviation",
-              "Value": 1.2
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Name": "Praditpan et al 2017 - Class I and II BMI",
-      "Seed": 2703406,
-      "Settings": {
-        "NumberOfIndividuals": 11,
-        "ProportionOfFemales": 100,
-        "Age": {
-          "Min": 18.0,
-          "Max": 31.0,
-          "Unit": "year(s)"
-        },
-        "Weight": {
-          "Min": 81.8,
-          "Max": 108.6,
-          "Unit": "kg"
-        },
-        "BMI": {
-          "Min": 30.0,
-          "Max": 37.2,
-          "Unit": "kg/m²"
-        },
-        "Individual": {
-          "Name": "Woman Class III BMI (above 40)",
-          "Seed": 18233187,
-          "OriginData": {
-            "CalculationMethods": [
-              "SurfaceAreaPlsInt_VAR1",
-              "Body surface area - Mosteller"
-            ],
-            "Species": "Human",
-            "Population": "European_ICRP_2002",
-            "Gender": "FEMALE",
-            "Age": {
-              "Value": 30.0,
-              "Unit": "year(s)"
-            },
-            "Weight": {
-              "Value": 110.0,
-              "Unit": "kg"
-            }
-          },
-          "ExpressionProfiles": [
-            "CYP3A4|Human|Praditpan et al 2017 - Class I and II BMI",
-            "CYP2C9|Human|Praditpan et al 2017 - Class I and II BMI",
-            "SHBG|Human|Praditpan et al 2017 - Class I and II BMI",
-            "ALB|Human|Praditpan et al 2017 - Class I and II BMI"
-          ]
-        }
-      },
-      "AdvancedParameters": [
-        {
-          "Name": "CYP3A4|Reference concentration",
-          "Seed": 2704031,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 4.32,
-              "Unit": "µmol/l"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 1.4,
-              "Unit": "µmol/l"
-            }
-          ]
-        },
-        {
-          "Name": "CYP3A4|t1/2 (liver)",
-          "Seed": 2704031,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 37.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "CYP3A4|t1/2 (intestine)",
-          "Seed": 2704031,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 23.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "CYP2C9|Reference concentration",
-          "Seed": 2704031,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 3.84,
-              "Unit": "µmol/l"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "µmol/l"
-            }
-          ]
-        },
-        {
-          "Name": "CYP2C9|t1/2 (liver)",
-          "Seed": 2704031,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 104.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "SHBG|Reference concentration",
-          "Seed": 2713312,
-          "DistributionType": "LogNormal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 38.5,
-              "Unit": "nmol/l"
-            },
-            {
-              "Name": "GeometricDeviation",
-              "Value": 1.15
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Name": "Healthy women",
-      "Seed": 632939968,
-      "Settings": {
-        "NumberOfIndividuals": 20,
-        "ProportionOfFemales": 100,
-        "Age": {
-          "Min": 18.0,
-          "Max": 30.0,
-          "Unit": "year(s)"
-        },
-        "BMI": {
-          "Min": 20.0,
-          "Max": 24.9,
-          "Unit": "kg/m²"
-        },
-        "Individual": {
-          "Name": "European (P-gp modified, CYP3A4 36 h)",
-          "Seed": 30344955,
-          "OriginData": {
-            "CalculationMethods": [
-              "SurfaceAreaPlsInt_VAR1",
-              "Body surface area - Mosteller"
-            ],
-            "Species": "Human",
-            "Population": "European_ICRP_2002",
-            "Gender": "MALE",
-            "Age": {
-              "Value": 30.0,
-              "Unit": "year(s)"
-            }
-          },
-          "Parameters": [
-            {
-              "Path": "CYP3A4|Ontogeny factor GI",
-              "Value": 0.9741260583
-            },
-            {
-              "Path": "Organism|Liver|EHC continuous fraction",
-              "Value": 1.0
-            }
-          ],
-          "ExpressionProfiles": [
-            "ABCB1|Human|Healthy women",
-            "CYP3A4|Human|Healthy women",
-            "AADAC|Human|Healthy women",
-            "OATP1B1|Human|Healthy women",
-            "ATP1A2|Human|Healthy women",
-            "CYP2C9|Human|Healthy women",
-            "SHBG|Human|Healthy women",
-            "ALB|Human|Healthy women"
-          ]
-        }
-      },
-      "AdvancedParameters": [
-        {
-          "Name": "CYP3A4|t1/2 (liver)",
-          "Seed": 632941125,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 36.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "CYP3A4|t1/2 (intestine)",
-          "Seed": 632941140,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 23.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "CYP2C9|t1/2 (liver)",
-          "Seed": 632941140,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 104.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "SHBG|Reference concentration",
-          "Seed": 633010187,
-          "DistributionType": "LogNormal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 60.0,
-              "Unit": "nmol/l"
-            },
-            {
-              "Name": "GeometricDeviation",
-              "Value": 1.2
-            }
-          ]
-        },
-        {
-          "Name": "OATP1B1|Reference concentration",
-          "Seed": 633021390,
-          "DistributionType": "LogNormal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 1.0,
-              "Unit": "µmol/l"
-            },
-            {
-              "Name": "GeometricDeviation",
-              "Value": 1.54
-            }
-          ]
-        },
-        {
-          "Name": "ATP1A2|Reference concentration",
-          "Seed": 633022046,
-          "DistributionType": "LogNormal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 0.47661714,
-              "Unit": "µmol/l"
-            },
-            {
-              "Name": "GeometricDeviation",
-              "Value": 1.4
-            }
-          ]
-        },
-        {
-          "Name": "AADAC|Reference concentration",
-          "Seed": 633022562,
-          "DistributionType": "LogNormal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 1.0,
-              "Unit": "µmol/l"
-            },
-            {
-              "Name": "GeometricDeviation",
-              "Value": 1.4
-            }
-          ]
-        },
-        {
-          "Name": "ABCB1|Reference concentration",
-          "Seed": 633023000,
-          "DistributionType": "LogNormal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 1.41,
-              "Unit": "µmol/l"
-            },
-            {
-              "Name": "GeometricDeviation",
-              "Value": 1.6
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Name": "Obese Women",
-      "Seed": 183953171,
-      "Settings": {
-        "NumberOfIndividuals": 20,
-        "ProportionOfFemales": 100,
-        "Age": {
-          "Min": 18.0,
-          "Max": 30.0,
-          "Unit": "year(s)"
-        },
-        "BMI": {
-          "Min": 30.0,
-          "Max": 34.9,
-          "Unit": "kg/m²"
-        },
-        "Individual": {
-          "Name": "European (P-gp modified, CYP3A4 36 h)",
-          "Seed": 30344955,
-          "OriginData": {
-            "CalculationMethods": [
-              "SurfaceAreaPlsInt_VAR1",
-              "Body surface area - Mosteller"
-            ],
-            "Species": "Human",
-            "Population": "European_ICRP_2002",
-            "Gender": "MALE",
-            "Age": {
-              "Value": 30.0,
-              "Unit": "year(s)"
-            }
-          },
-          "Parameters": [
-            {
-              "Path": "CYP3A4|Ontogeny factor GI",
-              "Value": 0.9741260583
-            },
-            {
-              "Path": "Organism|Liver|EHC continuous fraction",
-              "Value": 1.0
-            }
-          ],
-          "ExpressionProfiles": [
-            "ABCB1|Human|Obese Women",
-            "CYP3A4|Human|Obese Women",
-            "AADAC|Human|Obese Women",
-            "OATP1B1|Human|Obese Women",
-            "ATP1A2|Human|Obese Women",
-            "CYP2C9|Human|Obese Women",
-            "SHBG|Human|Obese Women",
-            "ALB|Human|Obese Women"
-          ]
-        }
-      },
-      "AdvancedParameters": [
-        {
-          "Name": "CYP3A4|t1/2 (liver)",
-          "Seed": 183987078,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 36.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "CYP3A4|t1/2 (intestine)",
-          "Seed": 183987078,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 23.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "CYP2C9|t1/2 (liver)",
-          "Seed": 183987093,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 104.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        },
-        {
-          "Name": "SHBG|Reference concentration",
-          "Seed": 184034078,
-          "DistributionType": "LogNormal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 27.6,
-              "Unit": "nmol/l"
-            },
-            {
-              "Name": "GeometricDeviation",
-              "Value": 1.5
-            }
-          ]
-        },
-        {
-          "Name": "OATP1B1|Reference concentration",
-          "Seed": 184129640,
-          "DistributionType": "Normal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 1.0,
-              "Unit": "µmol/l"
-            },
-            {
-              "Name": "Deviation",
-              "Value": 0.0,
-              "Unit": "µmol/l"
-            }
-          ]
-        },
-        {
-          "Name": "ATP1A2|Reference concentration",
-          "Seed": 184134062,
-          "DistributionType": "LogNormal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 0.47661714,
-              "Unit": "µmol/l"
-            },
-            {
-              "Name": "GeometricDeviation",
-              "Value": 1.0
-            }
-          ]
-        },
-        {
-          "Name": "AADAC|Reference concentration",
-          "Seed": 184163062,
-          "DistributionType": "LogNormal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 1.0,
-              "Unit": "µmol/l"
-            },
-            {
-              "Name": "GeometricDeviation",
-              "Value": 1.4
-            }
-          ]
-        },
-        {
-          "Name": "ABCB1|Reference concentration",
-          "Seed": 184169000,
-          "DistributionType": "LogNormal",
-          "Parameters": [
-            {
-              "Name": "Mean",
-              "Value": 1.41,
-              "Unit": "µmol/l"
-            },
-            {
-              "Name": "GeometricDeviation",
-              "Value": 1.6
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  "Compounds": [
-    {
-      "Name": "Levonorgestrel 1",
-      "IsSmallMolecule": true,
-      "Lipophilicity": [
-        {
-          "Name": "logP",
-          "Parameters": [
-            {
-              "Name": "Lipophilicity",
-              "Value": 4.0,
-              "Unit": "Log Units",
-              "ValueOrigin": {
-                "Source": "Database",
-                "Method": "ManualFit"
-              }
-            }
-          ]
-        }
-      ],
-      "FractionUnbound": [
-        {
-          "Name": "fu",
-          "Species": "Human",
-          "Parameters": [
-            {
-              "Name": "Fraction unbound (plasma, reference value)",
-              "Value": 1.0,
-              "ValueOrigin": {
-                "Source": "Other",
-                "Method": "Other",
-                "Description": "Binding kinetics operating in mechanistic mode"
-              }
-            }
-          ]
-        }
-      ],
-      "Solubility": [
-        {
-          "Name": "Estimated FaSSIF",
-          "Parameters": [
-            {
-              "Name": "Solubility at reference pH",
-              "Value": 14.0,
-              "Unit": "mg/l",
-              "ValueOrigin": {
-                "Source": "Other",
-                "Method": "Assumption",
-                "Description": "Biorelevant solubility estimated using Simcyp"
-              }
-            },
-            {
-              "Name": "Reference pH",
-              "Value": 6.5,
-              "ValueOrigin": {
-                "Source": "Other",
-                "Method": "Assumption",
-                "Description": "Biorelevant solubility estimated using Simcyp"
-              }
-            }
-          ]
-        }
-      ],
-      "IntestinalPermeability": [
-        {
-          "Name": "Fitted",
-          "Parameters": [
-            {
-              "Name": "Specific intestinal permeability (transcellular)",
-              "Value": 0.0002,
-              "Unit": "cm/min"
-            }
-          ]
-        }
-      ],
-      "Permeability": [
-        {
-          "Name": "Parameter Estimation",
-          "IsDefault": false,
-          "Parameters": [
-            {
-              "Name": "Permeability",
-              "Value": 0.31,
-              "Unit": "cm/min"
-            }
-          ]
-        }
-      ],
-      "Processes": [
-        {
-          "InternalName": "LiverClearance",
-          "DataSource": "Parameter identification",
-          "Species": "Human",
-          "Parameters": [
-            {
-              "Name": "Body weight",
-              "Value": 60.0,
-              "Unit": "kg",
-              "ValueOrigin": {
-                "Source": "Unknown"
-              }
-            },
-            {
-              "Name": "Hematocrit",
-              "Value": 0.41,
-              "ValueOrigin": {
-                "Source": "Unknown"
-              }
-            },
-            {
-              "Name": "Fraction unbound (experiment)",
-              "Value": 0.014
-            },
-            {
-              "Name": "Lipophilicity (experiment)",
-              "Value": 3.65,
-              "Unit": "Log Units"
-            },
-            {
-              "Name": "Plasma clearance",
-              "Value": 0.1,
-              "Unit": "l/h/kg",
-              "ValueOrigin": {
-                "Source": "ParameterIdentification",
-                "Method": "ParameterIdentification",
-                "Description": "Value updated from 'Parameter Identification 1' on 2019-01-22 13:07"
-              }
-            }
-          ],
-          "Description": "Total hepatic clearance is described as first order process in the liver, which eliminates the compound from plasma. Specific clearance is calculated from plasma clearance as input value. Cliv = 5.79 +/- 2.56 L/h. BW = 60 kg"
-        },
-        {
-          "InternalName": "rCYP450_FirstOrder",
-          "DataSource": "Parameter Identification",
-          "Molecule": "CYP3A4",
-          "Metabolite": "Metabolite",
-          "Parameters": [
-            {
-              "Name": "In vitro CL/recombinant enzyme",
-              "Value": 1.45,
-              "Unit": "µl/min/pmol rec. enzyme",
-              "ValueOrigin": {
-                "Source": "ParameterIdentification"
-              }
-            }
-          ]
-        },
-        {
-          "InternalName": "SpecificBinding",
-          "DataSource": "Qi-Gui & Humpel 1990",
-          "Molecule": "SHBG",
-          "Parameters": [
-            {
-              "Name": "koff",
-              "Value": 17.4,
-              "Unit": "1/min"
-            },
-            {
-              "Name": "Kd",
-              "Value": 0.0005,
-              "Unit": "µM"
-            }
-          ]
-        },
-        {
-          "InternalName": "SpecificBinding",
-          "DataSource": "Bayer report",
-          "Molecule": "ALB",
-          "Parameters": [
-            {
-              "Name": "koff",
-              "Value": 6.5,
-              "Unit": "1/min"
-            },
-            {
-              "Name": "Kd",
-              "Value": 6.0,
-              "Unit": "µmol/l"
-            }
-          ]
-        }
-      ],
-      "CalculationMethods": [
-        "Cellular partition coefficient method - Rodgers and Rowland",
-        "Cellular permeability - PK-Sim Standard"
-      ],
-      "Parameters": [
-        {
-          "Name": "Molecular weight",
-          "Value": 312.44,
-          "Unit": "g/mol"
-        },
-        {
-          "Name": "Density (drug)",
-          "Value": 1.2,
-          "Unit": "g/cm³",
-          "ValueOrigin": {
-            "Id": 32,
-            "Source": "Unknown"
-          }
-        }
-      ]
-    }
-  ],
-  "Formulations": [
-    {
-      "Name": "Microlut",
-      "FormulationType": "Formulation_Tablet_Lint80",
-      "Parameters": [
-        {
-          "Name": "Dissolution time (80% dissolved)",
-          "Value": 30.0,
-          "Unit": "min"
-        },
-        {
-          "Name": "Lag time",
-          "Value": 10.0,
-          "Unit": "min"
-        },
-        {
-          "Name": "Use as suspension",
-          "Value": 0.0
-        }
-      ]
-    },
-    {
-      "Name": "Plan B One Step",
-      "FormulationType": "Formulation_Tablet_Lint80",
-      "Parameters": [
-        {
-          "Name": "Dissolution time (80% dissolved)",
-          "Value": 180.0,
-          "Unit": "min"
-        },
-        {
-          "Name": "Lag time",
-          "Value": 0.0,
-          "Unit": "min"
-        },
-        {
-          "Name": "Use as suspension",
-          "Value": 0.0
-        }
-      ]
-    }
-  ],
-  "Protocols": [
-    {
-      "Name": "PO_0.27",
-      "ApplicationType": "Oral",
-      "DosingInterval": "Single",
-      "Parameters": [
-        {
-          "Name": "Start time",
-          "Value": 0.0,
-          "Unit": "h"
-        },
-        {
-          "Name": "InputDose",
-          "Value": 0.27,
-          "Unit": "mg"
-        },
-        {
-          "Name": "Volume of water/body weight",
-          "Value": 3.5,
-          "Unit": "ml/kg"
-        }
-      ]
-    },
-    {
-      "Name": "PO_0.03",
-      "ApplicationType": "Oral",
-      "DosingInterval": "DI_24",
-      "Parameters": [
-        {
-          "Name": "Start time",
-          "Value": 0.0,
-          "Unit": "h"
-        },
-        {
-          "Name": "InputDose",
-          "Value": 0.03,
-          "Unit": "mg"
-        },
-        {
-          "Name": "Volume of water/body weight",
-          "Value": 4.0,
-          "Unit": "ml/kg"
-        }
-      ]
-    },
-    {
-      "Name": "IV_0.09",
-      "ApplicationType": "IntravenousBolus",
-      "DosingInterval": "Single",
-      "Parameters": [
-        {
-          "Name": "Start time",
-          "Value": 0.0,
-          "Unit": "h"
-        },
-        {
-          "Name": "InputDose",
-          "Value": 0.09,
-          "Unit": "mg"
-        }
-      ]
-    },
-    {
-      "Name": "PO_0.09",
-      "ApplicationType": "Oral",
-      "DosingInterval": "DI_24",
-      "Parameters": [
-        {
-          "Name": "Start time",
-          "Value": 0.0,
-          "Unit": "h"
-        },
-        {
-          "Name": "InputDose",
-          "Value": 0.09,
-          "Unit": "mg"
-        },
-        {
-          "Name": "Volume of water/body weight",
-          "Value": 3.5,
-          "Unit": "ml/kg"
-        }
-      ]
-    },
-    {
-      "Name": "LNG 0.03 mg 28 days",
-      "ApplicationType": "Oral",
-      "DosingInterval": "DI_24",
-      "Parameters": [
-        {
-          "Name": "Start time",
-          "Value": 0.0,
-          "Unit": "h"
-        },
-        {
-          "Name": "InputDose",
-          "Value": 0.03,
-          "Unit": "mg"
-        },
-        {
-          "Name": "End time",
-          "Value": 29.0,
-          "Unit": "day(s)",
-          "ValueOrigin": {
-            "Source": "Unknown"
-          }
-        },
-        {
-          "Name": "Volume of water/body weight",
-          "Value": 3.5,
-          "Unit": "ml/kg"
-        }
-      ]
-    },
-    {
-      "Name": "LNG 0.75 mg on day 14th",
-      "DosingInterval": "Single",
-      "Schemas": [
-        {
-          "Name": "Schema 1",
-          "SchemaItems": [
-            {
-              "Name": "Schema Item 1",
-              "ApplicationType": "Oral",
-              "FormulationKey": "Formulation",
-              "Parameters": [
-                {
-                  "Name": "Start time",
-                  "Value": 0.0,
-                  "Unit": "h"
-                },
-                {
-                  "Name": "InputDose",
-                  "Value": 0.75,
-                  "Unit": "mg"
-                },
-                {
-                  "Name": "Volume of water/body weight",
-                  "Value": 3.5,
-                  "Unit": "ml/kg"
-                }
-              ]
-            }
-          ],
-          "Parameters": [
-            {
-              "Name": "Start time",
-              "Value": 14.0,
-              "Unit": "day(s)",
-              "ValueOrigin": {
-                "Source": "Unknown"
-              }
-            },
-            {
-              "Name": "NumberOfRepetitions",
-              "Value": 1.0
-            },
-            {
-              "Name": "TimeBetweenRepetitions",
-              "Value": 0.0,
-              "Unit": "h"
-            }
-          ]
-        }
-      ],
-      "TimeUnit": "day(s)"
-    },
-    {
-      "Name": "Natavio et al 2019 - Plan B One Step - Normal BMI",
-      "ApplicationType": "Oral",
-      "DosingInterval": "Single",
-      "Parameters": [
-        {
-          "Name": "Start time",
-          "Value": 0.0,
-          "Unit": "h"
-        },
-        {
-          "Name": "InputDose",
-          "Value": 1.5,
-          "Unit": "mg"
-        },
-        {
-          "Name": "Volume of water/body weight",
-          "Value": 3.6,
-          "Unit": "ml/kg"
-        }
-      ]
-    },
-    {
-      "Name": "Bayer Study 19604 - Levonorgestrel 0.03 mg single dose day 1",
-      "ApplicationType": "Oral",
-      "DosingInterval": "Single",
-      "Parameters": [
-        {
-          "Name": "Start time",
-          "Value": 0.0,
-          "Unit": "h"
-        },
-        {
-          "Name": "InputDose",
-          "Value": 0.03,
-          "Unit": "mg"
-        },
-        {
-          "Name": "End time",
-          "Value": 8.0,
-          "Unit": "day(s)",
-          "ValueOrigin": {
-            "Source": "Unknown"
-          }
-        },
-        {
-          "Name": "Volume of water/body weight",
-          "Value": 3.5,
-          "Unit": "ml/kg"
-        }
-      ]
-    },
-    {
-      "Name": "LNG_150 ug_21 Days",
-      "ApplicationType": "Oral",
-      "DosingInterval": "DI_24",
-      "Parameters": [
-        {
-          "Name": "Start time",
-          "Value": 0.0,
-          "Unit": "h"
-        },
-        {
-          "Name": "InputDose",
-          "Value": 0.15,
-          "Unit": "mg"
-        },
-        {
-          "Name": "End time",
-          "Value": 22.0,
-          "Unit": "day(s)",
-          "ValueOrigin": {
-            "Source": "Unknown"
-          }
-        },
-        {
-          "Name": "Volume of water/body weight",
-          "Value": 3.5,
-          "Unit": "ml/kg"
-        }
-      ]
     }
   ],
   "ObserverSets": [
