@@ -16,31 +16,15 @@
 #' compound("https://raw.githubusercontent.com/Open-Systems-Pharmacology/Alfentanil-Model/v2.2/Alfentanil-Model.json")
 #' }
 compound <- function(input) {
-  if (is_file(input)) {
-
-    source <- input
-
-  } else if (is_url(input)) {
-
-    check_internet()
-
-    source <- input
-
-  } else if (input %in% list_compounds(display = FALSE)) {
-
-    check_internet()
-
-    source <- get_osp_model_library()[[input]]
-
-    cli_process_start(msg = "Downloading {input} Building Block Data")
-
-  } else {
-
-    cli_abort(message = c(x = "Invalid input type.", i = "Please provide a valid compound name, URL or path to a local file."))
-
-  }
-
-  snapshot <- jsonlite::fromJSON(source, flatten = TRUE)
-
-  return(snapshot)
+  Compound$new(input)
 }
+
+
+Compound <- R6::R6Class(
+  classname = "Compound",
+  class = TRUE,
+  inherit = Snapshot,
+  public = list(),
+  private = list(),
+  active = list()
+  )
