@@ -38,3 +38,10 @@ test_that("Compounds snapshots are correctly merged when creating a DDI", {
   expect_equal(ddi_merged$observed_data, ddi_ref$observed_data)
 
 })
+
+test_that("Compound snapshot with different versions can be merged", {
+  ddi <- create_ddi(itraconazole80, rifampicin)
+
+  expect_equal(ddi$data$Version, 80)
+
+})

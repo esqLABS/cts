@@ -26,7 +26,8 @@ create_ddi <- function(...) {
 #' @export
 #'
 #' @examples
-#' #' \dontrun{
+#' #'
+#' \dontrun{
 #' import_ddi("Rifampicin-Midazolam-DDI.json")
 #' }
 import_ddi <- function(input) {
@@ -58,8 +59,39 @@ DDI <- R6::R6Class(
     combine = function(...) {
       self$source <- "Merge"
 
-      # Keep the highest version number
-      self$data$Version <- unlist(max(map_int(list(...), ~ .x$data$Version), na.rm = TRUE))
+      snapshots <- list(...)
+
+      snapshot_versions <- map(snapshots, ~ .x$data$Version) %>% list_c()
+
+      # If Snapshots have different versions
+      if (length(unique(snapshot_versions)) > 1) {
+        cli_process_start("Multiple versions detected. Converting to the latest version.")
+
+        temp_dir <- tempfile()
+        dir.create(temp_dir)
+
+        paths <- map(snapshots, ~ .x$source) %>% list_c()
+
+        suppressMessages({
+        # Convert snapshot to project to upgrade them to latest version
+        ospsuite::convertSnapshot(paths,
+          format = "project",
+          output = temp_dir,
+          runSimulations = FALSE
+        )
+
+        # Convert back to snapshot to get json format
+        ospsuite::convertSnapshot(
+          temp_dir,
+          format = "snapshot",
+          output = temp_dir
+        )
+        })
+
+        snapshots <- map(list.files(temp_dir, pattern = ".json", full.names = TRUE), ~ Compound$new(input = .x))
+      }
+
+      self$data$Version <- unique(map_int(snapshots, ~ .x$data$Version))
 
       sections_to_merge <- c(
         "Compounds",
@@ -75,10 +107,9 @@ DDI <- R6::R6Class(
       )
 
       walk(sections_to_merge, function(s) {
-
         # Merge all elements in section
         section_merged <- list_flatten(
-          map(list(...), ~ .x$data[[s]])
+          map(snapshots, ~ .x$data[[s]])
         )
 
         # Remove NULL elements
