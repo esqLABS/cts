@@ -20,7 +20,7 @@ Snapshot <- R6::R6Class(
     #' @return A new `Snapshot` object.
     initialize = function(input) {
       self$source <- get_source(input)
-      self$data <- jsonlite::fromJSON(self$source, simplifyDataFrame = FALSE, simplifyVector = FALSE)
+      self$data <- private$read_json(self$source)
       invisible(self)
     },
     #' @description
@@ -106,8 +106,10 @@ Snapshot <- R6::R6Class(
         if (length(names) > 0) {
           cli_ul(names)
         }
-
       invisible(names)
+    },
+    read_json = function(source) {
+      jsonlite::fromJSON(source, simplifyDataFrame = FALSE, simplifyVector = FALSE)
     }
   ),
   active = list(
@@ -164,7 +166,7 @@ Snapshot <- R6::R6Class(
 #' @return The source file path or url.
 get_source <- function(input){
     if (is_file_local(input)) {
-      source <- input
+      source <- normalizePath(input)
     } else if (is_file_url(input)) {
       check_internet()
 

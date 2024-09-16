@@ -108,8 +108,8 @@ DDI <- R6::R6Class(
     #' - a URL to a compound building block.
     #' - a Path to a local file.
     import = function(input) {
-      self$source <- private$get_source(input)
-      self$data <- jsonlite::fromJSON(self$source, simplifyDataFrame = FALSE, simplifyVector = FALSE, )
+      self$source <- get_source(input)
+      self$data <- private$read_json(self$source)
     }
   ),
   private = list(),
