@@ -18,23 +18,43 @@ create_ddi <- function(...) {
   ddi
 }
 
+#' Import Drug-Drug Interaction (DDI) Simulation from Snapshot
+#'
+#' @inheritParams get_source
+#'
+#' @return a DDI object
+#' @export
+#'
+#' @examples
+#' #' \dontrun{
+#' import_ddi("Rifampicin-Midazolam-DDI.json")
+#' }
 import_ddi <- function(input) {
   ddi <- DDI$new()
   ddi$import(input = input)
   ddi
 }
 
+#' R6 Class Representing a DDI Snapshot
+#'
+#' @description
+#' A snapshot is a JSON file that contains all the information about a model.
+#' This class is used to import, access and manipulate the data from a DDI snapshot.
 DDI <- R6::R6Class(
   classname = "DDI",
   class = TRUE,
   inherit = Snapshot,
   public = list(
-    data = NULL,
-    source = NULL,
+    #' @description
+    #' Create a DDI object.
+    #' @return A new `DDI` object.
     initialize = function() {
       self$source <- NULL
       self$data <- list()
     },
+    #' @description
+    #' Combine multiple compounds into a DDI simulation.
+    #' @param ... a set of compounds created by `compound()`
     combine = function(...) {
       self$source <- "Merge"
 
@@ -81,6 +101,12 @@ DDI <- R6::R6Class(
         self$data[[s]] <- section_unique
       })
     },
+    #' @description
+    #' Import a DDI simulation from a JSON file.
+    #' @param input character string that is wether
+    #' - a compound name from the list of available compounds `list_compounds()`.
+    #' - a URL to a compound building block.
+    #' - a Path to a local file.
     import = function(input) {
       self$source <- private$get_source(input)
       self$data <- jsonlite::fromJSON(self$source, simplifyDataFrame = FALSE, simplifyVector = FALSE, )
