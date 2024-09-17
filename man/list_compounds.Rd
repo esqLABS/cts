@@ -6,6 +6,9 @@
 \usage{
 list_compounds(...)
 }
+\arguments{
+\item{...}{supplementary arguments passed to the function, for development use only}
+}
 \value{
 a list of the available compound building blocks
 }

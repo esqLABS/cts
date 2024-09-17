@@ -30,7 +30,7 @@ is_file_url <- function(x, error_call = caller_env()) {
     ans <- try(
       {
         suppressWarnings(
-          download.file(x, destfile = tempfile(), quiet = T)
+          utils::download.file(x, destfile = tempfile(), quiet = T)
         )
       },
       silent = TRUE

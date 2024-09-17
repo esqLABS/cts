@@ -31,4 +31,4 @@ Compound <- R6::R6Class(
   public = list(),
   private = list(),
   active = list()
-  )
+)

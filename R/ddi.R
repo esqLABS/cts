@@ -26,7 +26,6 @@ create_ddi <- function(...) {
 #' @export
 #'
 #' @examples
-#' #'
 #' \dontrun{
 #' import_ddi("Rifampicin-Midazolam-DDI.json")
 #' }

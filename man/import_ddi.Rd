@@ -21,7 +21,7 @@ a DDI object
 Import Drug-Drug Interaction (DDI) Simulation from Snapshot
 }
 \examples{
-#' \dontrun{
+\dontrun{
 import_ddi("Rifampicin-Midazolam-DDI.json")
 }
 }

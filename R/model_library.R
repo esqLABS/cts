@@ -23,6 +23,8 @@ get_osp_model_library <- function() {
 #' Available Compound Building Blocks
 #' @description List all available official compound building blocks on OSPsuite
 #'
+#' @param ... supplementary arguments passed to the function, for development use only
+#'
 #' @return a list of the available compound building blocks
 #'
 #' @export
