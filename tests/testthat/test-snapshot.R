@@ -32,3 +32,10 @@ test_that("Providing wrong input type fails with explicit error", {
   # Bad file path
   expect_error(compound(test_path("data/Rifampicine-Model.json")))
 })
+
+
+test_that("get_names and print function works", {
+  expect_snapshot({
+    rifampicin
+  })
+})
