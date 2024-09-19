@@ -13,6 +13,7 @@ Imports:
     cli,
     curl,
     jsonlite,
+    magrittr,
     ospsuite (>= 12.1.0),
     purrr,
     R6,
