@@ -1,4 +1,4 @@
-#' Create a coumpound building block
+#' Create a compound building block
 #'
 #' @param input character string that is wether
 #' - a compound name from the list of available compounds `list_compounds()`.
@@ -16,29 +16,19 @@
 #' compound("https://raw.githubusercontent.com/Open-Systems-Pharmacology/Alfentanil-Model/v2.2/Alfentanil-Model.json")
 #' }
 compound <- function(input) {
-  if (is_file(input)) {
-
-    source <- input
-
-  } else if (is_url(input)) {
-
-    check_internet()
-
-    source <- input
-
-  } else if (input %in% list_compounds(display = FALSE)) {
-
-    check_internet()
-
-    source <- get_buildingblocks_data()[[input]]
-
-  } else {
-
-    cli_abort(message = c(x = "Invalid input type.", i = "Please provide a valid compound name, URL or path to a local file."))
-
-  }
-
-  snapshot <- jsonlite::fromJSON(source, simplifyDataFrame = FALSE)
-
-  return(snapshot)
+  Compound$new(input)
 }
+
+#' R6 Class Representing a Compound Snapshot
+#'
+#' @description
+#' A snapshot is a JSON file that contains all the information about a model.
+#' This class is used to import, access and manipulate the data from a compound snapshot.
+Compound <- R6::R6Class(
+  classname = "Compound",
+  class = TRUE,
+  inherit = Snapshot,
+  public = list(),
+  private = list(),
+  active = list()
+)
