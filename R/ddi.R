@@ -22,9 +22,25 @@ create_ddi <- function(victim, ...) {
     cli::cli_abort("At least one perpetrator compound must be provided.")
   }
 
+  # validate all elements are of class 'Compound'
+  compounds <- c(list(victim), perpetrators)
+  is_compound <- vapply(
+    compounds, \(comp) inherits(comp, "Compound"), logical(1)
+  )
+
+  if (!all(is_compound)) {
+    invalid_indices <- which(!is_compound)
+    invalid_classes <- vapply(compounds[invalid_indices], class, character(1))
+
+    invalid_details <- paste0("[", invalid_indices, "] ", invalid_classes)
+    cli_abort(c(
+      "All compounds must be of class 'Compound'. Invalid entries found at position(s):",
+      invalid_details
+    ))
+  }
   ddi <- DDI$new()
 
-  do.call(ddi$combine, c(list(victim), perpetrators))
+  do.call(ddi$combine, compounds)
   ddi
 }
 
