@@ -38,6 +38,14 @@ create_ddi <- function(victim, ...) {
       invalid_details
     ))
   }
+
+  # create and print status message
+  victim_name <- suppressMessages(victim$compoundsNames())
+  perpetrator_names <- sapply(perpetrators, function(x) suppressMessages(x$compoundsNames()))
+
+  cli_text("{.strong Victim compound:} {victim_name}")
+  cli_text("{.strong Perpetrator compound(s):} {paste(perpetrator_names, collapse = ', ')}")
+
   ddi <- DDI$new()
 
   do.call(ddi$combine, compounds)
