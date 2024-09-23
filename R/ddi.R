@@ -1,6 +1,10 @@
 #' Create a Drug-Drug Interaction (DDI) Simulation
 #'
-#' @param ... a set of compounds created by `compound()`
+#' @param victim The main compound in the DDI interaction, created by `compound()`,
+#' mandatory.
+#' @param ... Additional compounds (perpetrators) in the DDI interaction,
+#' created by `compound()`.
+
 #'
 #' @return a Drug-Drug Interaction (DDI) simulation object
 #' @export
@@ -9,12 +13,18 @@
 #' \dontrun{
 #' rifampicin <- compound("Rifampicin")
 #' midazolam <- compound("Midazolam")
-#' create_ddi(rifampicin, midazolam)
+#' create_ddi(victim = rifampicin, midazolam)
 #' }
-create_ddi <- function(...) {
+create_ddi <- function(victim, ...) {
+  perpetrators <- list(...)
+
+  if (length(perpetrators) == 0) {
+    cli::cli_abort("At least one perpetrator compound must be provided.")
+  }
+
   ddi <- DDI$new()
 
-  ddi$combine(...)
+  do.call(ddi$combine, c(list(victim), perpetrators))
   ddi
 }
 
