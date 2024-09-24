@@ -3,6 +3,7 @@
 export("%>%")
 export(compound)
 export(create_ddi)
+export(export_ddi)
 export(import_ddi)
 export(list_compounds)
 import(cli)

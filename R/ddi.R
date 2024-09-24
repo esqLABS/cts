@@ -35,6 +35,19 @@ import_ddi <- function(input) {
   ddi
 }
 
+#' Export Drug-Drug Interaction (DDI) Simulation to Snapshot
+#' @param ddi a DDI object
+#' @param path a character string that is the path to the snapshot
+#' @export
+#' @examples
+#' \dontrun{
+#' ddi <- create_ddi(rifampicin, midazolam)
+#' export_ddi(ddi, "Rifampicin-Midazolam-DDI.json")
+#' }
+export_ddi <- function(ddi, path) {
+  ddi$export(path)
+}
+
 #' R6 Class Representing a DDI Snapshot
 #'
 #' @description
