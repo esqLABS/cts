@@ -47,6 +47,7 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item \href{#method-Snapshot-new}{\code{Snapshot$new()}}
 \item \href{#method-Snapshot-print}{\code{Snapshot$print()}}
 \item \href{#method-Snapshot-compoundsNames}{\code{Snapshot$compoundsNames()}}
+\item \href{#method-Snapshot-export}{\code{Snapshot$export()}}
 \item \href{#method-Snapshot-individualsNames}{\code{Snapshot$individualsNames()}}
 \item \href{#method-Snapshot-populationsNames}{\code{Snapshot$populationsNames()}}
 \item \href{#method-Snapshot-formulationsNames}{\code{Snapshot$formulationsNames()}}
@@ -102,6 +103,23 @@ Get the names of the compounds in the snapshot.
 \if{html}{\out{<div class="r">}}\preformatted{Snapshot$compoundsNames()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-export"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-export}{}}}
+\subsection{Method \code{export()}}{
+Export a DDI simulation to a JSON file.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$export(path)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{path}}{character string that is the path to the output file.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-individualsNames"></a>}}

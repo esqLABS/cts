@@ -24,6 +24,7 @@ This class is used to import, access and manipulate the data from a DDI snapshot
 <ul>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="compoundsNames"><a href='../../cts/html/Snapshot.html#method-Snapshot-compoundsNames'><code>cts::Snapshot$compoundsNames()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="eventsNames"><a href='../../cts/html/Snapshot.html#method-Snapshot-eventsNames'><code>cts::Snapshot$eventsNames()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="export"><a href='../../cts/html/Snapshot.html#method-Snapshot-export'><code>cts::Snapshot$export()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="formulationsNames"><a href='../../cts/html/Snapshot.html#method-Snapshot-formulationsNames'><code>cts::Snapshot$formulationsNames()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="individualsNames"><a href='../../cts/html/Snapshot.html#method-Snapshot-individualsNames'><code>cts::Snapshot$individualsNames()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="observedDataNames"><a href='../../cts/html/Snapshot.html#method-Snapshot-observedDataNames'><code>cts::Snapshot$observedDataNames()</code></a></span></li>
