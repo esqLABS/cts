@@ -15,7 +15,7 @@ test_that("DDI can be created from two compounds", {
 test_that("Compounds snapshots are correctly merged when creating a DDI", {
   ddi_merged <- suppressWarnings(create_ddi(itraconazole, levonorgestrel))
 
-  ddi_ref <- import_ddi(test_path("data/Levonorgestrel-Itraconazole-DDI.json"))
+  ddi_ref <- levo_itra_ddi
 
   expect_equal(ddi_merged$compounds, ddi_ref$compounds)
 
@@ -43,5 +43,15 @@ test_that("Compound snapshot with different versions can be merged", {
   ddi <- create_ddi(itraconazole80, rifampicin)
 
   expect_equal(ddi$data$Version, 80)
+
+})
+
+test_that("DDI can be exported", {
+
+  temp_file <- withr::local_tempfile(fileext = ".json")
+
+  export_ddi(levo_itra_ddi,temp_file)
+
+  expect_snapshot_file(temp_file, name = "exported_ddi_snapshot.json")
 
 })

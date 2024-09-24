@@ -52,6 +52,12 @@ Snapshot <- R6::R6Class(
       private$get_names("compounds")
     },
     #' @description
+    #' Export a DDI simulation to a JSON file.
+    #' @param path character string that is the path to the output file.
+    export = function(path) {
+      private$write_json(self$data, path)
+    },
+    #' @description
     #' Get the names of the individuals in the snapshot.
     individualsNames = function() {
       private$get_names("individuals")
@@ -102,14 +108,27 @@ Snapshot <- R6::R6Class(
     get_names = function(field) {
       names <- map(self[[field]], ~ .x$Name) %>% list_c()
 
-        cli_text(snakecase::to_title_case(field), ":", if (length(names) == 0) {" None"})
-        if (length(names) > 0) {
-          cli_ul(names)
-        }
+      cli_text(snakecase::to_title_case(field), ":", if (length(names) == 0) {
+        " None"
+      })
+      if (length(names) > 0) {
+        cli_ul(names)
+      }
       invisible(names)
     },
     read_json = function(source) {
-      jsonlite::fromJSON(source, simplifyDataFrame = FALSE, simplifyVector = FALSE)
+      jsonlite::fromJSON(source,
+        simplifyDataFrame = FALSE,
+        simplifyVector = FALSE
+      )
+    },
+    write_json = function(data, path) {
+      jsonlite::write_json(data,
+        path = path,
+        pretty = TRUE,
+        auto_unbox = TRUE,
+        digits = NA
+      )
     }
   ),
   active = list(
@@ -164,21 +183,21 @@ Snapshot <- R6::R6Class(
 #' - a URL to a compound building block.
 #' - a Path to a local file.
 #' @return The source file path or url.
-get_source <- function(input){
-    if (is_file_local(input)) {
-      source <- normalizePath(input)
-    } else if (is_file_url(input)) {
-      check_internet()
+get_source <- function(input) {
+  if (is_file_local(input)) {
+    source <- normalizePath(input)
+  } else if (is_file_url(input)) {
+    check_internet()
 
-      source <- input
-    } else if (input %in% list_compounds(display = FALSE)) {
-      check_internet()
+    source <- input
+  } else if (input %in% list_compounds(display = FALSE)) {
+    check_internet()
 
-      source <- get_osp_model_library()[[input]]
+    source <- get_osp_model_library()[[input]]
 
-      cli_process_start(msg = "Downloading {input} Building Block Data")
-    } else {
-      cli_abort(message = c(x = "Invalid input type.", i = "Please provide a valid compound name, URL or path to a local file."))
-    }
-    return(source)
+    cli_process_start(msg = "Downloading {input} Building Block Data")
+  } else {
+    cli_abort(message = c(x = "Invalid input type.", i = "Please provide a valid compound name, URL or path to a local file."))
+  }
+  return(source)
 }

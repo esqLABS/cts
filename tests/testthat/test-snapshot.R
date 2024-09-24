@@ -39,3 +39,22 @@ test_that("get_names and print function works", {
     rifampicin
   })
 })
+
+test_that("Snapshot can be exported as JSON files and recreated from it", {
+  temp_file <- withr::local_tempfile(fileext = ".json")
+
+  rifampicin_snap$export(temp_file)
+  expect_true(file.exists(temp_file))
+
+  expect_no_error(
+    new_snap <- Snapshot$new(temp_file)
+  )
+
+  # overwrite source for comparison purposes
+  new_snap$source <- rifampicin_snap$source
+
+  expect_equal(
+    rifampicin_snap,
+    new_snap
+  )
+})
