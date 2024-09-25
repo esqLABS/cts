@@ -4,21 +4,26 @@
 \alias{create_ddi}
 \title{Create a Drug-Drug Interaction (DDI) Simulation}
 \usage{
-create_ddi(...)
+create_ddi(victim, perpetrator)
 }
 \arguments{
-\item{...}{a set of compounds created by \code{compound()}}
+\item{victim}{The main compound in the DDI interaction, created by \code{compound()},
+mandatory.}
+
+\item{perpetrator}{Additional compounds (perpetrators) in the DDI interaction,
+created by \code{compound()}. Pass one or more \code{Compound} objects.}
 }
 \value{
 a Drug-Drug Interaction (DDI) simulation object
 }
 \description{
-Create a Drug-Drug Interaction (DDI) Simulation
+This function creates a DDI simulation by combining a main compound (victim)
+with one or more additional compounds (perpetrators).
 }
 \examples{
 \dontrun{
 rifampicin <- compound("Rifampicin")
 midazolam <- compound("Midazolam")
-create_ddi(rifampicin, midazolam)
+create_ddi(victim = rifampicin, perpetrator = midazolam)
 }
 }

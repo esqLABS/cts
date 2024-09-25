@@ -1,10 +1,12 @@
 #' Create a Drug-Drug Interaction (DDI) Simulation
 #'
+#' This function creates a DDI simulation by combining a main compound (victim)
+#' with one or more additional compounds (perpetrators).
+#'
 #' @param victim The main compound in the DDI interaction, created by `compound()`,
-#' mandatory.
-#' @param ... Additional compounds (perpetrators) in the DDI interaction,
-#' created by `compound()`.
-
+#'  mandatory.
+#' @param perpetrator Additional compounds (perpetrators) in the DDI interaction,
+#' created by `compound()`. Pass one or more `Compound` objects.
 #'
 #' @return a Drug-Drug Interaction (DDI) simulation object
 #' @export
@@ -13,42 +15,23 @@
 #' \dontrun{
 #' rifampicin <- compound("Rifampicin")
 #' midazolam <- compound("Midazolam")
-#' create_ddi(victim = rifampicin, midazolam)
+#' create_ddi(victim = rifampicin, perpetrator = midazolam)
 #' }
-create_ddi <- function(victim, ...) {
-  perpetrators <- list(...)
-
-  if (length(perpetrators) == 0) {
+create_ddi <- function(victim, perpetrator) {
+  if (missing(victim)) {
+    cli::cli_abort("At least one victim compound must be provided.")
+  }
+  if (missing(perpetrator)) {
     cli::cli_abort("At least one perpetrator compound must be provided.")
   }
 
-  # validate all elements are of class 'Compound'
-  compounds <- c(list(victim), perpetrators)
-  is_compound <- vapply(
-    compounds, \(comp) inherits(comp, "Compound"), logical(1)
-  )
-
-  if (!all(is_compound)) {
-    invalid_indices <- which(!is_compound)
-    invalid_classes <- vapply(compounds[invalid_indices], class, character(1))
-
-    invalid_details <- paste0("[", invalid_indices, "] ", invalid_classes)
-    cli_abort(c(
-      "All compounds must be of class 'Compound'. Invalid entries found at position(s):",
-      invalid_details
-    ))
-  }
-
-  # create and print status message
-  victim_name <- suppressMessages(victim$compoundsNames())
-  perpetrator_names <- sapply(perpetrators, function(x) suppressMessages(x$compoundsNames()))
-
-  cli_text("{.strong Victim compound:} {victim_name}")
-  cli_text("{.strong Perpetrator compound(s):} {paste(perpetrator_names, collapse = ', ')}")
+  victim <- to_list(victim)
+  perpetrators <- to_list(perpetrator)
 
   ddi <- DDI$new()
 
-  do.call(ddi$combine, compounds)
+  # Delegate the combining task to the DDI object
+  do.call(ddi$combine, c(victim, perpetrators))
   ddi
 }
 
@@ -93,6 +76,9 @@ DDI <- R6::R6Class(
       self$source <- "Merge"
 
       snapshots <- list(...)
+
+      # Validate that all inputs are of class 'Compound'
+      private$validate_compounds(snapshots)
 
       snapshot_versions <- map(snapshots, ~ .x$data$Version) %>% list_c()
 
@@ -176,6 +162,36 @@ DDI <- R6::R6Class(
       self$data <- private$read_json(self$source)
     }
   ),
-  private = list(),
+  private = list(
+    # Validate that all inputs are of class 'Compound'
+    # @param compounds A list of compound objects to validate.
+    validate_compounds = function(compounds) {
+      is_compound <- vapply(
+        compounds, \(comp) inherits(comp, "Compound"), logical(1)
+      )
+
+      if (!all(is_compound)) {
+        invalid_indices <- which(!is_compound)
+        invalid_classes <- vapply(compounds[invalid_indices], class, character(1))
+
+        invalid_details <- paste0("[", invalid_indices, "] ", invalid_classes)
+        cli::cli_abort(c(
+          "All compounds must be of class 'Compound'. Invalid entries found at position(s):",
+          invalid_details
+        ))
+      }
+
+      # create and print status message
+      victim_name <- suppressMessages(compounds[[1]]$compoundsNames())
+      perpetrator_names <- sapply(
+        compounds[-1],
+        \(x) suppressMessages(x$compoundsNames())
+      )
+
+      cli::cli_text("{.strong Victim compound:} {victim_name}")
+      cli::cli_text("{.strong Perpetrator compound(s):} {paste(perpetrator_names,
+                collapse = ', ')}")
+    }
+  ),
   active = list()
 )
