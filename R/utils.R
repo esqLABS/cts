@@ -1,4 +1,3 @@
-
 #' Check whether the user has an internet connection
 #'
 #' @return TRUE if the user has an internet connection
@@ -61,4 +60,25 @@ is_file_url <- function(x, error_call = caller_env()) {
 #' @keywords internal
 is_file_local <- function(x) {
   all(file.exists(x) & !dir.exists(x))
+}
+
+#' Convert an object or vector to a list
+#'
+#' If the input is already a list, it returns the input unchanged. If the input
+#' is a vector, it converts the vector to a list where each element of the vector
+#' becomes an element of the list. For all other types, it wraps the input in a
+#' list.
+#'
+#' @param x Any R object or vector.
+#' @return A list containing `x`, a list of the elements of `x` if `x` is a
+#' vector, or `x` itself if it's already a list.
+#'
+#' @keywords internal
+to_list <- function(x) {
+  if (is.list(x)) {
+    return(x)
+  } else if (is.vector(x)) {
+    return(as.list(x))
+  }
+  return(list(x))
 }
