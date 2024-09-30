@@ -64,6 +64,13 @@ test_that("An error is thrown when victim or perpetrator are missing", {
   )
 })
 
+test_that("An error is thrown when victim is not length 1", {
+  expect_error(
+    create_ddi(victim = c(rifampicin, midazolam), perpetrator = midazolam),
+    "Please provide exactly one victim compound."
+  )
+})
+
 test_that("An error is thrown when victim or perpetrator are not a Compound", {
   expect_error(
     create_ddi(rifampicin, "not a compound"),

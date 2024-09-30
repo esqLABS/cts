@@ -24,6 +24,9 @@ create_ddi <- function(victim, perpetrator) {
   if (missing(perpetrator)) {
     cli::cli_abort("At least one perpetrator compound must be provided.")
   }
+  if (length(to_list(victim)) > 1) {
+    cli::cli_abort("Please provide exactly one victim compound.")
+  }
 
   perpetrators <- to_list(perpetrator)
 
