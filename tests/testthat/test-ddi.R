@@ -4,6 +4,14 @@ test_that("DDI snapshots can be imported", {
   )
 })
 
+test_that("create_ddi prints the correct status message", {
+  expect_snapshot(
+    capture_messages(
+      suppressWarnings(ddi <- create_ddi(rifampicin, c(midazolam, midazolam)))
+    )
+  )
+})
+
 test_that("DDI can be created from two compounds", {
   expect_no_error(
     suppressWarnings(

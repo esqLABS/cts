@@ -25,7 +25,6 @@ create_ddi <- function(victim, perpetrator) {
     cli::cli_abort("At least one perpetrator compound must be provided.")
   }
 
-  victim <- to_list(victim)
   perpetrators <- to_list(perpetrator)
 
   ddi <- DDI$new()
@@ -79,6 +78,7 @@ DDI <- R6::R6Class(
 
       # Validate that all inputs are of class 'Compound'
       private$validate_compounds(snapshots)
+      private$print_status(snapshots)
 
       snapshot_versions <- map(snapshots, ~ .x$data$Version) %>% list_c()
 
@@ -180,17 +180,19 @@ DDI <- R6::R6Class(
           invalid_details
         ))
       }
-
-      # create and print status message
-      victim_name <- suppressMessages(compounds[[1]]$compoundsNames())
-      perpetrator_names <- sapply(
-        compounds[-1],
+    },
+    # Create and print status message
+    # @param compounds A list of compound objects.
+    print_status = function(compounds) {
+      compound_names <- sapply(
+        compounds,
         \(x) suppressMessages(x$compoundsNames())
       )
 
-      cli::cli_text("{.strong Victim compound:} {victim_name}")
-      cli::cli_text("{.strong Perpetrator compound(s):} {paste(perpetrator_names,
-                collapse = ', ')}")
+      cli::cli_text("{.strong Victim compound:}")
+      cli::cli_li(compound_names[1])
+      cli::cli_text("{.strong Perpetrator compound(s):}")
+      cli::cli_li(compound_names[-1])
     }
   ),
   active = list()
