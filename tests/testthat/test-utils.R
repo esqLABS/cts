@@ -19,4 +19,6 @@ test_that("to_list works as expected", {
   expect_equal(to_list(c(1, 2)), list(1, 2))
   expect_equal(to_list(c("a", "b")), list("a", "b"))
   expect_equal(to_list(list(1, 2)), list(1, 2))
+  expect_equal(to_list(list(rifampicin)), to_list(rifampicin))
+  expect_equal(to_list(c(rifampicin, midazolam)), list(rifampicin, midazolam))
 })
