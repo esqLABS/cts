@@ -81,7 +81,7 @@ compound("https://raw.githubusercontent.com/Open-Systems-Pharmacology/Alfentanil
 ```
 
 
-#### 3. From Local File
+#### C. From Local File
 
 You can also import compound models from local JSON files:
 
