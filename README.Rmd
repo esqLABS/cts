@@ -99,7 +99,7 @@ Once you have imported a compound, you can explore its properties, such as formu
 rifampicin$formulations
 ```
 
-This command outputs the formulation details of the compound, allowing you to understand how the compound is configured in the simulation.
+This command outputs the formulations that are defined for the compound and that can be used in simulations.
 
 
 ## Create and Parameterize a DDI Simulation
