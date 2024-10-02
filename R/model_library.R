@@ -9,7 +9,7 @@ get_osp_model_library <- function() {
   check_internet()
 
   # If the data is not already cached in `the` package environment, download it
-  if (is.null(the$ model_library_data)) {
+  if (is.null(the$model_library_data)) {
     cli_process_start(msg = "Listing Compounds Building Blocks available in {style_hyperlink(text = 'OSP repositories', url = model_library_url)}")
     model_library_data_raw <- jsonlite::fromJSON(model_library_url, simplifyDataFrame = FALSE, simplifyVector = FALSE)$Templates
     the$model_library_data <-
