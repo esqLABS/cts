@@ -27,94 +27,46 @@ Snapshot <- R6::R6Class(
     #' Pretty print the snapshot data.
     print = function() {
       compounds <- cli_ul()
-      self$compoundsNames()
+      private$print_names("compounds")
       individuals <- cli_ul()
-      self$individualsNames()
+      private$print_names("individuals")
       populations <- cli_ul()
-      self$populationsNames()
+      private$print_names("populations")
       formulations <- cli_ul()
-      self$formulationsNames()
+      private$print_names("formulations")
       protocols <- cli_ul()
-      self$protocolsNames()
+      private$print_names("protocols")
       observerSets <- cli_ul()
-      self$observerSetsNames()
+      private$print_names("observer_sets")
       events <- cli_ul()
-      self$eventsNames()
+      private$print_names("events")
       simulations <- cli_ul()
-      self$simulationsNames()
+      private$print_names("simulations")
       observedData <- cli_ul()
-      self$observedDataNames()
+      private$print_names("observed_data")
       invisible(self)
-    },
-    #' @description
-    #' Get the names of the compounds in the snapshot.
-    compoundsNames = function() {
-      private$get_names("compounds")
     },
     #' @description
     #' Export a DDI simulation to a JSON file.
     #' @param path character string that is the path to the output file.
     export = function(path) {
       private$write_json(self$data, path)
-    },
-    #' @description
-    #' Get the names of the individuals in the snapshot.
-    individualsNames = function() {
-      private$get_names("individuals")
-    },
-    #' @description
-    #' Get the names of the populations in the snapshot.
-    populationsNames = function() {
-      private$get_names("populations")
-    },
-    #' @description
-    #' Get the names of the formulations in the snapshot.
-    formulationsNames = function() {
-      private$get_names("formulations")
-    },
-    #' @description
-    #' Get the names of the protocols in the snapshot.
-    protocolsNames = function() {
-      private$get_names("protocols")
-    },
-    # Expression profiles do not have names
-    # expressionProfileNames = function() {
-    #   private$get_names("expression_profiles")
-    # }
-    #' @description
-    #' Get the names of the observer sets in the snapshot.
-    observerSetsNames = function() {
-      private$get_names("observer_sets")
-    },
-    #' @description
-    #' Get the names of the events in the snapshot.
-    eventsNames = function() {
-      private$get_names("events")
-    },
-    #' @description
-    #' Get the names of the simulations in the snapshot.
-    simulationsNames = function() {
-      private$get_names("simulations")
-    },
-    #' @description
-    #' Get the names of the observed data in the snapshot.
-    observedDataNames = function() {
-      private$get_names("observed_data")
     }
   ),
   private = list(
     #' description
     #' get_names the names of a field in the snapshot.
     get_names = function(field) {
-      names <- map(self[[field]], ~ .x$Name) %>% list_c()
-
+      list_c(map(self[[field]], ~ .x$Name))
+    },
+    print_names = function(field){
+      names <- self[[paste0(field, "Names")]]
       cli_text(snakecase::to_title_case(field), ":", if (length(names) == 0) {
         " None"
       })
       if (length(names) > 0) {
         cli_ul(names)
       }
-      invisible(names)
     },
     read_json = function(source) {
       jsonlite::fromJSON(source,
@@ -136,41 +88,81 @@ Snapshot <- R6::R6Class(
     compounds = function() {
       self$data$Compounds
     },
+    #' @field compoundsNames Names of the compounds in the snapshot.
+    compoundsNames = function(){
+      private$get_names("compounds")
+    },
     #' @field individuals Access the individuals data from the snapshot.
-    individuals = function() {
+    individuals = function(){
       self$data$Individuals
     },
+    #' @field individualsNames Names of the individuals in the snapshot.
+    individualsNames = function() {
+      private$get_names("individuals")
+    },
     #' @field populations Access the populations data from the snapshot.
-    populations = function() {
+    populations = function(){
       self$data$Populations
     },
+    #' @field populationsNames Names of the populations in the snapshot.
+    populationsNames = function() {
+      private$get_names("populations")
+    },
     #' @field formulations Access the formulations data from the snapshot.
-    formulations = function() {
+    formulations = function(){
       self$data$Formulations
     },
+    #' @field formulationsNames Names of the formulations in the snapshot.
+    formulationsNames = function() {
+      private$get_names("formulations")
+    },
     #' @field protocols Access the protocols data from the snapshot.
-    protocols = function() {
+    protocols = function(){
       self$data$Protocols
     },
+    #' @field protocolsNames Names of the protocols in the snapshot.
+    protocolsNames = function() {
+      private$get_names("protocols")
+    },
     #' @field expression_profiles Access the expression profiles data from the snapshot.
-    expression_profiles = function() {
+    expression_profiles = function(){
       self$data$ExpressionProfiles
     },
+    #' @field expression_profilesNames Names of the expression profiles in the snapshot.
+    expression_profilesNames = function() {
+      private$get_names("expression_profiles")
+    },
     #' @field observer_sets Access the observer sets data from the snapshot.
-    observer_sets = function() {
+    observer_sets = function(){
       self$data$ObserverSets
     },
+    #' @field observer_setsNames Names of the observer sets in the snapshot.
+    observer_setsNames = function() {
+      private$get_names("observer_sets")
+    },
     #' @field events Access the events data from the snapshot.
-    events = function() {
+    events = function(){
       self$data$Events
     },
+    #' @field eventsNames Names of the events in the snapshot.
+    eventsNames = function() {
+      private$get_names("events")
+    },
     #' @field simulations Access the simulations data from the snapshot.
-    simulations = function() {
+    simulations = function(){
       self$data$Simulations
     },
+    #' @field simulationsNames Names of the simulations in the snapshot.
+    simulationsNames = function() {
+      private$get_names("simulations")
+    },
     #' @field observed_data Access the observed data from the snapshot.
-    observed_data = function() {
+    observed_data = function(){
       self$data$ObservedData
+    },
+    #' @field observed_dataNames Names of the observed data in the snapshot.
+    observed_dataNames = function() {
+      private$get_names("observed_data")
     }
   )
 )

@@ -8,6 +8,9 @@
 #' @param perpetrator Additional compounds (perpetrators) in the DDI interaction,
 #' created by `compound()`. Pass one or more `Compound` objects.
 #'
+#' @param options a named list of options to customize the DDI simulation. Default is to use `default_options`.
+#'   - import_simulations: logical, whether to import the simulations from the victim and perpetrators. default is FALSE.
+#'
 #' @return a Drug-Drug Interaction (DDI) simulation object
 #' @export
 #'
@@ -17,7 +20,7 @@
 #' midazolam <- compound("Midazolam")
 #' create_ddi(victim = rifampicin, perpetrator = midazolam)
 #' }
-create_ddi <- function(victim, perpetrator) {
+create_ddi <- function(victim, perpetrator, options = NULL) {
   if (missing(victim)) {
     cli::cli_abort("At least one victim compound must be provided.")
   }
@@ -30,7 +33,7 @@ create_ddi <- function(victim, perpetrator) {
 
   perpetrators <- to_list(perpetrator)
 
-  ddi <- DDI$new()
+  ddi <- DDI$new(options)
 
   # Delegate the combining task to the DDI object
   do.call(ddi$combine, c(victim, perpetrators))
@@ -77,12 +80,29 @@ DDI <- R6::R6Class(
   class = TRUE,
   inherit = Snapshot,
   public = list(
+    options = NULL,
     #' @description
     #' Create a DDI object.
     #' @return A new `DDI` object.
-    initialize = function() {
+    initialize = function(options = NULL) {
       self$source <- NULL
       self$data <- list()
+      if (is.null(options)) {
+        options <- default_options
+      } else {
+        private$validate_options(options)
+      }
+      self$options <- options
+    },
+    print = function() {
+      compound_names <- suppressMessages(self$compoundsNames)
+
+      cli_text("DDI simulation created with the following compounds:")
+      cli::cli_text("{.strong Victim compound:}")
+      cli::cli_li(compound_names[1])
+      cli::cli_text("{.strong Perpetrator {qty(compound_names[-1])}compound{?s}:}")
+      cli::cli_li(compound_names[-1])
+      invisible(self)
     },
     #' @description
     #' Combine multiple compounds into a DDI simulation.
@@ -94,9 +114,8 @@ DDI <- R6::R6Class(
 
       # Validate that all inputs are of class 'Compound'
       private$validate_compounds(snapshots)
-      private$print_status(snapshots)
 
-      snapshot_versions <- map(snapshots, ~ .x$data$Version) %>% list_c()
+      snapshot_versions <- list_c(map(snapshots, ~ .x$data$Version))
 
       # If Snapshots have different versions
       if (length(unique(snapshot_versions)) > 1) {
@@ -108,19 +127,19 @@ DDI <- R6::R6Class(
         paths <- map(snapshots, ~ .x$source) %>% list_c()
 
         suppressMessages({
-        # Convert snapshot to project to upgrade them to latest version
-        ospsuite::convertSnapshot(paths,
-          format = "project",
-          output = temp_dir,
-          runSimulations = FALSE
-        )
+          # Convert snapshot to project to upgrade them to latest version
+          ospsuite::convertSnapshot(paths,
+            format = "project",
+            output = temp_dir,
+            runSimulations = FALSE
+          )
 
-        # Convert back to snapshot to get json format
-        ospsuite::convertSnapshot(
-          temp_dir,
-          format = "snapshot",
-          output = temp_dir
-        )
+          # Convert back to snapshot to get json format
+          ospsuite::convertSnapshot(
+            temp_dir,
+            format = "snapshot",
+            output = temp_dir
+          )
         })
 
         snapshots <- map(list.files(temp_dir, pattern = ".json", full.names = TRUE), ~ Compound$new(input = .x))
@@ -137,9 +156,12 @@ DDI <- R6::R6Class(
         "ExpressionProfiles",
         "ObserverSets",
         "Events",
-        "Simulations",
+        # "Simulations",
         "ObservedData"
       )
+      if (self$options$import_simulations) {
+        sections_to_merge <- c(sections_to_merge, "Simulations")
+      }
 
       walk(sections_to_merge, function(s) {
         # Merge all elements in section
@@ -151,7 +173,7 @@ DDI <- R6::R6Class(
         section_non_null <- keep(section_merged, ~ !is.null(.x))
 
         # Detect duplicated Named element and remove them except first occurence
-        names <- map(section_non_null, "Name") %>% list_c()
+        names <- list_c(map(section_non_null, "Name"))
         duplicated <- names[duplicated(names)]
         n_duplicated <- length(duplicated)
         if (length(duplicated) > 0) {
@@ -179,6 +201,28 @@ DDI <- R6::R6Class(
     }
   ),
   private = list(
+    # Validate options
+    validate_options = function(options) {
+      # check option is a list
+      if (!is.list(options)) {
+        cli::cli_abort("Options must be a named list. see")
+      }
+
+      # check options is supported
+      if (!all(names(options) %in% names(default_options))) {
+        unsuported_options <- names(options)[!names(options) %in% names(default_options)]
+        cli_abort("Unsupported options found: {unsuported_options}")
+      }
+
+      # check options types
+      types_comparison <- list_c(purrr::imap(options, ~ typeof(.x) == typeof(default_options[[.y]])))
+      if (!all(types_comparison)) {
+        for (i in seq_along(types_comparison)) {
+          cli::cli_alert_danger("Option {names(options)[i]} must be of type {typeof(default_options[[i]])}.")
+        }
+        cli::cli_abort("Some options have invalid types.")
+      }
+    },
     # Validate that all inputs are of class 'Compound'
     # @param compounds A list of compound objects to validate.
     validate_compounds = function(compounds) {
@@ -196,20 +240,12 @@ DDI <- R6::R6Class(
           invalid_details
         ))
       }
-    },
-    # Create and print status message
-    # @param compounds A list of compound objects.
-    print_status = function(compounds) {
-      compound_names <- sapply(
-        compounds,
-        \(x) suppressMessages(x$compoundsNames())
-      )
-
-      cli::cli_text("{.strong Victim compound:}")
-      cli::cli_li(compound_names[1])
-      cli::cli_text("{.strong Perpetrator compound(s):}")
-      cli::cli_li(compound_names[-1])
     }
   ),
   active = list()
 )
+
+default_options <-
+  list(
+    import_simulations = FALSE
+  )
