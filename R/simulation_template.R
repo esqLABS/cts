@@ -66,7 +66,7 @@ extract_compound_processes <- function(compound) {
 }
 
 
-add_generic_simulation <- function(ddi, template_path, victim, perpetrator, individual, victim_formulation, perpetrator_formulation, victim_protocol, perpetrator_protocol) {
+create_generic_simulation <- function(ddi, template_path, victim, perpetrator, individual, victim_formulation, perpetrator_formulation, victim_protocol, perpetrator_protocol) {
   # fill the simulation template
   filled_template <- fill_simulation_template(template_path, victim, perpetrator, individual, victim_formulation, perpetrator_formulation, victim_protocol, perpetrator_protocol)
 
@@ -86,8 +86,5 @@ add_generic_simulation <- function(ddi, template_path, victim, perpetrator, indi
     filled_template$Simulations[[1]]$Compounds[[template_index]]$Processes <- extract_compound_processes(ddi$compounds[[ddi_index]])
   }
 
-  # Append original simulations with new generic one
-  ddi$data$Simulations <- c(filled_template$Simulations, ddi$data$Simulations)
-
-  return(ddi$data)
+  return(filled_template$Simulations)
 }

@@ -209,7 +209,7 @@ DDI <- R6::R6Class(
 
       if (self$options$auto_create_ddi_simulation) {
         # Add generic ddi simulation
-        self$data <- add_generic_simulation(self,
+        generic_simulation <- create_generic_simulation(self,
           system.file("extdata", "generic_simulation_template.json", package = "cts"),
           victim = self$victim,
           perpetrator = self$perpetrators[1],
@@ -219,6 +219,8 @@ DDI <- R6::R6Class(
           perpetrator_protocol = self$metadata$protocols$perpetrators[1],
           individual = self$individualsNames[1]
         )
+
+        self$add_simulation(generic_simulation)
       }
     },
     #' @description
@@ -230,6 +232,12 @@ DDI <- R6::R6Class(
     import = function(input) {
       self$source <- get_source(input)
       self$data <- private$read_json(self$source)
+    },
+    add_simulation = function(simulation) {
+      self$data$Simulations <- c(self$data$Simulations, simulation)
+    },
+    remove_simulation = function(simulation_names){
+      self$data$Simulations <- keep(self$data$Simulations, ~ !(.x$Name %in% simulation_names))
     }
   ),
   private = list(
