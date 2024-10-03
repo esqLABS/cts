@@ -4,13 +4,33 @@
 # cts
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
-The goal of cts is to …
+The `{cts}` (Contraceptives DDI Trial Simulation Platform) package
+provides a comprehensive R-based framework for designing and simulating
+drug-drug interactions (DDI) involving contraceptive drugs using
+physiologically based pharmacokinetic (PBPK) models. This package allows
+researchers to conduct *in silico* DDI simulations programmatically,
+enabling more automated and reproducible workflows. This is particularly
+useful for performing batch simulations, and integrating DDI modeling
+into larger R-based data analysis pipelines, thus enhancing flexibility
+and efficiency in model development and simulation.
+
+#### Key Features
+
+- Import and Explore Compound Models: Retrieve compound models from the
+  OSP model library, a URL, or a local file in JSON format.
+- Simulate DDIs: Design and run DDI simulations between compounds,
+  specifying dosing protocols, individual characteristics, and other
+  simulation parameters.
+- Analyze Results: — .
+- Seamless Integration: Supports the export of simulation snapshots
+  compatible with PK-Sim, enabling further exploration and analysis.
 
 ## Installation
 
-You can install the development version of cts from
+You can install the development version of `cts` from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -20,7 +40,15 @@ pak::pak("esqLABS/cts")
 
 ## Example
 
-### List available compounds building blocks
+Below are some examples to demonstrate how to use the package. These
+steps will guide you through importing compound models, exploring their
+properties, and simulating drug-drug interactions.
+
+### List Available Compound Building Blocks
+
+The `{cts}`package can interface with the Open Systems Pharmacology
+(OSP) model library to retrieve compound models. The `list_compounds()`
+function lists all available compounds in the OSP model library.
 
 ``` r
 library(cts)
@@ -29,23 +57,30 @@ library(cts)
 list_compounds()
 ```
 
-### Import compound snapshot
+This command outputs a list of compound names available in the OSP model
+library, which you can select to create your DDI simulations.
 
-#### From OSP qualified building blocks
+### Import Compound Snapshots
 
-``` r
-rifampicin <- compound("Rifampicin")
+The core functionality of the package involves importing compound
+models. You can import a compound model in various ways:
 
-midazolam <- compound("Midazolam")
-```
+#### A. From OSP Qualified Building Blocks
 
-#### From URL
+You can directly import pre-qualified compounds from the OSP model
+library:
+
+#### B. From URL
+
+For compound models hosted online, use the URL to import the model:
 
 ``` r
 compound("https://raw.githubusercontent.com/Open-Systems-Pharmacology/Alfentanil-Model/v2.2/Alfentanil-Model.json")
 ```
 
-#### From File
+#### 3. From Local File
+
+You can also import compound models from local JSON files:
 
 ``` r
 compound("path/to/Alfentanil-Model.json")
@@ -53,12 +88,78 @@ compound("path/to/Alfentanil-Model.json")
 
 ### Explore Compound
 
+Once you have imported a compound, you can explore its properties, such
+as formulations, protocols, and parameters:
+
+This command outputs the formulation details of the compound, allowing
+you to understand how the compound is configured in the simulation.
+
+## Create and Parameterize a DDI Simulation
+
+After importing the necessary compounds, you can create a DDI
+simulation. Here is a basic example of creating a DDI simulation with a
+victim compound (e.g., Rifampicin) and a perpetrator compound (e.g.,
+Midazolam):
+
 ``` r
-rifampicin$Formulations
-#> [[1]]
-#> [[1]]$Name
-#> [1] "Oral solution"
-#> 
-#> [[1]]$FormulationType
-#> [1] "Formulation_Dissolved"
+# Create a DDI simulation
+myDDI <- create_ddi(victim = rifampicin, perpetrator = midazolam)
 ```
+
+Next, you can parameterize the DDI simulation by setting dosing
+protocols and individual characteristics. For example, you can set a
+dosing protocol for the victim compound:
+
+``` r
+# Define dosing protocol
+protocol_1 <- protocol(dose = 250, dose_unit = "mg", start = 0, end = 30, interval = 1, time_unit = "days")
+
+# Apply the protocol to the compound in the DDI simulation
+set_protocol(myDDI, compound = "Rifampicin", protocol = protocol_1)
+```
+
+Here, a dosing protocol is defined and applied to Rifampicin, specifying
+a daily dose of 250 mg for 30 days.
+
+## Run the DDI Simulation and Export Results
+
+Finally, you can run the DDI simulation and export the results for
+further analysis:
+
+``` r
+# Run the DDI simulation and export results
+run_ddi(myDDI, path = "path/to/output", 
+        format = "csv",  # Export results as a CSV file
+        pkml = TRUE,     # Export the simulation as a PK-Sim project file
+        plots = TRUE,    # Generate simulation plots
+        stats = TRUE     # Compute and include PK statistics
+)
+```
+
+This command runs the DDI simulation, saves the results to the specified
+path, generates relevant plots, and computes PK statistics, making it
+easy to analyze the interaction outcomes.
+
+## Export the DDI Simulation as a Snapshot
+
+You can also export the entire DDI simulation as a snapshot file for
+future use or for importing into other platforms such as PK-Sim:
+
+``` r
+# Export the DDI simulation to a JSON snapshot file
+export_ddi(myDDI, "path/to/Rifampicin-Midazolam-DDI.json")
+```
+
+## Dependencies
+
+The `{cts}` package relies on several components from the Open Systems
+Pharmacology Suite:
+
+- **R version 4.4.0 or higher**.
+- **External R packages**: `{ospsuite}` for interaction with the PK-Sim
+  core and `{rSharp}` for R and C# integration. These packages are
+  installed automatically when you install `{cts}`.
+
+For more details on the installation and dependency requirements for
+`{ospsuite}`, please visit the `{ospsuiteR}` GitHub page
+[here](https://github.com/Open-Systems-Pharmacology/OSPSuite-R).
