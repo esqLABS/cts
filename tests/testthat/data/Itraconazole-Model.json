@@ -95,7 +95,14 @@
       ],
       "IntestinalPermeability": [
         {
-          "Name": "Fit"
+          "Name": "Fitted",
+          "Parameters": [
+            {
+              "Name": "Specific intestinal permeability (transcellular)",
+              "Value": 0.0000533,
+              "Unit": "cm/min"
+            }
+          ]
         }
       ],
       "Permeability": [

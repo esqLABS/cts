@@ -10,6 +10,12 @@
 #'
 #' @param options a named list of options to customize the DDI simulation. Default is to use `default_options`.
 #'   - import_simulations: logical, whether to import the simulations from the victim and perpetrators. default is FALSE.
+#'   - auto_create_ddi_simulation: logical, whether to create a generic simulation template. default is TRUE.
+#'      generic simulation will use:
+#'        - the first compound defined as perpetrator,
+#'        - the first protocol of the victim and perpetrator compounds,
+#'        - the first formulation of the victim and perpetrator compounds,
+#'        - the first individual defined in victim compounds.
 #'
 #' @return a Drug-Drug Interaction (DDI) simulation object
 #' @export
@@ -81,12 +87,14 @@ DDI <- R6::R6Class(
   inherit = Snapshot,
   public = list(
     options = NULL,
+    metadata = NULL,
     #' @description
     #' Create a DDI object.
     #' @return A new `DDI` object.
     initialize = function(options = NULL) {
       self$source <- NULL
       self$data <- list()
+      self$metadata <- list()
       if (is.null(options)) {
         options <- default_options
       } else {
@@ -95,13 +103,17 @@ DDI <- R6::R6Class(
       self$options <- options
     },
     print = function() {
+      if (is.null(self$source)) {
+        cli::cli_abort("DDI have not been initialized. Use {.code create_ddi()} or {.code import_ddi()} to create a DDI object.")
+      }
+
       compound_names <- suppressMessages(self$compoundsNames)
 
       cli_text("DDI simulation created with the following compounds:")
       cli::cli_text("{.strong Victim compound:}")
-      cli::cli_li(compound_names[1])
-      cli::cli_text("{.strong Perpetrator {qty(compound_names[-1])}compound{?s}:}")
-      cli::cli_li(compound_names[-1])
+      cli::cli_li(self$victim)
+      cli::cli_text("{.strong Perpetrator {qty(self$perpetrators)}compound{?s}:}")
+      cli::cli_li(self$perpetrators)
       invisible(self)
     },
     #' @description
@@ -147,6 +159,11 @@ DDI <- R6::R6Class(
 
       self$data$Version <- unique(map_int(snapshots, ~ .x$data$Version))
 
+      self$metadata$protocols$victim <- snapshots[[1]]$protocolsNames
+      self$metadata$protocols$perpetrators <- list_c(purrr::map(snapshots[-1], ~ .x$protocolsNames))
+      self$metadata$formulations$victim <- snapshots[[1]]$formulationsNames
+      self$metadata$formulations$perpetrators <- list_c(purrr::map(snapshots[-1], ~ .x$formulationsNames))
+
       sections_to_merge <- c(
         "Compounds",
         "Individuals",
@@ -169,6 +186,7 @@ DDI <- R6::R6Class(
           map(snapshots, ~ .x$data[[s]])
         )
 
+
         # Remove NULL elements
         section_non_null <- keep(section_merged, ~ !is.null(.x))
 
@@ -188,6 +206,20 @@ DDI <- R6::R6Class(
 
         self$data[[s]] <- section_unique
       })
+
+      if (self$options$auto_create_ddi_simulation) {
+        # Add generic ddi simulation
+        self$data <- add_generic_simulation(self,
+          system.file("extdata", "generic_simulation_template.json", package = "cts"),
+          victim = self$victim,
+          perpetrator = self$perpetrators[1],
+          victim_formulation = self$metadata$formulations$victim[1],
+          perpetrator_formulation = self$metadata$formulations$perpetrators[1],
+          victim_protocol = self$metadata$protocols$victim[1],
+          perpetrator_protocol = self$metadata$protocols$perpetrators[1],
+          individual = self$individualsNames[1]
+        )
+      }
     },
     #' @description
     #' Import a DDI simulation from a JSON file.
@@ -242,10 +274,18 @@ DDI <- R6::R6Class(
       }
     }
   ),
-  active = list()
+  active = list(
+    victim = function() {
+      self$compoundsNames[1]
+    },
+    perpetrators = function() {
+      self$compoundsNames[-1]
+    }
+  )
 )
 
 default_options <-
   list(
-    import_simulations = FALSE
+    import_simulations = FALSE,
+    auto_create_ddi_simulation = TRUE
   )

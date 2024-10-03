@@ -13,10 +13,10 @@
     Message
       DDI simulation created with the following compounds:
       Victim compound:
-      * Itraconazole
+      * Levonorgestrel 1
       Perpetrator compounds:
+      * Itraconazole
       * Hydroxy-Itraconazole
       * Keto-Itraconazole
       * N-desalkyl-Itraconazole
-      * Levonorgestrel 1
 
