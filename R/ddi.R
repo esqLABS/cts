@@ -119,6 +119,8 @@ DDI <- R6::R6Class(
       cli::cli_li(self$victim)
       cli::cli_text("{.strong Perpetrator {qty(self$perpetrators)}compound{?s}:}")
       cli::cli_li(self$perpetrators)
+      cli::cli_text("{.strong Simulations:}")
+      cli::cli_li(self$simulationsNames)
       invisible(self)
     },
     #' @description
