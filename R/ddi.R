@@ -10,7 +10,7 @@
 #'
 #' @param options a named list of options to customize the DDI simulation. Default is to use `default_options`.
 #'   - import_simulations: logical, whether to import the simulations from the victim and perpetrators. default is FALSE.
-#'   - auto_create_ddi_simulation: logical, whether to create a generic simulation template. default is TRUE.
+#'   - create_ddi_simulation: logical, whether to create a generic simulation template. default is TRUE.
 #'      generic simulation will use:
 #'        - the first compound defined as perpetrator,
 #'        - the first protocol of the victim and perpetrator compounds,

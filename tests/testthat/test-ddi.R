@@ -60,7 +60,11 @@ test_that("Compounds snapshots are correctly merged when creating a DDI", {
 
   # Compare simulations when they are imported (import_simulations = TRUE)
   ddi_merged <- suppressWarnings(create_ddi(levonorgestrel, itraconazole,
-                                            options = list(import_simulations = TRUE, auto_create_ddi_simulation = FALSE)))
+    options = list(
+      import_simulations = TRUE,
+      create_ddi_simulation = FALSE
+    )
+  ))
 
   expect_equal(ddi_merged$simulations, ddi_ref$simulations)
 })
@@ -111,11 +115,9 @@ test_that("An error is thrown when victim or perpetrator are not a Compound", {
 })
 
 test_that("DDI can be exported", {
-
   temp_file <- withr::local_tempfile(fileext = ".json")
 
   export_ddi(levo_itra_ddi, temp_file)
 
   expect_snapshot_file(temp_file, name = "exported_ddi_snapshot.json")
-
 })
