@@ -86,10 +86,13 @@ DDI <- R6::R6Class(
   class = TRUE,
   inherit = Snapshot,
   public = list(
+    #' @field options options to customize the DDI simulation. see `create_ddi()`.
     options = NULL,
+    #' @field metadata a list to store information useful for developers.
     metadata = NULL,
     #' @description
     #' Create a DDI object.
+    #' @param options a named list of options to customize the DDI simulation. Default is to use `default_options`.
     #' @return A new `DDI` object.
     initialize = function(options = NULL) {
       self$source <- NULL
@@ -102,6 +105,8 @@ DDI <- R6::R6Class(
       }
       self$options <- options
     },
+    #' @description
+    #' Nicely print the DDI object.
     print = function() {
       if (is.null(self$source)) {
         cli::cli_abort("DDI have not been initialized. Use {.code create_ddi()} or {.code import_ddi()} to create a DDI object.")
@@ -207,7 +212,7 @@ DDI <- R6::R6Class(
         self$data[[s]] <- section_unique
       })
 
-      if (self$options$auto_create_ddi_simulation) {
+      if (self$options$create_ddi_simulation) {
         # Add generic ddi simulation
         generic_simulation <- create_generic_simulation(self,
           system.file("extdata", "generic_simulation_template.json", package = "cts"),
@@ -233,9 +238,15 @@ DDI <- R6::R6Class(
       self$source <- get_source(input)
       self$data <- private$read_json(self$source)
     },
+    #' @description
+    #' Add a simulation to the DDI project
+    #' @param simulation a simulation created by `create_simulation()`
     add_simulation = function(simulation) {
       self$data$Simulations <- c(self$data$Simulations, simulation)
     },
+    #' @description
+    #' Remove a simulation from the DDI project
+    #' @param simulation_names a character vector of simulation names to remove
     remove_simulation = function(simulation_names){
       self$data$Simulations <- keep(self$data$Simulations, ~ !(.x$Name %in% simulation_names))
     }
@@ -283,9 +294,11 @@ DDI <- R6::R6Class(
     }
   ),
   active = list(
+    #' @field victim returns the victim compound of the ddi project
     victim = function() {
       self$compoundsNames[1]
     },
+    #' @field perpetrators returns the names of all perpetrators compounds of the ddi project
     perpetrators = function() {
       self$compoundsNames[-1]
     }
@@ -295,5 +308,5 @@ DDI <- R6::R6Class(
 default_options <-
   list(
     import_simulations = FALSE,
-    auto_create_ddi_simulation = TRUE
+    create_ddi_simulation = TRUE
   )
