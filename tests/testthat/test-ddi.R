@@ -16,7 +16,13 @@ test_that("print ddi object works", {
   expect_snapshot(
     levo_itra_ddi
   )
+
+  ddi <- DDI$new()
+  expect_error({
+    ddi$print()
+  })
 })
+
 
 test_that("DDI can be created from two compounds", {
   expect_no_error(
@@ -69,11 +75,11 @@ test_that("Compounds snapshots are correctly merged when creating a DDI", {
   expect_equal(ddi_merged$simulations, ddi_ref$simulations)
 })
 
-# test_that("Compound snapshot with different versions can be merged", {
-#   ddi <- create_ddi(itraconazole80, rifampicin)
-#
-#   expect_equal(ddi$data$Version, 80)
-# })
+test_that("Compound snapshot with different versions can be merged", {
+  ddi <- create_ddi(itraconazole80, rifampicin)
+
+  expect_equal(ddi$data$Version, 80)
+})
 
 test_that("An error is thrown when victim or perpetrator are missing", {
   expect_error(
