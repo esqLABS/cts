@@ -23,7 +23,8 @@ Imports:
     snakecase
 Suggests: 
     devtools,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    quarto
 Remotes: 
     ospsuite=Open-Systems-Pharmacology/OSPSuite-R
 Config/Needs/website: rmarkdown
