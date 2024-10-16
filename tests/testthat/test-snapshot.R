@@ -60,8 +60,8 @@ test_that("Snapshot can be exported as JSON files and recreated from it", {
 })
 
 
-# test_that("Snapshots can be updated", {
-#   updated_rif <- update_snapshots(rifampicin)
-#
-#   expect_equal(updated_rif$data$Version, 80)
-# })
+test_that("Snapshots can be updated", {
+  updated_rif <- update_snapshots(rifampicin)
+
+  expect_equal(updated_rif$data$Version, 80)
+})
