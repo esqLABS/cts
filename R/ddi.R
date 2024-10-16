@@ -99,11 +99,14 @@ DDI <- R6::R6Class(
       self$source <- NULL
 
       self$metadata <- list()
-      if (is.null(options)) {
+      if (!is.null(options)) {
         private$validate_options(options)
+        self$options <- modifyList(default_options, options)
+      } else {
+        self$options <- default_options
       }
 
-      self$options <- modifyList(default_options, options)
+
     },
     #' @description
     #' Nicely print the DDI object.

@@ -1940,11 +1940,6 @@
           "Unit": "mg"
         },
         {
-          "Name": "End time",
-          "Value": 24,
-          "Unit": "h"
-        },
-        {
           "Name": "Volume of water/body weight",
           "Value": 3.5,
           "Unit": "ml/kg"
@@ -1967,11 +1962,6 @@
           "Unit": "mg"
         },
         {
-          "Name": "End time",
-          "Value": 24,
-          "Unit": "h"
-        },
-        {
           "Name": "Volume of water/body weight",
           "Value": 4,
           "Unit": "ml/kg"
@@ -1992,11 +1982,6 @@
           "Name": "InputDose",
           "Value": 0.09,
           "Unit": "mg"
-        },
-        {
-          "Name": "End time",
-          "Value": 24,
-          "Unit": "h"
         }
       ]
     },
@@ -2014,11 +1999,6 @@
           "Name": "InputDose",
           "Value": 0.09,
           "Unit": "mg"
-        },
-        {
-          "Name": "End time",
-          "Value": 24,
-          "Unit": "h"
         },
         {
           "Name": "Volume of water/body weight",
@@ -2121,11 +2101,6 @@
           "Name": "InputDose",
           "Value": 1.5,
           "Unit": "mg"
-        },
-        {
-          "Name": "End time",
-          "Value": 24,
-          "Unit": "h"
         },
         {
           "Name": "Volume of water/body weight",

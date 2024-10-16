@@ -83,16 +83,26 @@ Protocol <- R6::R6Class("Protocol",
             Name = "InputDose",
             Value = self$dose,
             Unit = self$dose_unit
-          ),
-          list(
-            Name = "End time",
-            Value = self$end_time,
-            Unit = self$end_time_unit
           )
         )
       )
 
-      if (self$type == "iv") {
+      # don't write if default value
+      if (!(self$end_time == 24 & self$end_time_unit == "h")) {
+        data$Parameters <- c(
+          data$Parameters,
+          list(
+            list(
+              Name = "End time",
+              Value = self$end_time,
+              Unit = self$end_time_unit
+            )
+          )
+        )
+      }
+
+      # don't write if default value
+      if (self$type == "iv" && !(self$infusion_time == 60 && self$infusion_time_unit == "min")) {
         data$Parameters <- c(
           data$Parameters,
           list(
@@ -105,7 +115,7 @@ Protocol <- R6::R6Class("Protocol",
         )
       }
 
-      if (self$type == "oral") {
+      if (self$type == "oral" ) { # written even if set to default value but only if oral administration
         data$Parameters <- c(
           data$Parameters,
           list(
