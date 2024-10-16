@@ -12,13 +12,15 @@ This class is used to import, access and manipulate the data from a snapshot.
 \describe{
 \item{\code{source}}{The source of the snapshot (local file, url, ...)}
 
-\item{\code{data}}{The data of the snapshot}
+\item{\code{version}}{The version of the snapshot}
 }
 \if{html}{\out{</div>}}
 }
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
+\item{\code{data}}{The data of the snapshot}
+
 \item{\code{compounds}}{Access the compounds data from the snapshot.}
 
 \item{\code{individuals}}{Access the individuals data from the snapshot.}
@@ -46,16 +48,10 @@ This class is used to import, access and manipulate the data from a snapshot.
 \itemize{
 \item \href{#method-Snapshot-new}{\code{Snapshot$new()}}
 \item \href{#method-Snapshot-print}{\code{Snapshot$print()}}
-\item \href{#method-Snapshot-compoundsNames}{\code{Snapshot$compoundsNames()}}
 \item \href{#method-Snapshot-export}{\code{Snapshot$export()}}
-\item \href{#method-Snapshot-individualsNames}{\code{Snapshot$individualsNames()}}
-\item \href{#method-Snapshot-populationsNames}{\code{Snapshot$populationsNames()}}
-\item \href{#method-Snapshot-formulationsNames}{\code{Snapshot$formulationsNames()}}
-\item \href{#method-Snapshot-protocolsNames}{\code{Snapshot$protocolsNames()}}
-\item \href{#method-Snapshot-observerSetsNames}{\code{Snapshot$observerSetsNames()}}
-\item \href{#method-Snapshot-eventsNames}{\code{Snapshot$eventsNames()}}
-\item \href{#method-Snapshot-simulationsNames}{\code{Snapshot$simulationsNames()}}
-\item \href{#method-Snapshot-observedDataNames}{\code{Snapshot$observedDataNames()}}
+\item \href{#method-Snapshot-get_names}{\code{Snapshot$get_names()}}
+\item \href{#method-Snapshot-add_protocol}{\code{Snapshot$add_protocol()}}
+\item \href{#method-Snapshot-remove_protocol}{\code{Snapshot$remove_protocol()}}
 \item \href{#method-Snapshot-clone}{\code{Snapshot$clone()}}
 }
 }
@@ -95,16 +91,6 @@ Pretty print the snapshot data.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Snapshot-compoundsNames"></a>}}
-\if{latex}{\out{\hypertarget{method-Snapshot-compoundsNames}{}}}
-\subsection{Method \code{compoundsNames()}}{
-Get the names of the compounds in the snapshot.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$compoundsNames()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-export"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-export}{}}}
 \subsection{Method \code{export()}}{
@@ -122,84 +108,30 @@ Export a DDI simulation to a JSON file.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Snapshot-individualsNames"></a>}}
-\if{latex}{\out{\hypertarget{method-Snapshot-individualsNames}{}}}
-\subsection{Method \code{individualsNames()}}{
-Get the names of the individuals in the snapshot.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$individualsNames()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Snapshot-populationsNames"></a>}}
-\if{latex}{\out{\hypertarget{method-Snapshot-populationsNames}{}}}
-\subsection{Method \code{populationsNames()}}{
-Get the names of the populations in the snapshot.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$populationsNames()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Snapshot-formulationsNames"></a>}}
-\if{latex}{\out{\hypertarget{method-Snapshot-formulationsNames}{}}}
-\subsection{Method \code{formulationsNames()}}{
-Get the names of the formulations in the snapshot.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$formulationsNames()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Snapshot-protocolsNames"></a>}}
-\if{latex}{\out{\hypertarget{method-Snapshot-protocolsNames}{}}}
-\subsection{Method \code{protocolsNames()}}{
-Get the names of the protocols in the snapshot.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$protocolsNames()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Snapshot-observerSetsNames"></a>}}
-\if{latex}{\out{\hypertarget{method-Snapshot-observerSetsNames}{}}}
-\subsection{Method \code{observerSetsNames()}}{
-Get the names of the observer sets in the snapshot.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$observerSetsNames()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Snapshot-eventsNames"></a>}}
-\if{latex}{\out{\hypertarget{method-Snapshot-eventsNames}{}}}
-\subsection{Method \code{eventsNames()}}{
-Get the names of the events in the snapshot.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$eventsNames()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Snapshot-simulationsNames"></a>}}
-\if{latex}{\out{\hypertarget{method-Snapshot-simulationsNames}{}}}
-\subsection{Method \code{simulationsNames()}}{
-Get the names of the simulations in the snapshot.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$simulationsNames()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Snapshot-observedDataNames"></a>}}
-\if{latex}{\out{\hypertarget{method-Snapshot-observedDataNames}{}}}
-\subsection{Method \code{observedDataNames()}}{
-Get the names of the observed data in the snapshot.
-description
+\if{html}{\out{<a id="method-Snapshot-get_names"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-get_names}{}}}
+\subsection{Method \code{get_names()}}{
 get_names the names of a field in the snapshot.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$observedDataNames()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$get_names(field)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-add_protocol"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-add_protocol}{}}}
+\subsection{Method \code{add_protocol()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$add_protocol(protocol)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-remove_protocol"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-remove_protocol}{}}}
+\subsection{Method \code{remove_protocol()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$remove_protocol(protocol_name)}\if{html}{\out{</div>}}
 }
 
 }

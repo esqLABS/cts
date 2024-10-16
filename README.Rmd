@@ -13,6 +13,10 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE
 )
+library(cts)
+rifampicin <- compound(testthat::test_path("data/Rifampicin-Model.json"))
+midazolam <- compound(testthat::test_path("data/Midazolam-Model.json"))
+
 ```
 
 # cts
@@ -25,10 +29,10 @@ The `{cts}` (Contraceptives DDI Trial Simulation Platform) package provides a co
 
 #### Key Features
 
--   Import and Explore Compound Models: Retrieve compound models from the OSP model library, a URL, or a local file in JSON format.
+-   Import and Explore Compound Models: Retrieve compound models snapshots from the OSP model library, a URL, or a local file in JSON format.
 -   Simulate DDIs: Design and run DDI simulations between compounds, specifying dosing protocols, individual characteristics, and other simulation parameters.
--   Analyze Results: --- .
--   Seamless Integration: Supports the export of simulation snapshots compatible with PK-Sim, enabling further exploration and analysis.
+-   Analyze Results: In addition to simulation results, this packages provides an immediate and first glance at the data by providing basic plots and tables.
+-   Seamless Integration: Supports the export of simulation snapshots compatible with PK-Sim, enabling further configuration, exploration and analysis.
 
 
 ## Installation
@@ -48,31 +52,35 @@ Below are some examples to demonstrate how to use the package. These steps will 
 
 The `{cts}`package can interface with the Open Systems Pharmacology (OSP) model library to retrieve compound models. The `list_compounds()` function lists all available compounds in the OSP model library.
 
-```{r example, attr.output='style="max-height: 100px;"'}
+```{r example, eval = FALSE, attr.output='style="max-height: 100px;"'}
 library(cts)
 
-# List available compounds building blocks
 list_compounds()
 ```
+```{r, echo = FALSE, max.print=10, message=FALSE, warning=FALSE}
+# List available compounds building blocks
+cat(cli::cli_fmt(list_compounds(),collapse = T))
+```
+
 
 This command outputs a list of compound names available in the OSP model library, which you can select to create your DDI simulations.
 
 ### Import Compound Snapshots
 
-The core functionality of the package involves importing compound models. You can import a compound model in various ways:
+The core functionality of the package involves importing compound models from snapshot files. You can import a compound model in various ways:
 
 
-#### A. From OSP Qualified Building Blocks
+#### From OSP Qualified Building Blocks
 
 You can directly import pre-qualified compounds from the OSP model library:
 
-```{r, include=FALSE}
+```{r, eval=FALSE}
 rifampicin <- compound("Rifampicin")
 midazolam <- compound("Midazolam")
 ```
 
 
-#### B. From URL
+#### From URL
 
 For compound models hosted online, use the URL to import the model:
 
@@ -81,7 +89,7 @@ compound("https://raw.githubusercontent.com/Open-Systems-Pharmacology/Alfentanil
 ```
 
 
-#### C. From Local File
+#### From Local File
 
 You can also import compound models from local JSON files:
 
@@ -92,17 +100,16 @@ compound("path/to/Alfentanil-Model.json")
 
 ### Explore Compound
 
-Once you have imported a compound, you can explore its properties, such as formulations, protocols, and parameters:
+Once you have imported a compound snapshot, you can explore its properties, such as compound properties, formulations, protocols, predefined simulations and all other information contained in the snapshot. For example, you can explore the formulations of Rifampicin using the following command:
 
-```{r, include=FALSE}
-# Explore the formulations of Rifampicin
+```{r}
 rifampicin$formulations
 ```
 
 This command outputs the formulations that are defined for the compound and that can be used in simulations.
 
 
-## Create and Parameterize a DDI Simulation
+## Create, Parameterize and Run a DDI Simulation
 
 After importing the necessary compounds, you can create a DDI simulation. Here is a basic example of creating a DDI simulation with a victim compound (e.g., Rifampicin) and a perpetrator compound (e.g., Midazolam):
 
@@ -111,22 +118,85 @@ After importing the necessary compounds, you can create a DDI simulation. Here i
 myDDI <- create_ddi(victim = rifampicin, perpetrator = midazolam)
 ```
 
-Next, you can parameterize the DDI simulation by setting dosing protocols and individual characteristics. For example, you can set a dosing protocol for the victim compound:
+Some additional options can be passed during ddi creation:
 
-```{r, eval=FALSE}
-# Define dosing protocol
-protocol_1 <- protocol(dose = 250, dose_unit = "mg", start = 0, end = 30, interval = 1, time_unit = "days")
-
-# Apply the protocol to the compound in the DDI simulation
-set_protocol(myDDI, compound = "Rifampicin", protocol = protocol_1)
+```{r}
+myDDI <- create_ddi(
+  victim = rifampicin, perpetrator = midazolam,
+  options = list(
+    import_simulations = FALSE,
+    create_ddi_simulation = TRUE
+  )
+)
 ```
 
-Here, a dosing protocol is defined and applied to Rifampicin, specifying a daily dose of 250 mg for 30 days.
+All options can be found in the `?create_ddi` help page.  
 
+By default, the `create_ddi` function will generate a generic and ready-to-run ddi simulation.
+
+
+## Export the DDI Simulation as a Snapshot
+
+You can also export the entire DDI simulation as a snapshot file for future use or for importing into other platforms such as PK-Sim:
+
+```{r, eval=FALSE}
+# Export the DDI simulation to a JSON snapshot file
+export_ddi(myDDI, "path/to/Rifampicin-Midazolam-DDI.json")
+```
+
+
+## What's Next
+
+
+
+```{r, eval = FALSE}
+# Work in progress
+run_simulations(myDDI)
+```
+
+It is also possible to define new simulations, then add or remove them from the DDI object.
+
+```{r, eval = FALSE}
+# Work in progress
+add_simulation(myDDI,
+  name = "New Simulation",
+  model = "4Comp",
+  perpetrator = "midazolam",
+  individual = "Male",
+  victim_formulation,
+  victim_protocol,
+  perpetrator_formulation,
+  perpetrator_protocol,
+  ...
+)
+
+remove_simulation(myDDI, "New Simulation")
+```
+
+
+Other aspects can also be created and parameterized and added to the DDI object. For example, you can create a new protocol.
+
+```{r, eval = FALSE}
+# Add a new administration protocol
+add_protocol(myDDI,
+  name = "New Protocol",
+  dose = 250, dose_unit = "mg",
+  start = 0, end = 30, interval = 1, time_unit = "days"
+)
+```
+
+Then, it is possible to use this protocole to create a new simulation or to update an existing one.
+
+
+```{r, eval = FALSE}
+set_protocol(myDDI, 
+             protocol = "New Protocol",
+             simulation = "New Simulation", compound = "Rifampicin")
+```
 
 ## Run the DDI Simulation and Export Results
 
-Finally, you can run the DDI simulation and export the results for further analysis:
+Finally, you can run the DDI simulations and export the results for further analysis:
 
 ```{r, eval=FALSE}
 # Run the DDI simulation and export results
@@ -140,15 +210,6 @@ run_ddi(myDDI, path = "path/to/output",
 
 This command runs the DDI simulation, saves the results to the specified path, generates relevant plots, and computes PK statistics, making it easy to analyze the interaction outcomes.
 
-
-## Export the DDI Simulation as a Snapshot
-
-You can also export the entire DDI simulation as a snapshot file for future use or for importing into other platforms such as PK-Sim:
-
-```{r, eval=FALSE}
-# Export the DDI simulation to a JSON snapshot file
-export_ddi(myDDI, "path/to/Rifampicin-Midazolam-DDI.json")
-```
 
 
 ## Dependencies

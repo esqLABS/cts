@@ -12,16 +12,37 @@ test_that("create_ddi prints the correct status message", {
   )
 })
 
+test_that("print ddi object works", {
+  expect_snapshot(
+    levo_itra_ddi
+  )
+
+  ddi <- DDI$new()
+  expect_error({
+    ddi$print()
+  })
+})
+
+
 test_that("DDI can be created from two compounds", {
   expect_no_error(
     suppressWarnings(
-      create_ddi(itraconazole, levonorgestrel)
+      create_ddi(levonorgestrel, itraconazole)
     )
   )
 })
 
+test_that("options are checked", {
+  # option is not a list
+  expect_error(create_ddi(levonorgestrel, itraconazole, options = 1))
+  # unsuported option
+  expect_error(create_ddi(levonorgestrel, itraconazole, options = list(bad_option = 1)))
+  # bad option value
+  expect_error(suppressMessages(create_ddi(levonorgestrel, itraconazole, options = list(import_simulations = 1))))
+})
+
 test_that("Compounds snapshots are correctly merged when creating a DDI", {
-  ddi_merged <- suppressWarnings(create_ddi(itraconazole, levonorgestrel))
+  ddi_merged <- suppressWarnings(create_ddi(levonorgestrel, itraconazole))
 
   ddi_ref <- levo_itra_ddi
 
@@ -41,9 +62,17 @@ test_that("Compounds snapshots are correctly merged when creating a DDI", {
 
   expect_equal(ddi_merged$events, ddi_ref$events)
 
-  expect_equal(ddi_merged$simulations, ddi_ref$simulations)
-
   expect_equal(ddi_merged$observed_data, ddi_ref$observed_data)
+
+  # Compare simulations when they are imported (import_simulations = TRUE)
+  ddi_merged <- suppressWarnings(create_ddi(levonorgestrel, itraconazole,
+    options = list(
+      import_simulations = TRUE,
+      create_ddi_simulation = FALSE
+    )
+  ))
+
+  expect_equal(ddi_merged$simulations, ddi_ref$simulations)
 })
 
 test_that("Compound snapshot with different versions can be merged", {
@@ -92,11 +121,9 @@ test_that("An error is thrown when victim or perpetrator are not a Compound", {
 })
 
 test_that("DDI can be exported", {
-
   temp_file <- withr::local_tempfile(fileext = ".json")
 
-  export_ddi(levo_itra_ddi,temp_file)
+  export_ddi(levo_itra_ddi, temp_file)
 
   expect_snapshot_file(temp_file, name = "exported_ddi_snapshot.json")
-
 })

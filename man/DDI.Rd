@@ -10,29 +10,43 @@ This class is used to import, access and manipulate the data from a DDI snapshot
 \section{Super class}{
 \code{\link[cts:Snapshot]{cts::Snapshot}} -> \code{DDI}
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{options}}{options to customize the DDI simulation. see \code{create_ddi()}.}
+
+\item{\code{metadata}}{a list to store information useful for developers.}
+}
+\if{html}{\out{</div>}}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{victim}}{returns the victim compound of the ddi project}
+
+\item{\code{perpetrators}}{returns the names of all perpetrators compounds of the ddi project}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-DDI-new}{\code{DDI$new()}}
+\item \href{#method-DDI-print}{\code{DDI$print()}}
 \item \href{#method-DDI-combine}{\code{DDI$combine()}}
 \item \href{#method-DDI-import}{\code{DDI$import()}}
+\item \href{#method-DDI-add_simulation}{\code{DDI$add_simulation()}}
+\item \href{#method-DDI-remove_simulation}{\code{DDI$remove_simulation()}}
 \item \href{#method-DDI-clone}{\code{DDI$clone()}}
 }
 }
 \if{html}{\out{
-<details><summary>Inherited methods</summary>
+<details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="compoundsNames"><a href='../../cts/html/Snapshot.html#method-Snapshot-compoundsNames'><code>cts::Snapshot$compoundsNames()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="eventsNames"><a href='../../cts/html/Snapshot.html#method-Snapshot-eventsNames'><code>cts::Snapshot$eventsNames()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_protocol"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_protocol'><code>cts::Snapshot$add_protocol()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="export"><a href='../../cts/html/Snapshot.html#method-Snapshot-export'><code>cts::Snapshot$export()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="formulationsNames"><a href='../../cts/html/Snapshot.html#method-Snapshot-formulationsNames'><code>cts::Snapshot$formulationsNames()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="individualsNames"><a href='../../cts/html/Snapshot.html#method-Snapshot-individualsNames'><code>cts::Snapshot$individualsNames()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="observedDataNames"><a href='../../cts/html/Snapshot.html#method-Snapshot-observedDataNames'><code>cts::Snapshot$observedDataNames()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="observerSetsNames"><a href='../../cts/html/Snapshot.html#method-Snapshot-observerSetsNames'><code>cts::Snapshot$observerSetsNames()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="populationsNames"><a href='../../cts/html/Snapshot.html#method-Snapshot-populationsNames'><code>cts::Snapshot$populationsNames()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="print"><a href='../../cts/html/Snapshot.html#method-Snapshot-print'><code>cts::Snapshot$print()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="protocolsNames"><a href='../../cts/html/Snapshot.html#method-Snapshot-protocolsNames'><code>cts::Snapshot$protocolsNames()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="simulationsNames"><a href='../../cts/html/Snapshot.html#method-Snapshot-simulationsNames'><code>cts::Snapshot$simulationsNames()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="get_names"><a href='../../cts/html/Snapshot.html#method-Snapshot-get_names'><code>cts::Snapshot$get_names()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_protocol"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_protocol'><code>cts::Snapshot$remove_protocol()</code></a></span></li>
 </ul>
 </details>
 }}
@@ -42,12 +56,29 @@ This class is used to import, access and manipulate the data from a DDI snapshot
 \subsection{Method \code{new()}}{
 Create a DDI object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DDI$new()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DDI$new(options = NULL)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{options}}{a named list of options to customize the DDI simulation. Default is to use \code{default_options}.}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 A new \code{DDI} object.
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DDI-print"></a>}}
+\if{latex}{\out{\hypertarget{method-DDI-print}{}}}
+\subsection{Method \code{print()}}{
+Nicely print the DDI object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DDI$print()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DDI-combine"></a>}}
@@ -84,6 +115,40 @@ Import a DDI simulation from a JSON file.
 \item a URL to a compound building block.
 \item a Path to a local file.
 }}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DDI-add_simulation"></a>}}
+\if{latex}{\out{\hypertarget{method-DDI-add_simulation}{}}}
+\subsection{Method \code{add_simulation()}}{
+Add a simulation to the DDI project
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DDI$add_simulation(simulation)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{simulation}}{a simulation created by \code{create_simulation()}}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DDI-remove_simulation"></a>}}
+\if{latex}{\out{\hypertarget{method-DDI-remove_simulation}{}}}
+\subsection{Method \code{remove_simulation()}}{
+Remove a simulation from the DDI project
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DDI$remove_simulation(simulation_names)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{simulation_names}}{a character vector of simulation names to remove}
 }
 \if{html}{\out{</div>}}
 }

@@ -1,0 +1,88 @@
+{"Simulations": [
+    {
+      "Name": "Generic DDI simulation",
+      "Model": "4Comp",
+      "Solver": {},
+      "OutputSchema": [
+        {
+          "Parameters": [
+            {
+              "Name": "Start time",
+              "Value": 0.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "End time",
+              "Value": 2.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Resolution",
+              "Value": 20.0,
+              "Unit": "pts/h"
+            }
+          ]
+        },
+        {
+          "Parameters": [
+            {
+              "Name": "Start time",
+              "Value": 2.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "End time",
+              "Value": 528.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "Resolution",
+              "Value": 4.0,
+              "Unit": "pts/h"
+            }
+          ]
+        }
+      ],
+      "Parameters": [],
+      "OutputSelections": [
+        "Organism|PeripheralVenousBlood|${victim}$|Plasma (Peripheral Venous Blood)",
+        "Organism|PeripheralVenousBlood|${perpetrator}$|Plasma (Peripheral Venous Blood)"
+      ],
+      "Individual": "${individual}$",
+      "Compounds": [
+        {
+          "Name": "${perpetrator}$",
+          "CalculationMethods": [],
+          "Alternatives": [],
+          "Processes": [],
+          "Protocol": {
+            "Name": "${perpetrator_protocol}$",
+            "Formulations": [
+              {
+                "Name": "${perpetrator_formulation}$",
+                "Key": "Formulation"
+              }
+            ]
+          }
+        },
+        {
+          "Name": "${victim}$",
+          "CalculationMethods": [],
+          "Alternatives": [],
+          "Processes": [],
+          "Protocol": {
+            "Name": "${victim_protocol}$",
+            "Formulations": [
+              {
+                "Name": "${victim_formulation}$",
+                "Key": "Formulation"
+              }
+            ]
+          }
+        }
+      ],
+      "Interactions": [],
+      "HasResults": false
+    }
+  ]
+}

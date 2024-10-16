@@ -10,7 +10,9 @@ Snapshot <- R6::R6Class(
     #' @field source The source of the snapshot (local file, url, ...)
     source = NULL,
     #' @field data The data of the snapshot
-    data = NULL,
+    source_data = NULL,
+    #' @field version The version of the snapshot
+    version = NULL,
     #' @description
     #' Create a Snapshot object.
     #' @param input character string that is wether
@@ -20,36 +22,43 @@ Snapshot <- R6::R6Class(
     #' @return A new `Snapshot` object.
     initialize = function(input) {
       self$source <- get_source(input)
-      self$data <- private$read_json(self$source)
+      self$source_data <- private$read_json(self$source)
+      self$version <- self$source_data$Version
+      self$compounds <- self$source_data$Compounds
+      self$individuals <- self$source_data$Individuals
+      self$populations <- self$source_data$Populations
+      self$formulations <- self$source_data$Formulations
+      self$protocols <-
+        purrr::map(self$source_data$Protocols, protocol_from_data)
+      self$expression_profiles <- self$source_data$ExpressionProfiles
+      self$observer_sets <- self$source_data$ObserverSets
+      self$events <- self$source_data$Events
+      self$simulations <- self$source_data$Simulations
+      self$observed_data <- self$source_data$ObservedData
       invisible(self)
     },
     #' @description
     #' Pretty print the snapshot data.
     print = function() {
       compounds <- cli_ul()
-      self$compoundsNames()
+      private$print_names("compounds")
       individuals <- cli_ul()
-      self$individualsNames()
+      private$print_names("individuals")
       populations <- cli_ul()
-      self$populationsNames()
+      private$print_names("populations")
       formulations <- cli_ul()
-      self$formulationsNames()
+      private$print_names("formulations")
       protocols <- cli_ul()
-      self$protocolsNames()
+      private$print_names("protocols")
       observerSets <- cli_ul()
-      self$observerSetsNames()
+      private$print_names("observer_sets")
       events <- cli_ul()
-      self$eventsNames()
+      private$print_names("events")
       simulations <- cli_ul()
-      self$simulationsNames()
+      private$print_names("simulations")
       observedData <- cli_ul()
-      self$observedDataNames()
+      private$print_names("observed_data")
       invisible(self)
-    },
-    #' @description
-    #' Get the names of the compounds in the snapshot.
-    compoundsNames = function() {
-      private$get_names("compounds")
     },
     #' @description
     #' Export a DDI simulation to a JSON file.
@@ -58,63 +67,27 @@ Snapshot <- R6::R6Class(
       private$write_json(self$data, path)
     },
     #' @description
-    #' Get the names of the individuals in the snapshot.
-    individualsNames = function() {
-      private$get_names("individuals")
+    #' get_names the names of a field in the snapshot.
+    #' @param field
+    get_names = function(field) {
+      list_c(map(self[[field]], ~ .x$Name)) %||% list_c(map(self[[field]], "name"))
     },
-    #' @description
-    #' Get the names of the populations in the snapshot.
-    populationsNames = function() {
-      private$get_names("populations")
+    add_protocol = function(protocol) {
+      private$add_item("protocols", protocol)
     },
-    #' @description
-    #' Get the names of the formulations in the snapshot.
-    formulationsNames = function() {
-      private$get_names("formulations")
-    },
-    #' @description
-    #' Get the names of the protocols in the snapshot.
-    protocolsNames = function() {
-      private$get_names("protocols")
-    },
-    # Expression profiles do not have names
-    # expressionProfileNames = function() {
-    #   private$get_names("expression_profiles")
-    # }
-    #' @description
-    #' Get the names of the observer sets in the snapshot.
-    observerSetsNames = function() {
-      private$get_names("observer_sets")
-    },
-    #' @description
-    #' Get the names of the events in the snapshot.
-    eventsNames = function() {
-      private$get_names("events")
-    },
-    #' @description
-    #' Get the names of the simulations in the snapshot.
-    simulationsNames = function() {
-      private$get_names("simulations")
-    },
-    #' @description
-    #' Get the names of the observed data in the snapshot.
-    observedDataNames = function() {
-      private$get_names("observed_data")
+    remove_protocol = function(protocol_name){
+      private$remove_item("protocols", protocol_name)
     }
   ),
   private = list(
-    #' description
-    #' get_names the names of a field in the snapshot.
-    get_names = function(field) {
-      names <- map(self[[field]], ~ .x$Name) %>% list_c()
-
+    print_names = function(field) {
+      names <- self$get_names(field)
       cli_text(snakecase::to_title_case(field), ":", if (length(names) == 0) {
         " None"
       })
       if (length(names) > 0) {
         cli_ul(names)
       }
-      invisible(names)
     },
     read_json = function(source) {
       jsonlite::fromJSON(source,
@@ -129,48 +102,116 @@ Snapshot <- R6::R6Class(
         auto_unbox = TRUE,
         digits = NA
       )
-    }
+    },
+    add_item = function(target, item) {
+      self[[target]] <- c(self[[target]], list(item))
+    },
+    remove_item = function(target, name){
+      if (target == "protocols"){
+        self[[target]] <- purrr::discard(self[[target]], ~.x$name %in% name)
+      } else {
+        self[[target]] <- purrr::discard(self[[target]], ~.x$Name %in% name)
+      }
+
+    },
+    .compounds = NULL,
+    .individuals = NULL,
+    .populations = NULL,
+    .formulations = NULL,
+    .protocols = NULL,
+    .expression_profiles = NULL,
+    .observer_sets = NULL,
+    .events = NULL,
+    .simulations = NULL,
+    .observed_data = NULL
   ),
   active = list(
+    data = function() {
+      data <- self$source_data
+
+      data[["Version"]] <- self$version
+      data[["Compounds"]] <- self$compounds
+      data[["Individuals"]] <- self$individuals
+      data[["Populations"]] <- self$populations
+      data[["Formulations"]] <- self$formulations
+      data[["Protocols"]] <- purrr::map(self$protocols, ~ .x$data)
+      data[["ExpressionProfiles"]] <- self$expression_profiles
+      data[["ObserverSets"]] <- self$observer_sets
+      data[["Events"]] <- self$events
+      data[["Simulations"]] <- self$simulations
+      data[["ObservedData"]] <- self$observed_data
+
+      return(data)
+    },
     #' @field compounds Access the compounds data from the snapshot.
-    compounds = function() {
-      self$data$Compounds
+    compounds = function(value) {
+      if (!missing(value)) {
+        private$.compounds <- value
+      }
+      return(private$.compounds)
     },
     #' @field individuals Access the individuals data from the snapshot.
-    individuals = function() {
-      self$data$Individuals
+    individuals = function(value) {
+      if (!missing(value)) {
+        private$.individuals <- value
+      }
+      return(private$.individuals)
     },
     #' @field populations Access the populations data from the snapshot.
-    populations = function() {
-      self$data$Populations
+    populations = function(value) {
+      if (!missing(value)) {
+        private$.populations <- value
+      }
+      return(private$.populations)
     },
     #' @field formulations Access the formulations data from the snapshot.
-    formulations = function() {
-      self$data$Formulations
+    formulations = function(value) {
+      if (!missing(value)) {
+        private$.formulations <- value
+      }
+      return(private$.formulations)
     },
     #' @field protocols Access the protocols data from the snapshot.
-    protocols = function() {
-      self$data$Protocols
+    protocols = function(value) {
+      if (!missing(value)) {
+        private$.protocols <- value
+      }
+      return(private$.protocols)
     },
     #' @field expression_profiles Access the expression profiles data from the snapshot.
-    expression_profiles = function() {
-      self$data$ExpressionProfiles
+    expression_profiles = function(value) {
+      if (!missing(value)) {
+        private$.expression_profiles <- value
+      }
+      return(private$.expression_profiles)
     },
     #' @field observer_sets Access the observer sets data from the snapshot.
-    observer_sets = function() {
-      self$data$ObserverSets
+    observer_sets = function(value) {
+      if (!missing(value)) {
+        private$.observer_sets <- value
+      }
+      return(private$.observer_sets)
     },
     #' @field events Access the events data from the snapshot.
-    events = function() {
-      self$data$Events
+    events = function(value) {
+      if (!missing(value)) {
+        private$.events <- value
+      }
+      return(private$.events)
     },
     #' @field simulations Access the simulations data from the snapshot.
-    simulations = function() {
-      self$data$Simulations
+    simulations = function(value) {
+      if (!missing(value)) {
+        private$.simulations <- value
+      }
+      return(private$.simulations)
     },
     #' @field observed_data Access the observed data from the snapshot.
-    observed_data = function() {
-      self$data$ObservedData
+    observed_data = function(value) {
+      if (!missing(value)) {
+        private$.observed_data <- value
+      }
+      return(private$.observed_data)
     }
   )
 )
@@ -200,4 +241,50 @@ get_source <- function(input) {
     cli_abort(message = c(x = "Invalid input type.", i = "Please provide a valid compound name, URL or path to a local file."))
   }
   return(source)
+}
+
+
+update_snapshots <- function(snapshots) {
+  paths <- list_c(map(to_list(snapshots), ~ .x$source))
+
+  temp_dir <- tempfile()
+  dir.create(temp_dir)
+
+  suppressMessages({
+    # Convert snapshot to project to upgrade them to latest version
+    ospsuite::convertSnapshot(paths,
+      format = "project",
+      output = temp_dir,
+      runSimulations = FALSE
+    )
+
+    # Convert back to snapshot to get json format
+    ospsuite::convertSnapshot(
+      temp_dir,
+      format = "snapshot",
+      output = temp_dir
+    )
+  })
+
+  # Create Snapshots/Compounds objects from new jsons.
+  snapshots <- map(
+    list.files(temp_dir,
+      pattern = ".json",
+      full.names = TRUE
+    ),
+    ~ Compound$new(input = .x)
+  )
+  if (length(snapshots) == 1) {
+    return(snapshots[[1]])
+  } else {
+    return(snapshots)
+  }
+}
+
+add_protocol <- function(snapshot, protocol) {
+  snapshot$add_protocol(protocol)
+}
+
+remove_protocol <- function(snapshot, protocol_name){
+  snapshot$remove_protocol(protocol_name)
 }
