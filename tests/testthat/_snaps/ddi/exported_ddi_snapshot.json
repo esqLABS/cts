@@ -1940,6 +1940,11 @@
           "Unit": "mg"
         },
         {
+          "Name": "End time",
+          "Value": 24,
+          "Unit": "h"
+        },
+        {
           "Name": "Volume of water/body weight",
           "Value": 3.5,
           "Unit": "ml/kg"
@@ -1962,6 +1967,11 @@
           "Unit": "mg"
         },
         {
+          "Name": "End time",
+          "Value": 24,
+          "Unit": "h"
+        },
+        {
           "Name": "Volume of water/body weight",
           "Value": 4,
           "Unit": "ml/kg"
@@ -1982,6 +1992,11 @@
           "Name": "InputDose",
           "Value": 0.09,
           "Unit": "mg"
+        },
+        {
+          "Name": "End time",
+          "Value": 24,
+          "Unit": "h"
         }
       ]
     },
@@ -1999,6 +2014,11 @@
           "Name": "InputDose",
           "Value": 0.09,
           "Unit": "mg"
+        },
+        {
+          "Name": "End time",
+          "Value": 24,
+          "Unit": "h"
         },
         {
           "Name": "Volume of water/body weight",
@@ -2025,10 +2045,7 @@
         {
           "Name": "End time",
           "Value": 29,
-          "Unit": "day(s)",
-          "ValueOrigin": {
-            "Source": "Unknown"
-          }
+          "Unit": "day(s)"
         },
         {
           "Name": "Volume of water/body weight",
@@ -2106,6 +2123,11 @@
           "Unit": "mg"
         },
         {
+          "Name": "End time",
+          "Value": 24,
+          "Unit": "h"
+        },
+        {
           "Name": "Volume of water/body weight",
           "Value": 3.6,
           "Unit": "ml/kg"
@@ -2130,10 +2152,7 @@
         {
           "Name": "End time",
           "Value": 8,
-          "Unit": "day(s)",
-          "ValueOrigin": {
-            "Source": "Unknown"
-          }
+          "Unit": "day(s)"
         },
         {
           "Name": "Volume of water/body weight",
@@ -2160,10 +2179,7 @@
         {
           "Name": "End time",
           "Value": 22,
-          "Unit": "day(s)",
-          "ValueOrigin": {
-            "Source": "Unknown"
-          }
+          "Unit": "day(s)"
         },
         {
           "Name": "Volume of water/body weight",
@@ -2190,10 +2206,7 @@
         {
           "Name": "End time",
           "Value": 29,
-          "Unit": "day(s)",
-          "ValueOrigin": {
-            "Source": "Unknown"
-          }
+          "Unit": "day(s)"
         },
         {
           "Name": "Volume of water/body weight",
@@ -2220,10 +2233,7 @@
         {
           "Name": "End time",
           "Value": 22,
-          "Unit": "day(s)",
-          "ValueOrigin": {
-            "Source": "Unknown"
-          }
+          "Unit": "day(s)"
         },
         {
           "Name": "Volume of water/body weight",
@@ -2250,10 +2260,7 @@
         {
           "Name": "End time",
           "Value": 22,
-          "Unit": "day(s)",
-          "ValueOrigin": {
-            "Source": "Unknown"
-          }
+          "Unit": "day(s)"
         },
         {
           "Name": "Volume of water/body weight",

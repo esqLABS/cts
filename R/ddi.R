@@ -27,6 +27,7 @@
 #' create_ddi(victim = rifampicin, perpetrator = midazolam)
 #' }
 create_ddi <- function(victim, perpetrator, options = NULL) {
+
   if (missing(victim)) {
     cli::cli_abort("At least one victim compound must be provided.")
   }
@@ -39,7 +40,7 @@ create_ddi <- function(victim, perpetrator, options = NULL) {
 
   perpetrators <- to_list(perpetrator)
 
-  ddi <- DDI$new(options)
+  ddi <- DDI$new(options = options)
 
   # Delegate the combining task to the DDI object
   do.call(ddi$combine, c(victim, perpetrators))
@@ -96,14 +97,13 @@ DDI <- R6::R6Class(
     #' @return A new `DDI` object.
     initialize = function(options = NULL) {
       self$source <- NULL
-      self$data <- list()
+
       self$metadata <- list()
       if (is.null(options)) {
-        options <- default_options
-      } else {
         private$validate_options(options)
       }
-      self$options <- options
+
+      self$options <- modifyList(default_options, options)
     },
     #' @description
     #' Nicely print the DDI object.
@@ -120,7 +120,7 @@ DDI <- R6::R6Class(
       cli::cli_text("{.strong Perpetrator {qty(self$perpetrators)}compound{?s}:}")
       cli::cli_li(self$perpetrators)
       cli::cli_text("{.strong Simulations:}")
-      cli::cli_li(self$simulationsNames)
+      cli::cli_li(self$get_names("simulations"))
       invisible(self)
     },
     #' @description
@@ -140,60 +140,36 @@ DDI <- R6::R6Class(
       if (length(unique(snapshot_versions)) > 1) {
         cli_process_start("Multiple versions detected. Converting to the latest version.")
 
-        temp_dir <- tempfile()
-        dir.create(temp_dir)
-
-        paths <- map(snapshots, ~ .x$source) %>% list_c()
-
-        suppressMessages({
-          # Convert snapshot to project to upgrade them to latest version
-          ospsuite::convertSnapshot(paths,
-            format = "project",
-            output = temp_dir,
-            runSimulations = FALSE
-          )
-
-          # Convert back to snapshot to get json format
-          ospsuite::convertSnapshot(
-            temp_dir,
-            format = "snapshot",
-            output = temp_dir
-          )
-        })
-
-        snapshots <- map(list.files(temp_dir, pattern = ".json", full.names = TRUE), ~ Compound$new(input = .x))
+        snapshots <- update_snapshots(snapshots)
       }
 
-      self$data$Version <- unique(map_int(snapshots, ~ .x$data$Version))
+      self$version <- unique(map_int(snapshots, ~ .x$version))
 
-      self$metadata$protocols$victim <- snapshots[[1]]$protocolsNames
-      self$metadata$protocols$perpetrators <- list_c(purrr::map(snapshots[-1], ~ .x$protocolsNames))
-      self$metadata$formulations$victim <- snapshots[[1]]$formulationsNames
-      self$metadata$formulations$perpetrators <- list_c(purrr::map(snapshots[-1], ~ .x$formulationsNames))
+      self$metadata$protocols$victim <- snapshots[[1]]$get_names("protocols")
+      self$metadata$protocols$perpetrators <- list_c(purrr::map(snapshots[-1], ~ .x$get_names("protocols")))
+      self$metadata$formulations$victim <- snapshots[[1]]$get_names("formulations")
+      self$metadata$formulations$perpetrators <- list_c(purrr::map(snapshots[-1], ~ .x$get_names("formulations")))
 
       sections_to_merge <- c(
-        "Compounds",
-        "Individuals",
-        "Populations",
-        "Formulations",
-        "Protocols",
-        "ExpressionProfiles",
-        "ObserverSets",
-        "Events",
-        # "Simulations",
-        "ObservedData"
+        "compounds",
+        "individuals",
+        "populations",
+        "formulations",
+        "protocols",
+        "expression_profiles",
+        "observer_sets",
+        "events",
+        "observed_data"
       )
       if (self$options$import_simulations) {
-        sections_to_merge <- c(sections_to_merge, "Simulations")
+        sections_to_merge <- c(sections_to_merge, "simulations")
       }
 
       walk(sections_to_merge, function(s) {
         # Merge all elements in section
         section_merged <- list_flatten(
-          map(snapshots, ~ .x$data[[s]])
+          map(snapshots, ~ .x[[s]])
         )
-
-
         # Remove NULL elements
         section_non_null <- keep(section_merged, ~ !is.null(.x))
 
@@ -211,23 +187,25 @@ DDI <- R6::R6Class(
           section_unique <- section_non_null
         }
 
-        self$data[[s]] <- section_unique
+        self[[s]] <- section_unique
       })
 
       if (self$options$create_ddi_simulation) {
-        # Add generic ddi simulation
-        generic_simulation <- create_generic_simulation(self,
-          system.file("extdata", "generic_simulation_template.json", package = "cts"),
-          victim = self$victim,
-          perpetrator = self$perpetrators[1],
-          victim_formulation = self$metadata$formulations$victim[1],
-          perpetrator_formulation = self$metadata$formulations$perpetrators[1],
-          victim_protocol = self$metadata$protocols$victim[1],
-          perpetrator_protocol = self$metadata$protocols$perpetrators[1],
-          individual = self$individualsNames[1]
-        )
 
-        self$add_simulation(generic_simulation)
+        # Add generic ddi simulation
+        generic_simulation <-
+          create_generic_simulation(self,
+            system.file("extdata", "generic_simulation_template.json", package = "cts"),
+            victim = self$victim,
+            perpetrator = self$perpetrators[1],
+            victim_formulation = self$metadata$formulations$victim[1],
+            perpetrator_formulation = self$metadata$formulations$perpetrators[1],
+            victim_protocol = self$metadata$protocols$victim[1],
+            perpetrator_protocol = self$metadata$protocols$perpetrators[1],
+            individual = self$individuals[[1]]$Name
+          )
+
+        self$add_simulation(generic_simulation[[1]])
       }
     },
     #' @description
@@ -238,19 +216,21 @@ DDI <- R6::R6Class(
     #' - a Path to a local file.
     import = function(input) {
       self$source <- get_source(input)
-      self$data <- private$read_json(self$source)
+      # initialize from parent
+      super$initialize(input)
+      # self$data <- private$read_json(self$source)
     },
     #' @description
     #' Add a simulation to the DDI project
     #' @param simulation a simulation created by `create_simulation()`
     add_simulation = function(simulation) {
-      self$data$Simulations <- c(self$data$Simulations, simulation)
+      private$add_item("simulations", simulation)
     },
     #' @description
     #' Remove a simulation from the DDI project
     #' @param simulation_names a character vector of simulation names to remove
-    remove_simulation = function(simulation_names){
-      self$data$Simulations <- keep(self$data$Simulations, ~ !(.x$Name %in% simulation_names))
+    remove_simulation = function(simulation_names) {
+      private$remove_item("simulations", simulation_names)
     }
   ),
   private = list(
@@ -298,11 +278,11 @@ DDI <- R6::R6Class(
   active = list(
     #' @field victim returns the victim compound of the ddi project
     victim = function() {
-      self$compoundsNames[1]
+      self$get_names("compounds")[1]
     },
     #' @field perpetrators returns the names of all perpetrators compounds of the ddi project
     perpetrators = function() {
-      self$compoundsNames[-1]
+      self$get_names("compounds")[-1]
     }
   )
 )

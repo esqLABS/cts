@@ -67,6 +67,7 @@ extract_compound_processes <- function(compound) {
 
 
 create_generic_simulation <- function(ddi, template_path, victim, perpetrator, individual, victim_formulation, perpetrator_formulation, victim_protocol, perpetrator_protocol) {
+
   # fill the simulation template
   filled_template <- fill_simulation_template(template_path, victim, perpetrator, individual, victim_formulation, perpetrator_formulation, victim_protocol, perpetrator_protocol)
 
@@ -82,7 +83,7 @@ create_generic_simulation <- function(ddi, template_path, victim, perpetrator, i
 
   for (c in simulation_compounds_names) {
     template_index <- which(c == simulation_compounds_names)
-    ddi_index <- which(c == ddi$compoundsNames)
+    ddi_index <- which(c == ddi$get_names("compounds"))
     filled_template$Simulations[[1]]$Compounds[[template_index]]$Processes <- extract_compound_processes(ddi$compounds[[ddi_index]])
   }
 
