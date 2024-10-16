@@ -17,11 +17,14 @@ This class is used to import, access and manipulate the data from a compound sna
 }
 }
 \if{html}{\out{
-<details open><summary>Inherited methods</summary>
+<details><summary>Inherited methods</summary>
 <ul>
+<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_protocol"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_protocol'><code>cts::Snapshot$add_protocol()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="export"><a href='../../cts/html/Snapshot.html#method-Snapshot-export'><code>cts::Snapshot$export()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="get_names"><a href='../../cts/html/Snapshot.html#method-Snapshot-get_names'><code>cts::Snapshot$get_names()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="initialize"><a href='../../cts/html/Snapshot.html#method-Snapshot-initialize'><code>cts::Snapshot$initialize()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="print"><a href='../../cts/html/Snapshot.html#method-Snapshot-print'><code>cts::Snapshot$print()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_protocol"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_protocol'><code>cts::Snapshot$remove_protocol()</code></a></span></li>
 </ul>
 </details>
 }}

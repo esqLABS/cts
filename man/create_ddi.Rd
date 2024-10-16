@@ -16,7 +16,7 @@ created by \code{compound()}. Pass one or more \code{Compound} objects.}
 \item{options}{a named list of options to customize the DDI simulation. Default is to use \code{default_options}.
 \itemize{
 \item import_simulations: logical, whether to import the simulations from the victim and perpetrators. default is FALSE.
-\item auto_create_ddi_simulation: logical, whether to create a generic simulation template. default is TRUE.
+\item create_ddi_simulation: logical, whether to create a generic simulation template. default is TRUE.
 generic simulation will use:
 \itemize{
 \item the first compound defined as perpetrator,

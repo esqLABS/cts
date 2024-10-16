@@ -12,52 +12,34 @@ This class is used to import, access and manipulate the data from a snapshot.
 \describe{
 \item{\code{source}}{The source of the snapshot (local file, url, ...)}
 
-\item{\code{data}}{The data of the snapshot}
+\item{\code{version}}{The version of the snapshot}
 }
 \if{html}{\out{</div>}}
 }
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
-\item{\code{compounds}}{Access the compounds data from the snapshot.}
+\item{\code{data}}{The data of the snapshot}
 
-\item{\code{compoundsNames}}{Names of the compounds in the snapshot.}
+\item{\code{compounds}}{Access the compounds data from the snapshot.}
 
 \item{\code{individuals}}{Access the individuals data from the snapshot.}
 
-\item{\code{individualsNames}}{Names of the individuals in the snapshot.}
-
 \item{\code{populations}}{Access the populations data from the snapshot.}
-
-\item{\code{populationsNames}}{Names of the populations in the snapshot.}
 
 \item{\code{formulations}}{Access the formulations data from the snapshot.}
 
-\item{\code{formulationsNames}}{Names of the formulations in the snapshot.}
-
 \item{\code{protocols}}{Access the protocols data from the snapshot.}
-
-\item{\code{protocolsNames}}{Names of the protocols in the snapshot.}
 
 \item{\code{expression_profiles}}{Access the expression profiles data from the snapshot.}
 
-\item{\code{expression_profilesNames}}{Names of the expression profiles in the snapshot.}
-
 \item{\code{observer_sets}}{Access the observer sets data from the snapshot.}
-
-\item{\code{observer_setsNames}}{Names of the observer sets in the snapshot.}
 
 \item{\code{events}}{Access the events data from the snapshot.}
 
-\item{\code{eventsNames}}{Names of the events in the snapshot.}
-
 \item{\code{simulations}}{Access the simulations data from the snapshot.}
 
-\item{\code{simulationsNames}}{Names of the simulations in the snapshot.}
-
 \item{\code{observed_data}}{Access the observed data from the snapshot.}
-
-\item{\code{observed_dataNames}}{Names of the observed data in the snapshot.}
 }
 \if{html}{\out{</div>}}
 }
@@ -67,6 +49,9 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item \href{#method-Snapshot-new}{\code{Snapshot$new()}}
 \item \href{#method-Snapshot-print}{\code{Snapshot$print()}}
 \item \href{#method-Snapshot-export}{\code{Snapshot$export()}}
+\item \href{#method-Snapshot-get_names}{\code{Snapshot$get_names()}}
+\item \href{#method-Snapshot-add_protocol}{\code{Snapshot$add_protocol()}}
+\item \href{#method-Snapshot-remove_protocol}{\code{Snapshot$remove_protocol()}}
 \item \href{#method-Snapshot-clone}{\code{Snapshot$clone()}}
 }
 }
@@ -117,12 +102,38 @@ Export a DDI simulation to a JSON file.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{path}}{character string that is the path to the output file.
-description
-get_names the names of a field in the snapshot.}
+\item{\code{path}}{character string that is the path to the output file.}
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-get_names"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-get_names}{}}}
+\subsection{Method \code{get_names()}}{
+get_names the names of a field in the snapshot.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$get_names(field)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-add_protocol"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-add_protocol}{}}}
+\subsection{Method \code{add_protocol()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$add_protocol(protocol)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-remove_protocol"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-remove_protocol}{}}}
+\subsection{Method \code{remove_protocol()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$remove_protocol(protocol_name)}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-clone"></a>}}
