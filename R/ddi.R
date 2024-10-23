@@ -27,7 +27,6 @@
 #' create_ddi(victim = rifampicin, perpetrator = midazolam)
 #' }
 create_ddi <- function(victim, perpetrator, options = NULL) {
-
   if (missing(victim)) {
     cli::cli_abort("At least one victim compound must be provided.")
   }
@@ -77,6 +76,15 @@ export_ddi <- function(ddi, path) {
   ddi$export(path)
 }
 
+#' Run Drug-Drug Interaction (DDI) Simulations defined in the ddi project
+#' @param path description
+#' @param exportPKML description
+#' @export
+run_ddi <- function(ddi, path = NULL, exportPKML = FALSE) {
+  ddi$run_simulations(path, exportPKML)
+  return(ddi$simulations_results)
+}
+
 #' R6 Class Representing a DDI Snapshot
 #'
 #' @description
@@ -105,8 +113,6 @@ DDI <- R6::R6Class(
       } else {
         self$options <- default_options
       }
-
-
     },
     #' @description
     #' Nicely print the DDI object.
@@ -194,7 +200,6 @@ DDI <- R6::R6Class(
       })
 
       if (self$options$create_ddi_simulation) {
-
         # Add generic ddi simulation
         generic_simulation <-
           create_generic_simulation(self,
