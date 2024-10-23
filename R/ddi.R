@@ -77,6 +77,7 @@ export_ddi <- function(ddi, path) {
 }
 
 #' Run Drug-Drug Interaction (DDI) Simulations defined in the ddi project
+#' @param ddi a DDI object
 #' @param path description
 #' @param exportPKML description
 #' @export

@@ -7,6 +7,8 @@
 run_ddi(ddi, path = NULL, exportPKML = FALSE)
 }
 \arguments{
+\item{ddi}{a DDI object}
+
 \item{path}{description}
 
 \item{exportPKML}{description}
