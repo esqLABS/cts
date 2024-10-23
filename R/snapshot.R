@@ -9,10 +9,12 @@ Snapshot <- R6::R6Class(
   public = list(
     #' @field source The source of the snapshot (local file, url, ...)
     source = NULL,
-    #' @field data The data of the snapshot
+    #' @field source_data The input data of the snapshot
     source_data = NULL,
-    #' @field version The version of the snapshot
+    #' @field version version The version of the snapshot
     version = NULL,
+    #' @field simulations_results The simulation results of the snapshot
+    simulations_results = NULL,
     #' @description
     #' Create a Snapshot object.
     #' @param input character string that is wether
@@ -68,15 +70,69 @@ Snapshot <- R6::R6Class(
     },
     #' @description
     #' get_names the names of a field in the snapshot.
-    #' @param field
+    #' @param field the field to get the names from.
     get_names = function(field) {
       list_c(map(self[[field]], ~ .x$Name)) %||% list_c(map(self[[field]], "name"))
     },
+    #' @description
+    #' add a protocol to the snapshot.
+    #' @param protocol the protocol object to add
     add_protocol = function(protocol) {
       private$add_item("protocols", protocol)
     },
-    remove_protocol = function(protocol_name){
+    #' @description
+    #' remove a protocol from the snapshot.
+    #' @param protocol_name name(s) of the protocol(s) to remove
+    remove_protocol = function(protocol_name) {
       private$remove_item("protocols", protocol_name)
+    },
+    #' @description
+    #' run simulations defined in the snapshot
+    #' @param path character string that is the path to the output directory.
+    #' @param exportPKML logical that indicates if the PKML files should be exported.
+    run_simulations = function(path = NULL, exportPKML = FALSE) {
+      # create a temporary directory
+      temp_dir <- tempfile()
+      dir.create(temp_dir)
+      # write $data to a temporary file
+      temp_file <- tempfile(fileext = ".json", tmpdir = temp_dir)
+      temp_file_name <- basename(fs::path_ext_remove(temp_file))
+      private$write_json(self$data, temp_file)
+      # run simulations
+      ospsuite::runSimulationsFromSnapshot(temp_file,
+        output = temp_dir,
+        exportCSV = TRUE,
+        exportPKML = exportPKML
+      )
+      # read simulation results files and add to $simulations_results
+      sim_results_files <- list.files(temp_dir, pattern = glue("{temp_file_name}-.*\\.csv$"))
+      sim_names <- gsub(glue("{temp_file_name}-"), "", sim_results_files) %>%
+        gsub(glue("-Results"), "", .) %>%
+        fs::path_ext_remove()
+
+      results <- vector("list", length(sim_results_files))
+      names(results) <- sim_names
+
+      for (i in seq_along(sim_results_files)) {
+        sim_name <- sim_names[i]
+        results[[sim_name]] <-
+          readr::read_csv(file.path(temp_dir, sim_results_files[i]),
+            show_col_types = FALSE,
+            col_select = c(
+              "IndividualId",
+              "Time [min]",
+              tidyselect::starts_with(purrr::keep(self$simulations, ~ .x$Name == sim_name)[[1]]$OutputSelections)
+            )
+          )
+      }
+
+      self$simulations_results <- results
+
+      if (!is.null(path)) {
+        # copy simulation results and pkml to the output directory
+        fs::file_copy(fs::path(temp_dir, sim_results_files), path)
+        fs::file_copy(list.files(temp_dir, pattern = ".pkml$",full.names = T), path)
+      }
     }
   ),
   private = list(
@@ -106,13 +162,12 @@ Snapshot <- R6::R6Class(
     add_item = function(target, item) {
       self[[target]] <- c(self[[target]], list(item))
     },
-    remove_item = function(target, name){
-      if (target == "protocols"){
-        self[[target]] <- purrr::discard(self[[target]], ~.x$name %in% name)
+    remove_item = function(target, name) {
+      if (target == "protocols") {
+        self[[target]] <- purrr::discard(self[[target]], ~ .x$name %in% name)
       } else {
-        self[[target]] <- purrr::discard(self[[target]], ~.x$Name %in% name)
+        self[[target]] <- purrr::discard(self[[target]], ~ .x$Name %in% name)
       }
-
     },
     .compounds = NULL,
     .individuals = NULL,
@@ -126,6 +181,7 @@ Snapshot <- R6::R6Class(
     .observed_data = NULL
   ),
   active = list(
+    #' @field data dynamic json representation of the snapshot object
     data = function() {
       data <- self$source_data
 
@@ -281,10 +337,3 @@ update_snapshots <- function(snapshots) {
   }
 }
 
-add_protocol <- function(snapshot, protocol) {
-  snapshot$add_protocol(protocol)
-}
-
-remove_protocol <- function(snapshot, protocol_name){
-  snapshot$remove_protocol(protocol_name)
-}

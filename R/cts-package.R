@@ -12,5 +12,6 @@
 #' @importFrom purrr map_int
 #' @importFrom purrr map_vec
 #' @importFrom purrr walk
+#' @importFrom glue glue
 ## usethis namespace: end
 NULL

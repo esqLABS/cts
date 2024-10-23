@@ -14,11 +14,14 @@ Depends:
 Imports: 
     cli,
     curl,
+    fs,
+    glue,
     jsonlite,
     magrittr,
     ospsuite (>= 12.1.0),
     purrr,
     R6,
+    readr,
     rlang,
     snakecase
 Suggests: 

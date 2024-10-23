@@ -152,17 +152,47 @@ rifampicin$formulations
 This command outputs the formulations that are defined for the compound
 and that can be used in simulations.
 
+## Add new building blocks
+
+Only administration protocols can be altered/added/removed from
+snapshots
+
+``` r
+my_protocol <- create_protocol("my_protocol",
+                type = "oral",
+                interval = "single",
+                dose = 200,
+                water_vol_per_body_weight = 3.5)
+```
+
+``` r
+add_protocol(rifampicin, my_protocol)
+```
+
+``` r
+purrr::map_chr(rifampicin$protocols, "name")
+#>  [1] "iv 300 mg (0.5 h)"                                  
+#>  [2] "iv 300 mg (3 h)"                                    
+#>  [3] "iv 450 mg (3 h)"                                    
+#>  [4] "iv 600 mg (0.5 h)"                                  
+#>  [5] "iv 600 mg (3 h)"                                    
+#>  [6] "iv 600 mg (3 h) MD OD (7 days)"                     
+#>  [7] "po 300 mg"                                          
+#>  [8] "po 450 mg"                                          
+#>  [9] "po 600 mg"                                          
+#> [10] "po 600 mg MD OD (7 days)"                           
+#> [11] "po 450 mg MD OD (7 days)"                           
+#> [12] "po 600 mg MD OD (16 days)"                          
+#> [13] "Chattopadhyay 2018 - Rifampicin - 600 mg MD 11 days"
+#> [14] "my_protocol"
+```
+
 ## Create, Parameterize and Run a DDI Simulation
 
 After importing the necessary compounds, you can create a DDI
 simulation. Here is a basic example of creating a DDI simulation with a
 victim compound (e.g., Rifampicin) and a perpetrator compound (e.g.,
 Midazolam):
-
-``` r
-# Create a DDI simulation
-myDDI <- create_ddi(victim = rifampicin, perpetrator = midazolam)
-```
 
 Some additional options can be passed during ddi creation:
 
@@ -181,6 +211,35 @@ All options can be found in the `?create_ddi` help page.
 By default, the `create_ddi` function will generate a generic and
 ready-to-run ddi simulation.
 
+## Run the snapshot simulations
+
+``` r
+results <- run_ddi(myDDI)
+```
+
+``` r
+head(results$`Generic DDI simulation`)
+#> # A tibble: 6 × 4
+#>   IndividualId `Time [min]` Organism|PeripheralVenousBl…¹ Organism|PeripheralV…²
+#>          <dbl>        <dbl>                         <dbl>                  <dbl>
+#> 1            0            0                          0                     0    
+#> 2            0            3                          2.64                  1.01 
+#> 3            0            6                          5.26                  0.600
+#> 4            0            9                          7.41                  0.398
+#> 5            0           12                          9.23                  0.298
+#> 6            0           15                         10.8                   0.247
+#> # ℹ abbreviated names:
+#> #   ¹​`Organism|PeripheralVenousBlood|Rifampicin|Plasma (Peripheral Venous Blood) [µmol/l]`,
+#> #   ²​`Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood) [µmol/l]`
+```
+
+Results can also be exported as csv and pkml files with the `path` and
+`exportPKML` arguments:
+
+``` r
+results <- run_ddi(myDDI, path = "output_directory/", exportPKML = TRUE)
+```
+
 ## Export the DDI Simulation as a Snapshot
 
 You can also export the entire DDI simulation as a snapshot file for
@@ -192,11 +251,6 @@ export_ddi(myDDI, "path/to/Rifampicin-Midazolam-DDI.json")
 ```
 
 ## What’s Next
-
-``` r
-# Work in progress
-run_simulations(myDDI)
-```
 
 It is also possible to define new simulations, then add or remove them
 from the DDI object.
@@ -218,27 +272,6 @@ add_simulation(myDDI,
 remove_simulation(myDDI, "New Simulation")
 ```
 
-Other aspects can also be created and parameterized and added to the DDI
-object. For example, you can create a new protocol.
-
-``` r
-# Add a new administration protocol
-add_protocol(myDDI,
-  name = "New Protocol",
-  dose = 250, dose_unit = "mg",
-  start = 0, end = 30, interval = 1, time_unit = "days"
-)
-```
-
-Then, it is possible to use this protocole to create a new simulation or
-to update an existing one.
-
-``` r
-set_protocol(myDDI, 
-             protocol = "New Protocol",
-             simulation = "New Simulation", compound = "Rifampicin")
-```
-
 ## Run the DDI Simulation and Export Results
 
 Finally, you can run the DDI simulations and export the results for
@@ -246,11 +279,12 @@ further analysis:
 
 ``` r
 # Run the DDI simulation and export results
-run_ddi(myDDI, path = "path/to/output", 
-        format = "csv",  # Export results as a CSV file
-        pkml = TRUE,     # Export the simulation as a PK-Sim project file
-        plots = TRUE,    # Generate simulation plots
-        stats = TRUE     # Compute and include PK statistics
+run_ddi(myDDI,
+  path = "path/to/output",
+  format = "csv", # Export results as a CSV file
+  pkml = TRUE, # Export the simulation as a PK-Sim project file
+  plots = TRUE, # Generate simulation plots
+  stats = TRUE # Compute and include PK statistics
 )
 ```
 

@@ -25,6 +25,7 @@ This class is used to import, access and manipulate the data from a compound sna
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="initialize"><a href='../../cts/html/Snapshot.html#method-Snapshot-initialize'><code>cts::Snapshot$initialize()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="print"><a href='../../cts/html/Snapshot.html#method-Snapshot-print'><code>cts::Snapshot$print()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_protocol"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_protocol'><code>cts::Snapshot$remove_protocol()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="run_simulations"><a href='../../cts/html/Snapshot.html#method-Snapshot-run_simulations'><code>cts::Snapshot$run_simulations()</code></a></span></li>
 </ul>
 </details>
 }}

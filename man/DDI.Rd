@@ -47,6 +47,7 @@ This class is used to import, access and manipulate the data from a DDI snapshot
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="export"><a href='../../cts/html/Snapshot.html#method-Snapshot-export'><code>cts::Snapshot$export()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="get_names"><a href='../../cts/html/Snapshot.html#method-Snapshot-get_names'><code>cts::Snapshot$get_names()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_protocol"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_protocol'><code>cts::Snapshot$remove_protocol()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="run_simulations"><a href='../../cts/html/Snapshot.html#method-Snapshot-run_simulations'><code>cts::Snapshot$run_simulations()</code></a></span></li>
 </ul>
 </details>
 }}
