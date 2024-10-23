@@ -1,3 +1,85 @@
+#' Create a new administration protocol
+#'
+#' @param name a character string representing the protocol name.
+#' @param type a character string representing the protocol type. Can be one of:
+#'  - oral: oral administration
+#'  - ivb: intravenous bolus
+#'  - iv: intravenous
+#' @param interval a character string representing the administration interval. Can be one of:
+#'  - single
+#'  - 24
+#'  - 12-12
+#'  - 8-8-8
+#'  - 6-6-6-6
+#'  - 6-6-12
+#' @param dose a numeric value representing the dose.
+#' @param dose_unit a character string representing the dose unit. Default is "mg".
+#' @param end_time a numeric value representing the end time of the protocol. Default is 24.
+#' @param end_time_unit a character string representing the end time unit. Default is "h".
+#' @param ... additional parameters that depends on the `type` of administration:
+#' - for oral administrations:
+#'  - water_vol_per_body_weight. Default is 3.5.
+#'  - water_vol_per_body_weight_unit: Default is "ml/kg".
+#' - for intravenous:
+#'  - infusion_time. Default is 0.5.
+#'  - infusion_time_unit. Default is "h".
+#'
+#' @return a Protocol object
+#' @export
+create_protocol <- function(name, type, interval,
+                            dose, dose_unit = "mg",
+                            end_time = 24, end_time_unit = "h",
+                            ...) {
+  Protocol$new(name, type, interval,
+               dose,
+               dose_unit = dose_unit,
+               end_time = end_time, end_time_unit = end_time_unit,
+               ...
+  )
+}
+
+#' Add a protocol to a snapshot
+#'
+#' @param snapshot a snapshot object.
+#' @param protocol a protocol object created with `create_protocol()`.
+#'
+#' @return the updated snapshot with new protocol
+#' @export
+add_protocol <- function(snapshot, protocol) {
+  snapshot$add_protocol(protocol)
+  invisible(snapshot)
+}
+
+#' Remove a protocol from a snapshot
+#'
+#' @param snapshot a snapshot object.
+#' @param protocol_name a character vector of protocol name(s) to remove
+#'
+#' @return the updated snapshot without the specified protocols
+#' @export
+remove_protocol <- function(snapshot, protocol_name) {
+  snapshot$remove_protocol(protocol_name)
+  invisible(snapshot)
+}
+
+
+types <- list(
+  "oral" = list(pksim = "Oral", human = "Oral"),
+  "ivb" = list(pksim = "IntravenousBolus", human = "Intravenous Bolus"),
+  "iv" = list(pksim = "Intravenous", human = "Intravenous")
+)
+
+
+intervals <- list(
+  "single" = list(pksim = "Single", human = "Single Dose"),
+  "24" = list(pksim = "DI_24", human = "Once each 24 hours"),
+  "12-12" = list(pksim = "DI_12_12", human = "Each 12 hours"),
+  "8-8-8" = list(pksim = "DI_8_8_8", human = "Each 8 hours"),
+  "6-6-6-6" = list(pksim = "DI_6_6_6_6", human = "Each 6 hours"),
+  "6-6-12" = list(pksim = "DI_6_6_12", human = "Each 6 hours then 12 hours afters")
+)
+
+
 Protocol <- R6::R6Class("Protocol",
   public = list(
     name = NULL,
@@ -31,14 +113,21 @@ Protocol <- R6::R6Class("Protocol",
       if (self$type == "oral" && is.null(self$water_vol_per_body_weight)) {
         cli_warn("No {.code water_vol_per_body_weight} provided, using default value of 3.5 ml/kg.")
         self$water_vol_per_body_weight <- 3.5
+      }
+
+      if (!is.null(self$water_vol_per_body_weight) & is.null(self$water_vol_per_body_weight_unit)){
         self$water_vol_per_body_weight_unit <- "ml/kg"
       }
 
       if (self$type == "iv" && is.null(self$infusion_time)) {
         cli_warn("No {.code infusion_time} provided, using default value of 60 minutes.")
         self$infusion_time <- 60
+      }
+
+      if (!is.null(self$infusion_time) & is.null(self$infusion_time_unit)){
         self$infusion_time_unit <- "min"
       }
+
     },
     print = function() {
       cli_text(self$name)
@@ -115,7 +204,7 @@ Protocol <- R6::R6Class("Protocol",
         )
       }
 
-      if (self$type == "oral" ) { # written even if set to default value but only if oral administration
+      if (self$type == "oral") { # written even if set to default value but only if oral administration
         data$Parameters <- c(
           data$Parameters,
           list(
@@ -251,22 +340,6 @@ AdvancedProtocol <- R6::R6Class("AdvancedProtocol",
   active = list()
 )
 
-types <- list(
-  "oral" = list(pksim = "Oral", human = "Oral"),
-  "ivb" = list(pksim = "IntravenousBolus", human = "Intravenous Bolus"),
-  "iv" = list(pksim = "Intravenous", human = "Intravenous")
-)
-
-
-intervals <- list(
-  "single" = list(pksim = "Single", human = "Single Dose"),
-  "24" = list(pksim = "DI_24", human = "Once each 24 hours"),
-  "12-12" = list(pksim = "DI_12_12", human = "Each 12 hours"),
-  "8-8-8" = list(pksim = "DI_8_8_8", human = "Each 8 hours"),
-  "6-6-6-6" = list(pksim = "DI_6_6_6_6", human = "Each 6 hours"),
-  "6-6-12" = list(pksim = "DI_6_6_12", human = "Each 6 hours then 12 hours afters")
-)
-
 protocol_from_data <- function(protocol_data) {
   name <- protocol_data$Name
 
@@ -314,14 +387,3 @@ protocol_from_data <- function(protocol_data) {
   )
 }
 
-create_protocol <- function(name, type, interval,
-                            dose, dose_unit = "mg",
-                            end_time = 24, end_time_unit = "h",
-                            ...) {
-  Protocol$new(name, type, interval,
-    dose,
-    dose_unit = dose_unit,
-    end_time = end_time, end_time_unit = end_time_unit,
-    ...
-  )
-}
