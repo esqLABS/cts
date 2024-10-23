@@ -67,7 +67,6 @@ extract_compound_processes <- function(compound) {
 
 
 create_generic_simulation <- function(ddi, template_path, victim, perpetrator, individual, victim_formulation, perpetrator_formulation, victim_protocol, perpetrator_protocol) {
-
   # fill the simulation template
   filled_template <- fill_simulation_template(template_path, victim, perpetrator, individual, victim_formulation, perpetrator_formulation, victim_protocol, perpetrator_protocol)
 

@@ -12,14 +12,18 @@ This class is used to import, access and manipulate the data from a snapshot.
 \describe{
 \item{\code{source}}{The source of the snapshot (local file, url, ...)}
 
-\item{\code{version}}{The version of the snapshot}
+\item{\code{source_data}}{The input data of the snapshot}
+
+\item{\code{version}}{version The version of the snapshot}
+
+\item{\code{simulations_results}}{The simulation results of the snapshot}
 }
 \if{html}{\out{</div>}}
 }
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
-\item{\code{data}}{The data of the snapshot}
+\item{\code{data}}{dynamic json representation of the snapshot object}
 
 \item{\code{compounds}}{Access the compounds data from the snapshot.}
 
@@ -52,6 +56,7 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item \href{#method-Snapshot-get_names}{\code{Snapshot$get_names()}}
 \item \href{#method-Snapshot-add_protocol}{\code{Snapshot$add_protocol()}}
 \item \href{#method-Snapshot-remove_protocol}{\code{Snapshot$remove_protocol()}}
+\item \href{#method-Snapshot-run_simulations}{\code{Snapshot$run_simulations()}}
 \item \href{#method-Snapshot-clone}{\code{Snapshot$clone()}}
 }
 }
@@ -116,24 +121,66 @@ get_names the names of a field in the snapshot.
 \if{html}{\out{<div class="r">}}\preformatted{Snapshot$get_names(field)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{field}}{the field to get the names from.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-add_protocol"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-add_protocol}{}}}
 \subsection{Method \code{add_protocol()}}{
+add a protocol to the snapshot.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Snapshot$add_protocol(protocol)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{protocol}}{the protocol object to add}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-remove_protocol"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-remove_protocol}{}}}
 \subsection{Method \code{remove_protocol()}}{
+remove a protocol from the snapshot.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Snapshot$remove_protocol(protocol_name)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{protocol_name}}{name(s) of the protocol(s) to remove}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-run_simulations"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-run_simulations}{}}}
+\subsection{Method \code{run_simulations()}}{
+run simulations defined in the snapshot
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$run_simulations(path = NULL, exportPKML = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{path}}{character string that is the path to the output directory.}
+
+\item{\code{exportPKML}}{logical that indicates if the PKML files should be exported.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-clone"></a>}}
