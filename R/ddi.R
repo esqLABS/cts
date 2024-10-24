@@ -86,6 +86,16 @@ run_ddi <- function(ddi, path = NULL, exportPKML = FALSE) {
   return(ddi$simulations_results)
 }
 
+#' Run Pk-Analysis for DDI simulations defined in the ddi project
+#' @param ddi a DDI object
+#' @param path description
+#' @param exportToCSV description
+#' @export
+run_pk_analysis <- function(ddi, path = NULL, exportToCSV = FALSE) {
+  ddi$run_pk_analysis(path, exportToCSV)
+  return(ddi$pk_analysis)
+}
+
 #' R6 Class Representing a DDI Snapshot
 #'
 #' @description

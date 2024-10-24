@@ -15,6 +15,8 @@ Snapshot <- R6::R6Class(
     version = NULL,
     #' @field simulations_results The simulation results of the snapshot
     simulations_results = NULL,
+    #' @field pk_analysis_results The pk-analyses results of the simulations
+    pk_analysis_results = NULL,
     #' @description
     #' Create a Snapshot object.
     #' @param input character string that is wether
@@ -137,6 +139,31 @@ Snapshot <- R6::R6Class(
         fs::file_copy(fs::path(temp_dir, sim_results_files), path)
         if (exportPKML) {
           fs::file_copy(list.files(temp_dir, pattern = ".pkml$", full.names = T), path)
+        }
+      }
+    },
+    #' @description
+    #' run simulations defined in the snapshot
+    #' @param path character string that is the path to the output directory.
+    #' @param exportPKML logical that indicates if the PKML files should be exported.
+    run_pk_analysis = function(path = NULL, exportToCSV = FALSE) {
+      if (is.null(private$.simulations_results)) {
+        cli::cli_alert_info("DDI simulations results were not found. Running them.")
+        self$run_simulations()
+      }
+
+      # validate object
+
+      # run PK analysis
+      pk_analysis <- lapply(private$.simulations_results, ospsuite::calculatePKAnalyses)
+      self$pk_analysis_results <- lapply(pk_analysis, ospsuite::pkAnalysesToTibble)
+
+      if (!is.null(path) && isTRUE(exportToCSV)) {
+        for (i in seq_len(length(pk_analysis))) {
+          ospsuite::exportPKAnalysesToCSV(
+            pkAnalyses = pk_analysis[[i]],
+            filePath = file.path(path, glue("{names(pk_analysis)[i]}", "-PKAnalysis.csv"))
+          )
         }
       }
     }
