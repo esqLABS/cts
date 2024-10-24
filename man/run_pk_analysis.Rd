@@ -4,14 +4,14 @@
 \alias{run_pk_analysis}
 \title{Run Pk-Analysis for DDI simulations defined in the ddi project}
 \usage{
-run_pk_analysis(ddi, path = NULL, exportToCSV = FALSE)
+run_pk_analysis(ddi, path = NULL)
 }
 \arguments{
 \item{ddi}{a DDI object}
 
-\item{path}{description}
-
-\item{exportToCSV}{description}
+\item{path}{a character string representing the path to where to save
+pk analysis results. Default is NULL. If not NULL, will save the pk analysis
+results as .csv files at provided location.}
 }
 \description{
 Run Pk-Analysis for DDI simulations defined in the ddi project

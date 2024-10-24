@@ -9,9 +9,11 @@ run_ddi(ddi, path = NULL, exportPKML = FALSE)
 \arguments{
 \item{ddi}{a DDI object}
 
-\item{path}{description}
+\item{path}{a character string representing the path to where to save
+simulations results. Default is NULL. If not NULL, will save the simulation
+results as .csv files at provided location.}
 
-\item{exportPKML}{description}
+\item{exportPKML}{logical. Whether to export the PKML files. Default is FALSE.}
 }
 \description{
 Run Drug-Drug Interaction (DDI) Simulations defined in the ddi project

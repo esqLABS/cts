@@ -191,15 +191,13 @@ run simulations defined in the snapshot
 \subsection{Method \code{run_pk_analysis()}}{
 run simulations defined in the snapshot
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$run_pk_analysis(path = NULL, exportToCSV = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$run_pk_analysis(path = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{path}}{character string that is the path to the output directory.}
-
-\item{\code{exportToCSV}}{logical that indicates if the PKML files should be exported.}
+\item{\code{path}}{character string to where to export pk analysis as csv file}
 }
 \if{html}{\out{</div>}}
 }

@@ -78,8 +78,10 @@ export_ddi <- function(ddi, path) {
 
 #' Run Drug-Drug Interaction (DDI) Simulations defined in the ddi project
 #' @param ddi a DDI object
-#' @param path description
-#' @param exportPKML description
+#' @param path a character string representing the path to where to save
+#' simulations results. Default is NULL. If not NULL, will save the simulation
+#' results as .csv files at provided location.
+#' @param exportPKML logical. Whether to export the PKML files. Default is FALSE.
 #' @export
 run_ddi <- function(ddi, path = NULL, exportPKML = FALSE) {
   ddi$run_simulations(path, exportPKML)
@@ -88,11 +90,12 @@ run_ddi <- function(ddi, path = NULL, exportPKML = FALSE) {
 
 #' Run Pk-Analysis for DDI simulations defined in the ddi project
 #' @param ddi a DDI object
-#' @param path description
-#' @param exportToCSV description
+#' @param path a character string representing the path to where to save
+#' pk analysis results. Default is NULL. If not NULL, will save the pk analysis
+#' results as .csv files at provided location.
 #' @export
-run_pk_analysis <- function(ddi, path = NULL, exportToCSV = FALSE) {
-  ddi$run_pk_analysis(path, exportToCSV)
+run_pk_analysis <- function(ddi, path = NULL) {
+  ddi$run_pk_analysis(path)
   return(ddi$pk_analysis_results)
 }
 
