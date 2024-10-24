@@ -15,6 +15,8 @@ Snapshot <- R6::R6Class(
     version = NULL,
     #' @field simulations_results The simulation results of the snapshot
     simulations_results = NULL,
+    #' @field pk_analysis_results The pk-analyses results of the simulations
+    pk_analysis_results = NULL,
     #' @description
     #' Create a Snapshot object.
     #' @param input character string that is wether
@@ -102,36 +104,59 @@ Snapshot <- R6::R6Class(
       ospsuite::runSimulationsFromSnapshot(temp_file,
         output = temp_dir,
         exportCSV = TRUE,
-        exportPKML = exportPKML
+        exportPKML = TRUE
       )
-      # read simulation results files and add to $simulations_results
+
+      # recreate simulation results objects
       sim_results_files <- list.files(temp_dir, pattern = glue("{temp_file_name}-.*\\.csv$"))
       sim_names <- gsub(glue("{temp_file_name}-"), "", sim_results_files) %>%
         gsub(glue("-Results"), "", .) %>%
         fs::path_ext_remove()
 
-      results <- vector("list", length(sim_results_files))
-      names(results) <- sim_names
+      results_obj <- results_tibble <- vector("list", length(sim_results_files))
+      names(results_obj) <- names(results_tibble) <- sim_names
 
       for (i in seq_along(sim_results_files)) {
         sim_name <- sim_names[i]
-        results[[sim_name]] <-
-          readr::read_csv(file.path(temp_dir, sim_results_files[i]),
-            show_col_types = FALSE,
-            col_select = c(
-              "IndividualId",
-              "Time [min]",
-              tidyselect::starts_with(purrr::keep(self$simulations, ~ .x$Name == sim_name)[[1]]$OutputSelections)
-            )
-          )
+        simulation <- ospsuite::loadSimulation(file.path(temp_dir, glue(temp_file_name, "-", sim_name, ".pkml")))
+        results_obj[[sim_name]] <- ospsuite::importResultsFromCSV(simulation, file.path(temp_dir, sim_results_files[i]))
+        results_tibble[[sim_name]] <- ospsuite::simulationResultsToTibble(results_obj[[sim_name]])
       }
 
-      self$simulations_results <- results
+      private$.simulations_results <- results_obj
+      self$simulations_results <- results_tibble
 
       if (!is.null(path)) {
         # copy simulation results and pkml to the output directory
         fs::file_copy(fs::path(temp_dir, sim_results_files), path)
-        fs::file_copy(list.files(temp_dir, pattern = ".pkml$",full.names = T), path)
+        if (exportPKML) {
+          fs::file_copy(list.files(temp_dir, pattern = ".pkml$", full.names = T), path)
+        }
+      }
+    },
+    #' @description
+    #' run simulations defined in the snapshot
+    #' @param path character string to where to export pk analysis as csv file
+    run_pk_analysis = function(path = NULL) {
+      if (is.null(private$.simulations_results)) {
+        cli::cli_alert_info("DDI simulations results were not found. Running them.")
+        self$run_simulations()
+      }
+
+      # validate object, should be a list of SimulationResults
+      lapply(private$.simulations_results, ospsuite.utils::validateIsOfType, type = "SimulationResults")
+
+      # run PK analysis
+      pk_analysis <- lapply(private$.simulations_results, ospsuite::calculatePKAnalyses)
+      self$pk_analysis_results <- lapply(pk_analysis, ospsuite::pkAnalysesToTibble)
+
+      if (!is.null(path)) {
+        for (i in seq_len(length(pk_analysis))) {
+          ospsuite::exportPKAnalysesToCSV(
+            pkAnalyses = pk_analysis[[i]],
+            filePath = file.path(path, glue("{names(pk_analysis)[i]}", "-PKAnalysis.csv"))
+          )
+        }
       }
     }
   ),
@@ -178,7 +203,8 @@ Snapshot <- R6::R6Class(
     .observer_sets = NULL,
     .events = NULL,
     .simulations = NULL,
-    .observed_data = NULL
+    .observed_data = NULL,
+    .simulations_results = NULL
   ),
   active = list(
     #' @field data dynamic json representation of the snapshot object
@@ -258,6 +284,9 @@ Snapshot <- R6::R6Class(
     #' @field simulations Access the simulations data from the snapshot.
     simulations = function(value) {
       if (!missing(value)) {
+        self$simulations_results <- NULL
+        private$.simulations_results <- NULL
+        self$pk_analysis_results <- NULL
         private$.simulations <- value
       }
       return(private$.simulations)
@@ -336,4 +365,3 @@ update_snapshots <- function(snapshots) {
     return(snapshots)
   }
 }
-

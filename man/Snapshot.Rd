@@ -17,6 +17,8 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item{\code{version}}{version The version of the snapshot}
 
 \item{\code{simulations_results}}{The simulation results of the snapshot}
+
+\item{\code{pk_analysis_results}}{The pk-analyses results of the simulations}
 }
 \if{html}{\out{</div>}}
 }
@@ -57,6 +59,7 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item \href{#method-Snapshot-add_protocol}{\code{Snapshot$add_protocol()}}
 \item \href{#method-Snapshot-remove_protocol}{\code{Snapshot$remove_protocol()}}
 \item \href{#method-Snapshot-run_simulations}{\code{Snapshot$run_simulations()}}
+\item \href{#method-Snapshot-run_pk_analysis}{\code{Snapshot$run_pk_analysis()}}
 \item \href{#method-Snapshot-clone}{\code{Snapshot$clone()}}
 }
 }
@@ -178,6 +181,23 @@ run simulations defined in the snapshot
 \item{\code{path}}{character string that is the path to the output directory.}
 
 \item{\code{exportPKML}}{logical that indicates if the PKML files should be exported.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-run_pk_analysis"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-run_pk_analysis}{}}}
+\subsection{Method \code{run_pk_analysis()}}{
+run simulations defined in the snapshot
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$run_pk_analysis(path = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{path}}{character string to where to export pk analysis as csv file}
 }
 \if{html}{\out{</div>}}
 }

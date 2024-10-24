@@ -100,7 +100,7 @@ list_compounds()
 This command outputs a list of compound names available in the OSP model
 library, which you can select to create your DDI simulations.
 
-### Import Compound Snapshots
+### Import Snapshots
 
 The core functionality of the package involves importing compound models
 from snapshot files. You can import a compound model in various ways:
@@ -131,7 +131,7 @@ You can also import compound models from local JSON files:
 compound("path/to/Alfentanil-Model.json")
 ```
 
-### Explore Compound
+### Explore Snapshots
 
 Once you have imported a compound snapshot, you can explore its
 properties, such as compound properties, formulations, protocols,
@@ -140,13 +140,7 @@ snapshot. For example, you can explore the formulations of Rifampicin
 using the following command:
 
 ``` r
-rifampicin$formulations
-#> [[1]]
-#> [[1]]$Name
-#> [1] "Oral solution"
-#> 
-#> [[1]]$FormulationType
-#> [1] "Formulation_Dissolved"
+rifampicin$protocols[[1]]
 ```
 
 This command outputs the formulations that are defined for the compound
@@ -163,6 +157,8 @@ my_protocol <- create_protocol("my_protocol",
                 interval = "single",
                 dose = 200,
                 water_vol_per_body_weight = 3.5)
+
+my_protocol
 ```
 
 ``` r
@@ -187,7 +183,7 @@ purrr::map_chr(rifampicin$protocols, "name")
 #> [14] "my_protocol"
 ```
 
-## Create, Parameterize and Run a DDI Simulation
+## Create, Parameterize and Run a DDI Project
 
 After importing the necessary compounds, you can create a DDI
 simulation. Here is a basic example of creating a DDI simulation with a
@@ -211,26 +207,31 @@ All options can be found in the `?create_ddi` help page.
 By default, the `create_ddi` function will generate a generic and
 ready-to-run ddi simulation.
 
-## Run the snapshot simulations
+## Run the DDI simulations
+
+Simulations defined in snapshots can easily be executed and their
+results retrieved using the `run_ddi()` function:
 
 ``` r
 results <- run_ddi(myDDI)
 ```
 
+This will return a named list of data frames containing the simulation
+results for each simulation in the DDI project. You can access the
+results for a specific simulation using its name as a list index:
+
 ``` r
 head(results$`Generic DDI simulation`)
-#> # A tibble: 6 × 4
-#>   IndividualId `Time [min]` Organism|PeripheralVenousBl…¹ Organism|PeripheralV…²
-#>          <dbl>        <dbl>                         <dbl>                  <dbl>
-#> 1            0            0                          0                     0    
-#> 2            0            3                          2.64                  1.01 
-#> 3            0            6                          5.26                  0.600
-#> 4            0            9                          7.41                  0.398
-#> 5            0           12                          9.23                  0.298
-#> 6            0           15                         10.8                   0.247
-#> # ℹ abbreviated names:
-#> #   ¹​`Organism|PeripheralVenousBlood|Rifampicin|Plasma (Peripheral Venous Blood) [µmol/l]`,
-#> #   ²​`Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood) [µmol/l]`
+#> # A tibble: 6 × 9
+#>   IndividualId  Time paths     simulationValues TimeDimension TimeUnit dimension
+#>          <int> <dbl> <chr>                <dbl> <chr>         <chr>    <chr>    
+#> 1            0     0 Organism…                0 Time          min      Concentr…
+#> 2            0     0 Organism…                0 Time          min      Concentr…
+#> 3            0     0 Organism…                0 Time          min      Concentr…
+#> 4            0     0 Organism…                0 Time          min      Concentr…
+#> 5            0     0 Organism…                0 Time          min      Fraction 
+#> 6            0     0 Organism…                0 Time          min      Fraction 
+#> # ℹ 2 more variables: unit <chr>, molWeight <dbl>
 ```
 
 Results can also be exported as csv and pkml files with the `path` and
@@ -240,7 +241,32 @@ Results can also be exported as csv and pkml files with the `path` and
 results <- run_ddi(myDDI, path = "output_directory/", exportPKML = TRUE)
 ```
 
-## Export the DDI Simulation as a Snapshot
+## Get PK Parameters
+
+PK parameters can be computed directly from the simulation results using
+`run_pk_analysis()` function:
+
+``` r
+pk_analysis <- run_pk_analysis(myDDI)
+```
+
+As well as results, the PK statistics can be accessed by simulation
+name:
+
+``` r
+head(pk_analysis$`Generic DDI simulation`)
+#> # A tibble: 6 × 5
+#>   IndividualId QuantityPath                             Parameter    Value Unit 
+#>          <int> <chr>                                    <chr>        <dbl> <chr>
+#> 1            0 Organism|PeripheralVenousBlood|Rifampic… C_max     1.72e+ 1 µmol…
+#> 2            0 Organism|PeripheralVenousBlood|Rifampic… C_max_no… 3.44e+ 6 mg/l 
+#> 3            0 Organism|PeripheralVenousBlood|Rifampic… t_max     5   e- 1 h    
+#> 4            0 Organism|PeripheralVenousBlood|Rifampic… C_tEnd    5.54e- 5 µmol…
+#> 5            0 Organism|PeripheralVenousBlood|Rifampic… AUC_tEnd  3.02e+ 3 µmol…
+#> 6            0 Organism|PeripheralVenousBlood|Rifampic… AUC_tEnd… 6.06e+11 µg*m…
+```
+
+## Export the DDI project as a Snapshot
 
 You can also export the entire DDI simulation as a snapshot file for
 future use or for importing into other platforms such as PK-Sim:
@@ -272,25 +298,11 @@ add_simulation(myDDI,
 remove_simulation(myDDI, "New Simulation")
 ```
 
-## Run the DDI Simulation and Export Results
-
-Finally, you can run the DDI simulations and export the results for
-further analysis:
+## Plot ddi simulations
 
 ``` r
-# Run the DDI simulation and export results
-run_ddi(myDDI,
-  path = "path/to/output",
-  format = "csv", # Export results as a CSV file
-  pkml = TRUE, # Export the simulation as a PK-Sim project file
-  plots = TRUE, # Generate simulation plots
-  stats = TRUE # Compute and include PK statistics
-)
+plot_ddi_results(myDDI)
 ```
-
-This command runs the DDI simulation, saves the results to the specified
-path, generates relevant plots, and computes PK statistics, making it
-easy to analyze the interaction outcomes.
 
 ## Dependencies
 
