@@ -156,5 +156,3 @@ test_that("DDI can be exported with .json extension", {
 
   expect_true(file.exists(paste0(temp_file_no_suffix, ".json")))
 })
-
-
