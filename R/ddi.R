@@ -73,6 +73,7 @@ import_ddi <- function(input) {
 #' export_ddi(ddi, "Rifampicin-Midazolam-DDI.json")
 #' }
 export_ddi <- function(ddi, path) {
+  path <- with_json_suffix(path)
   ddi$export(path)
 }
 

@@ -148,3 +148,11 @@ test_that("DDI can be exported", {
 
   expect_snapshot_file(temp_file, name = "exported_ddi_snapshot.json")
 })
+
+test_that("DDI can be exported with .json extension", {
+  temp_file_no_suffix <- withr::local_tempfile(fileext = "")
+
+  export_ddi(levo_itra_ddi, temp_file_no_suffix)
+
+  expect_true(file.exists(paste0(temp_file_no_suffix, ".json")))
+})
