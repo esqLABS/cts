@@ -145,14 +145,15 @@ Snapshot <- R6::R6Class(
     #' @description
     #' run simulations defined in the snapshot
     #' @param path character string that is the path to the output directory.
-    #' @param exportPKML logical that indicates if the PKML files should be exported.
+    #' @param exportToCSV logical that indicates if the PKML files should be exported.
     run_pk_analysis = function(path = NULL, exportToCSV = FALSE) {
       if (is.null(private$.simulations_results)) {
         cli::cli_alert_info("DDI simulations results were not found. Running them.")
         self$run_simulations()
       }
 
-      # validate object
+      # validate object, should be a list of SimulationResults
+      lapply(private$.simulations_results, ospsuite.utils::validateIsOfType, type = "SimulationResults")
 
       # run PK analysis
       pk_analysis <- lapply(private$.simulations_results, ospsuite::calculatePKAnalyses)

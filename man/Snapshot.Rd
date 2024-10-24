@@ -199,7 +199,7 @@ run simulations defined in the snapshot
 \describe{
 \item{\code{path}}{character string that is the path to the output directory.}
 
-\item{\code{exportPKML}}{logical that indicates if the PKML files should be exported.}
+\item{\code{exportToCSV}}{logical that indicates if the PKML files should be exported.}
 }
 \if{html}{\out{</div>}}
 }

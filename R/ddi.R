@@ -93,7 +93,7 @@ run_ddi <- function(ddi, path = NULL, exportPKML = FALSE) {
 #' @export
 run_pk_analysis <- function(ddi, path = NULL, exportToCSV = FALSE) {
   ddi$run_pk_analysis(path, exportToCSV)
-  return(ddi$pk_analysis)
+  return(ddi$pk_analysis_results)
 }
 
 #' R6 Class Representing a DDI Snapshot
