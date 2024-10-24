@@ -120,15 +120,7 @@ Snapshot <- R6::R6Class(
         sim_name <- sim_names[i]
         simulation <- ospsuite::loadSimulation(file.path(temp_dir, glue(temp_file_name, "-", sim_name, ".pkml")))
         results_obj[[sim_name]] <- ospsuite::importResultsFromCSV(simulation, file.path(temp_dir, sim_results_files[i]))
-        results_tibble[[sim_name]] <- readr::read_csv(
-          file.path(temp_dir, sim_results_files[i]),
-          show_col_types = FALSE,
-          col_select = c(
-            "IndividualId",
-            "Time [min]",
-            tidyselect::starts_with(purrr::keep(self$simulations, ~ .x$Name == sim_name)[[1]]$OutputSelections)
-          )
-        )
+        results_tibble[[sim_name]] <- ospsuite::simulationResultsToTibble(results_obj[[sim_name]])
       }
 
       private$.simulations_results <- results_obj
@@ -144,9 +136,8 @@ Snapshot <- R6::R6Class(
     },
     #' @description
     #' run simulations defined in the snapshot
-    #' @param path character string that is the path to the output directory.
-    #' @param exportToCSV logical that indicates if the PKML files should be exported.
-    run_pk_analysis = function(path = NULL, exportToCSV = FALSE) {
+    #' @param path character string to where to export pk analysis as csv file
+    run_pk_analysis = function(path = NULL) {
       if (is.null(private$.simulations_results)) {
         cli::cli_alert_info("DDI simulations results were not found. Running them.")
         self$run_simulations()
@@ -159,7 +150,7 @@ Snapshot <- R6::R6Class(
       pk_analysis <- lapply(private$.simulations_results, ospsuite::calculatePKAnalyses)
       self$pk_analysis_results <- lapply(pk_analysis, ospsuite::pkAnalysesToTibble)
 
-      if (!is.null(path) && isTRUE(exportToCSV)) {
+      if (!is.null(path)) {
         for (i in seq_len(length(pk_analysis))) {
           ospsuite::exportPKAnalysesToCSV(
             pkAnalyses = pk_analysis[[i]],
@@ -293,6 +284,9 @@ Snapshot <- R6::R6Class(
     #' @field simulations Access the simulations data from the snapshot.
     simulations = function(value) {
       if (!missing(value)) {
+        self$simulations_results <- NULL
+        private$.simulations_results <- NULL
+        self$pk_analysis_results <- NULL
         private$.simulations <- value
       }
       return(private$.simulations)
@@ -371,4 +365,3 @@ update_snapshots <- function(snapshots) {
     return(snapshots)
   }
 }
-
