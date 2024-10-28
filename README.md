@@ -266,6 +266,21 @@ head(pk_analysis$`Generic DDI simulation`)
 #> 6            0 Organism|PeripheralVenousBlood|Rifampic… AUC_tEnd… 6.06e+11 µg*m…
 ```
 
+## Plot ddi simulations
+
+DDI simulations can be visualized using the `plot_ddi_results()`
+function. This will plot all the selected outputs for all simulations in
+the DDI project.
+
+``` r
+plots <- plot_ddi_results(myDDI)
+```
+
+<img src="man/figures/README-plot-ddi-results-1.png" width="50%" style="display: block; margin: auto;" />
+
+Individual plots can be accessed in the `plots` object for each
+simulation and dimension.
+
 ## Export the DDI project as a Snapshot
 
 You can also export the entire DDI simulation as a snapshot file for
@@ -296,12 +311,6 @@ add_simulation(myDDI,
 )
 
 remove_simulation(myDDI, "New Simulation")
-```
-
-## Plot ddi simulations
-
-``` r
-plot_ddi_results(myDDI)
 ```
 
 ## Dependencies
