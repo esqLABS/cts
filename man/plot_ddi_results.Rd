@@ -4,16 +4,13 @@
 \alias{plot_ddi_results}
 \title{Plot DDI simulations defined in the ddi project}
 \usage{
-plot_ddi_results(ddi, simulationNames = NULL, plotConfiguration = NULL)
+plot_ddi_results(ddi, simulationNames = NULL)
 }
 \arguments{
 \item{ddi}{a DDI object}
 
 \item{simulationNames}{a character vector of simulation names for which to generate plots.
 Default is NULL, i.e. plots will be generated for all simulations.}
-
-\item{plotConfiguration}{a DefaultPlotConfiguration object to customize the plots.
-If a yUnit is provided, only plots for that unit will be generated.}
 }
 \value{
 a list of plots

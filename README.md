@@ -268,18 +268,21 @@ head(pk_analysis$`Generic DDI simulation`)
 
 ## Plot ddi simulations
 
-DDI simulations can be visualized using the `plot_ddi_results()`
-function. This will plot all the selected outputs for all simulations in
-the DDI project.
+DDI simulations can be generated using the `plot_ddi_results()`
+function:
 
 ``` r
 plots <- plot_ddi_results(myDDI)
 ```
 
-<img src="man/figures/README-plot-ddi-results-1.png" width="50%" style="display: block; margin: auto;" />
+Similarly plots can be accessed and visualized by simulation name:
 
-Individual plots can be accessed in the `plots` object for each
-simulation and dimension.
+``` r
+plots$`Generic DDI simulation`
+#> $`Concentration (molar)`
+```
+
+<img src="man/figures/README-plot-ddi-results-1.png" width="50%" style="display: block; margin: auto;" />
 
 ## Export the DDI project as a Snapshot
 

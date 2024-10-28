@@ -46,6 +46,8 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item{\code{simulations}}{Access the simulations data from the snapshot.}
 
 \item{\code{observed_data}}{Access the observed data from the snapshot.}
+
+\item{\code{plots}}{Access plots for snapshot simulations.}
 }
 \if{html}{\out{</div>}}
 }
@@ -60,6 +62,7 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item \href{#method-Snapshot-remove_protocol}{\code{Snapshot$remove_protocol()}}
 \item \href{#method-Snapshot-run_simulations}{\code{Snapshot$run_simulations()}}
 \item \href{#method-Snapshot-run_pk_analysis}{\code{Snapshot$run_pk_analysis()}}
+\item \href{#method-Snapshot-plot_ind_time_profile}{\code{Snapshot$plot_ind_time_profile()}}
 \item \href{#method-Snapshot-clone}{\code{Snapshot$clone()}}
 }
 }
@@ -197,9 +200,22 @@ run simulations defined in the snapshot
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{path}}{character string to where to export pk analysis as csv file}
+\item{\code{path}}{character string to where to export pk analysis as csv file
+Plot Time profile of DDI simulations defined in the ddi project}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-plot_ind_time_profile"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-plot_ind_time_profile}{}}}
+\subsection{Method \code{plot_ind_time_profile()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$plot_ind_time_profile()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+a list of plots
 }
 }
 \if{html}{\out{<hr>}}

@@ -23,6 +23,7 @@ This class is used to import, access and manipulate the data from a compound sna
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="export"><a href='../../cts/html/Snapshot.html#method-Snapshot-export'><code>cts::Snapshot$export()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="get_names"><a href='../../cts/html/Snapshot.html#method-Snapshot-get_names'><code>cts::Snapshot$get_names()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="initialize"><a href='../../cts/html/Snapshot.html#method-Snapshot-initialize'><code>cts::Snapshot$initialize()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="plot_ind_time_profile"><a href='../../cts/html/Snapshot.html#method-Snapshot-plot_ind_time_profile'><code>cts::Snapshot$plot_ind_time_profile()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="print"><a href='../../cts/html/Snapshot.html#method-Snapshot-print'><code>cts::Snapshot$print()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_protocol"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_protocol'><code>cts::Snapshot$remove_protocol()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="run_pk_analysis"><a href='../../cts/html/Snapshot.html#method-Snapshot-run_pk_analysis'><code>cts::Snapshot$run_pk_analysis()</code></a></span></li>

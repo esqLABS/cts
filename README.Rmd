@@ -186,15 +186,18 @@ head(pk_analysis$`Generic DDI simulation`)
 
 
 ## Plot ddi simulations
-DDI simulations can be visualized using the `plot_ddi_results()` function. This will
-plot all the selected outputs for all simulations in the DDI project.
 
-```{r plot-ddi-results, out.width = "50%", fig.align="center"}
+DDI simulations can be generated using the `plot_ddi_results()` function:
+
+```{r} 
 plots <- plot_ddi_results(myDDI)
 ```
 
-Individual plots can be accessed in the `plots` object for each simulation and dimension.
+Similarly plots can be accessed and visualized by simulation name:
 
+```{r plot-ddi-results, out.width = "50%", fig.align="center"}
+plots$`Generic DDI simulation`
+```
 
 ## Export the DDI project as a Snapshot
 

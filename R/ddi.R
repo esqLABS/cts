@@ -104,71 +104,20 @@ run_pk_analysis <- function(ddi, path = NULL) {
 #' @param ddi a DDI object
 #' @param simulationNames a character vector of simulation names for which to generate plots.
 #' Default is NULL, i.e. plots will be generated for all simulations.
-#' @param plotConfiguration a DefaultPlotConfiguration object to customize the plots.
-#' If a yUnit is provided, only plots for that unit will be generated.
 #' @return a list of plots
 #' @export
-plot_ddi_results <- function(ddi, simulationNames = NULL, plotConfiguration = NULL) {
-  # set default plot configuration if not given
-  if (is.null(plotConfiguration)) {
-    defaultPlotConfiguration <- ospsuite::DefaultPlotConfiguration$new()
-  } else {
-    ospsuite.utils::validateIsOfType(plotConfiguration, "DefaultPlotConfiguration")
-  }
+plot_ddi_results <- function(ddi, simulationNames = NULL) {
+  ddi$plot_ind_time_profile()
 
-  # By default do all simulations
+  # By default return all simulations plots
   if (is.null(simulationNames)) {
-    simulationNames <- ddi$get_names("simulations")
-  }
-
-  # initializes plots
-  plotLists <- vector("list", length(simulationNames))
-  names(plotLists) <- simulationNames
-
-  if (is.null(ddi$.__enclos_env__$private$.simulations_results)) {
-    cli::cli_abort(c("x" = "Simulations results not found. Make sure simulations have been run."))
-  }
-
-  for (simulationName in simulationNames) {
-    # get all paths
-    paths <- purrr::map_chr(
-      ddi$.__enclos_env__$private$.simulations_results[[simulationName]]$simulation$outputSelections$allOutputs,
-      ~ .x$path
-    )
-
-    # get dimension for each path
-    dimensions <- sapply(
-      ospsuite::getAllQuantitiesMatching(
-          paths = paths,
-          container = ddi$.__enclos_env__$private$.simulations_results[[simulationName]]$simulation
-        ),
-      \(x){res <- x$dimension; names(res) <- x$path; return(res)}
-    )
-
-    # initialize one plot per dimension
-    plotLists[[simulationName]] <- vector("list", length(unique(dimensions)))
-    names(plotLists[[simulationName]]) <- unique(dimensions)
-
-    for (dimension in unique(dimensions)) {
-      dataCombined <- ospsuite::DataCombined$new()
-      dataCombined$addSimulationResults(
-        simulationResults = ddi$.__enclos_env__$private$.simulations_results[[simulationName]],
-        quantitiesOrPaths = names(dimensions)[dimensions == dimension]
-      )
-
-      validYUnit <- !is.null(plotConfiguration$yUnit) && (dimension %in% ospsuite::getDimensionForUnit(plotConfiguration$yUnit))
-
-      # only generate plots for specified yUnit if given in plotConfiguration
-      if (is.null(plotConfiguration$yUnit) || validYUnit) {
-        plotLists[[simulationName]][[dimension]] <- ospsuite::plotIndividualTimeProfile(dataCombined, plotConfiguration)
-        print(plotLists[[simulationName]][[dimension]])
-      }
+    return(ddi$plots)
+  } else {
+    if (any(!simulationNames %in% ddi$get_names("simulations"))) {
+      cli::cli_alert_warning("Some simulation names are not found in the DDI project. Returning only found simulations.")
     }
-
-    # remove empty plots
-    plotLists[[simulationName]] <- purrr::compact(plotLists[[simulationName]])
+    return(purrr::compact(ddi$plots[simulationNames]))
   }
-  return(plotLists)
 }
 
 #' R6 Class Representing a DDI Snapshot

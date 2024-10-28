@@ -158,6 +158,51 @@ Snapshot <- R6::R6Class(
           )
         }
       }
+    },
+    #' Plot Time profile of DDI simulations defined in the ddi project
+    #' @return a list of plots
+    plot_ind_time_profile = function() {
+      simulationNames <- self$get_names("simulations")
+
+      # initializes plots
+      plotLists <- vector("list", length(simulationNames))
+      names(plotLists) <- simulationNames
+
+      if (is.null(private$.simulations_results)) {
+        cli::cli_abort(c("x" = "Simulations results not found. Make sure simulations have been run."))
+      }
+
+      for (simulationName in simulationNames) {
+        # get all paths
+        paths <- purrr::map_chr(
+          private$.simulations_results[[simulationName]]$simulation$outputSelections$allOutputs,
+          ~ .x$path
+        )
+
+        # get dimension for each path
+        dimensions <- sapply(
+          ospsuite::getAllQuantitiesMatching(
+            paths = paths,
+            container = private$.simulations_results[[simulationName]]$simulation
+          ),
+          \(x){res <- x$dimension; names(res) <- x$path; return(res)}
+        )
+
+        # initialize one plot per dimension
+        plotLists[[simulationName]] <- vector("list", length(unique(dimensions)))
+        names(plotLists[[simulationName]]) <- unique(dimensions)
+
+        for (dimension in unique(dimensions)) {
+          dataCombined <- ospsuite::DataCombined$new()
+          dataCombined$addSimulationResults(
+            simulationResults = private$.simulations_results[[simulationName]],
+            quantitiesOrPaths = names(dimensions)[dimensions == dimension]
+          )
+
+          plotLists[[simulationName]][[dimension]] <- ospsuite::plotIndividualTimeProfile(dataCombined)
+        }
+      }
+      private$.plots_ind_time_profile <- plotLists
     }
   ),
   private = list(
@@ -204,7 +249,8 @@ Snapshot <- R6::R6Class(
     .events = NULL,
     .simulations = NULL,
     .observed_data = NULL,
-    .simulations_results = NULL
+    .simulations_results = NULL,
+    .plots_ind_time_profile = NULL
   ),
   active = list(
     #' @field data dynamic json representation of the snapshot object
@@ -297,6 +343,10 @@ Snapshot <- R6::R6Class(
         private$.observed_data <- value
       }
       return(private$.observed_data)
+    },
+    #' @field plots Access plots for snapshot simulations.
+    plots = function() {
+      return(private$.plots_ind_time_profile)
     }
   )
 )
