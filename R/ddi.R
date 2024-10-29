@@ -86,7 +86,7 @@ export_ddi <- function(ddi, path) {
 #' @export
 run_ddi <- function(ddi, path = NULL, exportPKML = FALSE) {
   ddi$run_simulations(path, exportPKML)
-  return(ddi$simulations_results)
+  return(ddi$simulation_results)
 }
 
 #' Run Pk-Analysis for DDI simulations defined in the ddi project
@@ -97,7 +97,7 @@ run_ddi <- function(ddi, path = NULL, exportPKML = FALSE) {
 #' @export
 run_pk_analysis <- function(ddi, path = NULL) {
   ddi$run_pk_analysis(path)
-  return(ddi$pk_analysis_results)
+  return(ddi$pk_analysis)
 }
 
 #' Plot DDI simulations defined in the ddi project
@@ -107,7 +107,7 @@ run_pk_analysis <- function(ddi, path = NULL) {
 #' @return a list of plots
 #' @export
 plot_ddi_results <- function(ddi, simulationNames = NULL) {
-  ddi$plot_ind_time_profile()
+  ddi$create_plots()
 
   # By default return all simulations plots
   if (is.null(simulationNames)) {
