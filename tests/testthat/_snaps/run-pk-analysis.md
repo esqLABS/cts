@@ -16,7 +16,7 @@
        7            0 Organism|PeripheralVenousBlood|Levonorg~ t_max     5.05e+2 h    
        8            0 Organism|PeripheralVenousBlood|Levonorg~ t_max_tD~ 1.25e+0 h    
        9            0 Organism|PeripheralVenousBlood|Levonorg~ t_max_tD~ 5.05e+2 h    
-      10            0 Organism|PeripheralVenousBlood|Levonorg~ C_tEnd    9.87e-6 µmol~
+      10            0 Organism|PeripheralVenousBlood|Levonorg~ C_tEnd    5.04e-6 µmol~
       # i 40 more rows
       
 
