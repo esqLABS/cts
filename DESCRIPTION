@@ -28,7 +28,8 @@ Suggests:
     devtools,
     testthat (>= 3.0.0),
     quarto,
-    vdiffr
+    vdiffr,
+    showtext
 Remotes: 
     ospsuite=Open-Systems-Pharmacology/OSPSuite-R
 Config/Needs/website: rmarkdown
