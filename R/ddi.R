@@ -235,10 +235,25 @@ DDI <- R6::R6Class(
       })
 
       if (self$options$create_ddi_simulation) {
+
+        # Set simulated time to maximum protocol duration + 1 day
+        protocols <- purrr::keep(self$protocols, ~.x$name %in% c(self$metadata$protocols$victim[1], self$metadata$protocols$perpetrators[1]))
+        max_protocol_duration <- c(0)
+        for(p in protocols){
+          # transform protocol duration in seconds
+          protocol_duration <- p$end_time * translate_end_time_unit(p$end_time_unit)
+          if (protocol_duration == max(max_protocol_duration, protocol_duration)){
+            max_protocol_duration <- protocol_duration
+          }
+        }
+        max_protocol_duration <- max_protocol_duration + 86400
+
+
         # Add generic ddi simulation
         generic_simulation <-
           create_generic_simulation(self,
             system.file("extdata", "generic_simulation_template.json", package = "cts"),
+            max_protocol_duration = max_protocol_duration,
             victim = self$victim,
             perpetrator = self$perpetrators[1],
             victim_formulation = self$metadata$formulations$victim[1],

@@ -37,7 +37,7 @@
       [1] "End time"
       
       $Simulations[[1]]$OutputSchema[[1]]$Parameters[[2]]$Value
-      [1] 2
+      [1] 528
       
       $Simulations[[1]]$OutputSchema[[1]]$Parameters[[2]]$Unit
       [1] "h"
@@ -48,46 +48,9 @@
       [1] "Resolution"
       
       $Simulations[[1]]$OutputSchema[[1]]$Parameters[[3]]$Value
-      [1] 20
-      
-      $Simulations[[1]]$OutputSchema[[1]]$Parameters[[3]]$Unit
-      [1] "pts/h"
-      
-      
-      
-      
-      $Simulations[[1]]$OutputSchema[[2]]
-      $Simulations[[1]]$OutputSchema[[2]]$Parameters
-      $Simulations[[1]]$OutputSchema[[2]]$Parameters[[1]]
-      $Simulations[[1]]$OutputSchema[[2]]$Parameters[[1]]$Name
-      [1] "Start time"
-      
-      $Simulations[[1]]$OutputSchema[[2]]$Parameters[[1]]$Value
-      [1] 2
-      
-      $Simulations[[1]]$OutputSchema[[2]]$Parameters[[1]]$Unit
-      [1] "h"
-      
-      
-      $Simulations[[1]]$OutputSchema[[2]]$Parameters[[2]]
-      $Simulations[[1]]$OutputSchema[[2]]$Parameters[[2]]$Name
-      [1] "End time"
-      
-      $Simulations[[1]]$OutputSchema[[2]]$Parameters[[2]]$Value
-      [1] 528
-      
-      $Simulations[[1]]$OutputSchema[[2]]$Parameters[[2]]$Unit
-      [1] "h"
-      
-      
-      $Simulations[[1]]$OutputSchema[[2]]$Parameters[[3]]
-      $Simulations[[1]]$OutputSchema[[2]]$Parameters[[3]]$Name
-      [1] "Resolution"
-      
-      $Simulations[[1]]$OutputSchema[[2]]$Parameters[[3]]$Value
       [1] 4
       
-      $Simulations[[1]]$OutputSchema[[2]]$Parameters[[3]]$Unit
+      $Simulations[[1]]$OutputSchema[[1]]$Parameters[[3]]$Unit
       [1] "pts/h"
       
       
@@ -107,7 +70,7 @@
       $Simulations[[1]]$Compounds
       $Simulations[[1]]$Compounds[[1]]
       $Simulations[[1]]$Compounds[[1]]$Name
-      [1] "itraconazole"
+      [1] "rifampicin"
       
       $Simulations[[1]]$Compounds[[1]]$CalculationMethods
       list()
@@ -125,7 +88,7 @@
       $Simulations[[1]]$Compounds[[1]]$Protocol$Formulations
       $Simulations[[1]]$Compounds[[1]]$Protocol$Formulations[[1]]
       $Simulations[[1]]$Compounds[[1]]$Protocol$Formulations[[1]]$Name
-      [1] "Capsule"
+      [1] "Tablet"
       
       $Simulations[[1]]$Compounds[[1]]$Protocol$Formulations[[1]]$Key
       [1] "Formulation"
@@ -136,7 +99,7 @@
       
       $Simulations[[1]]$Compounds[[2]]
       $Simulations[[1]]$Compounds[[2]]$Name
-      [1] "rifampicin"
+      [1] "itraconazole"
       
       $Simulations[[1]]$Compounds[[2]]$CalculationMethods
       list()
@@ -154,7 +117,7 @@
       $Simulations[[1]]$Compounds[[2]]$Protocol$Formulations
       $Simulations[[1]]$Compounds[[2]]$Protocol$Formulations[[1]]
       $Simulations[[1]]$Compounds[[2]]$Protocol$Formulations[[1]]$Name
-      [1] "Tablet"
+      [1] "Capsule"
       
       $Simulations[[1]]$Compounds[[2]]$Protocol$Formulations[[1]]$Key
       [1] "Formulation"

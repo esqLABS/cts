@@ -171,6 +171,10 @@ Snapshot <- R6::R6Class(
         self$run_simulations()
       }
 
+      individualTimeProfileConfiguration <- ospsuite::DefaultPlotConfiguration$new()
+      individualTimeProfileConfiguration$yAxisScale <- "log"
+      individualTimeProfileConfiguration$legendPosition <- "outsideTopRight"
+
       for (simulationName in simulationNames) {
         # get all paths
         paths <- purrr::map_chr(
@@ -199,8 +203,8 @@ Snapshot <- R6::R6Class(
             simulationResults = private$.sim_results_obj[[simulationName]],
             quantitiesOrPaths = names(dimensions)[dimensions == dimension]
           )
-
-          plotLists[[simulationName]][[dimension]] <- ospsuite::plotIndividualTimeProfile(dataCombined)
+          plotLists[[simulationName]][[dimension]] <- ospsuite::plotIndividualTimeProfile(dataCombined,
+                                                                                          individualTimeProfileConfiguration)
         }
       }
 
@@ -342,20 +346,21 @@ Snapshot <- R6::R6Class(
       }
       return(private$.simulations)
     },
-    #' @field observed_data Access the observed data from the snapshot.
+    #' @field observed_data Access the observed data.
     observed_data = function(value) {
       if (!missing(value)) {
         private$.observed_data <- value
       }
       return(private$.observed_data)
     },
+    #' @field simulation_results Access the simulations results.
     simulation_results = function() {
       if (is.null(private$.sim_results)) {
         self$run_simulations()
       }
       return(private$.sim_results)
     },
-    #' @field pk_analysis Access the PK analysis results from the snapshot.
+    #' @field pk_analysis Access the PK analysis results.
     pk_analysis = function() {
       if (is.null(private$.pk_analysis_results)) {
         self$run_pk_analysis()

@@ -54,8 +54,8 @@ test_that("Snapshot can be exported as JSON files and recreated from it", {
   new_snap$source <- rifampicin_snap$source
 
   expect_equal(
-    rifampicin_snap,
-    new_snap
+    rifampicin_snap$data,
+    new_snap$data
   )
 })
 

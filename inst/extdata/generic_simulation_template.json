@@ -13,27 +13,8 @@
             },
             {
               "Name": "End time",
-              "Value": 2.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "Resolution",
-              "Value": 20.0,
-              "Unit": "pts/h"
-            }
-          ]
-        },
-        {
-          "Parameters": [
-            {
-              "Name": "Start time",
-              "Value": 2.0,
-              "Unit": "h"
-            },
-            {
-              "Name": "End time",
-              "Value": 528.0,
-              "Unit": "h"
+              "Value": ${max_protocol_duration}$,
+              "Unit": "s"
             },
             {
               "Name": "Resolution",
@@ -51,21 +32,6 @@
       "Individual": "${individual}$",
       "Compounds": [
         {
-          "Name": "${perpetrator}$",
-          "CalculationMethods": [],
-          "Alternatives": [],
-          "Processes": [],
-          "Protocol": {
-            "Name": "${perpetrator_protocol}$",
-            "Formulations": [
-              {
-                "Name": "${perpetrator_formulation}$",
-                "Key": "Formulation"
-              }
-            ]
-          }
-        },
-        {
           "Name": "${victim}$",
           "CalculationMethods": [],
           "Alternatives": [],
@@ -75,6 +41,21 @@
             "Formulations": [
               {
                 "Name": "${victim_formulation}$",
+                "Key": "Formulation"
+              }
+            ]
+          }
+        },
+        {
+          "Name": "${perpetrator}$",
+          "CalculationMethods": [],
+          "Alternatives": [],
+          "Processes": [],
+          "Protocol": {
+            "Name": "${perpetrator_protocol}$",
+            "Formulations": [
+              {
+                "Name": "${perpetrator_formulation}$",
                 "Key": "Formulation"
               }
             ]

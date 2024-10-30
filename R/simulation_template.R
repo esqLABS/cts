@@ -1,4 +1,4 @@
-fill_simulation_template <- function(template_path, victim, perpetrator, individual, victim_formulation, perpetrator_formulation, victim_protocol, perpetrator_protocol) {
+fill_simulation_template <- function(template_path, max_protocol_duration, victim, perpetrator, individual, victim_formulation, perpetrator_formulation, victim_protocol, perpetrator_protocol) {
   template <- readr::read_file(template_path)
   filled_template <- glue::glue(template, .open = "${", .close = "}$")
   jsonlite::fromJSON(txt = filled_template, simplifyVector = T, simplifyDataFrame = FALSE)
@@ -66,9 +66,9 @@ extract_compound_processes <- function(compound) {
 }
 
 
-create_generic_simulation <- function(ddi, template_path, victim, perpetrator, individual, victim_formulation, perpetrator_formulation, victim_protocol, perpetrator_protocol) {
+create_generic_simulation <- function(ddi, template_path, max_protocol_duration, victim, perpetrator, individual, victim_formulation, perpetrator_formulation, victim_protocol, perpetrator_protocol) {
   # fill the simulation template
-  filled_template <- fill_simulation_template(template_path, victim, perpetrator, individual, victim_formulation, perpetrator_formulation, victim_protocol, perpetrator_protocol)
+  filled_template <- fill_simulation_template(template_path, max_protocol_duration, victim, perpetrator, individual, victim_formulation, perpetrator_formulation, victim_protocol, perpetrator_protocol)
 
   # extract molecule interactions from the ddi object
   interactions <- extract_interactions(ddi)
