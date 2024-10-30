@@ -11,11 +11,14 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%",
   message = FALSE,
-  warning = FALSE
+  warning = FALSE,
+  fig.showtext = TRUE
 )
 library(cts)
 rifampicin <- compound(testthat::test_path("data/Rifampicin-Model.json"))
 midazolam <- compound(testthat::test_path("data/Midazolam-Model.json"))
+
+showtext::showtext_opts(dpi = 300)
 ```
 
 # cts
@@ -195,7 +198,7 @@ plots <- plot_ddi_results(myDDI)
 
 Similarly plots can be accessed and visualized by simulation name:
 
-```{r plot-ddi-results, out.width = "50%", fig.align="center"}
+```{r plot-ddi-results, out.width = "85%", fig.align="center", fig.width=6, fig.asp=0.618, dpi = 300}
 plots$`Generic DDI simulation`
 ```
 
