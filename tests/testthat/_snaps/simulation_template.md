@@ -2,10 +2,10 @@
 
     Code
       fill_simulation_template(template_path = system.file("extdata",
-        "generic_simulation_template.json", package = "cts"), victim = "rifampicin",
-      perpetrator = "itraconazole", individual = "Male", victim_formulation = "Tablet",
-      perpetrator_formulation = "Capsule", victim_protocol = "SingleDose",
-      perpetrator_protocol = "SingleDose")
+        "generic_simulation_template.json", package = "cts"), max_protocol_duration = 24 *
+        60 * 60, victim = "rifampicin", perpetrator = "itraconazole", individual = "Male",
+      victim_formulation = "Tablet", perpetrator_formulation = "Capsule",
+      victim_protocol = "SingleDose", perpetrator_protocol = "SingleDose")
     Output
       $Simulations
       $Simulations[[1]]
@@ -37,10 +37,10 @@
       [1] "End time"
       
       $Simulations[[1]]$OutputSchema[[1]]$Parameters[[2]]$Value
-      [1] 528
+      [1] 86400
       
       $Simulations[[1]]$OutputSchema[[1]]$Parameters[[2]]$Unit
-      [1] "h"
+      [1] "s"
       
       
       $Simulations[[1]]$OutputSchema[[1]]$Parameters[[3]]
