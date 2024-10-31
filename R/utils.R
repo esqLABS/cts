@@ -95,3 +95,18 @@ to_list <- function(x) {
 with_json_suffix <- function(path) {
   purrr::modify_if(path, ~ !grepl("\\.json$", .x), ~ paste0(.x, ".json"))
 }
+
+
+translate_end_time_unit <- function(end_time_unit){
+  switch(
+    end_time_unit,
+    "s" = 1,
+    "min" = 60,
+    "ks" = 1000,
+    "h" = 3600,
+    "day(s)" = 86400,
+    "week(s)" = 604800,
+    "month(s)" = 2628000,
+    "year(s)" = 31536000
+  )
+}

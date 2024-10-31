@@ -6291,6 +6291,36 @@
     }
   ],
   "Protocols": [
+        {
+      "Name": "LNG_150 ug_21 Days",
+      "ApplicationType": "Oral",
+      "DosingInterval": "DI_24",
+      "Parameters": [
+        {
+          "Name": "Start time",
+          "Value": 0.0,
+          "Unit": "h"
+        },
+        {
+          "Name": "InputDose",
+          "Value": 0.15,
+          "Unit": "mg"
+        },
+        {
+          "Name": "End time",
+          "Value": 22.0,
+          "Unit": "day(s)",
+          "ValueOrigin": {
+            "Source": "Unknown"
+          }
+        },
+        {
+          "Name": "Volume of water/body weight",
+          "Value": 3.5,
+          "Unit": "ml/kg"
+        }
+      ]
+    },
     {
       "Name": "PO_0.27",
       "ApplicationType": "Oral",
@@ -6497,36 +6527,6 @@
         {
           "Name": "End time",
           "Value": 8.0,
-          "Unit": "day(s)",
-          "ValueOrigin": {
-            "Source": "Unknown"
-          }
-        },
-        {
-          "Name": "Volume of water/body weight",
-          "Value": 3.5,
-          "Unit": "ml/kg"
-        }
-      ]
-    },
-    {
-      "Name": "LNG_150 ug_21 Days",
-      "ApplicationType": "Oral",
-      "DosingInterval": "DI_24",
-      "Parameters": [
-        {
-          "Name": "Start time",
-          "Value": 0.0,
-          "Unit": "h"
-        },
-        {
-          "Name": "InputDose",
-          "Value": 0.15,
-          "Unit": "mg"
-        },
-        {
-          "Name": "End time",
-          "Value": 22.0,
           "Unit": "day(s)",
           "ValueOrigin": {
             "Source": "Unknown"

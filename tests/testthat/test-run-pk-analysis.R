@@ -1,7 +1,5 @@
 test_that("run pk analysis works", {
-  my_ddi <- suppressWarnings(create_ddi(levonorgestrel, itraconazole))
-
-  run_ddi(my_ddi)
+  my_ddi <- get_test_ddi()
 
   expect_snapshot(run_pk_analysis(my_ddi))
 })

@@ -27,7 +27,9 @@ Imports:
 Suggests: 
     devtools,
     testthat (>= 3.0.0),
-    quarto
+    quarto,
+    vdiffr,
+    showtext
 Remotes: 
     ospsuite=Open-Systems-Pharmacology/OSPSuite-R
 Config/Needs/website: rmarkdown

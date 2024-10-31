@@ -11,7 +11,20 @@ try(
     itraconazole80 <- compound(test_path("data/Itraconazole-Model-80.json"))
 
     # DDI
+    ## imported
     levo_itra_ddi <- import_ddi(test_path("data/Levonorgestrel-Itraconazole-DDI.json"))
   },
   silent = T
 )
+
+
+get_test_ddi <- function() {
+  if (is.null(the$.test_ddi)) {
+    the$.test_ddi <- suppressWarnings(create_ddi(levonorgestrel, itraconazole))
+    run_ddi(the$.test_ddi)
+  }
+
+  return(the$.test_ddi$clone())
+}
+
+

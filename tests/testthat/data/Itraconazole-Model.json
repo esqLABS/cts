@@ -500,6 +500,36 @@
     }
   ],
   "Protocols": [
+        {
+      "Name": "ITZ 100mg 21 days",
+      "ApplicationType": "Oral",
+      "DosingInterval": "DI_24",
+      "Parameters": [
+        {
+          "Name": "Start time",
+          "Value": 0.0,
+          "Unit": "h"
+        },
+        {
+          "Name": "InputDose",
+          "Value": 100.0,
+          "Unit": "mg"
+        },
+        {
+          "Name": "End time",
+          "Value": 22.0,
+          "Unit": "day(s)",
+          "ValueOrigin": {
+            "Source": "Unknown"
+          }
+        },
+        {
+          "Name": "Volume of water/body weight",
+          "Value": 3.5,
+          "Unit": "ml/kg"
+        }
+      ]
+    },
     {
       "Name": "ITR 200 mg 28 days",
       "ApplicationType": "Oral",
@@ -559,37 +589,8 @@
           "Unit": "ml/kg"
         }
       ]
-    },
-    {
-      "Name": "ITZ 100mg 21 days",
-      "ApplicationType": "Oral",
-      "DosingInterval": "DI_24",
-      "Parameters": [
-        {
-          "Name": "Start time",
-          "Value": 0.0,
-          "Unit": "h"
-        },
-        {
-          "Name": "InputDose",
-          "Value": 100.0,
-          "Unit": "mg"
-        },
-        {
-          "Name": "End time",
-          "Value": 22.0,
-          "Unit": "day(s)",
-          "ValueOrigin": {
-            "Source": "Unknown"
-          }
-        },
-        {
-          "Name": "Volume of water/body weight",
-          "Value": 3.5,
-          "Unit": "ml/kg"
-        }
-      ]
     }
+
   ],
   "ObserverSets": [
     {
