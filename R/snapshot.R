@@ -16,6 +16,8 @@ Snapshot <- R6::R6Class(
     #' @field simulations_results The simulation results of the snapshot
     simulations_results = NULL,
     #' @field pk_analysis_results The pk-analyses results of the simulations
+    pk_analysis_raw = NULL,
+    #' @field pk_analysis_results Formatted pk-analyses results of the simulations
     pk_analysis_results = NULL,
     #' @description
     #' Create a Snapshot object.
@@ -148,7 +150,14 @@ Snapshot <- R6::R6Class(
 
       # run PK analysis
       pk_analysis <- lapply(private$.simulations_results, ospsuite::calculatePKAnalyses)
-      self$pk_analysis_results <- lapply(pk_analysis, ospsuite::pkAnalysesToTibble)
+      self$pk_analysis_raw <- lapply(pk_analysis, ospsuite::pkAnalysesToTibble)
+
+      compound_names <- sapply(self$compounds, function(x) x$Name)
+
+      # PK analysis results to wider
+      self$pk_analysis_results <- lapply(
+        self$pk_analysis_raw, pivot_pk_analysis, compound_names
+      )
 
       if (!is.null(path)) {
         for (i in seq_len(length(pk_analysis))) {

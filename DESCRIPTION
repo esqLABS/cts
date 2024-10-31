@@ -14,6 +14,7 @@ Depends:
 Imports: 
     cli,
     curl,
+    dplyr,
     fs,
     glue,
     jsonlite,
@@ -23,7 +24,9 @@ Imports:
     R6,
     readr,
     rlang,
-    snakecase
+    snakecase,
+    stringr,
+    tidyr
 Suggests: 
     devtools,
     testthat (>= 3.0.0),
