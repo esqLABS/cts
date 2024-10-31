@@ -2,6 +2,7 @@ test_that("fill_simulation_template", {
   expect_snapshot(
     fill_simulation_template(
       template_path = system.file("extdata", "generic_simulation_template.json", package = "cts"),
+      max_protocol_duration = 24*60*60, # 24 hours
       victim = "rifampicin",
       perpetrator = "itraconazole",
       individual = "Male",

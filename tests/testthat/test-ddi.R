@@ -75,6 +75,12 @@ test_that("Compounds snapshots are correctly merged when creating a DDI", {
   expect_equal(ddi_merged$simulations, ddi_ref$simulations)
 })
 
+test_that("Generic simulation can be ran", {
+  ddi_merged <- suppressWarnings(create_ddi(levonorgestrel, itraconazole))
+
+  expect_no_error(run_ddi(ddi_merged))
+})
+
 
 test_that("Compound snapshot with different versions can be merged", {
   ddi <- create_ddi(itraconazole80, rifampicin)

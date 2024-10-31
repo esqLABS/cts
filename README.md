@@ -261,10 +261,28 @@ head(pk_analysis$`Generic DDI simulation`)
 #> 1            0 Organism|PeripheralVenousBlood|Rifampic… C_max     1.72e+ 1 µmol…
 #> 2            0 Organism|PeripheralVenousBlood|Rifampic… C_max_no… 3.44e+ 6 mg/l 
 #> 3            0 Organism|PeripheralVenousBlood|Rifampic… t_max     5   e- 1 h    
-#> 4            0 Organism|PeripheralVenousBlood|Rifampic… C_tEnd    5.54e- 5 µmol…
-#> 5            0 Organism|PeripheralVenousBlood|Rifampic… AUC_tEnd  3.02e+ 3 µmol…
-#> 6            0 Organism|PeripheralVenousBlood|Rifampic… AUC_tEnd… 6.06e+11 µg*m…
+#> 4            0 Organism|PeripheralVenousBlood|Rifampic… C_tEnd    8.77e- 2 µmol…
+#> 5            0 Organism|PeripheralVenousBlood|Rifampic… AUC_tEnd  2.81e+ 3 µmol…
+#> 6            0 Organism|PeripheralVenousBlood|Rifampic… AUC_tEnd… 5.62e+11 µg*m…
 ```
+
+## Plot ddi simulations
+
+DDI simulations can be generated using the `plot_ddi_results()`
+function:
+
+``` r
+plots <- plot_ddi_results(myDDI)
+```
+
+Similarly plots can be accessed and visualized by simulation name:
+
+``` r
+plots$`Generic DDI simulation`
+#> $`Concentration (molar)`
+```
+
+<img src="man/figures/README-plot-ddi-results-1.png" width="85%" style="display: block; margin: auto;" />
 
 ## Export the DDI project as a Snapshot
 
@@ -296,12 +314,6 @@ add_simulation(myDDI,
 )
 
 remove_simulation(myDDI, "New Simulation")
-```
-
-## Plot ddi simulations
-
-``` r
-plot_ddi_results(myDDI)
 ```
 
 ## Dependencies

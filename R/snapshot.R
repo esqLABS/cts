@@ -15,8 +15,6 @@ Snapshot <- R6::R6Class(
     version = NULL,
     #' @field simulations_results The simulation results of the snapshot
     simulations_results = NULL,
-    #' @field pk_analysis_results The pk-analyses results of the simulations
-    pk_analysis_raw = NULL,
     #' @field pk_analysis_results Formatted pk-analyses results of the simulations
     pk_analysis_results = NULL,
     #' @description
@@ -34,8 +32,7 @@ Snapshot <- R6::R6Class(
       self$individuals <- self$source_data$Individuals
       self$populations <- self$source_data$Populations
       self$formulations <- self$source_data$Formulations
-      self$protocols <-
-        purrr::map(self$source_data$Protocols, protocol_from_data)
+      self$protocols <- purrr::map(self$source_data$Protocols, protocol_from_data)
       self$expression_profiles <- self$source_data$ExpressionProfiles
       self$observer_sets <- self$source_data$ObserverSets
       self$events <- self$source_data$Events
@@ -125,8 +122,8 @@ Snapshot <- R6::R6Class(
         results_tibble[[sim_name]] <- ospsuite::simulationResultsToTibble(results_obj[[sim_name]])
       }
 
-      private$.simulations_results <- results_obj
-      self$simulations_results <- results_tibble
+      private$.sim_results_obj <- results_obj
+      private$.sim_results <- results_tibble
 
       if (!is.null(path)) {
         # copy simulation results and pkml to the output directory
@@ -140,23 +137,23 @@ Snapshot <- R6::R6Class(
     #' run simulations defined in the snapshot
     #' @param path character string to where to export pk analysis as csv file
     run_pk_analysis = function(path = NULL) {
-      if (is.null(private$.simulations_results)) {
+      if (is.null(private$.sim_results)) {
         cli::cli_alert_info("DDI simulations results were not found. Running them.")
         self$run_simulations()
       }
 
       # validate object, should be a list of SimulationResults
-      lapply(private$.simulations_results, ospsuite.utils::validateIsOfType, type = "SimulationResults")
+      lapply(private$.sim_results_obj, ospsuite.utils::validateIsOfType, type = "SimulationResults")
 
       # run PK analysis
-      pk_analysis <- lapply(private$.simulations_results, ospsuite::calculatePKAnalyses)
-      self$pk_analysis_raw <- lapply(pk_analysis, ospsuite::pkAnalysesToTibble)
+      pk_analysis <- lapply(private$.sim_results_obj, ospsuite::calculatePKAnalyses)
+      private$.pk_analysis_results <- lapply(pk_analysis, ospsuite::pkAnalysesToTibble)
 
       compound_names <- sapply(self$compounds, function(x) x$Name)
 
       # PK analysis results to wider
       self$pk_analysis_results <- lapply(
-        self$pk_analysis_raw, pivot_pk_analysis, compound_names
+        private$.pk_analysis_results, pivot_pk_analysis, compound_names
       )
 
       if (!is.null(path)) {
@@ -167,6 +164,58 @@ Snapshot <- R6::R6Class(
           )
         }
       }
+    },
+    #' Plot Time profile of DDI simulations defined in the ddi project
+    #' @return a list of plots
+    create_plots = function() {
+      simulationNames <- self$get_names("simulations")
+
+      # initializes plots
+      plotLists <- vector("list", length(simulationNames))
+      names(plotLists) <- simulationNames
+
+      if (is.null(self$simulation_results)) {
+        self$run_simulations()
+      }
+
+      individualTimeProfileConfiguration <- ospsuite::DefaultPlotConfiguration$new()
+      individualTimeProfileConfiguration$yAxisScale <- "log"
+      individualTimeProfileConfiguration$legendPosition <- "outsideTopRight"
+
+      for (simulationName in simulationNames) {
+        # get all paths
+        paths <- purrr::map_chr(
+          private$.sim_results_obj[[simulationName]]$simulation$outputSelections$allOutputs,
+          ~ .x$path
+        )
+
+        # Plot cannot contain two different dimension on one axis. The code below
+        # separates the paths by dimension and creates a plot for each dimension.
+
+        # get dimensions of each path
+        quantities <- ospsuite::getAllQuantitiesMatching(
+          paths = paths,
+          container = private$.sim_results_obj[[simulationName]]$simulation
+        )
+        dimensions <- purrr::map(quantities,"dimension") %>% list_c()
+        names(dimensions) <- map(quantities,"path") %>% list_c()
+
+        # initialize one plot per dimension
+        plotLists[[simulationName]] <- vector("list", length(unique(dimensions)))
+        names(plotLists[[simulationName]]) <- unique(dimensions)
+
+        for (dimension in unique(dimensions)) {
+          dataCombined <- ospsuite::DataCombined$new()
+          dataCombined$addSimulationResults(
+            simulationResults = private$.sim_results_obj[[simulationName]],
+            quantitiesOrPaths = names(dimensions)[dimensions == dimension]
+          )
+          plotLists[[simulationName]][[dimension]] <- ospsuite::plotIndividualTimeProfile(dataCombined,
+                                                                                          individualTimeProfileConfiguration)
+        }
+      }
+
+      private$.plots <- plotLists
     }
   ),
   private = list(
@@ -213,7 +262,10 @@ Snapshot <- R6::R6Class(
     .events = NULL,
     .simulations = NULL,
     .observed_data = NULL,
-    .simulations_results = NULL
+    .sim_results = NULL,
+    .sim_results_obj = NULL,
+    .pk_analysis_results = NULL,
+    .plots = NULL
   ),
   active = list(
     #' @field data dynamic json representation of the snapshot object
@@ -293,19 +345,41 @@ Snapshot <- R6::R6Class(
     #' @field simulations Access the simulations data from the snapshot.
     simulations = function(value) {
       if (!missing(value)) {
-        self$simulations_results <- NULL
-        private$.simulations_results <- NULL
-        self$pk_analysis_results <- NULL
+        private$.sim_results <- NULL
+        private$.sim_results_obj <- NULL
+        private$.pk_analysis_results <- NULL
+        private$.plots <- NULL
         private$.simulations <- value
       }
       return(private$.simulations)
     },
-    #' @field observed_data Access the observed data from the snapshot.
+    #' @field observed_data Access the observed data.
     observed_data = function(value) {
       if (!missing(value)) {
         private$.observed_data <- value
       }
       return(private$.observed_data)
+    },
+    #' @field simulation_results Access the simulations results.
+    simulation_results = function() {
+      if (is.null(private$.sim_results)) {
+        self$run_simulations()
+      }
+      return(private$.sim_results)
+    },
+    #' @field pk_analysis Access the PK analysis results.
+    pk_analysis = function() {
+      if (is.null(private$.pk_analysis_results)) {
+        self$run_pk_analysis()
+      }
+      return(private$.pk_analysis_results)
+    },
+    #' @field plots Access plots for snapshot simulations.
+    plots = function() {
+      if (is.null(private$.plots)) {
+        self$create_plots()
+      }
+      return(private$.plots)
     }
   )
 )

@@ -86,7 +86,7 @@ export_ddi <- function(ddi, path) {
 #' @export
 run_ddi <- function(ddi, path = NULL, exportPKML = FALSE) {
   ddi$run_simulations(path, exportPKML)
-  return(ddi$simulations_results)
+  return(ddi$simulation_results)
 }
 
 #' Run Pk-Analysis for DDI simulations defined in the ddi project
@@ -97,7 +97,27 @@ run_ddi <- function(ddi, path = NULL, exportPKML = FALSE) {
 #' @export
 run_pk_analysis <- function(ddi, path = NULL) {
   ddi$run_pk_analysis(path)
-  return(ddi$pk_analysis_results)
+  return(ddi$pk_analysis)
+}
+
+#' Plot DDI simulations defined in the ddi project
+#' @param ddi a DDI object
+#' @param simulationNames a character vector of simulation names for which to generate plots.
+#' Default is NULL, i.e. plots will be generated for all simulations.
+#' @return a list of plots
+#' @export
+plot_ddi_results <- function(ddi, simulationNames = NULL) {
+  ddi$create_plots()
+
+  # By default return all simulations plots
+  if (is.null(simulationNames)) {
+    return(ddi$plots)
+  } else {
+    if (any(!simulationNames %in% ddi$get_names("simulations"))) {
+      cli::cli_alert_warning("Some simulation names are not found in the DDI project. Returning only found simulations.")
+    }
+    return(purrr::compact(ddi$plots[simulationNames]))
+  }
 }
 
 #' R6 Class Representing a DDI Snapshot
@@ -215,10 +235,25 @@ DDI <- R6::R6Class(
       })
 
       if (self$options$create_ddi_simulation) {
+
+        # Set simulated time to maximum protocol duration + 1 day
+        protocols <- purrr::keep(self$protocols, ~.x$name %in% c(self$metadata$protocols$victim[1], self$metadata$protocols$perpetrators[1]))
+        max_protocol_duration <- c(0)
+        for(p in protocols){
+          # transform protocol duration in seconds
+          protocol_duration <- p$end_time * translate_end_time_unit(p$end_time_unit)
+          if (protocol_duration == max(max_protocol_duration, protocol_duration)){
+            max_protocol_duration <- protocol_duration
+          }
+        }
+        max_protocol_duration <- max_protocol_duration + 86400
+
+
         # Add generic ddi simulation
         generic_simulation <-
           create_generic_simulation(self,
             system.file("extdata", "generic_simulation_template.json", package = "cts"),
+            max_protocol_duration = max_protocol_duration,
             victim = self$victim,
             perpetrator = self$perpetrators[1],
             victim_formulation = self$metadata$formulations$victim[1],
