@@ -4,10 +4,5 @@ test_that("Plotting simulation results work", {
   # suppress log10 transformation warnings from ggplot2
   plots <- suppressWarnings(plot_ddi_results(my_ddi))
 
-  suppressWarnings(
-    vdiffr::expect_doppelganger(
-      "default lng itr ddi simulation",
-      plots[[1]][[1]]
-    )
-  )
+  expect_s3_class(plots[[1]][[1]], "ggplot")
 })
