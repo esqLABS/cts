@@ -163,9 +163,14 @@ results <- run_ddi(myDDI)
 ```
 This will return a named list of data frames containing the simulation results for each simulation in the DDI project. You can access the results for a specific simulation using its name as a list index:
 
-```{r}
+```{r, eval = FALSE}
 head(results$`Generic DDI simulation`)
 ```
+```{r , echo = FALSE}
+knitr::kable(head(results$`Generic DDI simulation`))
+```
+
+
 Results can also be exported as csv and pkml files with the `path` and `exportPKML` arguments:
 
 ```{r, eval = FALSE}
@@ -183,8 +188,11 @@ pk_analysis <- run_pk_analysis(myDDI)
 
 As well as results, the PK statistics can be accessed by simulation name:
 
-```{r}
+```{r, eval = FALSE}
 head(pk_analysis$`Generic DDI simulation`)
+```
+```{r, echo=FALSE}
+knitr::kable(head(pk_analysis$`Generic DDI simulation`))
 ```
 
 

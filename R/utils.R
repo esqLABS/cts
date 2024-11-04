@@ -91,11 +91,51 @@ to_list <- function(x) {
 #' @param path A character vector of file paths.
 #' @return A character vector with the ".json" suffix added where necessary.
 #'
-#' @keywords internal
+
 with_json_suffix <- function(path) {
   purrr::modify_if(path, ~ !grepl("\\.json$", .x), ~ paste0(.x, ".json"))
 }
 
+#' Format PK Analysis Data
+#'
+#' Transforms PK analysis data by removing compound names from `QuantityPath`,
+#' identifying compounds, and pivoting to a wide format with columns for each
+#' compound.
+#'
+#' @param df A data frame or tibble containing PK analysis data returned by
+#' `ospsuite::calculatePKAnalyses`.
+#' @param compound_names A character vector of compound names.
+#'
+#' @return A tibble with individual columns for each compound.
+#'
+#' @keywords internal
+pivot_pk_analysis <- function(df, compound_names) {
+  compound_pattern <- paste(compound_names, collapse = "|")
+
+  df <- df %>%
+    dplyr::mutate(
+      UniqueQuantityPath = stringr::str_remove(
+        QuantityPath, paste0("\\|?(", compound_pattern, ")\\|?")
+      )
+    ) %>%
+    dplyr::mutate(df,
+      Compound = purrr::map_chr(QuantityPath, ~ {
+        match <- compound_names[stringr::str_detect(
+          .x, stringr::regex(compound_names, ignore_case = TRUE)
+        )]
+        if (length(match) > 0) match[1] else NA_character_
+      })
+    ) %>%
+    dplyr::select(-dplyr::any_of(c("IndividualId", "QuantityPath")))
+
+  df %>%
+    dplyr::rename(QuantityPath = UniqueQuantityPath) %>%
+    tidyr::pivot_wider(
+      names_from = Compound,
+      values_from = Value
+    ) %>%
+    dplyr::relocate(QuantityPath)
+}
 
 translate_end_time_unit <- function(end_time_unit){
   switch(

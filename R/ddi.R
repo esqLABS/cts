@@ -97,7 +97,7 @@ run_ddi <- function(ddi, path = NULL, exportPKML = FALSE) {
 #' @export
 run_pk_analysis <- function(ddi, path = NULL) {
   ddi$run_pk_analysis(path)
-  return(ddi$pk_analysis)
+  return(ddi$pk_analysis_results)
 }
 
 #' Plot DDI simulations defined in the ddi project

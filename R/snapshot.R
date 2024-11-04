@@ -15,8 +15,6 @@ Snapshot <- R6::R6Class(
     version = NULL,
     #' @field simulations_results The simulation results of the snapshot
     simulations_results = NULL,
-    #' @field pk_analysis_results The pk-analyses results of the simulations
-    pk_analysis_results = NULL,
     #' @description
     #' Create a Snapshot object.
     #' @param input character string that is wether
@@ -73,7 +71,7 @@ Snapshot <- R6::R6Class(
     #' get_names the names of a field in the snapshot.
     #' @param field the field to get the names from.
     get_names = function(field) {
-      list_c(map(self[[field]], ~ .x$Name)) %||% list_c(map(self[[field]], "name"))
+      list_c(map(self[[field]], "Name")) %||% list_c(map(self[[field]], "name"))
     },
     #' @description
     #' add a protocol to the snapshot.
@@ -147,7 +145,14 @@ Snapshot <- R6::R6Class(
 
       # run PK analysis
       pk_analysis <- lapply(private$.sim_results_obj, ospsuite::calculatePKAnalyses)
-      private$.pk_analysis_results <- lapply(pk_analysis, ospsuite::pkAnalysesToTibble)
+      private$.pk_analysis_results_raw <- lapply(pk_analysis, ospsuite::pkAnalysesToTibble)
+
+      compound_names <- self$get_names("compounds")
+
+      # PK analysis results to wider
+      private$.pk_analysis_results <- lapply(
+        private$.pk_analysis_results_raw, pivot_pk_analysis, compound_names
+      )
 
       if (!is.null(path)) {
         for (i in seq_len(length(pk_analysis))) {
@@ -258,6 +263,7 @@ Snapshot <- R6::R6Class(
     .sim_results = NULL,
     .sim_results_obj = NULL,
     .pk_analysis_results = NULL,
+    .pk_analysis_results_raw = NULL,
     .plots = NULL
   ),
   active = list(
@@ -360,8 +366,8 @@ Snapshot <- R6::R6Class(
       }
       return(private$.sim_results)
     },
-    #' @field pk_analysis Access the PK analysis results.
-    pk_analysis = function() {
+    #' @field pk_analysis_results Formatted pk-analyses results of the simulations
+    pk_analysis_results = function() {
       if (is.null(private$.pk_analysis_results)) {
         self$run_pk_analysis()
       }
