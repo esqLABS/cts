@@ -222,17 +222,16 @@ results for a specific simulation using its name as a list index:
 
 ``` r
 head(results$`Generic DDI simulation`)
-#> # A tibble: 6 × 9
-#>   IndividualId  Time paths     simulationValues TimeDimension TimeUnit dimension
-#>          <int> <dbl> <chr>                <dbl> <chr>         <chr>    <chr>    
-#> 1            0     0 Organism…                0 Time          min      Concentr…
-#> 2            0     0 Organism…                0 Time          min      Concentr…
-#> 3            0     0 Organism…                0 Time          min      Concentr…
-#> 4            0     0 Organism…                0 Time          min      Concentr…
-#> 5            0     0 Organism…                0 Time          min      Fraction 
-#> 6            0     0 Organism…                0 Time          min      Fraction 
-#> # ℹ 2 more variables: unit <chr>, molWeight <dbl>
 ```
+
+| IndividualId | Time | paths | simulationValues | TimeDimension | TimeUnit | dimension | unit | molWeight |
+|---:|---:|:---|---:|:---|:---|:---|:---|---:|
+| 0 | 0 | Organism\|PeripheralVenousBlood\|Rifampicin\|Plasma (Peripheral Venous Blood) | 0 | Time | min | Concentration (molar) | µmol/l | 822.94 |
+| 0 | 0 | Organism\|PeripheralVenousBlood\|Midazolam\|Plasma (Peripheral Venous Blood) | 0 | Time | min | Concentration (molar) | µmol/l | 325.78 |
+| 0 | 0 | Organism\|VenousBlood\|Plasma\|Rifampicin\|Concentration in container | 0 | Time | min | Concentration (molar) | µmol/l | 822.94 |
+| 0 | 0 | Organism\|VenousBlood\|Plasma\|Midazolam\|Concentration in container | 0 | Time | min | Concentration (molar) | µmol/l | 325.78 |
+| 0 | 0 | Organism\|Lumen\|Rifampicin\|Fraction of oral drug mass absorbed into mucosa | 0 | Time | min | Fraction |  | 822.94 |
+| 0 | 0 | Organism\|Lumen\|Midazolam\|Fraction of oral drug mass absorbed into mucosa | 0 | Time | min | Fraction |  | 325.78 |
 
 Results can also be exported as csv and pkml files with the `path` and
 `exportPKML` arguments:
@@ -255,16 +254,16 @@ name:
 
 ``` r
 head(pk_analysis$`Generic DDI simulation`)
-#> # A tibble: 6 × 5
-#>   IndividualId QuantityPath                             Parameter    Value Unit 
-#>          <int> <chr>                                    <chr>        <dbl> <chr>
-#> 1            0 Organism|PeripheralVenousBlood|Rifampic… C_max     1.72e+ 1 µmol…
-#> 2            0 Organism|PeripheralVenousBlood|Rifampic… C_max_no… 3.44e+ 6 mg/l 
-#> 3            0 Organism|PeripheralVenousBlood|Rifampic… t_max     5   e- 1 h    
-#> 4            0 Organism|PeripheralVenousBlood|Rifampic… C_tEnd    8.77e- 2 µmol…
-#> 5            0 Organism|PeripheralVenousBlood|Rifampic… AUC_tEnd  2.81e+ 3 µmol…
-#> 6            0 Organism|PeripheralVenousBlood|Rifampic… AUC_tEnd… 5.62e+11 µg*m…
 ```
+
+| QuantityPath | Parameter | Unit | Rifampicin | Midazolam |
+|:---|:---|:---|---:|---:|
+| Organism\|PeripheralVenousBloodPlasma (Peripheral Venous Blood) | C_max | µmol/l | 1.716535e+01 | 2.473786e-01 |
+| Organism\|PeripheralVenousBloodPlasma (Peripheral Venous Blood) | C_max_norm | mg/l | 3.437340e+06 | 1.074547e+06 |
+| Organism\|PeripheralVenousBloodPlasma (Peripheral Venous Blood) | t_max | h | 5.000000e-01 | 2.500000e-01 |
+| Organism\|PeripheralVenousBloodPlasma (Peripheral Venous Blood) | C_tEnd | µmol/l | 8.767600e-02 | 4.490000e-05 |
+| Organism\|PeripheralVenousBloodPlasma (Peripheral Venous Blood) | AUC_tEnd | µmol\*min/l | 2.808189e+03 | 2.978657e+01 |
+| Organism\|PeripheralVenousBloodPlasma (Peripheral Venous Blood) | AUC_tEnd_norm | µg\*min/l | 5.623362e+11 | 1.293849e+11 |
 
 ## Plot ddi simulations
 
