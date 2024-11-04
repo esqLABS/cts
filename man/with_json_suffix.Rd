@@ -16,4 +16,3 @@ A character vector with the ".json" suffix added where necessary.
 This function checks if the provided file path(s) already have the ".json"
 suffix. If not, it appends the ".json" suffix. The function is vectorized.
 }
-\keyword{internal}

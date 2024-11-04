@@ -17,8 +17,6 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item{\code{version}}{version The version of the snapshot}
 
 \item{\code{simulations_results}}{The simulation results of the snapshot}
-
-\item{\code{pk_analysis_results}}{The pk-analyses results of the simulations}
 }
 \if{html}{\out{</div>}}
 }
@@ -49,7 +47,7 @@ This class is used to import, access and manipulate the data from a snapshot.
 
 \item{\code{simulation_results}}{Access the simulations results.}
 
-\item{\code{pk_analysis}}{Access the PK analysis results.}
+\item{\code{pk_analysis_results}}{Formatted pk-analyses results of the simulations}
 
 \item{\code{plots}}{Access plots for snapshot simulations.}
 }
