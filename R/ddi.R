@@ -277,18 +277,6 @@ DDI <- R6::R6Class(
       # initialize from parent
       super$initialize(input)
       # self$data <- private$read_json(self$source)
-    },
-    #' @description
-    #' Add a simulation to the DDI project
-    #' @param simulation a simulation created by `create_simulation()`
-    add_simulation = function(simulation) {
-      private$add_item("simulations", simulation)
-    },
-    #' @description
-    #' Remove a simulation from the DDI project
-    #' @param simulation_names a character vector of simulation names to remove
-    remove_simulation = function(simulation_names) {
-      private$remove_item("simulations", simulation_names)
     }
   ),
   private = list(

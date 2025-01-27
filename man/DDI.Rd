@@ -35,8 +35,6 @@ This class is used to import, access and manipulate the data from a DDI snapshot
 \item \href{#method-DDI-print}{\code{DDI$print()}}
 \item \href{#method-DDI-combine}{\code{DDI$combine()}}
 \item \href{#method-DDI-import}{\code{DDI$import()}}
-\item \href{#method-DDI-add_simulation}{\code{DDI$add_simulation()}}
-\item \href{#method-DDI-remove_simulation}{\code{DDI$remove_simulation()}}
 \item \href{#method-DDI-clone}{\code{DDI$clone()}}
 }
 }
@@ -44,10 +42,13 @@ This class is used to import, access and manipulate the data from a DDI snapshot
 <details><summary>Inherited methods</summary>
 <ul>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_protocol"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_protocol'><code>cts::Snapshot$add_protocol()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_simulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_simulation'><code>cts::Snapshot$add_simulation()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="check_simulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-check_simulation'><code>cts::Snapshot$check_simulation()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="create_plots"><a href='../../cts/html/Snapshot.html#method-Snapshot-create_plots'><code>cts::Snapshot$create_plots()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="export"><a href='../../cts/html/Snapshot.html#method-Snapshot-export'><code>cts::Snapshot$export()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="get_names"><a href='../../cts/html/Snapshot.html#method-Snapshot-get_names'><code>cts::Snapshot$get_names()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_protocol"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_protocol'><code>cts::Snapshot$remove_protocol()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_simulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_simulation'><code>cts::Snapshot$remove_simulation()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="run_pk_analysis"><a href='../../cts/html/Snapshot.html#method-Snapshot-run_pk_analysis'><code>cts::Snapshot$run_pk_analysis()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="run_simulations"><a href='../../cts/html/Snapshot.html#method-Snapshot-run_simulations'><code>cts::Snapshot$run_simulations()</code></a></span></li>
 </ul>
@@ -118,40 +119,6 @@ Import a DDI simulation from a JSON file.
 \item a URL to a compound building block.
 \item a Path to a local file.
 }}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DDI-add_simulation"></a>}}
-\if{latex}{\out{\hypertarget{method-DDI-add_simulation}{}}}
-\subsection{Method \code{add_simulation()}}{
-Add a simulation to the DDI project
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DDI$add_simulation(simulation)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{simulation}}{a simulation created by \code{create_simulation()}}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DDI-remove_simulation"></a>}}
-\if{latex}{\out{\hypertarget{method-DDI-remove_simulation}{}}}
-\subsection{Method \code{remove_simulation()}}{
-Remove a simulation from the DDI project
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DDI$remove_simulation(simulation_names)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{simulation_names}}{a character vector of simulation names to remove}
 }
 \if{html}{\out{</div>}}
 }

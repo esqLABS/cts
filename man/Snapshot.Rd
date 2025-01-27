@@ -62,6 +62,9 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item \href{#method-Snapshot-get_names}{\code{Snapshot$get_names()}}
 \item \href{#method-Snapshot-add_protocol}{\code{Snapshot$add_protocol()}}
 \item \href{#method-Snapshot-remove_protocol}{\code{Snapshot$remove_protocol()}}
+\item \href{#method-Snapshot-add_simulation}{\code{Snapshot$add_simulation()}}
+\item \href{#method-Snapshot-remove_simulation}{\code{Snapshot$remove_simulation()}}
+\item \href{#method-Snapshot-check_simulation}{\code{Snapshot$check_simulation()}}
 \item \href{#method-Snapshot-run_simulations}{\code{Snapshot$run_simulations()}}
 \item \href{#method-Snapshot-run_pk_analysis}{\code{Snapshot$run_pk_analysis()}}
 \item \href{#method-Snapshot-create_plots}{\code{Snapshot$create_plots()}}
@@ -167,6 +170,57 @@ remove a protocol from the snapshot.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{protocol_name}}{name(s) of the protocol(s) to remove}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-add_simulation"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-add_simulation}{}}}
+\subsection{Method \code{add_simulation()}}{
+add a simulation to the snapshot.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$add_simulation(simulation)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{simulation}}{the simulation to add}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-remove_simulation"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-remove_simulation}{}}}
+\subsection{Method \code{remove_simulation()}}{
+remove a simulation from the snapshot.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$remove_simulation(simulation_name)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{simulation_name}}{name(s) of the simulation(s) to remove}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-check_simulation"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-check_simulation}{}}}
+\subsection{Method \code{check_simulation()}}{
+check that a simulation is valid
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$check_simulation(simulation)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{simulation}}{simulation object to check for vaiidity}
 }
 \if{html}{\out{</div>}}
 }
