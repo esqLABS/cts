@@ -86,6 +86,66 @@ Snapshot <- R6::R6Class(
       private$remove_item("protocols", protocol_name)
     },
     #' @description
+    #' add a simulation to the snapshot.
+    #' @param simulation the simulation to add
+    add_simulation = function(simulation) {
+      private$add_item("simulations", simulation)
+    },
+    #' @description
+    #' remove a simulation from the snapshot.
+    #' @param simulation_name name(s) of the simulation(s) to remove
+    remove_simulation = function(simulation_name) {
+      private$remove_item("simulations", simulation_name)
+    },
+    #' @description
+    #' check that a simulation is valid
+    #' @param simulation simulation object to check for vaiidity
+    check_simulation = function(simulation) {
+      # check that no simulation has the same name
+      if (simulation$name %in% self$get_names("simulations")) {
+        cli_abort("Simulation with name {.code {simulation$name}} already exists.")
+      }
+      # check that compounds are defined
+      if (!all(purrr::list_c(purrr::map(simulation$compounds, ~ .x$Name)) %in% self$get_names("compounds"))) {
+        cli_abort("Some compounds not found in snapshot.")
+      }
+      # check that individual is defined
+      if (!simulation$individual %in% self$get_names("individuals")) {
+        cli_abort("Individual {.code {simulation$individual}} not found in snapshot.")
+      }
+      # check that protocols are defined
+      sim_protocols <- purrr::list_c(purrr::map(simulation$compounds, ~ .x$Protocol$Name))
+      if (!all(sim_protocols %in% self$get_names("protocols"))) {
+        missing_protocols <- sim_protocols[!(sim_protocols %in% self$get_names("protocols"))]
+        cli_abort("Protocols {.code {missing_protocols}} not found in snapshot.")
+      }
+      # check that formulations are defined
+      sim_formulations <- purrr:::list_c(purrr::map(simulation$compounds, ~ purrr::list_c(purrr::map(.x$Protocol$Formulations, ~ .x$Name))))
+      if (!all(sim_formulations %in% self$get_names("formulations"))) {
+        missing_formulations <- sim_formulations[!(sim_formulations %in% self$get_names("formulations"))]
+        cli_abort("Formulations {.code {missing_formulations}} not found in snapshot.")
+      }
+      # check that correct number of formulations key-name mapping are defined
+      for (protocolIdx in seq_along(purrr::map(simulation$compounds, ~ .x$Protocol))) {
+        protocol_name <- purrr::map(simulation$compounds, ~ .x$Protocol$Name)[[protocolIdx]]
+        given_formulation_keys <- purrr::list_c(purrr::map(purrr::map(simulation$compounds, ~ .x$Protocol)[[protocolIdx]]$Formulations,  ~ (.x$Key)))
+
+        snap_protocol <- self$protocols[[which(self$get_names("protocols") == protocol_name)]]
+        needed_formulation_keys <- c()
+        # For simple protocol with oral or user defined administration, simulation need a `Formulation` key but key is not explicitly defined in the protocol
+        if (snap_protocol$type %in% c("oral", "user")) {
+          needed_formulation_keys <- c("Formulation")
+        }
+        # For advanced protocol look at all defined formulation keys
+
+        # Check that all needed key are given
+        if (!all(needed_formulation_keys %in% given_formulation_keys)) {
+          missing_formulation_keys <- needed_formulation_keys[!needed_formulation_keys %in% given_formulation_keys]
+          cli_abort("Missing formulation key(s) {.code {missing_formulation_keys}} for protocol {.code {protocol_name}}.")
+        }
+      }
+    },
+    #' @description
     #' run simulations defined in the snapshot
     #' @param path character string that is the path to the output directory.
     #' @param exportPKML logical that indicates if the PKML files should be exported.
