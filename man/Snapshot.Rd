@@ -220,7 +220,7 @@ check that a simulation is valid
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{simulation}}{simulation object to check for vaiidity}
+\item{\code{simulation}}{simulation object to check for validity}
 }
 \if{html}{\out{</div>}}
 }

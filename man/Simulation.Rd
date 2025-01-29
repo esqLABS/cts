@@ -43,6 +43,7 @@ This class is used to create the json corresponding to a simulation.
 \item \href{#method-Simulation-set_individual}{\code{Simulation$set_individual()}}
 \item \href{#method-Simulation-add_compound}{\code{Simulation$add_compound()}}
 \item \href{#method-Simulation-set_compound_protocol}{\code{Simulation$set_compound_protocol()}}
+\item \href{#method-Simulation-add_compound_interactions}{\code{Simulation$add_compound_interactions()}}
 \item \href{#method-Simulation-print}{\code{Simulation$print()}}
 \item \href{#method-Simulation-clone}{\code{Simulation$clone()}}
 }
@@ -132,6 +133,30 @@ Set the protocol to be used in for a given compound.
 \item{\code{protocol}}{name of the protocol used for the compound.}
 
 \item{\code{formulation}}{oral formulation key mapping for the protocol if needed,}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The updated \code{Simulation} object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Simulation-add_compound_interactions"></a>}}
+\if{latex}{\out{\hypertarget{method-Simulation-add_compound_interactions}{}}}
+\subsection{Method \code{add_compound_interactions()}}{
+Add the interactions to be used in for a given compound.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Simulation$add_compound_interactions(compound, interactions)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{compound}}{name of the compound for which to add interaction}
+
+\item{\code{interactions}}{name of the molecule with which the compound interacts.}
+
+\item{\code{datasource}}{name of the Datasource to use as interaction.}
 }
 \if{html}{\out{</div>}}
 }

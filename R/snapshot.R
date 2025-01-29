@@ -99,7 +99,7 @@ Snapshot <- R6::R6Class(
     },
     #' @description
     #' check that a simulation is valid
-    #' @param simulation simulation object to check for vaiidity
+    #' @param simulation simulation object to check for validity
     check_simulation = function(simulation) {
       # check that no simulation has the same name
       if (simulation$name %in% self$get_names("simulations")) {
@@ -506,4 +506,47 @@ update_snapshots <- function(snapshots) {
   } else {
     return(snapshots)
   }
+}
+
+#' @title Extract defined interactions for compounds from a snapshot
+#' @param snapshot A snapshot object.
+#' @param compounds (Optional) A character vector of compound names to extract interactions for.
+#' By default interactions are extracted for all compounds in the snapshot
+#' @param quietly (Optional) Logical. If TRUE, the interactions are not printed to the console.
+#' @export
+extract_interactions <- function(snapshot, compounds = NULL, quietly = FALSE) {
+  if (is.null(compounds)) {
+    compounds <- snapshot$get_names("compounds")
+  }
+
+  all_interactions <- list()
+  i <- 1
+  # in each compound
+  for (c in snapshot$compounds) {
+    if (c$Name %in% compounds) {
+      # in each process
+      for (p in c$Processes) {
+        # if InternalName of process is "CompetitiveInhibition" or "Induction"
+        if (p$InternalName == "CompetitiveInhibition" | p$InternalName == "Induction") {
+          all_interactions[[i]] <- list(
+            Name = glue::glue("{p$Molecule}-{p$DataSource}"),
+            MoleculeName = p$Molecule,
+            CompoundName = c$Name
+          )
+          i <- i + 1
+        }
+      }
+    }
+  }
+
+  if (!quietly) {
+    for (c in compounds) {
+      cli::cli_text("Compound: ", c)
+      purrr::map(
+        all_interactions,
+        ~ if(.x$CompoundName == c) { cli::cli_ul(.x$Name) }
+      )
+    }
+  }
+  return(invisible(all_interactions))
 }

@@ -4,27 +4,6 @@ fill_simulation_template <- function(template_path, max_protocol_duration, victi
   jsonlite::fromJSON(txt = filled_template, simplifyVector = T, simplifyDataFrame = FALSE)
 }
 
-extract_interactions <- function(ddi) {
-  all_interactions <- list()
-  i <- 1
-  # in each compound
-  for (c in ddi$compounds) {
-    # in each process
-    for (p in c$Processes) {
-      # if InternalName of process is "CompetitiveInhibition" or "Induction"
-      if (p$InternalName == "CompetitiveInhibition" | p$InternalName == "Induction") {
-        all_interactions[[i]] <- list(
-          Name = glue::glue("{p$Molecule}-{p$DataSource}"),
-          MoleculeName = p$Molecule,
-          CompoundName = c$Name
-        )
-        i <- i + 1
-      }
-    }
-  }
-  return(all_interactions)
-}
-
 extract_compound_processes <- function(compound) {
   all_processes <- list()
   i <- 1
@@ -71,9 +50,14 @@ create_generic_simulation <- function(ddi, template_path, max_protocol_duration,
   filled_template <- fill_simulation_template(template_path, max_protocol_duration, victim, perpetrator, individual, victim_formulation, perpetrator_formulation, victim_protocol, perpetrator_protocol)
 
   # extract molecule interactions from the ddi object
-  interactions <- extract_interactions(ddi)
+  interactions <- extract_interactions(ddi, quietly = TRUE)
+  interactions_compounds <- purrr::list_c(purrr::map(all_interactions, ~ .x$CompoundName))
+  interactions_molecules <- purrr::list_c(purrr::map(all_interactions, ~ .x$MoleculeName))
+
   # add interactions to the simulation template
-  filled_template$Simulations[[1]]$Interactions <- interactions
+  # Using first interaction found for each enzyme/compound pair.
+  selected_interactions <- which(!duplicated(interaction(interactions_compounds, interactions_molecules)))
+  filled_template$Simulations[[1]]$Interactions <- interactions[selected_interactions]
 
   # extract processes
   processes <- extract_compound_processes(ddi)
