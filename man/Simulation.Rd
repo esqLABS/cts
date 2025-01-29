@@ -44,6 +44,8 @@ This class is used to create the json corresponding to a simulation.
 \item \href{#method-Simulation-add_compound}{\code{Simulation$add_compound()}}
 \item \href{#method-Simulation-set_compound_protocol}{\code{Simulation$set_compound_protocol()}}
 \item \href{#method-Simulation-add_compound_interactions}{\code{Simulation$add_compound_interactions()}}
+\item \href{#method-Simulation-set_output_selection}{\code{Simulation$set_output_selection()}}
+\item \href{#method-Simulation-add_output_selection}{\code{Simulation$add_output_selection()}}
 \item \href{#method-Simulation-print}{\code{Simulation$print()}}
 \item \href{#method-Simulation-clone}{\code{Simulation$clone()}}
 }
@@ -163,6 +165,24 @@ Add the interactions to be used in for a given compound.
 \subsection{Returns}{
 The updated \code{Simulation} object.
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Simulation-set_output_selection"></a>}}
+\if{latex}{\out{\hypertarget{method-Simulation-set_output_selection}{}}}
+\subsection{Method \code{set_output_selection()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Simulation$set_output_selection(paths)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Simulation-add_output_selection"></a>}}
+\if{latex}{\out{\hypertarget{method-Simulation-add_output_selection}{}}}
+\subsection{Method \code{add_output_selection()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Simulation$add_output_selection(paths)}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Simulation-print"></a>}}

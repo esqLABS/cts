@@ -205,8 +205,14 @@ Simulation <- R6::R6Class(
     },
     # set_output_schema = function()
     # add_output_schema = function()
-    # set_output_selection = function(),
-    # add_output_selection = function(),
+    set_output_selection = function(paths) {
+      self$output_selection <- list(paths)
+      invisible(self)
+    },
+    add_output_selection = function(paths) {
+      self$output_selection <- c(self$output_selection, paths)
+      invisible(self)
+    },
     # remove_output_selection = function(),
     #' @description
     #' Pretty print the simulation object.
@@ -231,6 +237,8 @@ Simulation <- R6::R6Class(
         })
         cli::cli_end(ol)
       })
+      cli::cli_text("Outputs: ")
+      cli::cli_li(self$output_selection)
       invisible(self)
     }
   ),
@@ -275,7 +283,7 @@ Simulation <- R6::R6Class(
         Solver = self$solver,
         OutputSchema = self$output_schema,
         Parameter = self$parameters,
-        OutputSelection = self$output_selection,
+        OutputSelections = self$output_selection,
         Individual = self$individual,
         Compounds = self$compounds,
         Interactions = self$interactions,
@@ -303,6 +311,13 @@ Simulation <- R6::R6Class(
         private$.output_schema <- value
       }
       return(private$.output_schema)
+    },
+    #' @field output_selections Output to be returned when running the simulation
+    output_selection = function(value) {
+      if (!missing(value)) {
+        private$.output_selection <- value
+      }
+      return(private$.output_selection)
     },
     #' @field individual Individual used in the simulation
     individual = function(value) {
@@ -354,5 +369,6 @@ create_simulation <- function(simulation_name, individual, victim, perpetrators)
     compounds = purrr::map(c(victim, perpetrators), ~list(Name = .x)),
     individual = individual
   )
+  sim$set_output_selection(glue::glue("Organism|PeripheralVenousBlood|{victim}|Plasma (Peripheral Venous Blood)"))
   return(sim)
 }

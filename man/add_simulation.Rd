@@ -7,7 +7,7 @@
 add_simulation(
   snapshot,
   simulation,
-  options = list(add_interactions = FALSE, add_processes = FALSE)
+  options = list(add_interactions = TRUE, add_processes = TRUE)
 )
 }
 \arguments{
@@ -17,11 +17,14 @@ add_simulation(
 
 \item{options}{a named list of options to customize the simulation.
 \itemize{
-\item add_interactions: logical, whether to automatically add the first interactions of each type
-for each enzyme/compound pair to the simulation (only valid if no interaction have been defined in the simulation).
+\item add_interactions: logical, whether to automatically add the first interactions for each
+enzyme/compound pair to the simulation (only used if no interaction have been defined in the simulation).
 \item add_processes: logical, whether to automatically add the first process of each type for each
-compound to the simulation (only valid if no processes have been defined in the simulation).
+compound to the simulation (only used if no processes have been defined in the simulation).
 }}
+}
+\value{
+The \code{Snapshot} or \code{DDI} object with the simulation added.
 }
 \description{
 This function adds a simulation to a \code{Snapshot} or \code{DDI} object.
