@@ -107,6 +107,34 @@ add_interactions <- function(simulation, compound, interactions) {
   invisible(simulation)
 }
 
+#' Set outputs to a `Simulation` object
+#'
+#' @description
+#' Set the outputs to be used for plotting to the simulation.
+#' This removes any previously set outputs.
+#' @param simulation The `Simulation` object (as created by `create_simulation`).
+#' @param paths path of the output to use for plotting
+#' @return The updated `Simulation` object.
+#' @export
+set_outputs = function(simulation, paths) {
+  simulation$set_output_selections(paths)
+  invisible(simulation)
+}
+
+#' Add outputs to a already defined outputs of a `Simulation` object
+#'
+#' @description
+#' Add some outputs to be used for plotting to the simulation.
+#' This add the output to any previously set outputs.
+#' @param simulation The `Simulation` object (as created by `create_simulation`).
+#' @param paths path of the output to add for plotting
+#' @return The updated `Simulation` object.
+#' @export
+add_outputs = function(simulation, paths) {
+  simulation$add_output_selections(paths)
+  invisible(simulation)
+}
+
 #' R6 Class Representing a Simulation
 #'
 #' @description
@@ -201,12 +229,22 @@ Simulation <- R6::R6Class(
     },
     # set_output_schema = function()
     # add_output_schema = function()
-    set_output_selection = function(paths) {
-      self$output_selection <- list(paths)
+    #' @description
+    #' Set the outputs to be used for plotting.
+    #' This removes any previously set outputs.
+    #' @param paths path of the output to use for plotting
+    #' @return The updated `Simulation` object.
+    set_output_selections = function(paths) {
+      self$output_selections <- c(list(), paths)
       invisible(self)
     },
-    add_output_selection = function(paths) {
-      self$output_selection <- c(self$output_selection, paths)
+    #' @description
+    #' Add some outputs to be used for plotting.
+    #' This add the output to any previously set outputs.
+    #' @param paths path of the output to add for plotting
+    #' @return The updated `Simulation` object.
+    add_output_selections = function(paths) {
+      self$output_selections <- c(self$output_selections, paths)
       invisible(self)
     },
     # remove_output_selection = function(),
@@ -234,7 +272,7 @@ Simulation <- R6::R6Class(
         cli::cli_end(ol)
       })
       cli::cli_text("Outputs: ")
-      cli::cli_li(self$output_selection)
+      cli::cli_li(self$output_selections)
       invisible(self)
     }
   ),
@@ -263,7 +301,7 @@ Simulation <- R6::R6Class(
       )
     ),
     .parameters = list(),
-    .output_selection = list(),
+    .output_selections = list(),
     .individual = list(),
     .compounds = list(),
     .interactions = list(),
@@ -279,7 +317,7 @@ Simulation <- R6::R6Class(
         Solver = self$solver,
         OutputSchema = self$output_schema,
         Parameter = self$parameters,
-        OutputSelections = self$output_selection,
+        OutputSelections = self$output_selections,
         Individual = self$individual,
         Compounds = self$compounds,
         Interactions = self$interactions,
@@ -309,11 +347,11 @@ Simulation <- R6::R6Class(
       return(private$.output_schema)
     },
     #' @field output_selections Output to be returned when running the simulation
-    output_selection = function(value) {
+    output_selections = function(value) {
       if (!missing(value)) {
-        private$.output_selection <- value
+        private$.output_selections <- value
       }
-      return(private$.output_selection)
+      return(private$.output_selections)
     },
     #' @field individual Individual used in the simulation
     individual = function(value) {
@@ -366,6 +404,6 @@ create_simulation <- function(simulation_name, individual, victim, perpetrators)
     compounds = purrr::map(c(victim, perpetrators), ~list(Name = .x)),
     individual = individual
   )
-  sim$set_output_selection(glue::glue("Organism|PeripheralVenousBlood|{victim}|Plasma (Peripheral Venous Blood)"))
+  sim$set_output_selections(glue::glue("Organism|PeripheralVenousBlood|{victim}|Plasma (Peripheral Venous Blood)"))
   return(sim)
 }
