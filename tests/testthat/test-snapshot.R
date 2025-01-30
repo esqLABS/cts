@@ -65,3 +65,9 @@ test_that("Snapshots can be updated", {
 
   expect_equal(updated_rif$data$Version, 80)
 })
+
+test_that("Interactions can be extracted", {
+  expect_snapshot(
+    extract_interactions(rifampicin)
+  )
+})

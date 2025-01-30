@@ -50,14 +50,14 @@ create_generic_simulation <- function(ddi, template_path, max_protocol_duration,
   filled_template <- fill_simulation_template(template_path, max_protocol_duration, victim, perpetrator, individual, victim_formulation, perpetrator_formulation, victim_protocol, perpetrator_protocol)
 
   # extract molecule interactions from the ddi object
-  interactions <- extract_interactions(ddi, quietly = TRUE)
-  interactions_compounds <- purrr::list_c(purrr::map(all_interactions, ~ .x$CompoundName))
-  interactions_molecules <- purrr::list_c(purrr::map(all_interactions, ~ .x$MoleculeName))
+  all_interactions <- extract_interactions(ddi, quietly = TRUE)
+  all_interactions_compounds <- purrr::list_c(purrr::map(all_interactions, ~ .x$CompoundName))
+  all_interactions_molecules <- purrr::list_c(purrr::map(all_interactions, ~ .x$MoleculeName))
 
   # add interactions to the simulation template
   # Using first interaction found for each enzyme/compound pair.
-  selected_interactions <- which(!duplicated(interaction(interactions_compounds, interactions_molecules)))
-  filled_template$Simulations[[1]]$Interactions <- interactions[selected_interactions]
+  selected_interactions <- which(!duplicated(interaction(all_interactions_compounds, all_interactions_molecules)))
+  filled_template$Simulations[[1]]$Interactions <- all_interactions[selected_interactions]
 
   # extract processes
   processes <- extract_compound_processes(ddi)

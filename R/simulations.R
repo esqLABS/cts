@@ -197,9 +197,6 @@ Simulation <- R6::R6Class(
       }
 
       self$interactions <- c(self$interactions, purrr::map(interactions, ~ list(Name = .x, CompoundName = compound)))
-
-      # ensure uniqueness of interactions (unique compound/name pair)
-      self$interactions <- unique(self$interactions)
       invisible(self)
     },
     # set_output_schema = function()
@@ -335,7 +332,8 @@ Simulation <- R6::R6Class(
     #' @field interactions Interactions used in the simulation
     interactions = function(value) {
       if (!missing(value)) {
-        private$.interactions <- value
+        # ensure uniqueness of interactions every times it is changed
+        private$.interactions <- unique(value)
       }
       return(private$.interactions)
     },

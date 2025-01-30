@@ -136,67 +136,6 @@
       
       
 
-# Interaction can be extracted
-
-    Code
-      extract_interactions(levo_itra_ddi)
-    Output
-      [[1]]
-      [[1]]$Name
-      CYP3A4-Isoherranen, 2004
-      
-      [[1]]$MoleculeName
-      [1] "CYP3A4"
-      
-      [[1]]$CompoundName
-      [1] "Itraconazole"
-      
-      
-      [[2]]
-      [[2]]$Name
-      ABCB1-Shityakov 2014
-      
-      [[2]]$MoleculeName
-      [1] "ABCB1"
-      
-      [[2]]$CompoundName
-      [1] "Itraconazole"
-      
-      
-      [[3]]
-      [[3]]$Name
-      CYP3A4-Isoherranen, 2004
-      
-      [[3]]$MoleculeName
-      [1] "CYP3A4"
-      
-      [[3]]$CompoundName
-      [1] "Hydroxy-Itraconazole"
-      
-      
-      [[4]]
-      [[4]]$Name
-      CYP3A4-Isoherranen, 2004
-      
-      [[4]]$MoleculeName
-      [1] "CYP3A4"
-      
-      [[4]]$CompoundName
-      [1] "Keto-Itraconazole"
-      
-      
-      [[5]]
-      [[5]]$Name
-      CYP3A4-Isoherranen, 2004
-      
-      [[5]]$MoleculeName
-      [1] "CYP3A4"
-      
-      [[5]]$CompoundName
-      [1] "N-desalkyl-Itraconazole"
-      
-      
-
 # Compounds process can be extracted
 
     Code
