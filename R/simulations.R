@@ -30,7 +30,7 @@ add_simulation <- function(snapshot, simulation, options = list(add_interactions
 
       # check that the interaction is valid
       if (length(index) == 0) {
-        cli::cli_warn("Interaction {.code {x$Name}} not found for compound {.code {x$CompoundName}} in snapshot.")
+        cli::cli_warn("Interaction {.code {x$Name}} not found for compound {.code {x$CompoundName}} in snapshot. Skipping.")
         return(NULL)
       } else {
         x$MoleculeName <- all_interactions[[index]]$MoleculeName
@@ -41,8 +41,7 @@ add_simulation <- function(snapshot, simulation, options = list(add_interactions
 
   } else {
     if (isTRUE(options$add_interactions)) {
-      cli::cli_warn('Automatically adding interactions to the simulation.')
-      cli::cli_warn('Using first interaction found for each enzyme/compound pair.')
+      cli::cli_warn(c('Automatically adding interactions to the simulation.', 'Using first interaction found for each enzyme/compound pair.'))
 
       selected_interactions <- which(!duplicated(interaction(all_interactions_compounds, all_interactions_molecules)))
       simulation$interactions <- all_interactions[selected_interactions]
@@ -57,7 +56,7 @@ add_simulation <- function(snapshot, simulation, options = list(add_interactions
 #'
 #' This function removes a simulation from a `Snapshot` or `DDI` object.
 #' @param snapshot The `Snapshot` or `DDI` object to which the simulation(s) should be removed.
-#' @param simulation_names Names of the simulations to be removed from the `Snapshot` or `DDI` object
+#' @param simulation_name Names of the simulations to be removed from the `Snapshot` or `DDI` object
 #'
 #' @return The `Snapshot` or `DDI` object with the simulation(s) removed
 #' @export
