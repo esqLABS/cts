@@ -216,3 +216,14 @@
         * CYP2E1-Rae 2001
         * OATP1B3-Annaert 2010
 
+# Compounds process can be extracted
+
+    Code
+      extract_processes(rifampicin)
+    Message
+      Compound: Rifampicin
+        * AADAC-Nakajima 2011
+        * P-gp-Collett 2004
+        * OATP1B1-Tirona 2003
+        * Glomerular Filtration-GFR
+

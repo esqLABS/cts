@@ -71,3 +71,9 @@ test_that("Interactions can be extracted", {
     extract_interactions(rifampicin)
   )
 })
+
+test_that("Compounds process can be extracted", {
+  expect_snapshot(
+    extract_processes(rifampicin)
+  )
+})
