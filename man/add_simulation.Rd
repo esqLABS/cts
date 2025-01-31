@@ -19,8 +19,8 @@ add_simulation(
 \itemize{
 \item add_interactions: logical, whether to automatically add the first interactions for each
 enzyme/compound pair to the simulation (only used if no interaction have been defined in the simulation).
-\item add_processes: logical, whether to automatically add the first process of each type for each
-compound to the simulation (only used if no processes have been defined in the simulation).
+\item add_processes: logical, whether to automatically add the first process of each type/molecule for each
+compound to the simulation (only used if no processes have been defined in the simulation for a compound).
 }}
 }
 \value{

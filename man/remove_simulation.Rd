@@ -9,7 +9,7 @@ remove_simulation(snapshot, simulation_name)
 \arguments{
 \item{snapshot}{The \code{Snapshot} or \code{DDI} object to which the simulation(s) should be removed.}
 
-\item{simulation_names}{Names of the simulations to be removed from the \code{Snapshot} or \code{DDI} object}
+\item{simulation_name}{Names of the simulations to be removed from the \code{Snapshot} or \code{DDI} object}
 }
 \value{
 The \code{Snapshot} or \code{DDI} object with the simulation(s) removed

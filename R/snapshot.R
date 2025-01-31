@@ -550,3 +550,64 @@ extract_interactions <- function(snapshot, compounds = NULL, quietly = FALSE) {
   }
   return(invisible(all_interactions))
 }
+
+#' @title Extract defined processes for compounds from a snapshot
+#' @param snapshot A snapshot object.
+#' @param compounds (Optional) A character vector of compound names to extract processes for.
+#' By default processes are extracted for all compounds in the snapshot
+#' @param quietly (Optional) Logical. If TRUE, the processes are not printed to the console.
+#' @export
+extract_processes <- function(snapshot, compounds = NULL, quietly = FALSE) {
+  if (is.null(compounds)) {
+    compounds <- snapshot$get_names("compounds")
+  }
+
+  all_processes <- vector(mode = "list", length = length(compounds))
+  names(all_processes) <- compounds
+
+  for (compound in compounds) {
+    all_processes[[compound]] <- list()
+    i <- 1
+
+    for (p in snapshot$compounds[[which(snapshot$get_names("compounds") == compound)]]$Processes) {
+      if (p$InternalName %in% c("LiverClearance", "HepatocytesHalfTime", "HepatocytesRes", "LiverMicrosomeHalfTime", "LiverMicrosomeRes")) {
+        all_processes[[compound]][[i]] <- list(
+          Name = glue::glue("Total Hepatic Clearance-{p$DataSource}"),
+          SystemicProcessType = "Hepatic"
+        )
+      } else if (p$InternalName %in% c("KidneyClearance", "TubularSecretion_FirstOrder", "TubularSecretion_MM")) {
+        all_processes[[compound]][[i]] <- list(
+          Name = glue::glue("Renal Clearances-{p$DataSource}"),
+          SystemicProcessType = "Renal"
+        )
+      } else if (p$InternalName == "GlomerularFiltration") {
+        all_processes[[compound]][[i]] <- list(
+          Name = glue::glue("Glomerular Filtration-{p$DataSource}"),
+          SystemicProcessType = "GFR"
+        )
+      } else if (p$InternalName == "BiliaryClearance") {
+        all_processes[[compound]][[i]] <- list(
+          Name = glue::glue("Biliary Clearance-{p$DataSource}"),
+          SystemicProcessType = "Biliary"
+        )
+      } else if (!is.null(p$Molecule) && !(stringr::str_detect(string = p$InternalName, pattern = "Inhibition") | p$InternalName == "Induction")) {
+        all_processes[[compound]][[i]] <- list(
+          Name = glue::glue("{p$Molecule}-{p$DataSource}"),
+          MoleculeName = p$Molecule
+        )
+      }
+      i <- i + 1
+    }
+  }
+
+  if (!quietly) {
+    for (c in compounds) {
+      cli::cli_text("Compound: ", c)
+      purrr::map(
+        all_processes[[c]],
+        ~ cli::cli_ul(.x$Name)
+      )
+    }
+  }
+  return(invisible(all_processes))
+}

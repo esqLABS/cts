@@ -46,6 +46,7 @@ This class is used to create the json corresponding to a simulation.
 \item \href{#method-Simulation-add_compound}{\code{Simulation$add_compound()}}
 \item \href{#method-Simulation-set_compound_protocol}{\code{Simulation$set_compound_protocol()}}
 \item \href{#method-Simulation-add_compound_interactions}{\code{Simulation$add_compound_interactions()}}
+\item \href{#method-Simulation-add_compound_processes}{\code{Simulation$add_compound_processes()}}
 \item \href{#method-Simulation-set_output_selections}{\code{Simulation$set_output_selections()}}
 \item \href{#method-Simulation-add_output_selections}{\code{Simulation$add_output_selections()}}
 \item \href{#method-Simulation-print}{\code{Simulation$print()}}
@@ -159,8 +160,28 @@ Add the interactions to be used in for a given compound.
 \item{\code{compound}}{name of the compound for which to add interaction}
 
 \item{\code{interactions}}{name of the molecule with which the compound interacts.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The updated \code{Simulation} object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Simulation-add_compound_processes"></a>}}
+\if{latex}{\out{\hypertarget{method-Simulation-add_compound_processes}{}}}
+\subsection{Method \code{add_compound_processes()}}{
+Add the interactions to be used in for a given compound.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Simulation$add_compound_processes(compound, processes)}\if{html}{\out{</div>}}
+}
 
-\item{\code{datasource}}{name of the Datasource to use as interaction.}
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{compound}}{name of the compound for which to add interaction}
+
+\item{\code{processes}}{name of the molecule with which the compound interacts.}
 }
 \if{html}{\out{</div>}}
 }

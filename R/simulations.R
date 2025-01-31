@@ -6,8 +6,8 @@
 #' @param options a named list of options to customize the simulation.
 #'   - add_interactions: logical, whether to automatically add the first interactions for each
 #'      enzyme/compound pair to the simulation (only used if no interaction have been defined in the simulation).
-#'   - add_processes: logical, whether to automatically add the first process of each type for each
-#'      compound to the simulation (only used if no processes have been defined in the simulation).
+#'   - add_processes: logical, whether to automatically add the first process of each type/molecule for each
+#'      compound to the simulation (only used if no processes have been defined in the simulation for a compound).
 #' @return The `Snapshot` or `DDI` object with the simulation added.
 #' @export
 add_simulation <- function(snapshot, simulation, options = list(add_interactions = TRUE, add_processes = TRUE)) {
@@ -46,6 +46,42 @@ add_simulation <- function(snapshot, simulation, options = list(add_interactions
       selected_interactions <- which(!duplicated(interaction(all_interactions_compounds, all_interactions_molecules)))
       simulation$interactions <- all_interactions[selected_interactions]
     }
+  }
+
+  # get processes defined in snapshot to match with given processes names
+  all_processes <- extract_processes(snapshot, quietly = TRUE)
+  for (compound_index in seq_along(simulation$compounds)) {
+    compound <- simulation$compounds[[compound_index]]
+    compound_name <- simulation$compounds[[compound_index]]$Name
+    compound_processes <- all_processes[[compound_name]]
+
+    # add processes used in sim as defined in snapshot
+    if (length(compound$Processes) > 0) {
+      for (i in seq_along(compound$Processes)) {
+        p_name <- compound$Processes[[i]]$Name
+        index <- which(purrr::list_c(purrr::map(compound_processes, ~ {.x$Name == p_name})))
+        if (length(index) == 0) {
+          cli::cli_warn("Process {.code {p_name}} not found for compound {.code {compound_name}} in snapshot. Skipping.")
+          compound$Processes[[i]] <- NULL
+        } else {
+          compound$Processes[[i]] <- compound_processes[[index]]
+        }
+      }
+    } else {
+      # if not processes are defined and add_processes is TRUE, add the first processes of each type/molecule found for each compound
+      if (isTRUE(options$add_processes)) {
+        cli::cli_warn(c('Automatically adding processes to the simulation for compound {.code {compound_name}}.',
+                        'Using first processes of each type and of each metabolizing enzyme found.'))
+
+        processes_types <- purrr::map(compound_processes, ~ ifelse(!is.null(.x$Molecule), .x$Molecule, .x$SystemicProcessType))
+
+        # Using first processes of each type/molecule found for each compound pair.
+        selected_processes <- which(!duplicated(processes_types))
+        compound$Processes <- compound_processes[selected_processes]
+      }
+    }
+
+    simulation$compounds[[compound_index]]$Processes <- purrr::compact(compound$Processes)
   }
 
   snapshot$add_simulation(simulation$data)
@@ -104,6 +140,19 @@ set_compound_protocol <- function(simulation, compound, protocol, formulation = 
 #' @export
 add_interactions <- function(simulation, compound, interactions) {
   simulation$add_compound_interactions(compound, interactions)
+  invisible(simulation)
+}
+
+#' Add processes for an already used compound from a `Simulation` object
+#'
+#' This function add the interactions of the specified compounds.
+#' @param simulation The `Simulation` object (as created by `create_simulation`).
+#' @param compound name of the compound for which to add interaction
+#' @param processes name of interactions to use
+#' @return The updated `Simulation` object
+#' @export
+add_processes <- function(simulation, compound, processes) {
+  simulation$add_compound_processes(compound, processes)
   invisible(simulation)
 }
 
@@ -211,7 +260,6 @@ Simulation <- R6::R6Class(
     #' Add the interactions to be used in for a given compound.
     #' @param compound name of the compound for which to add interaction
     #' @param interactions name of the molecule with which the compound interacts.
-    #' @param datasource name of the Datasource to use as interaction.
     #' @return The updated `Simulation` object.
     add_compound_interactions = function(compound, interactions) {
       if (!is.character(compound)) {
@@ -225,6 +273,26 @@ Simulation <- R6::R6Class(
       }
 
       self$interactions <- c(self$interactions, purrr::map(interactions, ~ list(Name = .x, CompoundName = compound)))
+      invisible(self)
+    },
+    #' @description
+    #' Add the interactions to be used in for a given compound.
+    #' @param compound name of the compound for which to add interaction
+    #' @param processes name of the molecule with which the compound interacts.
+    #' @return The updated `Simulation` object.
+    add_compound_processes = function(compound, processes) {
+      if (!is.character(compound)) {
+        cli_abort("`compound` must be a character.")
+      }
+      if (!is.character(processes)) {
+        cli_abort("`interactions` must be a character vector.")
+      }
+      if (length(compound) > 1) {
+        cli_abort("Interactions for a single compound can be set at a time.")
+      }
+
+      compound_index <- which(purrr::map(self$compounds, ~.x$Name) == compound)
+      self$compounds[[compound_index]]$Processes <- c(self$processes, purrr::map(processes, ~ list(Name = .x)))
       invisible(self)
     },
     # set_output_schema = function()
@@ -260,6 +328,12 @@ Simulation <- R6::R6Class(
         ol <- cli::cli_ol()
         purrr::map(x$Protocol$Formulations, \(f) {
           cli::cli_li(paste0(f$Key, ": ", f$Name))
+        })
+        cli::cli_end(ol)
+        cli::cli_li("Processes: ")
+        ol <- cli::cli_ol()
+        purrr::map(x$Processes, \(p) {
+          cli::cli_li(paste0(p$Name))
         })
         cli::cli_end(ol)
         cli::cli_li("Interactions: ")
