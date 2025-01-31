@@ -527,7 +527,7 @@ extract_interactions <- function(snapshot, compounds = NULL, quietly = FALSE) {
       # in each process
       for (p in c$Processes) {
         # if InternalName of process is "CompetitiveInhibition" or "Induction"
-        if (p$InternalName == "CompetitiveInhibition" | p$InternalName == "Induction") {
+        if (stringr::str_detect(string = p$InternalName, pattern = "Inhibition") | p$InternalName == "Induction") {
           all_interactions[[i]] <- list(
             Name = glue::glue("{p$Molecule}-{p$DataSource}"),
             MoleculeName = p$Molecule,
