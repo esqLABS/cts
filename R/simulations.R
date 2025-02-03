@@ -73,7 +73,7 @@ add_simulation <- function(snapshot, simulation, options = list(add_interactions
         cli::cli_warn(c('Automatically adding processes to the simulation for compound {.code {compound_name}}.',
                         'Using first processes of each type and of each metabolizing enzyme found.'))
 
-        processes_types <- purrr::map(compound_processes, ~ ifelse(!is.null(.x$Molecule), .x$Molecule, .x$SystemicProcessType))
+        processes_types <- purrr::map(compound_processes, ~ ifelse(!is.null(.x$MoleculeName), .x$MoleculeName, .x$SystemicProcessType))
 
         # Using first processes of each type/molecule found for each compound pair.
         selected_processes <- which(!duplicated(processes_types))

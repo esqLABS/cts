@@ -596,7 +596,7 @@ extract_processes <- function(snapshot, compounds = NULL, quietly = FALSE) {
           MoleculeName = p$Molecule
         )
       }
-      i <- i + 1
+      i <- length(all_processes[[compound]]) + 1
     }
   }
 
