@@ -267,9 +267,16 @@ Plot Time profile of DDI simulations defined in the ddi project}
 \if{latex}{\out{\hypertarget{method-Snapshot-create_plots}{}}}
 \subsection{Method \code{create_plots()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$create_plots()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$create_plots(...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{additional arguments to pass to the plotPopulationTimeProfile (for example aggregation method)}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 a list of plots
 }

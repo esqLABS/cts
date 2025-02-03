@@ -106,8 +106,8 @@ run_pk_analysis <- function(ddi, path = NULL) {
 #' Default is NULL, i.e. plots will be generated for all simulations.
 #' @return a list of plots
 #' @export
-plot_ddi_results <- function(ddi, simulationNames = NULL) {
-  ddi$create_plots()
+plot_ddi_results <- function(ddi, simulationNames = NULL, ...) {
+  ddi$create_plots(...)
 
   # By default return all simulations plots
   if (is.null(simulationNames)) {

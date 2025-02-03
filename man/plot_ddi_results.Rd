@@ -4,7 +4,7 @@
 \alias{plot_ddi_results}
 \title{Plot DDI simulations defined in the ddi project}
 \usage{
-plot_ddi_results(ddi, simulationNames = NULL)
+plot_ddi_results(ddi, simulationNames = NULL, ...)
 }
 \arguments{
 \item{ddi}{a DDI object}

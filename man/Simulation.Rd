@@ -28,6 +28,8 @@ This class is used to create the json corresponding to a simulation.
 
 \item{\code{individual}}{Individual used in the simulation}
 
+\item{\code{population}}{Population used in the simulation}
+
 \item{\code{compounds}}{Compounds used in the simulation}
 
 \item{\code{interactions}}{Interactions used in the simulation}
@@ -41,6 +43,7 @@ This class is used to create the json corresponding to a simulation.
 \itemize{
 \item \href{#method-Simulation-new}{\code{Simulation$new()}}
 \item \href{#method-Simulation-set_individual}{\code{Simulation$set_individual()}}
+\item \href{#method-Simulation-set_population}{\code{Simulation$set_population()}}
 \item \href{#method-Simulation-add_compound}{\code{Simulation$add_compound()}}
 \item \href{#method-Simulation-set_compound_protocol}{\code{Simulation$set_compound_protocol()}}
 \item \href{#method-Simulation-print}{\code{Simulation$print()}}
@@ -53,7 +56,12 @@ This class is used to create the json corresponding to a simulation.
 \subsection{Method \code{new()}}{
 Create a Simulation object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Simulation$new(name, compounds = list(), individual = list())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Simulation$new(
+  name,
+  compounds = list(),
+  individual = list(),
+  population = list()
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -64,6 +72,8 @@ Create a Simulation object.
 \item{\code{compounds}}{list of compounds names used in the simulation.}
 
 \item{\code{individual}}{name of the individual used in the simulation.}
+
+\item{\code{population}}{name of the population used in the simulation.}
 }
 \if{html}{\out{</div>}}
 }
@@ -84,6 +94,26 @@ Set the individual to be used in the simulation.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{individual}}{name of the individual used in the simulation.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The updated \code{Simulation} object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Simulation-set_population"></a>}}
+\if{latex}{\out{\hypertarget{method-Simulation-set_population}{}}}
+\subsection{Method \code{set_population()}}{
+Set the individual to be used in the simulation.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Simulation$set_population(population)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{population}}{name of the individual used in the simulation.}
 }
 \if{html}{\out{</div>}}
 }
