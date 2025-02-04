@@ -108,3 +108,19 @@ test_that("Simulation with missing formulation for a protocol throws an error.",
   set_compound_protocol(my_sim, compound = "Midazolam", protocol = "po 3.5 mg")
   expect_error(add_simulation(ddi, my_sim), "Missing formulation key(s) `Formulation` for protocol `po 3.5 mg`.", fixed = TRUE)
 })
+
+
+test_that("Simulation output schema can be set", {
+  ddi <- suppressWarnings(create_ddi(rifampicin, midazolam))
+  my_sim <- create_simulation(
+    simulation_name = "Test",
+    victim = "Rifampicin",
+    perpetrators = "Midazolam",
+    individual = "European (P-gp modified, CYP3A4 36 h)"
+  )
+  set_compound_protocol(my_sim, compound = "Rifampicin", protocol = "iv 300 mg (0.5 h)")
+  set_compound_protocol(my_sim, compound = "Midazolam", protocol = "po 3.5 mg", formulation = list(list(Key = "Formulation", Name = "Tablet (Dormicum)")))
+  add_output_interval(my_sim, start_time = 24, end_time = 48, resolution = 1, unit = "h")
+  expect_no_message(add_simulation(ddi, my_sim))
+})
+
