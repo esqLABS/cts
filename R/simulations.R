@@ -161,8 +161,8 @@ Simulation <- R6::R6Class(
         cli::cli_text("Compound: ", x$Name)
         cli::cli_li(paste0("Protocol: ", x$Protocol$Name))
         cli::cli_li("Formulations: ")
-        purrr::map(.x$Protocol$Formulations, ~{
-          cli::cli_ol(paste0(.x$Key, ": ", .x$Name))
+        purrr::map(x$Protocol$Formulations, \(f) {
+          cli::cli_ol(paste0(f$Key, ": ", f$Name))
         })
       })
       invisible(self)
