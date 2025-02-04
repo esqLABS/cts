@@ -193,7 +193,7 @@ Simulation <- R6::R6Class(
       )
     ),
     .parameters = list(),
-    .output_selection = list(),
+    .output_selections = list(),
     .individual = list(),
     .population = list(),
     .compounds = list(),
@@ -210,7 +210,7 @@ Simulation <- R6::R6Class(
         Solver = self$solver,
         OutputSchema = self$output_schema,
         Parameter = self$parameters,
-        OutputSelection = self$output_selection,
+        OutputSelections = self$output_selections,
         Individual = self$individual,
         Population = self$population,
         Compounds = self$compounds,
@@ -246,6 +246,13 @@ Simulation <- R6::R6Class(
         private$.output_schema <- value
       }
       return(private$.output_schema)
+    },
+    #' @field output_selections Output to be returned when running the simulation
+    output_selections = function(value) {
+      if (!missing(value)) {
+        private$.output_selections <- value
+      }
+      return(private$.output_selections)
     },
     #' @field individual Individual used in the simulation
     individual = function(value) {

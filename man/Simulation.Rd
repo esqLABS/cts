@@ -26,6 +26,8 @@ This class is used to create the json corresponding to a simulation.
 
 \item{\code{output_schema}}{Output time intervals setting used in the simulation}
 
+\item{\code{output_selections}}{Output to be returned when running the simulation}
+
 \item{\code{individual}}{Individual used in the simulation}
 
 \item{\code{population}}{Population used in the simulation}
