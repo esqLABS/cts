@@ -213,7 +213,7 @@ Simulation <- R6::R6Class(
         Model = self$model,
         Solver = self$solver,
         OutputSchema = self$output_schema$data,
-        Parameter = self$parameters,
+        Parameters = self$parameters,
         OutputSelection = self$output_selection,
         Individual = self$individual,
         Compounds = self$compounds,
