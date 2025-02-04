@@ -92,7 +92,6 @@ Simulation <- R6::R6Class(
     #' @param individual name of the individual used in the simulation.
     #' @return The updated `Simulation` object.
     set_individual = function(individual) {
-      # if individual ensure no population is also set
       self$individual <- individual
     },
     #' @description
