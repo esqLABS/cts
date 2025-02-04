@@ -30,3 +30,63 @@
       * Formulations:
         1. Formulation: Tablet (Dormicum)
 
+# Adding population to a simulation compound works.
+
+    Code
+      my_sim
+    Message
+      Simulation name: Test
+      Population: Women
+      Compound: Levonorgestrel 1
+      * Protocol: LNG_150 ug_21 Days
+      * Formulations:
+        1. Formulation: Microlut
+      Compound: Itraconazole
+      * Protocol: ITZ 100mg 21 days
+      * Formulations:
+        1. Formulation: IR Dissolved
+
+# Adding an unknown population to a simulation compound does not work.
+
+    Code
+      my_sim
+    Message
+      Simulation name: Test
+      Population: UnknowPop
+      Compound: Levonorgestrel 1
+      * Protocol: LNG_150 ug_21 Days
+      * Formulations:
+        1. Formulation: Microlut
+      Compound: Itraconazole
+      * Protocol: ITZ 100mg 21 days
+      * Formulations:
+        1. Formulation: IR Dissolved
+
+# Setting a population in a simulation remove defined individual and vice versa.
+
+    Code
+      sim
+    Message
+      Simulation name: Test
+      Population: Women
+      Compound: Levonorgestrel 1
+      * Protocol:
+      * Formulations:
+      Compound: Itraconazole
+      * Protocol:
+      * Formulations:
+
+---
+
+    Code
+      sim
+    Message
+      Simulation name: Test
+      Individual: Woman SHBG 40% more
+      Compound: Levonorgestrel 1
+      * Protocol:
+      * Formulations:
+      Compound: Itraconazole
+      * Protocol:
+      * Formulations:
+

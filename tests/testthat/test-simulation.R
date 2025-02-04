@@ -108,3 +108,68 @@ test_that("Simulation with missing formulation for a protocol throws an error.",
   set_compound_protocol(my_sim, compound = "Midazolam", protocol = "po 3.5 mg")
   expect_error(add_simulation(ddi, my_sim), "Missing formulation key(s) `Formulation` for protocol `po 3.5 mg`.", fixed = TRUE)
 })
+
+test_that("Adding population to a simulation compound works.", {
+  ddi <- levo_itra_ddi$clone()
+  sim_to_remove <- ddi$get_names("simulations")
+  remove_simulation(ddi, sim_to_remove)
+
+  my_sim <- create_simulation(
+    simulation_name = "Test",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    population = "Women"
+  )
+  set_compound_protocol(my_sim, compound = "Levonorgestrel 1", protocol = "LNG_150 ug_21 Days", formulation = list(list(Key = "Formulation", Name = "Microlut")))
+  set_compound_protocol(my_sim, compound = "Itraconazole", protocol = "ITZ 100mg 21 days", formulation = list(list(Key = "Formulation", Name = "IR Dissolved")))
+
+  expect_snapshot(my_sim)
+
+  expect_no_error(add_simulation(ddi, my_sim))
+})
+
+test_that("Adding an unknown population to a simulation compound does not work.", {
+  ddi <- levo_itra_ddi$clone()
+  sim_to_remove <- ddi$get_names("simulations")
+  remove_simulation(ddi, sim_to_remove)
+
+  my_sim <- create_simulation(
+    simulation_name = "Test",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    population = "UnknowPop"
+  )
+  set_compound_protocol(my_sim, compound = "Levonorgestrel 1", protocol = "LNG_150 ug_21 Days", formulation = list(list(Key = "Formulation", Name = "Microlut")))
+  set_compound_protocol(my_sim, compound = "Itraconazole", protocol = "ITZ 100mg 21 days", formulation = list(list(Key = "Formulation", Name = "IR Dissolved")))
+
+  expect_snapshot(my_sim)
+
+  expect_error(add_simulation(ddi, my_sim), "Population `UnknowPop` not found in snapshot.")
+})
+
+test_that("Adding a population and an individual does not work.", {
+  expect_error(
+    create_simulation(
+      simulation_name = "Test",
+      victim = "Levonorgestrel 1",
+      perpetrators = "Itraconazole",
+      population = "Women",
+      individual = "Woman"
+    ),
+    "Only one of `individual` or `population` can be set."
+  )
+})
+
+test_that("Setting a population in a simulation remove defined individual and vice versa.", {
+  sim <- create_simulation(
+    simulation_name = "Test",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
+  )
+
+  sim$set_population("Women")
+  expect_snapshot(sim)
+  sim$set_individual("Woman SHBG 40% more")
+  expect_snapshot(sim)
+})
