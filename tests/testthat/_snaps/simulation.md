@@ -14,6 +14,11 @@
       Compound: Test compound 2
       * Protocol: New protocol
       * Formulations:
+      Output schema:
+      * Interval 1
+        * Start time: 0 h
+        * End time: 24 h
+        * Resolution: 4 pts/h
 
 # `set_compound_protocol` can set a new protocol for a compound.
 
@@ -29,4 +34,9 @@
       * Protocol: po 3.5 mg
       * Formulations:
         1. Formulation: Tablet (Dormicum)
+      Output schema:
+      * Interval 1
+        * Start time: 0 h
+        * End time: 24 h
+        * Resolution: 4 pts/h
 
