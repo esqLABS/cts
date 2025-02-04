@@ -7,7 +7,7 @@
 add_compound(simulation, compound, protocol = NULL, formulation = list())
 }
 \arguments{
-\item{simulation}{The \code{Simualtion} object (as created by \code{create_simulation}) to which the compound should be added.}
+\item{simulation}{The \code{Simulation} object (as created by \code{create_simulation}) to which the compound should be added.}
 
 \item{compound}{Name of the compound to add to the simulation}
 

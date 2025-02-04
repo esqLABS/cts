@@ -43,6 +43,8 @@ This class is used to create the json corresponding to a simulation.
 \item \href{#method-Simulation-set_individual}{\code{Simulation$set_individual()}}
 \item \href{#method-Simulation-add_compound}{\code{Simulation$add_compound()}}
 \item \href{#method-Simulation-set_compound_protocol}{\code{Simulation$set_compound_protocol()}}
+\item \href{#method-Simulation-set_output_interval}{\code{Simulation$set_output_interval()}}
+\item \href{#method-Simulation-add_output_interval}{\code{Simulation$add_output_interval()}}
 \item \href{#method-Simulation-print}{\code{Simulation$print()}}
 \item \href{#method-Simulation-clone}{\code{Simulation$clone()}}
 }
@@ -132,6 +134,58 @@ Set the protocol to be used in for a given compound.
 \item{\code{protocol}}{name of the protocol used for the compound.}
 
 \item{\code{formulation}}{oral formulation key mapping for the protocol if needed,}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The updated \code{Simulation} object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Simulation-set_output_interval"></a>}}
+\if{latex}{\out{\hypertarget{method-Simulation-set_output_interval}{}}}
+\subsection{Method \code{set_output_interval()}}{
+Clears the output interval from the simulation and adds a new one.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Simulation$set_output_interval(startTime, endTime, resolution, unit)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{startTime}}{Start time of the interval in \code{unit}}
+
+\item{\code{endTime}}{End time of the interval in \code{unit}}
+
+\item{\code{resolution}}{resolution in points per \code{unit}}
+
+\item{\code{unit}}{time unit for the interval.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The updated \code{Simulation} object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Simulation-add_output_interval"></a>}}
+\if{latex}{\out{\hypertarget{method-Simulation-add_output_interval}{}}}
+\subsection{Method \code{add_output_interval()}}{
+Adds an interval to the output schema of the simulation
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Simulation$add_output_interval(startTime, endTime, resolution, unit)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{startTime}}{Start time of the interval in \code{unit}}
+
+\item{\code{endTime}}{End time of the interval in \code{unit}}
+
+\item{\code{resolution}}{resolution in points per \code{unit}}
+
+\item{\code{unit}}{time unit for the interval.}
 }
 \if{html}{\out{</div>}}
 }
