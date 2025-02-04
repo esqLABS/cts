@@ -110,7 +110,7 @@ test_that("Simulation with missing formulation for a protocol throws an error.",
 })
 
 
-test_that("Simulation output schema can be set", {
+test_that("Simulation output interval can be set and added", {
   ddi <- suppressWarnings(create_ddi(rifampicin, midazolam))
   my_sim <- create_simulation(
     simulation_name = "Test",
@@ -120,7 +120,9 @@ test_that("Simulation output schema can be set", {
   )
   set_compound_protocol(my_sim, compound = "Rifampicin", protocol = "iv 300 mg (0.5 h)")
   set_compound_protocol(my_sim, compound = "Midazolam", protocol = "po 3.5 mg", formulation = list(list(Key = "Formulation", Name = "Tablet (Dormicum)")))
-  add_output_interval(my_sim, start_time = 24, end_time = 48, resolution = 1, unit = "h")
+  expect_no_message(set_output_interval(my_sim, start_time = 0, end_time = 2, resolution = 20, unit = "h"))
+  expect_no_message(add_output_interval(my_sim, start_time = 2, end_time = 48, resolution = 1, unit = "h"))
+  expect_snapshot(my_sim)
   expect_no_message(add_simulation(ddi, my_sim))
 })
 
