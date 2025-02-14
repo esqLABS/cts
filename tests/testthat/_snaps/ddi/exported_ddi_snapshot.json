@@ -2095,10 +2095,7 @@
             {
               "Name": "Start time",
               "Value": 14,
-              "Unit": "day(s)",
-              "ValueOrigin": {
-                "Source": "Unknown"
-              }
+              "Unit": "day(s)"
             },
             {
               "Name": "NumberOfRepetitions",
