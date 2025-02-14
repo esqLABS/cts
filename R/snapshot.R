@@ -29,7 +29,7 @@ Snapshot <- R6::R6Class(
       self$compounds <- self$source_data$Compounds
       self$individuals <- self$source_data$Individuals
       self$populations <- self$source_data$Populations
-      self$formulations <- self$source_data$Formulations
+      self$formulations <- purrr::map(self$source_data$Formulations, formulation_from_data)
       self$protocols <- purrr::map(self$source_data$Protocols, protocol_from_data)
       self$expression_profiles <- self$source_data$ExpressionProfiles
       self$observer_sets <- self$source_data$ObserverSets
@@ -335,7 +335,7 @@ Snapshot <- R6::R6Class(
       data[["Compounds"]] <- self$compounds
       data[["Individuals"]] <- self$individuals
       data[["Populations"]] <- self$populations
-      data[["Formulations"]] <- self$formulations
+      data[["Formulations"]] <- purrr::map(self$formulations, ~ .x$data)
       data[["Protocols"]] <- purrr::map(self$protocols, ~ .x$data)
       data[["ExpressionProfiles"]] <- self$expression_profiles
       data[["ObserverSets"]] <- self$observer_sets
