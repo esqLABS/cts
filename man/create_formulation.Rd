@@ -42,6 +42,10 @@ create_formulation(name, type, ...)
 \item radius_max: maximum particle radius for polydispersed only (default 19)
 \item radius_max_unit: unit of the maximum particle radius for polydispersed only (default µm)
 \item n_bins: number of bins for polydispersed only (default 3)
+\item for table formulation:
+\item tableX: Vector of time points for the release profile in hours
+\item tableY: Vector of fraction of dose at each time point
+\item suspension: Boolean, whether to use as suspension (default True)
 \item for zero order formulation:
 \item end_time: Time of administration end (default 60)
 \item end_time_unit: Unit for time of administration end (default min)
