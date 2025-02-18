@@ -1,8 +1,8 @@
 # create_ddi prints the correct status message
 
     Code
-      capture_messages(suppressWarnings(ddi <- create_ddi(rifampicin, c(midazolam,
-        midazolam))))
+      capture_messages(suppressWarnings(ddi <- create_ddi(rifampicin, midazolam,
+        midazolam)))
     Output
       character(0)
 
@@ -11,7 +11,7 @@
     Code
       levo_itra_ddi
     Message
-      DDI simulation created with the following compounds:
+      DDI project containing:
       Victim compound:
       * Levonorgestrel 1
       Perpetrator compounds:
@@ -19,7 +19,7 @@
       * Hydroxy-Itraconazole
       * Keto-Itraconazole
       * N-desalkyl-Itraconazole
-      Simulations:
+      Simulation simulations:
       * LNG 0.09 mg IV - Bayer Study A229
       * IV
       * Bayer Study 19604 - control Day 1

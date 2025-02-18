@@ -13,8 +13,6 @@ Snapshot <- R6::R6Class(
     source_data = NULL,
     #' @field version version The version of the snapshot
     version = NULL,
-    #' @field simulations_results The simulation results of the snapshot
-    simulations_results = NULL,
     #' @description
     #' Create a Snapshot object.
     #' @param input character string that is wether

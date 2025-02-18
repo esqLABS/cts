@@ -7,7 +7,7 @@ test_that("DDI snapshots can be imported", {
 test_that("create_ddi prints the correct status message", {
   expect_snapshot(
     capture_messages(
-      suppressWarnings(ddi <- create_ddi(rifampicin, c(midazolam, midazolam)))
+      suppressWarnings(ddi <- create_ddi(rifampicin, midazolam, midazolam))
     )
   )
 })
@@ -90,7 +90,7 @@ test_that("Compound snapshot with different versions can be merged", {
 
 test_that("An error is thrown when victim or perpetrator are missing", {
   expect_error(
-    create_ddi(perpetrator = midazolam),
+    create_ddi(victim = NULL, perpetrator = midazolam),
     "At least one victim compound must be provided."
   )
 
@@ -113,11 +113,7 @@ test_that("An error is thrown when victim or perpetrator are not a Compound", {
     "All compounds must be of class 'Compound'"
   )
   expect_error(
-    create_ddi(rifampicin, list(midazolam, "not a compound")),
-    "All compounds must be of class 'Compound'"
-  )
-  expect_error(
-    create_ddi(rifampicin, list(midazolam, NULL)),
+    create_ddi(rifampicin, midazolam, "not a compound"),
     "All compounds must be of class 'Compound'"
   )
 
