@@ -140,7 +140,7 @@ test_that("Adding manual interactions works.", {
   expect_no_message(add_simulation(ddi, my_sim, list(add_interactions = FALSE, add_processes = FALSE)))
 })
 
-test_that("Adding unknowkn interactions throws a warning.", {
+test_that("Adding unknown interactions throws a warning.", {
   ddi <- suppressWarnings(create_ddi(rifampicin, midazolam))
   my_sim <- create_simulation(
     simulation_name = "Test",

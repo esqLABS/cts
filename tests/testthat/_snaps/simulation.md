@@ -73,7 +73,7 @@
       Outputs:
       * Organism|PeripheralVenousBlood|Rifampicin|Plasma (Peripheral Venous Blood)
 
-# Adding unknowkn interactions throws a warning.
+# Adding unknown interactions throws a warning.
 
     Code
       my_sim
