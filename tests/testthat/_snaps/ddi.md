@@ -19,7 +19,7 @@
       * Hydroxy-Itraconazole
       * Keto-Itraconazole
       * N-desalkyl-Itraconazole
-      Simulation simulations:
+      Simulations:
       * LNG 0.09 mg IV - Bayer Study A229
       * IV
       * Bayer Study 19604 - control Day 1
