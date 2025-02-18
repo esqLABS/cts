@@ -1,3 +1,26 @@
+#' Create a simulation object
+#'
+#' This function creates a custom simulation.
+#'
+#' @param simulation_name Name of the simulation to be created.
+#' @param individual Name of the individual to be used in the simulation.
+#' @param victim Name of the victim compound to be used in the simulation.
+#' @param perpetrators Vector of names of the compounds to be used as perpetrators in the simulation
+#' @details Protocols used by each compounds need to be defined afterwards with set_compound_protocol().
+#' New compound can also be added afterwards with add_compound().
+#' @return A `Simulation` object
+#' @export
+create_simulation <- function(simulation_name, individual, victim, perpetrators) {
+  # Combine Compound, Protocol and Formulation
+  sim <- Simulation$new(
+    name = simulation_name,
+    compounds = purrr::map(c(victim, perpetrators), ~list(Name = .x)),
+    individual = individual
+  )
+  sim$set_output_selections(glue::glue("Organism|PeripheralVenousBlood|{victim}|Plasma (Peripheral Venous Blood)"))
+  return(sim)
+}
+
 #' Add a simulation to a `Snapshot` or DDI object
 #'
 #' This function adds a simulation to a `Snapshot` or `DDI` object.
@@ -459,25 +482,3 @@ Simulation <- R6::R6Class(
   )
 )
 
-#' Create a simulation object
-#'
-#' This function creates a custom simulation.
-#'
-#' @param simulation_name Name of the simulation to be created.
-#' @param individual Name of the individual to be used in the simulation.
-#' @param victim Name of the victim compound to be used in the simulation.
-#' @param perpetrators Vector of names of the compounds to be used as perpetrators in the simulation
-#' @details Protocols used by each compounds need to be defined afterwards with set_compound_protocol().
-#' New compound can also be added afterwards with add_compound().
-#' @return A `Simulation` object
-#' @export
-create_simulation <- function(simulation_name, individual, victim, perpetrators) {
-  # Combine Compound, Protocol and Formulation
-  sim <- Simulation$new(
-    name = simulation_name,
-    compounds = purrr::map(c(victim, perpetrators), ~list(Name = .x)),
-    individual = individual
-  )
-  sim$set_output_selections(glue::glue("Organism|PeripheralVenousBlood|{victim}|Plasma (Peripheral Venous Blood)"))
-  return(sim)
-}
