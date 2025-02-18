@@ -15,8 +15,6 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item{\code{source_data}}{The input data of the snapshot}
 
 \item{\code{version}}{version The version of the snapshot}
-
-\item{\code{simulations_results}}{The simulation results of the snapshot}
 }
 \if{html}{\out{</div>}}
 }

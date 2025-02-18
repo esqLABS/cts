@@ -4,14 +4,14 @@
 \alias{create_ddi}
 \title{Create a Drug-Drug Interaction (DDI) Simulation}
 \usage{
-create_ddi(victim, perpetrator, options = NULL)
+create_ddi(victim, ..., options = NULL)
 }
 \arguments{
 \item{victim}{The main compound in the DDI interaction, created by \code{compound()},
 mandatory.}
 
-\item{perpetrator}{Additional compounds (perpetrators) in the DDI interaction,
-created by \code{compound()}. Pass one or more \code{Compound} objects.}
+\item{...}{Additional \code{Compounds} objects to be added as perpetrators in the
+DDI interaction,}
 
 \item{options}{a named list of options to customize the DDI simulation. Default is to use \code{default_options}.
 \itemize{
