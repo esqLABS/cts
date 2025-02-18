@@ -113,9 +113,7 @@ Snapshot <- R6::R6Class(
       }
       # check that protocols are defined
       sim_protocols <- purrr::list_c(purrr::map(simulation$compounds, ~ .x$Protocol$Name))
-      if(is.null(sim_protocols)){
-        cli_abort("No protocols defined in simulation.")
-      }
+
       if (!all(sim_protocols %in% self$get_names("protocols"))) {
         missing_protocols <- sim_protocols[!(sim_protocols %in% self$get_names("protocols"))]
         cli_abort("Protocols {.code {missing_protocols}} not found in snapshot.")
@@ -128,8 +126,9 @@ Snapshot <- R6::R6Class(
         missing_formulations <- sim_formulations[!(sim_formulations %in% self$get_names("formulations"))]
         cli_abort("Formulations {.code {missing_formulations}} not found in snapshot.")
       }
+
       # check that correct number of formulations key-name mapping are defined
-      for (protocolIdx in seq_along(purrr::map(simulation$compounds, ~ .x$Protocol))) {
+      for (protocolIdx in seq_along(purrr::compact(purrr::map(simulation$compounds, ~ .x$Protocol)))) {
         protocol_name <- purrr::map(simulation$compounds, ~ .x$Protocol$Name)[[protocolIdx]]
         given_formulation_keys <- purrr::list_c(purrr::map(purrr::map(simulation$compounds, ~ .x$Protocol)[[protocolIdx]]$Formulations,  ~ (.x$Key)))
 

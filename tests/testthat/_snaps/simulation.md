@@ -1,3 +1,23 @@
+# New simulation can be added without compound protocol
+
+    Code
+      my_sim
+    Message
+      Simulation name: Test
+      Individual: European (P-gp modified, CYP3A4 36 h)
+      Compound: Rifampicin
+      * Protocol:
+      * Formulations:
+      * Processes:
+      * Interactions:
+      Compound: Midazolam
+      * Protocol:
+      * Formulations:
+      * Processes:
+      * Interactions:
+      Outputs:
+      * Organism|PeripheralVenousBlood|Rifampicin|Plasma (Peripheral Venous Blood)
+
 # `add_compound` can add compounds to the simulation.
 
     Code
