@@ -47,6 +47,17 @@ test_that("Correct simulation can be added to a ddi object.", {
   expect_no_message(add_simulation(ddi, my_sim, options = list(add_interactions = FALSE, add_processes = FALSE)))
 })
 
+test_that("New simulation without compound protocols cannot be added", {
+  ddi <- suppressWarnings(create_ddi(rifampicin, midazolam))
+  my_sim <- create_simulation(
+    simulation_name = "Test",
+    victim = "Rifampicin",
+    perpetrators = "Midazolam",
+    individual = "European (P-gp modified, CYP3A4 36 h)"
+  )
+  expect_error(add_simulation(ddi, my_sim, options = list(add_interactions = FALSE, add_processes = FALSE)))
+})
+
 test_that("Simulation with identical name throws an error.", {
   ddi <- suppressWarnings(create_ddi(rifampicin, midazolam))
   my_sim <- create_simulation(

@@ -113,12 +113,17 @@ Snapshot <- R6::R6Class(
       }
       # check that protocols are defined
       sim_protocols <- purrr::list_c(purrr::map(simulation$compounds, ~ .x$Protocol$Name))
+      if(is.null(sim_protocols)){
+        cli_abort("No protocols defined in simulation.")
+      }
       if (!all(sim_protocols %in% self$get_names("protocols"))) {
         missing_protocols <- sim_protocols[!(sim_protocols %in% self$get_names("protocols"))]
         cli_abort("Protocols {.code {missing_protocols}} not found in snapshot.")
       }
       # check that formulations are defined
-      sim_formulations <- purrr:::list_c(purrr::map(simulation$compounds, ~ purrr::list_c(purrr::map(.x$Protocol$Formulations, ~ .x$Name))))
+      sim_formulations <- purrr:::list_c(purrr::map(simulation$compounds,
+                                                    ~ purrr::list_c(purrr::map(.x$Protocol$Formulations,
+                                                                               ~ .x$Name))))
       if (!all(sim_formulations %in% self$get_names("formulations"))) {
         missing_formulations <- sim_formulations[!(sim_formulations %in% self$get_names("formulations"))]
         cli_abort("Formulations {.code {missing_formulations}} not found in snapshot.")
@@ -161,6 +166,7 @@ Snapshot <- R6::R6Class(
         exportCSV = TRUE,
         exportPKML = TRUE
       )
+
 
       # recreate simulation results objects
       sim_results_files <- list.files(temp_dir, pattern = glue("{temp_file_name}-.*\\.csv$"))
