@@ -1,3 +1,5 @@
+# User functions ----------------------------------------------------------
+
 #' Create a simulation object
 #'
 #' This function creates a custom simulation.
@@ -140,7 +142,6 @@ add_compound <- function(simulation, compound, protocol = NULL, formulation = li
   invisible(simulation)
 }
 
-
 #' Set protocol for an already used compound from a `Simulation` object
 #'
 #' This function set the protocol of the specified compounds.
@@ -152,6 +153,32 @@ add_compound <- function(simulation, compound, protocol = NULL, formulation = li
 #' @export
 set_compound_protocol <- function(simulation, compound, protocol, formulation = list()) {
   simulation$set_compound_protocol(compound, protocol, formulation)
+  invisible(simulation)
+}
+
+#' Clears the output interval from the simulation and adds a new one.
+#' @param simulation The `Simulation` object (as created by `create_simulation`).
+#' @param start_time Start time of the interval in `unit`
+#' @param end_time End time of the interval in `unit`
+#' @param resolution resolution in points per `unit`
+#' @param unit time unit for the interval.
+#' @return The updated `Simulation` object.
+#' @export
+set_output_interval = function(simulation, start_time, end_time, resolution, unit) {
+  simulation$output_schema$set_interval(start_time, end_time, resolution, unit)
+  invisible(simulation)
+}
+
+#' Adds an interval to the output schema of the simulation
+#' @param simulation The `Simulation` object (as created by `create_simulation`).
+#' @param start_time Start time of the interval in `unit`
+#' @param end_time End time of the interval in `unit`
+#' @param resolution resolution in points per `unit`
+#' @param unit time unit for the interval.
+#' @return The updated `Simulation` object.
+#' @export
+add_output_interval = function(simulation, start_time, end_time, resolution, unit) {
+  simulation$output_schema$add_interval(start_time, end_time, resolution, unit)
   invisible(simulation)
 }
 
@@ -209,6 +236,10 @@ add_outputs = function(simulation, paths) {
   invisible(simulation)
 }
 
+
+
+# Object definition -------------------------------------------------------
+
 #' R6 Class Representing a Simulation
 #'
 #' @description
@@ -220,7 +251,6 @@ Simulation <- R6::R6Class(
   public = list(
     #' @field name Name of the simulation
     name = NULL,
-
     #' @description
     #' Create a Simulation object.
     #' @param name character string corresponding to the simulation name.
@@ -234,14 +264,13 @@ Simulation <- R6::R6Class(
       if (length(individual) > 0 && length(population) > 0) {
         cli_abort("Only one of `individual` or `population` can be set.")
       }
-
+      self$output_schema <- SnapshotOutputSchema$new()
       if (length(individual) > 0) {
         self$individual <- individual
       } else if (length(population) > 0) {
         self$population <- population
       }
     },
-
     #' @description
     #' Set the individual to be used in the simulation.
     #' @param individual name of the individual used in the simulation.
@@ -295,6 +324,27 @@ Simulation <- R6::R6Class(
       }
 
       self$compounds[[compoundIdx]]$Protocol <- list(Name = protocol, Formulations = formulation)
+      invisible(self)
+    },
+    #' @description
+    #' Clears the output interval from the simulation and adds a new one.
+    #' @param startTime Start time of the interval in `unit`
+    #' @param endTime End time of the interval in `unit`
+    #' @param resolution resolution in points per `unit`
+    #' @param unit time unit for the interval.
+    #' @return The updated `Simulation` object.
+    set_output_interval = function(startTime, endTime, resolution, unit) {
+      self$output_schema$set_interval(startTime, endTime, resolution, unit)
+    },
+    #' @description
+    #' Adds an interval to the output schema of the simulation
+    #' @param startTime Start time of the interval in `unit`
+    #' @param endTime End time of the interval in `unit`
+    #' @param resolution resolution in points per `unit`
+    #' @param unit time unit for the interval.
+    #' @return The updated `Simulation` object.
+    add_output_interval = function(startTime, endTime, resolution, unit) {
+      self$output_schema$add_interval(startTime, endTime, resolution, unit)
       invisible(self)
     },
     #' @description
@@ -388,6 +438,7 @@ Simulation <- R6::R6Class(
         })
         cli::cli_end(ol)
       })
+      self$output_schema$print()
       cli::cli_text("Outputs: ")
       cli::cli_li(self$output_selections)
       invisible(self)
@@ -396,28 +447,8 @@ Simulation <- R6::R6Class(
   private = list(
     .model = "4Comp",
     .solver = NULL,
-    .output_schema = list(
-      list(
-        "Parameters" = list(
-          list(
-            "Name" = "Start time",
-            "Value" = 0.0,
-            "Unit" = "h"
-          ),
-          list(
-            "Name" = "End time",
-            "Value" = 24,
-            "Unit" = "h"
-          ),
-          list(
-            "Name" = "Resolution",
-            "Value" = 4.0,
-            "Unit" = "pts/h"
-          )
-        )
-      )
-    ),
     .parameters = list(),
+    .output_schema = list(),
     .output_selections = list(),
     .individual = list(),
     .population = list(),
@@ -433,7 +464,7 @@ Simulation <- R6::R6Class(
         Name = self$name,
         Model = self$model,
         Solver = self$solver,
-        OutputSchema = self$output_schema,
+        OutputSchema = self$output_schema$data,
         Parameter = self$parameters,
         OutputSelections = self$output_selections,
         Individual = self$individual,
