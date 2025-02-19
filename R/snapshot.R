@@ -104,12 +104,22 @@ Snapshot <- R6::R6Class(
         cli_abort("Simulation with name {.code {simulation$name}} already exists.")
       }
       # check that compounds are defined
-      if (!all(purrr::list_c(purrr::map(simulation$compounds, ~ .x$Name)) %in% self$get_names("compounds"))) {
-        cli_abort("Some compounds not found in snapshot.")
+      sim_compounds <- purrr::list_c(purrr::map(simulation$compounds, ~ .x$Name))
+      missing_compounds <- !(sim_compounds %in% self$get_names("compounds"))
+      if (any(missing_compounds)) {
+        cli_abort("Compounds {.code {sim_compounds[missing_compounds]}} not found in snapshot.")
       }
-      # check that individual is defined
-      if (!simulation$individual %in% self$get_names("individuals")) {
-        cli_abort("Individual {.code {simulation$individual}} not found in snapshot.")
+      # check that individual or population is defined
+      if (length(simulation$individual) > 0 ) {
+        if (!(simulation$individual %in% self$get_names("individuals"))) {
+          cli_abort("Individual {.code {simulation$individual}} not found in snapshot.")
+        }
+      } else if (length(simulation$population) > 0) {
+        if (!(simulation$population %in% self$get_names("populations"))) {
+          cli_abort("Population {.code {simulation$population}} not found in snapshot.")
+        }
+      } else {
+        cli_abort("No individual or population defined in simulation.")
       }
       # check that protocols are defined
       sim_protocols <- purrr::list_c(purrr::map(simulation$compounds, ~ .x$Protocol$Name))
@@ -168,7 +178,7 @@ Snapshot <- R6::R6Class(
 
 
       # recreate simulation results objects
-      sim_results_files <- list.files(temp_dir, pattern = glue("{temp_file_name}-.*\\.csv$"))
+      sim_results_files <- list.files(temp_dir, pattern = glue("{temp_file_name}-.*-Results\\.csv$"))
       sim_names <- gsub(glue("{temp_file_name}-"), "", sim_results_files) %>%
         gsub(glue("-Results"), "", .) %>%
         fs::path_ext_remove()
@@ -227,8 +237,9 @@ Snapshot <- R6::R6Class(
       }
     },
     #' Plot Time profile of DDI simulations defined in the ddi project
+    #' @param ... additional arguments to pass to the plotPopulationTimeProfile (for example aggregation method)
     #' @return a list of plots
-    create_plots = function() {
+    create_plots = function(...) {
       simulationNames <- self$get_names("simulations")
 
       # initializes plots
@@ -271,8 +282,17 @@ Snapshot <- R6::R6Class(
             simulationResults = private$.sim_results_obj[[simulationName]],
             quantitiesOrPaths = names(dimensions)[dimensions == dimension]
           )
-          plotLists[[simulationName]][[dimension]] <- ospsuite::plotIndividualTimeProfile(dataCombined,
-                                                                                          individualTimeProfileConfiguration)
+          if (length(private$.sim_results_obj[[simulationName]]$allIndividualIds) > 1) {
+            plotLists[[simulationName]][[dimension]] <- ospsuite::plotPopulationTimeProfile(
+              dataCombined = dataCombined,
+              defaultPlotConfiguration = individualTimeProfileConfiguration,
+              ...
+            )
+          } else {
+            plotLists[[simulationName]][[dimension]] <- ospsuite::plotIndividualTimeProfile(dataCombined,
+                                                                                            individualTimeProfileConfiguration)
+          }
+
         }
       }
 

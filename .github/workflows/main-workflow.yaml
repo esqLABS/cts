@@ -28,7 +28,7 @@ jobs:
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
-  pkgdown:
-    if: ${{ !cancelled() }}
-    needs: [bump-dev-version]
-    uses:  Open-Systems-Pharmacology/Workflows/.github/workflows/pkgdown.yaml@main
+  # pkgdown:
+  #   if: ${{ !cancelled() }}
+  #   needs: [bump-dev-version]
+  #   uses:  Open-Systems-Pharmacology/Workflows/.github/workflows/pkgdown.yaml@main

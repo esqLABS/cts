@@ -1,23 +1,3 @@
-# New simulation can be added without compound protocol
-
-    Code
-      my_sim
-    Message
-      Simulation name: Test
-      Individual: European (P-gp modified, CYP3A4 36 h)
-      Compound: Rifampicin
-      * Protocol:
-      * Formulations:
-      * Processes:
-      * Interactions:
-      Compound: Midazolam
-      * Protocol:
-      * Formulations:
-      * Processes:
-      * Interactions:
-      Outputs:
-      * Organism|PeripheralVenousBlood|Rifampicin|Plasma (Peripheral Venous Blood)
-
 # `add_compound` can add compounds to the simulation.
 
     Code
@@ -41,7 +21,6 @@
       * Processes:
       * Interactions:
       Outputs:
-      * Organism|PeripheralVenousBlood|Rifampicin|Plasma (Peripheral Venous Blood)
 
 # `set_compound_protocol` can set a new protocol for a compound.
 
@@ -62,7 +41,105 @@
       * Processes:
       * Interactions:
       Outputs:
-      * Organism|PeripheralVenousBlood|Rifampicin|Plasma (Peripheral Venous Blood)
+
+# Adding population to a simulation compound works.
+
+    Code
+      my_sim
+    Message
+      Simulation name: Test
+      Population: Women
+      Compound: Levonorgestrel 1
+      * Protocol: LNG_150 ug_21 Days
+      * Formulations:
+        1. Formulation: Microlut
+      * Processes:
+      * Interactions:
+      Compound: Itraconazole
+      * Protocol: ITZ 100mg 21 days
+      * Formulations:
+        1. Formulation: IR Dissolved
+      * Processes:
+      * Interactions:
+      Outputs:
+
+# Setting a population in a simulation remove defined individual and vice versa.
+
+    Code
+      sim
+    Message
+      Simulation name: Test
+      Population: Women
+      Compound: Levonorgestrel 1
+      * Protocol:
+      * Formulations:
+      * Processes:
+      * Interactions:
+      Compound: Itraconazole
+      * Protocol:
+      * Formulations:
+      * Processes:
+      * Interactions:
+      Outputs:
+
+---
+
+    Code
+      sim
+    Message
+      Simulation name: Test
+      Individual: Woman SHBG 40% more
+      Compound: Levonorgestrel 1
+      * Protocol:
+      * Formulations:
+      * Processes:
+      * Interactions:
+      Compound: Itraconazole
+      * Protocol:
+      * Formulations:
+      * Processes:
+      * Interactions:
+      Outputs:
+
+# Add simulation without compound protocol works
+
+    Code
+      my_sim
+    Message
+      Simulation name: Test
+      Individual: European (P-gp modified, CYP3A4 36 h)
+      Compound: Rifampicin
+      * Protocol:
+      * Formulations:
+      * Processes:
+      * Interactions:
+      Compound: Midazolam
+      * Protocol:
+      * Formulations:
+      * Processes:
+      * Interactions:
+      Outputs:
+
+# Add a simulation with an unknown population throws an error
+
+    Code
+      my_sim
+    Message
+      Simulation name: Test
+      Population: UnknowPop
+      Compound: Levonorgestrel 1
+      * Protocol: LNG_150 ug_21 Days
+      * Formulations:
+        1. Formulation: Microlut
+      * Processes:
+      * Interactions:
+      Compound: Itraconazole
+      * Protocol: ITZ 100mg 21 days
+      * Formulations:
+        1. Formulation: IR Dissolved
+      * Processes:
+      * Interactions:
+      Outputs:
 
 # Adding default interactions works.
 
@@ -91,7 +168,6 @@
       * Processes:
       * Interactions:
       Outputs:
-      * Organism|PeripheralVenousBlood|Rifampicin|Plasma (Peripheral Venous Blood)
 
 # Adding unknown interactions throws a warning.
 
@@ -113,7 +189,6 @@
       * Processes:
       * Interactions:
       Outputs:
-      * Organism|PeripheralVenousBlood|Rifampicin|Plasma (Peripheral Venous Blood)
 
 # Adding/setting outptuts to a simulation object works.
 
@@ -133,7 +208,6 @@
       * Processes:
       * Interactions:
       Outputs:
-      * Organism|PeripheralVenousBlood|Rifampicin|Plasma (Peripheral Venous Blood)
 
 ---
 
@@ -153,7 +227,6 @@
       * Processes:
       * Interactions:
       Outputs:
-      * Organism|PeripheralVenousBlood|Rifampicin|Plasma (Peripheral Venous Blood)
       * Organism|ArterialBlood|Plasma|Rifampicin|Concentration in container
 
 ---
@@ -204,7 +277,6 @@
         4. UGT1A4-Optimized
       * Interactions:
       Outputs:
-      * Organism|PeripheralVenousBlood|Rifampicin|Plasma (Peripheral Venous Blood)
 
 # Adding processes to a simulation compound works.
 
@@ -225,7 +297,6 @@
       * Processes:
       * Interactions:
       Outputs:
-      * Organism|PeripheralVenousBlood|Rifampicin|Plasma (Peripheral Venous Blood)
 
 ---
 
@@ -249,7 +320,6 @@
         1. CYP3A4-Optimized
       * Interactions:
       Outputs:
-      * Organism|PeripheralVenousBlood|Rifampicin|Plasma (Peripheral Venous Blood)
 
 # Adding unknowkn processes throws a warning.
 
@@ -270,5 +340,4 @@
       * Processes:
       * Interactions:
       Outputs:
-      * Organism|PeripheralVenousBlood|Rifampicin|Plasma (Peripheral Venous Blood)
 

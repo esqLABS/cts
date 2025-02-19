@@ -4,20 +4,22 @@
 #'
 #' @param simulation_name Name of the simulation to be created.
 #' @param individual Name of the individual to be used in the simulation.
+#' @param population Name of the population to be used in the simulation.
 #' @param victim Name of the victim compound to be used in the simulation.
 #' @param perpetrators Vector of names of the compounds to be used as perpetrators in the simulation
 #' @details Protocols used by each compounds need to be defined afterwards with set_compound_protocol().
-#' New compound can also be added afterwards with add_compound().
+#' New compound can also be added afterwards with add_compound(). Either individual or population should
+#' be set, but not both.
 #' @return A `Simulation` object
 #' @export
-create_simulation <- function(simulation_name, individual, victim, perpetrators) {
+create_simulation <- function(simulation_name, individual = list(), population = list(), victim, perpetrators) {
   # Combine Compound, Protocol and Formulation
   sim <- Simulation$new(
     name = simulation_name,
     compounds = purrr::map(c(victim, perpetrators), ~list(Name = .x)),
-    individual = individual
+    individual = individual,
+    population = population
   )
-  sim$set_output_selections(glue::glue("Organism|PeripheralVenousBlood|{victim}|Plasma (Peripheral Venous Blood)"))
   return(sim)
 }
 
@@ -224,11 +226,20 @@ Simulation <- R6::R6Class(
     #' @param name character string corresponding to the simulation name.
     #' @param compounds list of compounds names used in the simulation.
     #' @param individual name of the individual used in the simulation.
+    #' @param population name of the population used in the simulation.
     #' @return A new `Simulation` object.
-    initialize = function(name, compounds = list(), individual = list()) {
+    initialize = function(name, compounds = list(), individual = list(), population = list()) {
       self$name <- name
       self$compounds <- compounds
-      self$individual <- individual
+      if (length(individual) > 0 && length(population) > 0) {
+        cli_abort("Only one of `individual` or `population` can be set.")
+      }
+
+      if (length(individual) > 0) {
+        self$individual <- individual
+      } else if (length(population) > 0) {
+        self$population <- population
+      }
     },
 
     #' @description
@@ -237,6 +248,13 @@ Simulation <- R6::R6Class(
     #' @return The updated `Simulation` object.
     set_individual = function(individual) {
       self$individual <- individual
+    },
+    #' @description
+    #' Set the individual to be used in the simulation.
+    #' @param population name of the individual used in the simulation.
+    #' @return The updated `Simulation` object.
+    set_population = function(population) {
+      self$population <- population
     },
     #' @description
     #' Add the compounds to be used in the simulation.
@@ -343,16 +361,18 @@ Simulation <- R6::R6Class(
     #' Pretty print the simulation object.
     print = function() {
       cli::cli_text("Simulation name: ", self$name)
-      cli::cli_text("Individual: ", self$individual)
+      if (length(self$population) > 0) {
+        cli::cli_text("Population: ", self$population)
+      } else {
+        cli::cli_text("Individual: ", self$individual)
+      }
       purrr::map(private$.compounds, \(x) {
         cli::cli_text("Compound: ", x$Name)
         cli::cli_li(paste0("Protocol: ", x$Protocol$Name))
         cli::cli_li("Formulations: ")
-        ol <- cli::cli_ol()
         purrr::map(x$Protocol$Formulations, \(f) {
-          cli::cli_li(paste0(f$Key, ": ", f$Name))
+          cli::cli_ol(paste0(f$Key, ": ", f$Name))
         })
-        cli::cli_end(ol)
         cli::cli_li("Processes: ")
         ol <- cli::cli_ol()
         purrr::map(x$Processes, \(p) {
@@ -400,6 +420,7 @@ Simulation <- R6::R6Class(
     .parameters = list(),
     .output_selections = list(),
     .individual = list(),
+    .population = list(),
     .compounds = list(),
     .interactions = list(),
     .has_results = FALSE
@@ -416,10 +437,18 @@ Simulation <- R6::R6Class(
         Parameter = self$parameters,
         OutputSelections = self$output_selections,
         Individual = self$individual,
+        Population = self$population,
         Compounds = self$compounds,
         Interactions = self$interactions,
         HasResults = self$has_results
       )
+
+      if (length(self$individual) == 0) {
+        data <-  purrr::discard_at(data, "Individual")
+      } else if (length(self$population) == 0) {
+        data <-  purrr::discard_at(data, "Population")
+      }
+
       return(data)
     },
     #' @field model model used in the simulation
@@ -453,9 +482,20 @@ Simulation <- R6::R6Class(
     #' @field individual Individual used in the simulation
     individual = function(value) {
       if (!missing(value)) {
+        # if individual ensure no population is also set
+        private$.population <- list()
         private$.individual <- value
       }
       return(private$.individual)
+    },
+    #' @field population Population used in the simulation
+    population = function(value) {
+      if (!missing(value)) {
+        # if population ensure no individual is also set
+        private$.individual <- list()
+        private$.population <- value
+      }
+      return(private$.population)
     },
     #' @field compounds Compounds used in the simulation
     compounds = function(value) {
@@ -481,4 +521,3 @@ Simulation <- R6::R6Class(
     }
   )
 )
-

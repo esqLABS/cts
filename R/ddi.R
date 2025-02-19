@@ -102,10 +102,11 @@ run_pk_analysis <- function(ddi, path = NULL) {
 #' @param ddi a DDI object
 #' @param simulationNames a character vector of simulation names for which to generate plots.
 #' Default is NULL, i.e. plots will be generated for all simulations.
+#' @param ... additional arguments to pass to the plotPopulationTimeProfile (for example aggregation method)
 #' @return a list of plots
 #' @export
-plot_ddi_results <- function(ddi, simulationNames = NULL) {
-  ddi$create_plots()
+plot_ddi_results <- function(ddi, simulationNames = NULL, ...) {
+  ddi$create_plots(...)
 
   # By default return all simulations plots
   if (is.null(simulationNames)) {
@@ -132,10 +133,12 @@ DDI <- R6::R6Class(
     options = NULL,
     #' @field metadata a list to store information useful for developers.
     metadata = NULL,
+
     #' @description
     #' Create a DDI object.
     #' @param victim a `Compound` object representing the victim compound.
     #' @param ... a list of `Compound` objects representing the perpetrator compounds.
+    #' @param file a character string representing the path to the snapshot file to import.
     #' @param options a named list of options to customize the DDI simulation. Default is to use `default_options`.
     #' @return A new `DDI` object.
     initialize = function(victim=NULL, ..., file = NULL, options = NULL) {
@@ -221,9 +224,8 @@ DDI <- R6::R6Class(
         ))
       }
     },
-    #' @description
-    #' Combine multiple compounds into a DDI simulation.
-    #' @param ... a set of compounds created by `compound()`
+    # Combine multiple compounds into a DDI simulation.
+    # @param ... a set of compounds created by `compound()`
     combine = function(...) {
       self$source <- "Merge"
 
@@ -319,12 +321,11 @@ DDI <- R6::R6Class(
         self$add_simulation(generic_simulation[[1]])
       }
     },
-    #' @description
-    #' Import a DDI simulation from a JSON file.
-    #' @param input character string that is wether
-    #' - a compound name from the list of available compounds `list_compounds()`.
-    #' - a URL to a compound building block.
-    #' - a Path to a local file.
+    # Import a DDI simulation from a JSON file.
+    # @param input character string that is wether
+    # - a compound name from the list of available compounds `list_compounds()`.
+    # - a URL to a compound building block.
+    # - a Path to a local file.
     import = function(input) {
       self$source <- get_source(input)
       # initialize from parent
