@@ -17,6 +17,13 @@ test_that("`set_interval` can clear and add intervals to the schema.", {
   expect_snapshot(output_schema)
 })
 
+test_that("`add_interval` works", {
+  output_schema <- SnapshotOutputSchema$new()
+  output_schema$add_interval(start_time = 0, end_time = 70, resolution = 2, unit = "min")
+
+  expect_snapshot(output_schema)
+})
+
 
 test_that("`set interval` check numeric value of input.", {
   output_schema <- SnapshotOutputSchema$new()

@@ -26,7 +26,11 @@ This class is used to create the json corresponding to a simulation.
 
 \item{\code{output_schema}}{Output time intervals setting used in the simulation}
 
+\item{\code{output_selections}}{Output to be returned when running the simulation}
+
 \item{\code{individual}}{Individual used in the simulation}
+
+\item{\code{population}}{Population used in the simulation}
 
 \item{\code{compounds}}{Compounds used in the simulation}
 
@@ -41,10 +45,15 @@ This class is used to create the json corresponding to a simulation.
 \itemize{
 \item \href{#method-Simulation-new}{\code{Simulation$new()}}
 \item \href{#method-Simulation-set_individual}{\code{Simulation$set_individual()}}
+\item \href{#method-Simulation-set_population}{\code{Simulation$set_population()}}
 \item \href{#method-Simulation-add_compound}{\code{Simulation$add_compound()}}
 \item \href{#method-Simulation-set_compound_protocol}{\code{Simulation$set_compound_protocol()}}
 \item \href{#method-Simulation-set_output_interval}{\code{Simulation$set_output_interval()}}
 \item \href{#method-Simulation-add_output_interval}{\code{Simulation$add_output_interval()}}
+\item \href{#method-Simulation-add_compound_interactions}{\code{Simulation$add_compound_interactions()}}
+\item \href{#method-Simulation-add_compound_processes}{\code{Simulation$add_compound_processes()}}
+\item \href{#method-Simulation-set_output_selections}{\code{Simulation$set_output_selections()}}
+\item \href{#method-Simulation-add_output_selections}{\code{Simulation$add_output_selections()}}
 \item \href{#method-Simulation-print}{\code{Simulation$print()}}
 \item \href{#method-Simulation-clone}{\code{Simulation$clone()}}
 }
@@ -55,7 +64,12 @@ This class is used to create the json corresponding to a simulation.
 \subsection{Method \code{new()}}{
 Create a Simulation object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Simulation$new(name, compounds = list(), individual = list())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Simulation$new(
+  name,
+  compounds = list(),
+  individual = list(),
+  population = list()
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -66,6 +80,8 @@ Create a Simulation object.
 \item{\code{compounds}}{list of compounds names used in the simulation.}
 
 \item{\code{individual}}{name of the individual used in the simulation.}
+
+\item{\code{population}}{name of the population used in the simulation.}
 }
 \if{html}{\out{</div>}}
 }
@@ -86,6 +102,26 @@ Set the individual to be used in the simulation.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{individual}}{name of the individual used in the simulation.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The updated \code{Simulation} object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Simulation-set_population"></a>}}
+\if{latex}{\out{\hypertarget{method-Simulation-set_population}{}}}
+\subsection{Method \code{set_population()}}{
+Set the individual to be used in the simulation.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Simulation$set_population(population)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{population}}{name of the individual used in the simulation.}
 }
 \if{html}{\out{</div>}}
 }
@@ -186,6 +222,92 @@ Adds an interval to the output schema of the simulation
 \item{\code{resolution}}{resolution in points per \code{unit}}
 
 \item{\code{unit}}{time unit for the interval.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The updated \code{Simulation} object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Simulation-add_compound_interactions"></a>}}
+\if{latex}{\out{\hypertarget{method-Simulation-add_compound_interactions}{}}}
+\subsection{Method \code{add_compound_interactions()}}{
+Add the interactions to be used in for a given compound.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Simulation$add_compound_interactions(compound, interactions)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{compound}}{name of the compound for which to add interaction}
+
+\item{\code{interactions}}{name of the molecule with which the compound interacts.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The updated \code{Simulation} object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Simulation-add_compound_processes"></a>}}
+\if{latex}{\out{\hypertarget{method-Simulation-add_compound_processes}{}}}
+\subsection{Method \code{add_compound_processes()}}{
+Add the interactions to be used in for a given compound.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Simulation$add_compound_processes(compound, processes)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{compound}}{name of the compound for which to add interaction}
+
+\item{\code{processes}}{name of the molecule with which the compound interacts.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The updated \code{Simulation} object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Simulation-set_output_selections"></a>}}
+\if{latex}{\out{\hypertarget{method-Simulation-set_output_selections}{}}}
+\subsection{Method \code{set_output_selections()}}{
+Set the outputs to be used for plotting.
+This removes any previously set outputs.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Simulation$set_output_selections(paths)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{paths}}{path of the output to use for plotting}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The updated \code{Simulation} object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Simulation-add_output_selections"></a>}}
+\if{latex}{\out{\hypertarget{method-Simulation-add_output_selections}{}}}
+\subsection{Method \code{add_output_selections()}}{
+Add some outputs to be used for plotting.
+This add the output to any previously set outputs.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Simulation$add_output_selections(paths)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{paths}}{path of the output to add for plotting}
 }
 \if{html}{\out{</div>}}
 }

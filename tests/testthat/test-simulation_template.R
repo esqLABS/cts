@@ -12,16 +12,3 @@ test_that("fill_simulation_template", {
   )
 })
 
-
-test_that("Interaction can be extracted", {
-  expect_snapshot(
-    extract_interactions(levo_itra_ddi)
-  )
-})
-
-
-test_that("Compounds process can be extracted", {
-  expect_snapshot(
-    extract_compound_processes(levo_itra_ddi$compounds[[1]])
-  )
-})
