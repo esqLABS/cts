@@ -11,6 +11,8 @@ plot_ddi_results(ddi, simulationNames = NULL, ...)
 
 \item{simulationNames}{a character vector of simulation names for which to generate plots.
 Default is NULL, i.e. plots will be generated for all simulations.}
+
+\item{...}{additional arguments to pass to the plotPopulationTimeProfile (for example aggregation method)}
 }
 \value{
 a list of plots

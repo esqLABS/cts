@@ -68,6 +68,8 @@ Create a DDI object.
 
 \item{\code{...}}{a list of \code{Compound} objects representing the perpetrator compounds.}
 
+\item{\code{file}}{a character string representing the path to the snapshot file to import.}
+
 \item{\code{options}}{a named list of options to customize the DDI simulation. Default is to use \code{default_options}.}
 }
 \if{html}{\out{</div>}}
