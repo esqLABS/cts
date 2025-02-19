@@ -61,21 +61,28 @@ list_compounds()
     #> ℹ Listing Compounds Building Blocks available in OSP repositories
     #> ✖ Listing Compounds Building Blocks available in OSP repositories ... failed
     #> 
+    #> • 7E3
     #> • Alfentanil
     #> • Alprazolam
     #> • Amikacin
     #> • Atazanavir
+    #> • BAY794620
+    #> • CDA1
     #> • Carbamazepine
     #> • Cimetidine
     #> • Clarithromycin
     #> • Dapagliflozin
+    #> • Digoxin
     #> • Efavirenz
     #> • Erythromycin
     #> • Ethinylestradiol
     #> • Felodipine
     #> • Fluconazole
     #> • Fluvoxamine
+    #> • Inulin
     #> • Itraconazole
+    #> • MEDI524
+    #> • MEDI524YTE
     #> • Hydroxy-Itraconazole
     #> • Keto-Itraconazole
     #> • N-desalkyl-Itraconazole
@@ -92,10 +99,12 @@ list_compounds()
     #> • S-Mephenytoin
     #> • Sildenafil
     #> • Sufentanil
+    #> • Tefibazumab
     #> • Tizanidine
     #> • Triazolam
     #> • Vancomycin
     #> • Verapamil
+    #> • dAb2
 
 This command outputs a list of compound names available in the OSP model
 library, which you can select to create your DDI simulations.
@@ -194,7 +203,8 @@ Some additional options can be passed during ddi creation:
 
 ``` r
 myDDI <- create_ddi(
-  victim = rifampicin, perpetrator = midazolam,
+  victim = rifampicin, 
+  midazolam,
   options = list(
     import_simulations = FALSE,
     create_ddi_simulation = TRUE
@@ -258,12 +268,12 @@ head(pk_analysis$`Generic DDI simulation`)
 
 | QuantityPath | Parameter | Unit | Rifampicin | Midazolam |
 |:---|:---|:---|---:|---:|
-| Organism\|PeripheralVenousBloodPlasma (Peripheral Venous Blood) | C_max | µmol/l | 1.716535e+01 | 2.473786e-01 |
-| Organism\|PeripheralVenousBloodPlasma (Peripheral Venous Blood) | C_max_norm | mg/l | 3.437340e+06 | 1.074547e+06 |
+| Organism\|PeripheralVenousBloodPlasma (Peripheral Venous Blood) | C_max | µmol/l | 1.716553e+01 | 2.478949e-01 |
+| Organism\|PeripheralVenousBloodPlasma (Peripheral Venous Blood) | C_max_norm | mg/l | 3.437376e+06 | 1.076790e+06 |
 | Organism\|PeripheralVenousBloodPlasma (Peripheral Venous Blood) | t_max | h | 5.000000e-01 | 2.500000e-01 |
-| Organism\|PeripheralVenousBloodPlasma (Peripheral Venous Blood) | C_tEnd | µmol/l | 8.767600e-02 | 4.490000e-05 |
-| Organism\|PeripheralVenousBloodPlasma (Peripheral Venous Blood) | AUC_tEnd | µmol\*min/l | 2.808189e+03 | 2.978657e+01 |
-| Organism\|PeripheralVenousBloodPlasma (Peripheral Venous Blood) | AUC_tEnd_norm | µg\*min/l | 5.623362e+11 | 1.293849e+11 |
+| Organism\|PeripheralVenousBloodPlasma (Peripheral Venous Blood) | C_tEnd | µmol/l | 8.729170e-02 | 9.960000e-05 |
+| Organism\|PeripheralVenousBloodPlasma (Peripheral Venous Blood) | AUC_tEnd | µmol\*min/l | 2.807567e+03 | 3.462460e+01 |
+| Organism\|PeripheralVenousBloodPlasma (Peripheral Venous Blood) | AUC_tEnd_norm | µg\*min/l | 5.622117e+11 | 1.504000e+11 |
 
 ## Plot ddi simulations
 
@@ -293,26 +303,42 @@ future use or for importing into other platforms such as PK-Sim:
 export_ddi(myDDI, "path/to/Rifampicin-Midazolam-DDI.json")
 ```
 
-## What’s Next
+## Add a new simulation
 
-It is also possible to define new simulations, then add or remove them
-from the DDI object.
+New simulations can be defined and added to the DDI object. Use
+create_simulation() to define a new simulation, listing its name, the
+victim compound, the perpetrator compound, and the individual. Then, the
+simulation can be added to the DDI object using the add_simulation()
+function.
+
+By default, all compounds interactions and processes will be added to
+the simulation.
 
 ``` r
-# Work in progress
-add_simulation(myDDI,
-  name = "New Simulation",
-  model = "4Comp",
-  perpetrator = "midazolam",
-  individual = "Male",
-  victim_formulation,
-  victim_protocol,
-  perpetrator_formulation,
-  perpetrator_protocol,
-  ...
+my_sim <- create_simulation(
+  simulation_name = "My New Simulation",
+  victim = "Rifampicin",
+  perpetrators = "Midazolam",
+  individual = "European (P-gp modified, CYP3A4 36 h)"
 )
 
-remove_simulation(myDDI, "New Simulation")
+# add_simulation(myDDI, my_sim, options = list(add_interactions = TRUE, add_processes = FALSE))
+```
+
+### Simulations parameterization
+
+Simulations can be parameterized.
+
+#### Add another compound
+
+``` r
+my_sim$add_compound(compound = "Test compound 2", protocol = "New protocol")
+```
+
+#### Change administration protocol
+
+``` r
+set_compound_protocol(my_sim, compound = "Rifampicin", protocol = "iv 300 mg (0.5 h)")
 ```
 
 ## Dependencies
