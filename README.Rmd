@@ -141,7 +141,8 @@ Some additional options can be passed during ddi creation:
 
 ```{r, warning=FALSE}
 myDDI <- create_ddi(
-  victim = rifampicin, perpetrator = midazolam,
+  victim = rifampicin, 
+  midazolam,
   options = list(
     import_simulations = FALSE,
     create_ddi_simulation = TRUE
@@ -219,27 +220,43 @@ You can also export the entire DDI simulation as a snapshot file for future use 
 export_ddi(myDDI, "path/to/Rifampicin-Midazolam-DDI.json")
 ```
 
+## Add a new simulation
 
-## What's Next
+New simulations can be defined and added to the DDI object. 
+Use create_simulation() to define a new simulation, listing its name, the victim compound, the perpetrator compound, and the individual. 
+Then, the simulation can be added to the DDI object using the add_simulation() function. 
 
-It is also possible to define new simulations, then add or remove them from the DDI object.
+By default, all compounds interactions and processes will be added to the simulation.
 
-```{r, eval = FALSE}
-# Work in progress
-add_simulation(myDDI,
-  name = "New Simulation",
-  model = "4Comp",
-  perpetrator = "midazolam",
-  individual = "Male",
-  victim_formulation,
-  victim_protocol,
-  perpetrator_formulation,
-  perpetrator_protocol,
-  ...
+```{r}
+my_sim <- create_simulation(
+  simulation_name = "My New Simulation",
+  victim = "Rifampicin",
+  perpetrators = "Midazolam",
+  individual = "European (P-gp modified, CYP3A4 36 h)"
 )
 
-remove_simulation(myDDI, "New Simulation")
+# add_simulation(myDDI, my_sim, options = list(add_interactions = TRUE, add_processes = FALSE))
+
 ```
+
+### Simulations parameterization
+
+Simulations can be parameterized.
+
+
+#### Add another compound
+
+```{r}
+my_sim$add_compound(compound = "Test compound 2", protocol = "New protocol")
+```
+
+#### Change administration protocol
+
+```{r}
+set_compound_protocol(my_sim, compound = "Rifampicin", protocol = "iv 300 mg (0.5 h)")
+```
+
 
 ## Dependencies
 

@@ -33,8 +33,6 @@ This class is used to import, access and manipulate the data from a DDI snapshot
 \itemize{
 \item \href{#method-DDI-new}{\code{DDI$new()}}
 \item \href{#method-DDI-print}{\code{DDI$print()}}
-\item \href{#method-DDI-combine}{\code{DDI$combine()}}
-\item \href{#method-DDI-import}{\code{DDI$import()}}
 \item \href{#method-DDI-clone}{\code{DDI$clone()}}
 }
 }
@@ -60,12 +58,16 @@ This class is used to import, access and manipulate the data from a DDI snapshot
 \subsection{Method \code{new()}}{
 Create a DDI object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DDI$new(options = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DDI$new(victim = NULL, ..., file = NULL, options = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{victim}}{a \code{Compound} object representing the victim compound.}
+
+\item{\code{...}}{a list of \code{Compound} objects representing the perpetrator compounds.}
+
 \item{\code{options}}{a named list of options to customize the DDI simulation. Default is to use \code{default_options}.}
 }
 \if{html}{\out{</div>}}
@@ -83,45 +85,6 @@ Nicely print the DDI object.
 \if{html}{\out{<div class="r">}}\preformatted{DDI$print()}\if{html}{\out{</div>}}
 }
 
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DDI-combine"></a>}}
-\if{latex}{\out{\hypertarget{method-DDI-combine}{}}}
-\subsection{Method \code{combine()}}{
-Combine multiple compounds into a DDI simulation.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DDI$combine(...)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{a set of compounds created by \code{compound()}}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DDI-import"></a>}}
-\if{latex}{\out{\hypertarget{method-DDI-import}{}}}
-\subsection{Method \code{import()}}{
-Import a DDI simulation from a JSON file.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DDI$import(input)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{input}}{character string that is wether
-\itemize{
-\item a compound name from the list of available compounds \code{list_compounds()}.
-\item a URL to a compound building block.
-\item a Path to a local file.
-}}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DDI-clone"></a>}}

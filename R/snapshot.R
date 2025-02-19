@@ -13,8 +13,6 @@ Snapshot <- R6::R6Class(
     source_data = NULL,
     #' @field version version The version of the snapshot
     version = NULL,
-    #' @field simulations_results The simulation results of the snapshot
-    simulations_results = NULL,
     #' @description
     #' Create a Snapshot object.
     #' @param input character string that is wether
@@ -99,7 +97,7 @@ Snapshot <- R6::R6Class(
     },
     #' @description
     #' check that a simulation is valid
-    #' @param simulation simulation object to check for vaiidity
+    #' @param simulation simulation object to check for validity
     check_simulation = function(simulation) {
       # check that no simulation has the same name
       if (simulation$name %in% self$get_names("simulations")) {
@@ -125,18 +123,22 @@ Snapshot <- R6::R6Class(
       }
       # check that protocols are defined
       sim_protocols <- purrr::list_c(purrr::map(simulation$compounds, ~ .x$Protocol$Name))
+
       if (!all(sim_protocols %in% self$get_names("protocols"))) {
         missing_protocols <- sim_protocols[!(sim_protocols %in% self$get_names("protocols"))]
         cli_abort("Protocols {.code {missing_protocols}} not found in snapshot.")
       }
       # check that formulations are defined
-      sim_formulations <- purrr:::list_c(purrr::map(simulation$compounds, ~ purrr::list_c(purrr::map(.x$Protocol$Formulations, ~ .x$Name))))
+      sim_formulations <- purrr:::list_c(purrr::map(simulation$compounds,
+                                                    ~ purrr::list_c(purrr::map(.x$Protocol$Formulations,
+                                                                               ~ .x$Name))))
       if (!all(sim_formulations %in% self$get_names("formulations"))) {
         missing_formulations <- sim_formulations[!(sim_formulations %in% self$get_names("formulations"))]
         cli_abort("Formulations {.code {missing_formulations}} not found in snapshot.")
       }
+
       # check that correct number of formulations key-name mapping are defined
-      for (protocolIdx in seq_along(purrr::map(simulation$compounds, ~ .x$Protocol))) {
+      for (protocolIdx in seq_along(purrr::compact(purrr::map(simulation$compounds, ~ .x$Protocol)))) {
         protocol_name <- purrr::map(simulation$compounds, ~ .x$Protocol$Name)[[protocolIdx]]
         given_formulation_keys <- purrr::list_c(purrr::map(purrr::map(simulation$compounds, ~ .x$Protocol)[[protocolIdx]]$Formulations,  ~ (.x$Key)))
 
@@ -173,6 +175,7 @@ Snapshot <- R6::R6Class(
         exportCSV = TRUE,
         exportPKML = TRUE
       )
+
 
       # recreate simulation results objects
       sim_results_files <- list.files(temp_dir, pattern = glue("{temp_file_name}-.*-Results\\.csv$"))
@@ -526,4 +529,108 @@ update_snapshots <- function(snapshots) {
   } else {
     return(snapshots)
   }
+}
+
+#' @title Extract defined interactions for compounds from a snapshot
+#' @param snapshot A snapshot object.
+#' @param compounds (Optional) A character vector of compound names to extract interactions for.
+#' By default interactions are extracted for all compounds in the snapshot
+#' @param quietly (Optional) Logical. If TRUE, the interactions are not printed to the console.
+#' @export
+extract_interactions <- function(snapshot, compounds = NULL, quietly = FALSE) {
+  if (is.null(compounds)) {
+    compounds <- snapshot$get_names("compounds")
+  }
+
+  all_interactions <- list()
+  i <- 1
+  # in each compound
+  for (c in snapshot$compounds) {
+    if (c$Name %in% compounds) {
+      # in each process
+      for (p in c$Processes) {
+        # if InternalName of process is "CompetitiveInhibition" or "Induction"
+        if (stringr::str_detect(string = p$InternalName, pattern = "Inhibition") | p$InternalName == "Induction") {
+          all_interactions[[i]] <- list(
+            Name = glue::glue("{p$Molecule}-{p$DataSource}"),
+            MoleculeName = p$Molecule,
+            CompoundName = c$Name
+          )
+          i <- i + 1
+        }
+      }
+    }
+  }
+
+  if (!quietly) {
+    for (c in compounds) {
+      cli::cli_text("Compound: ", c)
+      purrr::map(
+        all_interactions,
+        ~ if(.x$CompoundName == c) { cli::cli_ul(.x$Name) }
+      )
+    }
+  }
+  return(invisible(all_interactions))
+}
+
+#' @title Extract defined processes for compounds from a snapshot
+#' @param snapshot A snapshot object.
+#' @param compounds (Optional) A character vector of compound names to extract processes for.
+#' By default processes are extracted for all compounds in the snapshot
+#' @param quietly (Optional) Logical. If TRUE, the processes are not printed to the console.
+#' @export
+extract_processes <- function(snapshot, compounds = NULL, quietly = FALSE) {
+  if (is.null(compounds)) {
+    compounds <- snapshot$get_names("compounds")
+  }
+
+  all_processes <- vector(mode = "list", length = length(compounds))
+  names(all_processes) <- compounds
+
+  for (compound in compounds) {
+    all_processes[[compound]] <- list()
+    i <- 1
+
+    for (p in snapshot$compounds[[which(snapshot$get_names("compounds") == compound)]]$Processes) {
+      if (p$InternalName %in% c("LiverClearance", "HepatocytesHalfTime", "HepatocytesRes", "LiverMicrosomeHalfTime", "LiverMicrosomeRes")) {
+        all_processes[[compound]][[i]] <- list(
+          Name = glue::glue("Total Hepatic Clearance-{p$DataSource}"),
+          SystemicProcessType = "Hepatic"
+        )
+      } else if (p$InternalName %in% c("KidneyClearance", "TubularSecretion_FirstOrder", "TubularSecretion_MM")) {
+        all_processes[[compound]][[i]] <- list(
+          Name = glue::glue("Renal Clearances-{p$DataSource}"),
+          SystemicProcessType = "Renal"
+        )
+      } else if (p$InternalName == "GlomerularFiltration") {
+        all_processes[[compound]][[i]] <- list(
+          Name = glue::glue("Glomerular Filtration-{p$DataSource}"),
+          SystemicProcessType = "GFR"
+        )
+      } else if (p$InternalName == "BiliaryClearance") {
+        all_processes[[compound]][[i]] <- list(
+          Name = glue::glue("Biliary Clearance-{p$DataSource}"),
+          SystemicProcessType = "Biliary"
+        )
+      } else if (!is.null(p$Molecule) && !(stringr::str_detect(string = p$InternalName, pattern = "Inhibition") | p$InternalName == "Induction")) {
+        all_processes[[compound]][[i]] <- list(
+          Name = glue::glue("{p$Molecule}-{p$DataSource}"),
+          MoleculeName = p$Molecule
+        )
+      }
+      i <- length(all_processes[[compound]]) + 1
+    }
+  }
+
+  if (!quietly) {
+    for (c in compounds) {
+      cli::cli_text("Compound: ", c)
+      purrr::map(
+        all_processes[[c]],
+        ~ cli::cli_ul(.x$Name)
+      )
+    }
+  }
+  return(invisible(all_processes))
 }
