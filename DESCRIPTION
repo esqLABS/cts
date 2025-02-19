@@ -6,9 +6,6 @@ Authors@R:
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
 License: file LICENSE
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
 Depends:
     R (>= 4.4.0)
 Imports: 
@@ -20,20 +17,29 @@ Imports:
     jsonlite,
     magrittr,
     ospsuite (>= 12.1.0),
+    ospsuite.utils,
     purrr,
     R6,
     readr,
     rlang,
     snakecase,
     stringr,
-    tidyr
+    tidyr,
+    utils
 Suggests: 
     devtools,
+    here,
+    knitr,
+    lobstr,
+    rmarkdown,
+    showtext,
     testthat (>= 3.0.0),
-    quarto,
     vdiffr,
-    showtext
+    withr
 Remotes: 
     ospsuite=Open-Systems-Pharmacology/OSPSuite-R
 Config/Needs/website: rmarkdown
 Config/testthat/edition: 3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
