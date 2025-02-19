@@ -1,22 +1,3 @@
-# New simulation can be added without compound protocol
-
-    Code
-      my_sim
-    Message
-      Simulation name: Test
-      Individual: European (P-gp modified, CYP3A4 36 h)
-      Compound: Rifampicin
-      * Protocol:
-      * Formulations:
-      * Processes:
-      * Interactions:
-      Compound: Midazolam
-      * Protocol:
-      * Formulations:
-      * Processes:
-      * Interactions:
-      Outputs:
-
 # `add_compound` can add compounds to the simulation.
 
     Code
@@ -82,42 +63,6 @@
       * Interactions:
       Outputs:
 
----
-
-    Code
-      add_simulation(ddi, my_sim)
-    Condition
-      Warning:
-      Automatically adding interactions to the simulation.
-      Using first interaction found for each enzyme/compound pair.
-      Warning:
-      Automatically adding processes to the simulation for compound `Levonorgestrel 1`.
-      Using first processes of each type and of each metabolizing enzyme found.
-      Warning:
-      Automatically adding processes to the simulation for compound `Itraconazole`.
-      Using first processes of each type and of each metabolizing enzyme found.
-
-# Adding an unknown population to a simulation compound does not work.
-
-    Code
-      my_sim
-    Message
-      Simulation name: Test
-      Population: UnknowPop
-      Compound: Levonorgestrel 1
-      * Protocol: LNG_150 ug_21 Days
-      * Formulations:
-        1. Formulation: Microlut
-      * Processes:
-      * Interactions:
-      Compound: Itraconazole
-      * Protocol: ITZ 100mg 21 days
-      * Formulations:
-        1. Formulation: IR Dissolved
-      * Processes:
-      * Interactions:
-      Outputs:
-
 # Setting a population in a simulation remove defined individual and vice versa.
 
     Code
@@ -152,6 +97,46 @@
       Compound: Itraconazole
       * Protocol:
       * Formulations:
+      * Processes:
+      * Interactions:
+      Outputs:
+
+# Add simulation without compound protocol works
+
+    Code
+      my_sim
+    Message
+      Simulation name: Test
+      Individual: European (P-gp modified, CYP3A4 36 h)
+      Compound: Rifampicin
+      * Protocol:
+      * Formulations:
+      * Processes:
+      * Interactions:
+      Compound: Midazolam
+      * Protocol:
+      * Formulations:
+      * Processes:
+      * Interactions:
+      Outputs:
+
+# Add a simulation with an unknown population throws an error
+
+    Code
+      my_sim
+    Message
+      Simulation name: Test
+      Population: UnknowPop
+      Compound: Levonorgestrel 1
+      * Protocol: LNG_150 ug_21 Days
+      * Formulations:
+        1. Formulation: Microlut
+      * Processes:
+      * Interactions:
+      Compound: Itraconazole
+      * Protocol: ITZ 100mg 21 days
+      * Formulations:
+        1. Formulation: IR Dissolved
       * Processes:
       * Interactions:
       Outputs:
