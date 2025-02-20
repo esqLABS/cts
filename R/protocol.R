@@ -139,7 +139,7 @@ Protocol <- R6::R6Class("Protocol",
         }
       }
       cli_li("Dose: {self$dose} {self$dose_unit}")
-      if (!advanced) {
+      if (self$interval != "single") {
         cli_li("End Time: {self$end_time} {self$end_time_unit}")
       }
       if (self$type == "oral") {
