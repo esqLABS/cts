@@ -25,7 +25,7 @@ Formulation <- R6::R6Class(
     #' @field type Type of Formulation
     type = function(value) {
       if (!missing(value)) {
-        cli_abort("Formulation {.code type} cannot be changed, create a new one instead.")
+        cli_abort(c("x" = "Formulation {.code type} cannot be changed, create a new one instead."))
       }
 
       return(private$.type)
@@ -36,7 +36,7 @@ Formulation <- R6::R6Class(
         private$.name
       } else {
         if (!is.null(value) && !is.character(value)) {
-          cli::cli_abort("Supplied name is not valid.")
+          cli::cli_abort(c("x" = "Supplied name is not valid."))
         } else {
           private$.name <- value
         }
@@ -50,7 +50,7 @@ Formulation <- R6::R6Class(
     dissolution_time = function(value) {
       if (!missing(value)) {
         if (!is.numeric(value)) {
-          cli::cli_abort("Dissolution time should be numeric value.")
+          cli::cli_abort(c("x" = "Dissolution time should be numeric value."))
         }
         private$.dissolution_time <- value
       }
@@ -69,7 +69,7 @@ Formulation <- R6::R6Class(
     lag_time = function(value) {
       if (!missing(value)) {
         if (!is.numeric(value)) {
-          cli::cli_abort("Lag time should be numeric value.")
+          cli::cli_abort(c("x" = "Lag time should be numeric value."))
         }
         private$.lag_time <- value
       }
@@ -88,7 +88,7 @@ Formulation <- R6::R6Class(
     dissolution_shape = function(value) {
       if (!missing(value)) {
         if (!is.numeric(value)) {
-          cli::cli_abort("Dissolution shape should be numeric value.")
+          cli::cli_abort(c("x" = "Dissolution shape should be numeric value."))
         }
         private$.dissolution_shape <- value
       }
@@ -98,7 +98,7 @@ Formulation <- R6::R6Class(
     suspension = function(value) {
       if (!missing(value)) {
         if (!is.logical(value)) {
-          cli::cli_abort("Suspension should be a boolean.")
+          cli::cli_abort(c("x" = "Suspension should be a boolean."))
         }
         private$.suspension <- value
       }
@@ -108,7 +108,7 @@ Formulation <- R6::R6Class(
     thickness = function(value) {
       if (!missing(value)) {
         if (!is.numeric(value)) {
-          cli::cli_abort("Thickness should be numeric value.")
+          cli::cli_abort(c("x" = "Thickness should be numeric value."))
         }
         private$.thickness <- value
       }
@@ -126,7 +126,7 @@ Formulation <- R6::R6Class(
     #' @field distribution_type Type of the particle formulation
     distribution_type = function(value) {
       if (!missing(value)) {
-        cli_abort("Formulation {.code distribution_type} cannot be changed, create a new one instead.")
+        cli_abort(c("x" = "Formulation {.code distribution_type} cannot be changed, create a new one instead."))
       }
 
       return(private$.distribution_type)
@@ -135,7 +135,7 @@ Formulation <- R6::R6Class(
     radius = function(value) {
       if (!missing(value)) {
         if (!is.numeric(value)) {
-          cli::cli_abort("Radius should be numeric value.")
+          cli::cli_abort(c("x" = "Radius should be numeric value."))
         }
         private$.radius <- value
       }
@@ -153,7 +153,7 @@ Formulation <- R6::R6Class(
     #' @field particle_size_distribution Distribution of the particle size (normal or lognormal)
     particle_size_distribution = function(value) {
       if (!missing(value)) {
-        cli_abort("Formulation {.code particle_size_distribution} cannot be changed, create a new one instead.")
+        cli_abort(c("x" = "Formulation {.code particle_size_distribution} cannot be changed, create a new one instead."))
       }
 
       return(private$.particle_size_distribution)
@@ -162,7 +162,7 @@ Formulation <- R6::R6Class(
     radius_sd = function(value) {
       if (!missing(value)) {
         if (!is.numeric(value)) {
-          cli::cli_abort("Radius standard deviation should be numeric value.")
+          cli::cli_abort(c("x" = "Radius standard deviation should be numeric value."))
         }
         private$.radius_sd <- value
       }
@@ -181,7 +181,7 @@ Formulation <- R6::R6Class(
     radius_cv = function(value) {
       if (!missing(value)) {
         if (!is.numeric(value)) {
-          cli::cli_abort("Radius CV should be numeric value.")
+          cli::cli_abort(c("x" = "Radius CV should be numeric value."))
         }
         private$.radius_cv <- value
       }
@@ -191,7 +191,7 @@ Formulation <- R6::R6Class(
     radius_min = function(value) {
       if (!missing(value)) {
         if (!is.numeric(value)) {
-          cli::cli_abort("Radius standard deviation should be numeric value.")
+          cli::cli_abort(c("x" = "Radius standard deviation should be numeric value."))
         }
         private$.radius_min <- value
       }
@@ -210,7 +210,7 @@ Formulation <- R6::R6Class(
     radius_max = function(value) {
       if (!missing(value)) {
         if (!is.numeric(value)) {
-          cli::cli_abort("Radius standard deviation should be numeric value.")
+          cli::cli_abort(c("x" = "Radius standard deviation should be numeric value."))
         }
         private$.radius_max <- value
       }
@@ -229,7 +229,7 @@ Formulation <- R6::R6Class(
     n_bins = function(value) {
       if (!missing(value)) {
         if (!is.integer(value)) {
-          cli::cli_abort("Number of bins should be an integer.")
+          cli::cli_abort(c("x" = "Number of bins should be an integer."))
         }
         private$.n_bins <- value
       }
@@ -239,7 +239,7 @@ Formulation <- R6::R6Class(
     end_time = function(value) {
       if (!missing(value)) {
         if (!is.numeric(value)) {
-          cli::cli_abort("End time should be numeric value.")
+          cli::cli_abort(c("x" = "End time should be numeric value."))
         }
         private$.end_time <- value
       }
@@ -258,7 +258,7 @@ Formulation <- R6::R6Class(
     thalf = function(value) {
       if (!missing(value)) {
         if (!is.numeric(value)) {
-          cli::cli_abort("thalf should be numeric value.")
+          cli::cli_abort(c("x" = "thalf should be numeric value."))
         }
         private$.thalf <- value
       }
@@ -310,13 +310,13 @@ Formulation <- R6::R6Class(
       additional_args <- list(...)
       if (!is.null(additional_args$distribution_type)) {
         if (!(additional_args$distribution_type %in% names(particle_size_dist_types))) {
-          cli::cli_abort("Invalid {.code distribution_type} provided.")
+          cli::cli_abort(c("x" = "Invalid {.var distribution_type} provided."))
         }
         private$.distribution_type <- additional_args$distribution_type
       }
       if (!is.null(additional_args$particle_size_distribution)) {
         if (!(additional_args$particle_size_distribution %in% names(particle_size_dists))) {
-          cli::cli_abort("Invalid {.code particle_size_distribution} provided.")
+          cli::cli_abort(c("x" = "Invalid {.var particle_size_distribution} provided."))
         }
         private$.particle_size_distribution <- additional_args$particle_size_distribution
       }
@@ -349,102 +349,102 @@ Formulation <- R6::R6Class(
 
       if (self$type %in% c("weibull", "lint80")) {
         if (is.null(private$.dissolution_time)) {
-          cli::cli_warn("No {.code dissolution_time} provided, using default value of 240 min.")
+          cli::cli_warn(c("!" = "No {.code dissolution_time} provided, using default value of 240 min."))
           private$.dissolution_time <- 240
           private$.dissolution_time_unit <- "min"
         }
         if (is.null(private$.dissolution_time_unit)) {
-          cli::cli_warn("No {.code dissolution_time_unit} provided, using default unit of 'min'.")
+          cli::cli_warn(c("!" = "No {.code dissolution_time_unit} provided, using default unit of 'min'."))
           private$.dissolution_time_unit <- "min"
         }
         if (is.null(private$.lag_time)) {
-          cli::cli_warn("No {.code lag_time} provided, using default value of 0 min.")
+          cli::cli_warn(c("!" = "No {.code lag_time} provided, using default value of 0 min."))
           private$.lag_time <- 0
           private$.lag_time_unit <- "min"
         }
         if (is.null(private$.lag_time_unit)) {
-          cli::cli_warn("No {.code lag_time_unit} provided, using default unit of 'min'.")
+          cli::cli_warn(c("!" = "No {.code lag_time_unit} provided, using default unit of 'min'."))
           private$.lag_time_unit <- "min"
         }
         if (is.null(private$.suspension)) {
-          cli::cli_warn("No {.code suspension} provided, using default of 'TRUE'.")
+          cli::cli_warn(c("!" = "No {.code suspension} provided, using default of 'TRUE'."))
           private$.suspension <- TRUE
         }
 
         if (self$type == "weibull" && is.null(private$.dissolution_shape)) {
-          cli::cli_warn("No {.code dissolution_shape} provided, using default value of 0.92.")
+          cli::cli_warn(c("!" = "No {.code dissolution_shape} provided, using default value of 0.92."))
           private$.dissolution_shape <- 0.92
         }
       }
 
       if (self$type == "particle") {
         if (is.null(private$.thickness)) {
-          cli::cli_warn("No {.code thickness} provided, using default value of 30 µm.")
+          cli::cli_warn(c("!" = "No {.code thickness} provided, using default value of 30 µm."))
           private$.thickness <- 30
           private$.thickness_unit <- "µm"
         }
         if (is.null(private$.thickness_unit)) {
-          cli::cli_warn("No {.code thickness_unit} provided, using default unit of µm.")
+          cli::cli_warn(c("!" = "No {.code thickness_unit} provided, using default unit of µm."))
           private$.thickness_unit <- "µm"
         }
 
         if (is.null(private$.distribution_type)) {
-          cli::cli_warn("No {.code distribution_type} provided, using default of 'mono'.")
+          cli::cli_warn(c("!" = "No {.code distribution_type} provided, using default of 'mono'."))
           private$.distribution_type <- "mono"
         }
 
         if (is.null(private$.radius)) {
-          cli::cli_warn("No {.code radius} provided, using default value of 10 µm.")
+          cli::cli_warn(c("!" = "No {.code radius} provided, using default value of 10 µm."))
           private$.radius <- 10
           private$.radius_unit <- "µm"
         }
         if (is.null(private$.radius_unit)) {
-          cli::cli_warn("No {.code radius_unit} provided, using default unit of µm.")
+          cli::cli_warn(c("!" = "No {.code radius_unit} provided, using default unit of µm."))
           private$.radius_unit <- "µm"
         }
 
         if (private$.distribution_type == "poly") {
           if (is.null(private$.particle_size_distribution)) {
-            cli::cli_warn("No {.code particle_size_distribution} provided, using default of 'normal'.")
+            cli::cli_warn(c("!" = "No {.code particle_size_distribution} provided, using default of 'normal'."))
             private$.particle_size_distribution <- "normal"
           }
 
           if (is.null(private$.radius_min)) {
-            cli::cli_warn("No {.code radius_min} provided, using default value of 1 µm.")
+            cli::cli_warn(c("!" = "No {.code radius_min} provided, using default value of 1 µm."))
             private$.radius_min <- 1
             private$.radius_min_unit <- "µm"
           }
           if (is.null(private$.radius_min_unit)) {
-            cli::cli_warn("No {.code radius_min_unit} provided, using default unit of µm.")
+            cli::cli_warn(c("!" = "No {.code radius_min_unit} provided, using default unit of µm."))
             private$.radius_min_unit <- "µm"
           }
           if (is.null(private$.radius_max)) {
-            cli::cli_warn("No {.code radius_max} provided, using default value of 19 µm.")
+            cli::cli_warn(c("!" = "No {.code radius_max} provided, using default value of 19 µm."))
             private$.radius_max <- 19
             private$.radius_max_unit <- "µm"
           }
           if (is.null(private$.radius_max_unit)) {
-            cli::cli_warn("No {.code radius_max_unit} provided, using default unit of µm.")
+            cli::cli_warn(c("!" = "No {.code radius_max_unit} provided, using default unit of µm."))
             private$.radius_max_unit <- "µm"
           }
           if (is.null(private$.n_bins)) {
-            cli::cli_warn("No {.code n_bins} provided, using default value of 3.")
+            cli::cli_warn(c("!" = "No {.code n_bins} provided, using default value of 3."))
             private$.n_bins <- 3
           }
 
           if (private$.particle_size_distribution == "normal") {
             if (is.null(private$.radius_sd)) {
-              cli::cli_warn("No {.code radius_sd} provided, using default value of 3 µm.")
+              cli::cli_warn(c("!" = "No {.code radius_sd} provided, using default value of 3 µm."))
               private$.radius_sd <- 3
               private$.radius_sd_unit <- "µm"
             }
             if (is.null(private$.radius_sd_unit)) {
-              cli::cli_warn("No {.code radius_sd_unit} provided, using default unit of µm.")
+              cli::cli_warn(c("!" = "No {.code radius_sd_unit} provided, using default unit of µm."))
               private$.radius_sd_unit <- "µm"
             }
           } else {
             if (is.null(private$.radius_cv)) {
-              cli::cli_warn("No {.code radius_cv} provided, using default value of 1.5.")
+              cli::cli_warn(c("!" = "No {.code radius_cv} provided, using default value of 1.5."))
               private$.radius_cv <- 1.5
             }
           }
@@ -453,37 +453,37 @@ Formulation <- R6::R6Class(
 
       if (self$type == "zero") {
         if (is.null(private$.end_time)) {
-          cli::cli_warn("No {.code end_time} provided, using default unit of 60 min.")
+          cli::cli_warn(c("!" = "No {.code end_time} provided, using default unit of 60 min."))
           private$.end_time <- 60
           private$.end_time_unit <- "min"
         }
         if (is.null(private$.end_time_unit)) {
-          cli::cli_warn("No {.code end_time_unit} provided, using default unit of min.")
+          cli::cli_warn(c("!" = "No {.code end_time_unit} provided, using default unit of min."))
           private$.end_time_unit <- "min"
         }
       }
 
       if (self$type == "first") {
         if (is.null(private$.thalf)) {
-          cli::cli_warn("No {.code thalf} provided, using default unit of 0.01 min.")
+          cli::cli_warn(c("!" = "No {.code thalf} provided, using default unit of 0.01 min."))
           private$.thalf <- 0.01
           private$.thalf_unit <- "min"
         }
         if (is.null(private$.thalf_unit)) {
-          cli::cli_warn("No {.code thalf_unit} provided, using default unit of min.")
+          cli::cli_warn(c("!" = "No {.code thalf_unit} provided, using default unit of min."))
           private$.thalf_unit <- "min"
         }
       }
 
       if (self$type == "table") {
         if (is.null(private$.tableX) || is.null(private$.tableY)) {
-          cli::cli_abort("No {.code tableX} or {.code tableY} provided. For table formulation, provide release time profile.")
+          cli::cli_abort(c("x" = "No {.code tableX} or {.code tableY} provided. For table formulation, provide release time profile."))
         }
         if (length(private$.tableX) != length(private$.tableY)) {
-          cli::cli_abort("{.code tableX} and {.code tableY} should have the same length.")
+          cli::cli_abort(c("x" = "{.code tableX} and {.code tableY} should have the same length."))
         }
         if (is.null(private$.suspension)) {
-          cli::cli_warn("No {.code suspension} provided, using default of 'TRUE'.")
+          cli::cli_warn(c("x" = "No {.code suspension} provided, using default of 'TRUE'."))
           private$.suspension <- TRUE
         }
       }
