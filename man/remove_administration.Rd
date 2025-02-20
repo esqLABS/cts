@@ -4,14 +4,14 @@
 \alias{remove_administration}
 \title{Remove administration from an existing schema}
 \usage{
-remove_administration(advanced_protocol, schema_name, protocol_name)
+remove_administration(advanced_protocol, schema_name, administration_name)
 }
 \arguments{
 \item{advanced_protocol}{The protocol to which to remove the simple protocol from the schema \code{schema_name}}
 
 \item{schema_name}{Name of the schema to remove the protocol from}
 
-\item{protocol}{The protocol to remove from the schema called \code{schema_name}}
+\item{administration_name}{The name of the administration protocol to remove from the schema called \code{schema_name}}
 }
 \value{
 The updated \code{AdvancedProtocol} object.

@@ -33,21 +33,21 @@ test_that("Administration can be added, replaced and removed to/from schema.", {
   prot <- create_advanced_protocol(name = "Test protocol") |>
     add_schema(schema_name = "my Schema", start_time = 2, start_time_unit = "h", rep_nb = 5, time_btw_rep = 10, time_btw_rep_unit = "min") |>
     add_administration(
-      protocol = create_protocol(name = "Test protocol", type = "ivb", interval = "single", dose = 300),
+      administration = create_protocol(name = "Test protocol", type = "ivb", interval = "single", dose = 300),
       schema_name = "my Schema"
     )
 
   expect_message(
     prot |>
     add_administration(
-      protocol = create_protocol(name = "Test protocol", type = "ivb", interval = "single", dose = 400),
+      administration = create_protocol(name = "Test protocol", type = "ivb", interval = "single", dose = 400),
       schema_name = "my Schema"
     )
     )
 
   expect_no_error(
     prot |>
-    remove_administration(schema_name = "my Schema", protocol_name = "Test protocol (schema item 2)")
+    remove_administration(schema_name = "my Schema", administration_name = "Test protocol (schema item 2)")
   )
 })
 
@@ -56,7 +56,7 @@ test_that("Advanced protocol are corectly printed", {
     create_advanced_protocol(name = "Test protocol") |>
       add_schema(schema_name = "my Schema", start_time = 2, start_time_unit = "h", rep_nb = 5, time_btw_rep = 10, time_btw_rep_unit = "min") |>
       add_administration(
-        protocol = create_protocol(name = "Test protocol", type = "ivb", interval = "single", dose = 300),
+        administration = create_protocol(name = "Test protocol", type = "ivb", interval = "single", dose = 300),
         schema_name = "my Schema"
       )
   )

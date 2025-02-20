@@ -403,15 +403,16 @@ remove_schema <- function(advanced_protocol, schema_name) {
 #' @param advanced_protocol The protocol to which to add to the simple protocol to the schema `schema_name`
 #' @param schema_name Name of the schema to add the protocol to
 #' @param administration The protocol to add to the schema called `schema_name`
+#' Must be a `Protocol` object, with a `single` dosing interval
 #' @param formulation_key Formulation key for mapping to formulation for oral protocol. If NULL
 #' it will be automatically assigned in the form of "Formulation X"
 #' @return The updated `AdvancedProtocol` object.
 #' @export
-add_administration <- function(advanced_protocol, schema_name, protocol, formulation_key = NULL) {
+add_administration <- function(advanced_protocol, schema_name, administration, formulation_key = NULL) {
   # check that protocol is an AdvancedProtocol object
   check_advanced(advanced_protocol)
 
-  advanced_protocol$add_administration(protocol, schema_name, formulation_key)
+  advanced_protocol$add_administration(administration, schema_name, formulation_key)
 }
 
 #' Remove administration from an existing schema
@@ -419,14 +420,14 @@ add_administration <- function(advanced_protocol, schema_name, protocol, formula
 #' Remove an administration from an existing schema of an advanced protocol
 #' @param advanced_protocol The protocol to which to remove the simple protocol from the schema `schema_name`
 #' @param schema_name Name of the schema to remove the protocol from
-#' @param protocol The protocol to remove from the schema called `schema_name`
+#' @param administration_name The name of the administration protocol to remove from the schema called `schema_name`
 #' @return The updated `AdvancedProtocol` object.
 #' @export
-remove_administration <- function(advanced_protocol, schema_name, protocol_name) {
+remove_administration <- function(advanced_protocol, schema_name, administration_name) {
   # check that protocol is an AdvancedProtocol object
   check_advanced(advanced_protocol)
 
-  advanced_protocol$remove_administration(schema_name, protocol_name)
+  advanced_protocol$remove_administration(schema_name, protocol_name = administration_name)
 }
 
 #' @noRd

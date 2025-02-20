@@ -7,7 +7,7 @@
 add_administration(
   advanced_protocol,
   schema_name,
-  protocol,
+  administration,
   formulation_key = NULL
 )
 }
@@ -16,10 +16,11 @@ add_administration(
 
 \item{schema_name}{Name of the schema to add the protocol to}
 
+\item{administration}{The protocol to add to the schema called \code{schema_name}
+Must be a \code{Protocol} object, with a \code{single} dosing interval}
+
 \item{formulation_key}{Formulation key for mapping to formulation for oral protocol. If NULL
 it will be automatically assigned in the form of "Formulation X"}
-
-\item{administration}{The protocol to add to the schema called \code{schema_name}}
 }
 \value{
 The updated \code{AdvancedProtocol} object.
