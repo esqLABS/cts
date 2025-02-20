@@ -4,12 +4,20 @@
 \alias{create_simulation}
 \title{Create a simulation object}
 \usage{
-create_simulation(simulation_name, individual, victim, perpetrators)
+create_simulation(
+  simulation_name,
+  individual = list(),
+  population = list(),
+  victim,
+  perpetrators
+)
 }
 \arguments{
 \item{simulation_name}{Name of the simulation to be created.}
 
 \item{individual}{Name of the individual to be used in the simulation.}
+
+\item{population}{Name of the population to be used in the simulation.}
 
 \item{victim}{Name of the victim compound to be used in the simulation.}
 
@@ -23,5 +31,6 @@ This function creates a custom simulation.
 }
 \details{
 Protocols used by each compounds need to be defined afterwards with set_compound_protocol().
-New compound can also be added afterwards with add_compound().
+New compound can also be added afterwards with add_compound(). Either individual or population should
+be set, but not both.
 }

@@ -15,8 +15,6 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item{\code{source_data}}{The input data of the snapshot}
 
 \item{\code{version}}{version The version of the snapshot}
-
-\item{\code{simulations_results}}{The simulation results of the snapshot}
 }
 \if{html}{\out{</div>}}
 }
@@ -220,7 +218,7 @@ check that a simulation is valid
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{simulation}}{simulation object to check for vaiidity}
+\item{\code{simulation}}{simulation object to check for validity}
 }
 \if{html}{\out{</div>}}
 }
@@ -267,9 +265,16 @@ Plot Time profile of DDI simulations defined in the ddi project}
 \if{latex}{\out{\hypertarget{method-Snapshot-create_plots}{}}}
 \subsection{Method \code{create_plots()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$create_plots()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$create_plots(...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{additional arguments to pass to the plotPopulationTimeProfile (for example aggregation method)}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 a list of plots
 }
