@@ -63,7 +63,7 @@ remove_protocol <- function(snapshot, protocol_name) {
 }
 
 
-types <- list(
+protocol_types <- list(
   "oral" = list(pksim = "Oral", human = "Oral"),
   "ivb" = list(pksim = "IntravenousBolus", human = "Intravenous Bolus"),
   "iv" = list(pksim = "Intravenous", human = "Intravenous")
@@ -90,7 +90,7 @@ Protocol <- R6::R6Class("Protocol",
       self$name <- name
 
       rlang::arg_match(type,
-        values = names(types),
+        values = names(protocol_types),
         error_arg = "type"
       )
 
@@ -131,7 +131,7 @@ Protocol <- R6::R6Class("Protocol",
     },
     print = function() {
       cli_text(self$name)
-      cli_li("Application Type: {types[[self$type]]$human}")
+      cli_li("Application Type: {protocol_types[[self$type]]$human}")
       cli_li("Dosing Interval: {intervals[[self$interval]]$human}")
       cli_li("Dose: {self$dose} {self$dose_unit}")
       cli_li("End Time: {self$end_time} {self$end_time_unit}")
@@ -160,7 +160,7 @@ Protocol <- R6::R6Class("Protocol",
     data = function() {
       data <- list(
         Name = self$name,
-        ApplicationType = types[[self$type]]$pksim,
+        ApplicationType = protocol_types[[self$type]]$pksim,
         DosingInterval = intervals[[self$interval]]$pksim,
         Parameters = list(
           list(
@@ -375,7 +375,7 @@ protocol_from_data <- function(protocol_data) {
   return(
     Protocol$new(
       name = name,
-      type = names(keep(types, ~ .x$pksim == type)),
+      type = names(keep(protocol_types, ~ .x$pksim == type)),
       interval = names(keep(intervals, ~ .x$pksim == interval)),
       start_time = start_time_value, start_time_unit = start_time_unit,
       dose = dose_value, dose_unit = dose_unit,
