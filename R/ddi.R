@@ -5,8 +5,8 @@
 #'
 #' @param victim The main compound in the DDI interaction, created by `compound()`,
 #'  mandatory.
-#' @param perpetrator Additional compounds (perpetrators) in the DDI interaction,
-#' created by `compound()`. Pass one or more `Compound` objects.
+#' @param ... Additional `Compounds` objects to be added as perpetrators in the
+#' DDI interaction,
 #'
 #' @param options a named list of options to customize the DDI simulation. Default is to use `default_options`.
 #'   - import_simulations: logical, whether to import the simulations from the victim and perpetrators. default is FALSE.
@@ -26,23 +26,22 @@
 #' midazolam <- compound("Midazolam")
 #' create_ddi(victim = rifampicin, perpetrator = midazolam)
 #' }
-create_ddi <- function(victim, perpetrator, options = NULL) {
-  if (missing(victim)) {
+create_ddi <- function(victim, ..., options = NULL) {
+  if (is.null(victim)) {
     cli::cli_abort("At least one victim compound must be provided.")
   }
-  if (missing(perpetrator)) {
+
+  perpetrators <- c(...)
+
+  if (length(perpetrators) == 0) {
     cli::cli_abort("At least one perpetrator compound must be provided.")
   }
   if (length(to_list(victim)) > 1) {
     cli::cli_abort("Please provide exactly one victim compound.")
   }
 
-  perpetrators <- to_list(perpetrator)
+  ddi <- DDI$new(victim = victim, perpetrators, options = options)
 
-  ddi <- DDI$new(options = options)
-
-  # Delegate the combining task to the DDI object
-  do.call(ddi$combine, c(victim, perpetrators))
   ddi
 }
 
@@ -58,8 +57,7 @@ create_ddi <- function(victim, perpetrator, options = NULL) {
 #' import_ddi("Rifampicin-Midazolam-DDI.json")
 #' }
 import_ddi <- function(input) {
-  ddi <- DDI$new()
-  ddi$import(input = input)
+  ddi <- DDI$new(file = input)
   ddi
 }
 
@@ -104,11 +102,12 @@ run_pk_analysis <- function(ddi, path = NULL) {
 #' @param ddi a DDI object
 #' @param simulationNames a character vector of simulation names for which to generate plots.
 #' Default is NULL, i.e. plots will be generated for all simulations.
+#' @param ... additional arguments to pass to the plotPopulationTimeProfile (for example aggregation method)
 #' @return a list of plots
 #' @export
-plot_ddi_results <- function(ddi, simulationNames = NULL) {
-  ddi$create_plots()
+plot_ddi_results <- function(ddi, simulationNames = NULL, ...) {
 
+  ddi$create_plots(...)
   # By default return all simulations plots
   if (is.null(simulationNames)) {
     return(ddi$plots)
@@ -134,11 +133,15 @@ DDI <- R6::R6Class(
     options = NULL,
     #' @field metadata a list to store information useful for developers.
     metadata = NULL,
+
     #' @description
     #' Create a DDI object.
+    #' @param victim a `Compound` object representing the victim compound.
+    #' @param ... a list of `Compound` objects representing the perpetrator compounds.
+    #' @param file a character string representing the path to the snapshot file to import.
     #' @param options a named list of options to customize the DDI simulation. Default is to use `default_options`.
     #' @return A new `DDI` object.
-    initialize = function(options = NULL) {
+    initialize = function(victim=NULL, ..., file = NULL, options = NULL) {
       self$source <- NULL
 
       self$metadata <- list()
@@ -147,6 +150,18 @@ DDI <- R6::R6Class(
         self$options <- modifyList(default_options, options)
       } else {
         self$options <- default_options
+      }
+
+      if (!missing(victim) && !missing(file)) {
+        cli::cli_abort("Please provide either compounds or file, not both.")
+      }
+
+      if (!is.null(victim)) {
+        do.call(what = private$combine, c(victim, ...))
+      }
+
+      if (!is.null(file)) {
+        private$import(file)
       }
     },
     #' @description
@@ -158,18 +173,59 @@ DDI <- R6::R6Class(
 
       compound_names <- suppressMessages(self$compoundsNames)
 
-      cli_text("DDI simulation created with the following compounds:")
+      cli_text("DDI project containing:")
       cli::cli_text("{.strong Victim compound:}")
       cli::cli_li(self$victim)
       cli::cli_text("{.strong Perpetrator {qty(self$perpetrators)}compound{?s}:}")
       cli::cli_li(self$perpetrators)
-      cli::cli_text("{.strong Simulations:}")
+      cli::cli_text("{.strong {qty(self$simulations)}Simulation{?s}:}")
       cli::cli_li(self$get_names("simulations"))
       invisible(self)
+    }
+  ),
+  private = list(
+    # Validate options
+    validate_options = function(options) {
+      # check option is a list
+      if (!is.list(options)) {
+        cli::cli_abort("Options must be a named list. see")
+      }
+
+      # check options is supported
+      if (!all(names(options) %in% names(default_options))) {
+        unsuported_options <- names(options)[!names(options) %in% names(default_options)]
+        cli_abort("Unsupported options found: {unsuported_options}")
+      }
+
+      # check options types
+      types_comparison <- list_c(purrr::imap(options, ~ typeof(.x) == typeof(default_options[[.y]])))
+      if (!all(types_comparison)) {
+        for (i in seq_along(types_comparison)) {
+          cli::cli_alert_danger("Option {names(options)[i]} must be of type {typeof(default_options[[i]])}.")
+        }
+        cli::cli_abort("Some options have invalid types.")
+      }
     },
-    #' @description
-    #' Combine multiple compounds into a DDI simulation.
-    #' @param ... a set of compounds created by `compound()`
+    # Validate that all inputs are of class 'Compound'
+    # @param compounds A list of compound objects to validate.
+    validate_compounds = function(compounds) {
+      is_compound <- vapply(
+        compounds, \(comp) inherits(comp, "Compound"), logical(1)
+      )
+
+      if (!all(is_compound)) {
+        invalid_indices <- which(!is_compound)
+        invalid_classes <- vapply(compounds[invalid_indices], class, character(1))
+
+        invalid_details <- paste0("[", invalid_indices, "] ", invalid_classes)
+        cli::cli_abort(c(
+          "All compounds must be of class 'Compound'. Invalid entries found at position(s):",
+          invalid_details
+        ))
+      }
+    },
+    # Combine multiple compounds into a DDI simulation.
+    # @param ... a set of compounds created by `compound()`
     combine = function(...) {
       self$source <- "Merge"
 
@@ -235,14 +291,13 @@ DDI <- R6::R6Class(
       })
 
       if (self$options$create_ddi_simulation) {
-
         # Set simulated time to maximum protocol duration + 1 day
-        protocols <- purrr::keep(self$protocols, ~.x$name %in% c(self$metadata$protocols$victim[1], self$metadata$protocols$perpetrators[1]))
+        protocols <- purrr::keep(self$protocols, ~ .x$name %in% c(self$metadata$protocols$victim[1], self$metadata$protocols$perpetrators[1]))
         max_protocol_duration <- c(0)
-        for(p in protocols){
+        for (p in protocols) {
           # transform protocol duration in seconds
           protocol_duration <- p$end_time * translate_end_time_unit(p$end_time_unit)
-          if (protocol_duration == max(max_protocol_duration, protocol_duration)){
+          if (protocol_duration == max(max_protocol_duration, protocol_duration)) {
             max_protocol_duration <- protocol_duration
           }
         }
@@ -266,59 +321,16 @@ DDI <- R6::R6Class(
         self$add_simulation(generic_simulation[[1]])
       }
     },
-    #' @description
-    #' Import a DDI simulation from a JSON file.
-    #' @param input character string that is wether
-    #' - a compound name from the list of available compounds `list_compounds()`.
-    #' - a URL to a compound building block.
-    #' - a Path to a local file.
+    # Import a DDI simulation from a JSON file.
+    # @param input character string that is wether
+    # - a compound name from the list of available compounds `list_compounds()`.
+    # - a URL to a compound building block.
+    # - a Path to a local file.
     import = function(input) {
       self$source <- get_source(input)
       # initialize from parent
       super$initialize(input)
       # self$data <- private$read_json(self$source)
-    }
-  ),
-  private = list(
-    # Validate options
-    validate_options = function(options) {
-      # check option is a list
-      if (!is.list(options)) {
-        cli::cli_abort("Options must be a named list. see")
-      }
-
-      # check options is supported
-      if (!all(names(options) %in% names(default_options))) {
-        unsuported_options <- names(options)[!names(options) %in% names(default_options)]
-        cli_abort("Unsupported options found: {unsuported_options}")
-      }
-
-      # check options types
-      types_comparison <- list_c(purrr::imap(options, ~ typeof(.x) == typeof(default_options[[.y]])))
-      if (!all(types_comparison)) {
-        for (i in seq_along(types_comparison)) {
-          cli::cli_alert_danger("Option {names(options)[i]} must be of type {typeof(default_options[[i]])}.")
-        }
-        cli::cli_abort("Some options have invalid types.")
-      }
-    },
-    # Validate that all inputs are of class 'Compound'
-    # @param compounds A list of compound objects to validate.
-    validate_compounds = function(compounds) {
-      is_compound <- vapply(
-        compounds, \(comp) inherits(comp, "Compound"), logical(1)
-      )
-
-      if (!all(is_compound)) {
-        invalid_indices <- which(!is_compound)
-        invalid_classes <- vapply(compounds[invalid_indices], class, character(1))
-
-        invalid_details <- paste0("[", invalid_indices, "] ", invalid_classes)
-        cli::cli_abort(c(
-          "All compounds must be of class 'Compound'. Invalid entries found at position(s):",
-          invalid_details
-        ))
-      }
     }
   ),
   active = list(

@@ -4,12 +4,24 @@
 \alias{add_simulation}
 \title{Add a simulation to a \code{Snapshot} or DDI object}
 \usage{
-add_simulation(snapshot, simulation)
+add_simulation(
+  snapshot,
+  simulation,
+  options = list(add_interactions = TRUE, add_processes = TRUE)
+)
 }
 \arguments{
 \item{snapshot}{The \code{Snapshot} or \code{DDI} object to which the simulation will be added.}
 
 \item{simulation}{\code{Simulation} object created by \code{create_simulation()}, to be added to the \code{Snapshot} or \code{DDI} object.}
+
+\item{options}{a named list of options to customize the simulation.
+\itemize{
+\item add_interactions: logical, whether to automatically add the first interactions for each
+enzyme/compound pair to the simulation (only used if no interaction have been defined in the simulation).
+\item add_processes: logical, whether to automatically add the first process of each type/molecule for each
+compound to the simulation (only used if no processes have been defined in the simulation for a compound).
+}}
 }
 \value{
 The \code{Snapshot} or \code{DDI} object with the simulation added.

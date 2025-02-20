@@ -7,7 +7,7 @@
 set_compound_protocol(simulation, compound, protocol, formulation = list())
 }
 \arguments{
-\item{simulation}{The \code{Simualtion} object (as created by \code{create_simulation}).}
+\item{simulation}{The \code{Simulation} object (as created by \code{create_simulation}).}
 
 \item{compound}{Name of the compound for which to set the protocol.}
 
