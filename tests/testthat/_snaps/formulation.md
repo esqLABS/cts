@@ -12,13 +12,13 @@
       create_formulation(name = "Weibull", type = "weibull")
     Condition
       Warning:
-      No `dissolution_time` provided, using default value of 240 min.
+      ! No `dissolution_time` provided, using default value of 240 min.
       Warning:
-      No `lag_time` provided, using default value of 0 min.
+      ! No `lag_time` provided, using default value of 0 min.
       Warning:
-      No `suspension` provided, using default of 'TRUE'.
+      ! No `suspension` provided, using default of 'TRUE'.
       Warning:
-      No `dissolution_shape` provided, using default value of 0.92.
+      ! No `dissolution_shape` provided, using default value of 0.92.
     Message
       Weibull
       * Type: Weibull
@@ -33,11 +33,11 @@
       create_formulation(name = "Lint", type = "lint80")
     Condition
       Warning:
-      No `dissolution_time` provided, using default value of 240 min.
+      ! No `dissolution_time` provided, using default value of 240 min.
       Warning:
-      No `lag_time` provided, using default value of 0 min.
+      ! No `lag_time` provided, using default value of 0 min.
       Warning:
-      No `suspension` provided, using default of 'TRUE'.
+      ! No `suspension` provided, using default of 'TRUE'.
     Message
       Lint
       * Type: Lint80
@@ -51,11 +51,11 @@
       create_formulation(name = "ParticleMono", type = "particle")
     Condition
       Warning:
-      No `thickness` provided, using default value of 30 µm.
+      ! No `thickness` provided, using default value of 30 µm.
       Warning:
-      No `distribution_type` provided, using default of 'mono'.
+      ! No `distribution_type` provided, using default of 'mono'.
       Warning:
-      No `radius` provided, using default value of 10 µm.
+      ! No `radius` provided, using default value of 10 µm.
     Message
       ParticleMono
       * Type: Particle
@@ -70,19 +70,19 @@
         distribution_type = "poly")
     Condition
       Warning:
-      No `thickness` provided, using default value of 30 µm.
+      ! No `thickness` provided, using default value of 30 µm.
       Warning:
-      No `radius` provided, using default value of 10 µm.
+      ! No `radius` provided, using default value of 10 µm.
       Warning:
-      No `particle_size_distribution` provided, using default of 'normal'.
+      ! No `particle_size_distribution` provided, using default of 'normal'.
       Warning:
-      No `radius_min` provided, using default value of 1 µm.
+      ! No `radius_min` provided, using default value of 1 µm.
       Warning:
-      No `radius_max` provided, using default value of 19 µm.
+      ! No `radius_max` provided, using default value of 19 µm.
       Warning:
-      No `n_bins` provided, using default value of 3.
+      ! No `n_bins` provided, using default value of 3.
       Warning:
-      No `radius_sd` provided, using default value of 3 µm.
+      ! No `radius_sd` provided, using default value of 3 µm.
     Message
       ParticlePolyNormal
       * Type: Particle
@@ -102,17 +102,17 @@
         distribution_type = "poly", particle_size_distribution = "lognormal")
     Condition
       Warning:
-      No `thickness` provided, using default value of 30 µm.
+      ! No `thickness` provided, using default value of 30 µm.
       Warning:
-      No `radius` provided, using default value of 10 µm.
+      ! No `radius` provided, using default value of 10 µm.
       Warning:
-      No `radius_min` provided, using default value of 1 µm.
+      ! No `radius_min` provided, using default value of 1 µm.
       Warning:
-      No `radius_max` provided, using default value of 19 µm.
+      ! No `radius_max` provided, using default value of 19 µm.
       Warning:
-      No `n_bins` provided, using default value of 3.
+      ! No `n_bins` provided, using default value of 3.
       Warning:
-      No `radius_cv` provided, using default value of 1.5.
+      ! No `radius_cv` provided, using default value of 1.5.
     Message
       ParticlePolyLogNormal
       * Type: Particle
@@ -132,7 +132,7 @@
       tableY = c(0, 0.2, 0.8, 1))
     Condition
       Warning:
-      No `suspension` provided, using default of 'TRUE'.
+      x No `suspension` provided, using default of 'TRUE'.
     Message
       Table
       * Type: Table
@@ -151,7 +151,7 @@
       create_formulation(name = "ZeroOrder", type = "zero")
     Condition
       Warning:
-      No `end_time` provided, using default unit of 60 min.
+      ! No `end_time` provided, using default unit of 60 min.
     Message
       ZeroOrder
       * Type: ZeroOrder
@@ -163,7 +163,7 @@
       create_formulation(name = "FirstOrder", type = "first")
     Condition
       Warning:
-      No `thalf` provided, using default unit of 0.01 min.
+      ! No `thalf` provided, using default unit of 0.01 min.
     Message
       FirstOrder
       * Type: FirstOrder
