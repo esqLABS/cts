@@ -2,7 +2,7 @@
 % Please edit documentation in R/protocol.R
 \name{create_advanced_protocol}
 \alias{create_advanced_protocol}
-\title{Create a new administration protocol}
+\title{Create a new advanced administration protocol}
 \usage{
 create_advanced_protocol(name)
 }
@@ -13,5 +13,5 @@ create_advanced_protocol(name)
 an AdvancedProtocol object
 }
 \description{
-Create a new administration protocol
+Create a new advanced administration protocol
 }
