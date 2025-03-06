@@ -1,0 +1,181 @@
+---
+title: "Creating DDI Projects"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Creating DDI Projects}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "figures/ddi-projects-",
+  out.width = "100%",
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+# Creating Drug-Drug Interaction (DDI) Projects
+
+The `{cts}` package provides a comprehensive framework for creating, running, and analyzing drug-drug interaction (DDI) simulations. This vignette demonstrates how to create DDI projects, run simulations, and analyze the results.
+
+## Loading the Package
+
+First, load the `cts` package:
+
+```{r setup}
+library(cts)
+```
+
+## Creating a DDI Project
+
+The core function for creating a DDI project is `create_ddi()`. This function requires at least two compound models: a victim compound and one or more perpetrator compounds.
+
+### Basic DDI Project Creation
+
+Here's a simple example of creating a DDI project with one victim and one perpetrator:
+
+```{r basic-ddi, eval=FALSE}
+# Import compound models
+rifampicin <- compound("Rifampicin")
+midazolam <- compound("Midazolam")
+
+# Create a basic DDI project
+myDDI <- create_ddi(victim = rifampicin, midazolam)
+```
+
+By default, `create_ddi()` will generate a generic and ready-to-run DDI simulation.
+
+### Customizing DDI Project Creation
+
+You can customize the DDI project creation by providing options:
+
+```{r custom-ddi, eval=FALSE}
+# Create a DDI project with custom options
+myDDI <- create_ddi(
+  victim = rifampicin, 
+  midazolam,
+  options = list(
+    import_simulations = FALSE,  # Don't import simulations from compound models
+    create_ddi_simulation = TRUE  # Create a generic DDI simulation
+  )
+)
+```
+
+Available options include:
+
+- `import_simulations`: Whether to import simulations from the victim and perpetrator compound models (default: `FALSE`)
+- `create_ddi_simulation`: Whether to create a generic simulation template (default: `TRUE`)
+
+### Creating a DDI Project with Multiple Perpetrators
+
+You can include multiple perpetrator compounds in a DDI project:
+
+```{r multi-perpetrator, eval=FALSE}
+# Import another compound model
+ketoconazole <- compound("Ketoconazole")
+
+# Create a DDI project with multiple perpetrators
+multiDDI <- create_ddi(
+  victim = midazolam, 
+  rifampicin, 
+  ketoconazole
+)
+```
+
+## Running DDI Simulations
+
+Once you've created a DDI project, you can run the simulations using the `run_ddi()` function:
+
+```{r run-ddi, eval=FALSE}
+# Run the DDI simulations
+results <- run_ddi(myDDI)
+```
+
+This will return a named list of data frames containing the simulation results for each simulation in the DDI project. You can access the results for a specific simulation using its name as a list index:
+
+```{r access-results, eval=FALSE}
+# Access results for a specific simulation
+head(results$`Generic DDI simulation`)
+```
+
+### Exporting Simulation Results
+
+You can export the simulation results to files by providing a path:
+
+```{r export-results, eval=FALSE}
+# Run simulations and export results
+results <- run_ddi(myDDI, path = "output_directory/", exportPKML = TRUE)
+```
+
+The `exportPKML` parameter controls whether PKML files are also exported.
+
+## Analyzing DDI Simulation Results
+
+### Calculating PK Parameters
+
+You can calculate pharmacokinetic (PK) parameters from the simulation results using the `run_pk_analysis()` function:
+
+```{r pk-analysis, eval=FALSE}
+# Calculate PK parameters
+pk_analysis <- run_pk_analysis(myDDI)
+
+# Access PK parameters for a specific simulation
+head(pk_analysis$`Generic DDI simulation`)
+```
+
+You can also export the PK analysis results to files:
+
+```{r export-pk, eval=FALSE}
+# Calculate and export PK parameters
+pk_analysis <- run_pk_analysis(myDDI, path = "pk_results/")
+```
+
+### Plotting DDI Simulation Results
+
+The `plot_ddi_results()` function generates plots of the simulation results:
+
+```{r plot-ddi, eval=FALSE}
+# Generate plots
+plots <- plot_ddi_results(myDDI)
+
+# Access a specific plot
+plots$`Generic DDI simulation`
+```
+
+You can customize the plots by passing additional parameters:
+
+```{r custom-plot, eval=FALSE}
+# Generate plots with custom aggregation method
+plots <- plot_ddi_results(myDDI, aggregationMethod = "median")
+```
+
+You can also generate plots for specific simulations:
+
+```{r specific-plots, eval=FALSE}
+# Generate plots for specific simulations
+plots <- plot_ddi_results(myDDI, simulationNames = c("Generic DDI simulation"))
+```
+
+## Importing and Exporting DDI Projects
+
+### Importing a DDI Project
+
+You can import a DDI project from a JSON file:
+
+```{r import-ddi, eval=FALSE}
+# Import a DDI project
+importedDDI <- import_ddi("path/to/DDI-Project.json")
+```
+
+### Exporting a DDI Project
+
+You can export a DDI project to a JSON file for future use or for importing into other platforms such as PK-Sim:
+
+```{r export-ddi, eval=FALSE}
+# Export a DDI project
+export_ddi(myDDI, "path/to/Rifampicin-Midazolam-DDI.json")
+```

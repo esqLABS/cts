@@ -1,4 +1,29 @@
-url: ~
+url: https://esqlabs.github.io/cts
 template:
   bootstrap: 5
+
+navbar:
+  structure:
+    left:  [intro, reference, articles, tutorials, news]
+    right: [search, github]
+  components:
+    articles:
+      text: Articles
+      menu:
+      - text: Working with Compound Models
+        href: articles/working-with-compounds.html
+      - text: Creating Building Blocks
+        href: articles/create-building-blocks.html
+      - text: Creating and Managing Simulations
+        href: articles/simulations.html
+      - text: Creating DDI Projects
+        href: articles/creating-ddi-projects.html
+
+articles:
+  - title: Getting Started
+    contents:
+    - working-with-compounds
+    - create-building-blocks
+    - simulations
+    - creating-ddi-projects
 
