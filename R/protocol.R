@@ -94,11 +94,13 @@ add_protocol <- function(snapshot, protocol) {
 #' @return the updated snapshot without the specified protocols
 #' @export
 #' @examples
+#' \dontrun{
 #' # Remove a protocol from a snapshot
 #' snapshot <- remove_protocol(snapshot, "Standard dose")
 #'
 #' # Remove multiple protocols at once
 #' snapshot <- remove_protocol(snapshot, c("Protocol 1", "Protocol 2"))
+#' }
 remove_protocol <- function(snapshot, protocol_name) {
   snapshot$remove_protocol(protocol_name)
   invisible(snapshot)
