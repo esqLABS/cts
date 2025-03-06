@@ -7,7 +7,7 @@ test_that("Dissolved formulation can be created", {
 })
 
 test_that("Weibull formulation can be created", {
-  expect_snapshot(create_formulation(name = "Weibull", type = "weibull"))
+  expect_snapshot(create_formulation(name = "Weibull", typFe = "weibull"))
 })
 
 test_that("Lint80 formulation can be created", {

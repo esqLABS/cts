@@ -929,7 +929,7 @@ add_formulation <- function(snapshot, formulation) {
 #' Remove a formulation from a snapshot
 #'
 #' @param snapshot a snapshot object.
-#' @param formualtion_name a character vector of protocol name(s) to remove
+#' @param formulation_name a character vector of protocol name(s) to remove
 #'
 #' @return the updated snapshot without the specified formulations
 #' @export
@@ -939,7 +939,7 @@ add_formulation <- function(snapshot, formulation) {
 #'
 #' # Remove multiple formulations
 #' snapshot <- remove_formulation(
-#'   snapshot, 
+#'   snapshot,
 #'   c("Immediate release solution", "Standard tablet")
 #' )
 remove_formulation <- function(snapshot, formulation_name) {

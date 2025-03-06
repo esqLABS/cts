@@ -9,7 +9,7 @@ remove_formulation(snapshot, formulation_name)
 \arguments{
 \item{snapshot}{a snapshot object.}
 
-\item{formualtion_name}{a character vector of protocol name(s) to remove}
+\item{formulation_name}{a character vector of protocol name(s) to remove}
 }
 \value{
 the updated snapshot without the specified formulations
@@ -23,7 +23,7 @@ snapshot <- remove_formulation(snapshot, "Extended release tablet")
 
 # Remove multiple formulations
 snapshot <- remove_formulation(
-  snapshot, 
+  snapshot,
   c("Immediate release solution", "Standard tablet")
 )
 }

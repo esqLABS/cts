@@ -21,9 +21,7 @@ a DDI object
 Import Drug-Drug Interaction (DDI) Simulation from Snapshot
 }
 \examples{
-# Import DDI from a local file
-ddi <- import_ddi("path/to/Midazolam-Ketoconazole-DDI.json")
-
-# Import DDI from a URL
-ddi <- import_ddi("https://example.com/ddi-simulations/Midazolam-Ketoconazole-DDI.json")
+\dontrun{
+import_ddi("Rifampicin-Midazolam-DDI.json")
+}
 }

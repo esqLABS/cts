@@ -5,7 +5,6 @@
 #' - a URL to a compound building block.
 #' - a Path to a local file.
 #'
-#'
 #' @return a compound building block as a list
 #' @export
 #'
