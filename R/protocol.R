@@ -26,6 +26,26 @@
 #'
 #' @return a Protocol object
 #' @export
+#' @examples
+#' # Create an oral administration protocol
+#' oral_protocol <- create_protocol(
+#'   name = "Oral dose",
+#'   type = "oral",
+#'   interval = "single",
+#'   dose = 500,
+#'   dose_unit = "mg"
+#' )
+#'
+#' # Create an intravenous protocol with custom infusion time
+#' iv_protocol <- create_protocol(
+#'   name = "IV infusion",
+#'   type = "iv",
+#'   interval = "12-12",
+#'   dose = 250,
+#'   dose_unit = "mg",
+#'   infusion_time = 30,
+#'   infusion_time_unit = "min"
+#' )
 create_protocol <- function(name, type, interval,
                             dose, dose_unit = "mg",
                             end_time = 24, end_time_unit = "h",
@@ -45,6 +65,20 @@ create_protocol <- function(name, type, interval,
 #'
 #' @return the updated snapshot with new protocol
 #' @export
+#' @examples
+#' # Create a snapshot
+#' snapshot <- create_snapshot("MySimulation")
+#'
+#' # Create a protocol
+#' protocol <- create_protocol(
+#'   name = "Standard dose",
+#'   type = "oral",
+#'   interval = "24",
+#'   dose = 500
+#' )
+#'
+#' # Add protocol to snapshot
+#' snapshot <- add_protocol(snapshot, protocol)
 add_protocol <- function(snapshot, protocol) {
   snapshot$add_protocol(protocol)
   invisible(snapshot)
@@ -57,6 +91,12 @@ add_protocol <- function(snapshot, protocol) {
 #'
 #' @return the updated snapshot without the specified protocols
 #' @export
+#' @examples
+#' # Remove a protocol from a snapshot
+#' snapshot <- remove_protocol(snapshot, "Standard dose")
+#'
+#' # Remove multiple protocols at once
+#' snapshot <- remove_protocol(snapshot, c("Protocol 1", "Protocol 2"))
 remove_protocol <- function(snapshot, protocol_name) {
   snapshot$remove_protocol(protocol_name)
   invisible(snapshot)
@@ -130,7 +170,7 @@ Protocol <- R6::R6Class("Protocol",
     },
     print = function(advanced = FALSE) {
       cli_text(self$name)
-      cli_li("Application Type: {types[[self$type]]$human}")
+      cli_li("Application Type: {protocol_types[[self$type]]$human}")
       if (!advanced) {
         cli_li("Dosing Interval: {intervals[[self$interval]]$human}")
       } else {
@@ -350,6 +390,9 @@ Protocol <- R6::R6Class("Protocol",
 #'
 #' @return an AdvancedProtocol object
 #' @export
+#' @examples
+#' # Create an advanced protocol for complex dosing regimen
+#' advanced_protocol <- create_advanced_protocol("Complex dosing regimen")
 create_advanced_protocol <- function(name) {
   AdvancedProtocol$new(name)
 }
@@ -367,6 +410,20 @@ create_advanced_protocol <- function(name) {
 #' @param schema_name Name of the schema. (Optional) If not given schema name will be in the form of "Schema X"
 #' @return The updated `AdvancedProtocol` object.
 #' @export
+#' @examples
+#' # Create an advanced protocol
+#' advanced_protocol <- create_advanced_protocol("Weekly dosing")
+#'
+#' # Add a schema for weekly administration
+#' advanced_protocol <- add_schema(
+#'   advanced_protocol,
+#'   start_time = 0,
+#'   start_time_unit = "h",
+#'   rep_nb = 4,
+#'   time_btw_rep = 7,
+#'   time_btw_rep_unit = "day",
+#'   schema_name = "Weekly dosing"
+#' )
 add_schema <- function(advanced_protocol, start_time, start_time_unit, rep_nb, time_btw_rep, time_btw_rep_unit, schema_name = NULL) {
   # check that protocol is an AdvancedProtocol object
   check_advanced(advanced_protocol)
@@ -389,6 +446,9 @@ add_schema <- function(advanced_protocol, start_time, start_time_unit, rep_nb, t
 #' @return The updated `AdvancedProtocol` object.
 #'
 #' @export
+#' @examples
+#' # Remove a schema from an advanced protocol
+#' advanced_protocol <- remove_schema(advanced_protocol, "Weekly dosing")
 remove_schema <- function(advanced_protocol, schema_name) {
   # check that protocol is an AdvancedProtocol object
   check_advanced(advanced_protocol)
@@ -408,6 +468,36 @@ remove_schema <- function(advanced_protocol, schema_name) {
 #' it will be automatically assigned in the form of "Formulation X"
 #' @return The updated `AdvancedProtocol` object.
 #' @export
+#' @examples
+#' # Create an advanced protocol
+#' advanced_protocol <- create_advanced_protocol("Complex regimen")
+#'
+#' # Add a schema
+#' advanced_protocol <- add_schema(
+#'   advanced_protocol,
+#'   start_time = 0,
+#'   start_time_unit = "h",
+#'   rep_nb = 3,
+#'   time_btw_rep = 24,
+#'   time_btw_rep_unit = "h",
+#'   schema_name = "Daily dosing"
+#' )
+#'
+#' # Create a single dose protocol
+#' single_dose <- create_protocol(
+#'   name = "Morning dose",
+#'   type = "oral",
+#'   interval = "single",
+#'   dose = 250,
+#'   dose_unit = "mg"
+#' )
+#'
+#' # Add the administration to the schema
+#' advanced_protocol <- add_administration(
+#'   advanced_protocol,
+#'   schema_name = "Daily dosing",
+#'   administration = single_dose
+#' )
 add_administration <- function(advanced_protocol, schema_name, administration, formulation_key = NULL) {
   # check that protocol is an AdvancedProtocol object
   check_advanced(advanced_protocol)
@@ -423,6 +513,13 @@ add_administration <- function(advanced_protocol, schema_name, administration, f
 #' @param administration_name The name of the administration protocol to remove from the schema called `schema_name`
 #' @return The updated `AdvancedProtocol` object.
 #' @export
+#' @examples
+#' # Remove an administration from a schema
+#' advanced_protocol <- remove_administration(
+#'   advanced_protocol,
+#'   schema_name = "Daily dosing",
+#'   administration_name = "Morning dose"
+#' )
 remove_administration <- function(advanced_protocol, schema_name, administration_name) {
   # check that protocol is an AdvancedProtocol object
   check_advanced(advanced_protocol)

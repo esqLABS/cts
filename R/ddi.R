@@ -21,11 +21,26 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' rifampicin <- compound("Rifampicin")
+#' # Create compounds
 #' midazolam <- compound("Midazolam")
-#' create_ddi(victim = rifampicin, perpetrator = midazolam)
-#' }
+#' ketoconazole <- compound("Ketoconazole")
+#' 
+#' # Create a basic DDI simulation
+#' ddi <- create_ddi(victim = midazolam, ketoconazole)
+#' 
+#' # Create a DDI with custom options
+#' ddi_custom <- create_ddi(
+#'   victim = midazolam, 
+#'   ketoconazole,
+#'   options = list(
+#'     import_simulations = TRUE,
+#'     create_ddi_simulation = FALSE
+#'   )
+#' )
+#' 
+#' # Create a DDI with multiple perpetrators
+#' rifampicin <- compound("Rifampicin")
+#' ddi_multi <- create_ddi(victim = midazolam, ketoconazole, rifampicin)
 create_ddi <- function(victim, ..., options = NULL) {
   if (is.null(victim)) {
     cli::cli_abort("At least one victim compound must be provided.")
@@ -82,6 +97,15 @@ export_ddi <- function(ddi, path) {
 #' results as .csv files at provided location.
 #' @param exportPKML logical. Whether to export the PKML files. Default is FALSE.
 #' @export
+#' @examples
+#' # Run simulations without saving results
+#' results <- run_ddi(ddi)
+#' 
+#' # Run simulations and save results to a directory
+#' results <- run_ddi(ddi, path = "simulation_results")
+#' 
+#' # Run simulations and export PKML files
+#' results <- run_ddi(ddi, path = "simulation_results", exportPKML = TRUE)
 run_ddi <- function(ddi, path = NULL, exportPKML = FALSE) {
   ddi$run_simulations(path, exportPKML)
   return(ddi$simulation_results)
@@ -93,6 +117,12 @@ run_ddi <- function(ddi, path = NULL, exportPKML = FALSE) {
 #' pk analysis results. Default is NULL. If not NULL, will save the pk analysis
 #' results as .csv files at provided location.
 #' @export
+#' @examples
+#' # Run PK analysis without saving results
+#' pk_results <- run_pk_analysis(ddi)
+#' 
+#' # Run PK analysis and save results to a directory
+#' pk_results <- run_pk_analysis(ddi, path = "pk_analysis_results")
 run_pk_analysis <- function(ddi, path = NULL) {
   ddi$run_pk_analysis(path)
   return(ddi$pk_analysis_results)
@@ -105,6 +135,15 @@ run_pk_analysis <- function(ddi, path = NULL) {
 #' @param ... additional arguments to pass to the plotPopulationTimeProfile (for example aggregation method)
 #' @return a list of plots
 #' @export
+#' @examples
+#' # Plot all simulation results
+#' plots <- plot_ddi_results(ddi)
+#' 
+#' # Plot specific simulations
+#' plots <- plot_ddi_results(ddi, simulationNames = c("Midazolam_alone", "DDI_simulation"))
+#' 
+#' # Plot with custom aggregation method
+#' plots <- plot_ddi_results(ddi, aggregationMethod = "median")
 plot_ddi_results <- function(ddi, simulationNames = NULL, ...) {
 
   ddi$create_plots(...)
