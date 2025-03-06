@@ -46,11 +46,13 @@ You can install the development version of `cts` from [GitHub](https://github.co
 pak::pak("esqLABS/cts")
 ```
 
-## Example
+## Get Started
+
+### Import Compound Models
 
 Below are some examples to demonstrate how to use the package. These steps will guide you through importing compound models, exploring their properties, and simulating drug-drug interactions.
 
-### List Available Compound Building Blocks
+#### List Available Compound Building Blocks
 
 The `{cts}`package can interface with the Open Systems Pharmacology (OSP) model library to retrieve compound models. The `list_compounds()` function lists all available compounds in the OSP model library.
 
@@ -67,12 +69,12 @@ cat(cli::cli_fmt(list_compounds(), collapse = T))
 
 This command outputs a list of compound names available in the OSP model library, which you can select to create your DDI simulations.
 
-### Import Snapshots
+#### Import Snapshots
 
 The core functionality of the package involves importing compound models from snapshot files. You can import a compound model in various ways:
 
 
-#### From OSP Qualified Building Blocks
+##### From OSP Qualified Building Blocks
 
 You can directly import pre-qualified compounds from the OSP model library:
 
@@ -81,7 +83,7 @@ rifampicin <- compound("Rifampicin")
 midazolam <- compound("Midazolam")
 ```
 
-#### From URL
+##### From URL
 
 For compound models hosted online, use the URL to import the model:
 
@@ -90,7 +92,7 @@ compound("https://raw.githubusercontent.com/Open-Systems-Pharmacology/Alfentanil
 ```
 
 
-#### From Local File
+##### From Local File
 
 You can also import compound models from local JSON files:
 
@@ -99,7 +101,7 @@ compound("path/to/Alfentanil-Model.json")
 ```
 
 
-### Explore Snapshots
+#### Explore Snapshots
 
 Once you have imported a compound snapshot, you can explore its properties, such as compound properties, formulations, protocols, predefined simulations and all other information contained in the snapshot. For example, you can explore the formulations of Rifampicin using the following command:
 
@@ -110,32 +112,12 @@ rifampicin$protocols[[1]]
 This command outputs the formulations that are defined for the compound and that can be used in simulations.
 
 
-## Add new building blocks
 
-Only administration protocols can be altered/added/removed from snapshots
+### DDI projects
 
-```{r}
-my_protocol <- create_protocol("my_protocol",
-                type = "oral",
-                interval = "single",
-                dose = 200,
-                water_vol_per_body_weight = 3.5)
+#### Create a DDI project
 
-my_protocol
-```
-
-```{r}
-add_protocol(rifampicin, my_protocol)
-```
-
-```{r}
-purrr::map_chr(rifampicin$protocols, "name")
-```
-
-
-## Create, Parameterize and Run a DDI Project
-
-After importing the necessary compounds, you can create a DDI simulation. Here is a basic example of creating a DDI simulation with a victim compound (e.g., Rifampicin) and a perpetrator compound (e.g., Midazolam):
+After importing the necessary compounds, you can create a DDI project. Here is a basic example of creating a DDI simulation with a victim compound (e.g., Rifampicin) and a perpetrator compound (e.g., Midazolam):
 
 Some additional options can be passed during ddi creation:
 
@@ -155,7 +137,7 @@ All options can be found in the `?create_ddi` help page.
 By default, the `create_ddi` function will generate a generic and ready-to-run ddi simulation.
 
 
-## Run the DDI simulations
+#### Run the DDI simulations
 
 Simulations defined in snapshots can easily be executed and their results retrieved using the `run_ddi()` function:
 
@@ -178,7 +160,7 @@ Results can also be exported as csv and pkml files with the `path` and `exportPK
 results <- run_ddi(myDDI, path = "output_directory/", exportPKML = TRUE)
 ```
 
-## Get PK Parameters
+#### Get PK Parameters
 
 PK parameters can be computed directly from the simulation results using `run_pk_analysis()` function:
 
@@ -197,7 +179,7 @@ knitr::kable(head(pk_analysis$`Generic DDI simulation`))
 ```
 
 
-## Plot ddi simulations
+#### Plot DDI simulations results
 
 DDI simulations can be generated using the `plot_ddi_results()` function:
 
@@ -211,7 +193,7 @@ Similarly plots can be accessed and visualized by simulation name:
 plots$`Generic DDI simulation`
 ```
 
-## Export the DDI project as a Snapshot
+#### Export the DDI project as a Snapshot
 
 You can also export the entire DDI simulation as a snapshot file for future use or for importing into other platforms such as PK-Sim:
 
@@ -220,50 +202,352 @@ You can also export the entire DDI simulation as a snapshot file for future use 
 export_ddi(myDDI, "path/to/Rifampicin-Midazolam-DDI.json")
 ```
 
-## Add a new simulation
+### Modify DDI projects
 
-New simulations can be defined and added to the DDI object. 
-Use create_simulation() to define a new simulation, listing its name, the victim compound, the perpetrator compound, and the individual. 
-Then, the simulation can be added to the DDI object using the add_simulation() function. 
+Once created, DDI projects can be modified in several ways:
+- Building blocks can be added or modified,
+- Simulations can be added, modified or removed.
 
-By default, all compounds interactions and processes will be added to the simulation.
+#### Create and add building blocks
+
+Currently, the {cts} package only supports the creation of the following building blocks:
+- Administration Protocols
+- Formulations
+
+##### Administration Protocols
+Simple and advanced administration protocols can be created and added to DDI projects.
 
 ```{r}
-my_sim <- create_simulation(
-  simulation_name = "My New Simulation",
-  victim = "Rifampicin",
-  perpetrators = "Midazolam",
-  individual = "European (P-gp modified, CYP3A4 36 h)"
+# Create a simple oral protocol
+oral_protocol <- create_protocol(
+  name = "oral 10 mg",
+  type = "oral", 
+  interval = "single",
+  dose = 10,
+  dose_unit = "mg",
+    water_vol_per_body_weight = 3.5 # Custom water volume per body weight
 )
 
-# add_simulation(myDDI, my_sim, options = list(add_interactions = TRUE, add_processes = FALSE))
+# Create an intravenous protocol with custom infusion time
+iv_protocol <- create_protocol(
+  name = "iv 300 mg (0.5 h)",
+  type = "iv",
+  interval = "single", 
+  dose = 300,
+  dose_unit = "mg",
+  infusion_time = 0.5,
+  infusion_time_unit = "h"
+)
 
+# Create a multiple dose oral protocol
+multiple_oral <- create_protocol(
+  name = "oral 100 mg BID",
+  type = "oral",
+  interval = "12-12", # Twice daily dosing
+  dose = 100,
+  dose_unit = "mg",
+  end_time = 48, # Total duration of 48 hours
+  water_vol_per_body_weight = 4.0 # Custom water volume per body weight
+)
 ```
 
-### Simulations parameterization
+Advanced protocols allow for more complex dosing regimens by combining multiple administrations 
+into schemas that can be repeated. Here's an example of a loading dose followed by maintenance doses:
 
-Simulations can be parameterized.
-
-
-#### Add another compound
 
 ```{r}
-my_sim$add_compound(compound = "Test compound 2", protocol = "New protocol")
+# Create an advanced protocol for a loading dose followed by maintenance doses
+advanced_protocol <- 
+  create_advanced_protocol(name = "Loading + Maintenance Protocol")
+
+# Add first schema for loading dose (single high dose)
+advanced_protocol <- add_schema(
+  advanced_protocol,
+  schema_name = "Loading Phase",
+  start_time = 0,    # Start immediately
+  start_time_unit = "h",
+  rep_nb = 1,        # Just once
+  time_btw_rep = 24, # Not relevant for single rep but required
+  time_btw_rep_unit = "h"
+)
+
+# Create the loading dose administration
+loading_dose <- create_protocol(
+  name = "Loading Dose",
+  type = "oral",
+  interval = "single", # Must be single for advanced protocols
+  dose = 200,         # Higher initial dose
+  dose_unit = "mg",
+  water_vol_per_body_weight = 3.5
+)
+
+# Add loading dose to the first schema
+advanced_protocol <- add_administration(
+  advanced_protocol,
+  schema_name = "Loading Phase",
+  administration = loading_dose
+)
+
+# Add second schema for maintenance doses
+advanced_protocol <- add_schema(
+  advanced_protocol,
+  schema_name = "Maintenance Phase",
+  start_time = 24,    # Start 24h after beginning
+  start_time_unit = "h",
+  rep_nb = 5,         # Repeat 5 times
+  time_btw_rep = 12,  # Every 12 hours
+  time_btw_rep_unit = "h"
+)
+
+# Create the maintenance dose administration
+maintenance_dose <- create_protocol(
+  name = "Maintenance Dose",
+  type = "oral",
+  interval = "single",
+  dose = 100,         # Lower maintenance dose
+  dose_unit = "mg",
+  water_vol_per_body_weight = 3.5
+)
+
+# Add maintenance dose to the second schema
+advanced_protocol <- add_administration(
+  advanced_protocol,
+  schema_name = "Maintenance Phase",
+  administration = maintenance_dose
+)
+
+# Print the complete advanced protocol structure
+advanced_protocol
 ```
 
-#### Change administration protocol
+Once created, protocols can be added to a DDI project using the `add_protocol()` function.
 
 ```{r}
-set_compound_protocol(my_sim, compound = "Rifampicin", protocol = "iv 300 mg (0.5 h)")
+add_protocol(myDDI, advanced_protocol)
+```
+
+They can also be removed from a DDI project using the `remove_protocol()` function:
+
+```{r}
+remove_protocol(myDDI, "Loading + Maintenance Protocol")
+```
+
+##### Formulations
+
+Formulations define how a drug is released into the system. The `{cts}` package supports several types of formulations:
+- Dissolved
+- Weibull
+- Lint80
+- Particle
+- Table
+- Zero Order
+- First Order
+
+Here are examples of different formulation types:
+
+```r
+# Create a simple dissolved formulation
+dissolved_form <- create_formulation(
+  name = "Simple Solution",
+  type = "dissolved"  # Immediately available drug
+)
+
+# Create a Weibull tablet formulation
+weibull_form <- create_formulation(
+  name = "Tablet Formulation",
+  type = "weibull",
+  dissolution_time = 240,     # Time to achieve 50% dissolution
+  dissolution_time_unit = "min",
+  lag_time = 10,             # Delay before dissolution starts
+  lag_time_unit = "min",
+  dissolution_shape = 0.92,   # Shape parameter
+  suspension = FALSE          # Use as tablet, not suspension
+)
+
+# Create a particle formulation with polydisperse distribution
+particle_form <- create_formulation(
+  name = "Particle Formulation",
+  type = "particle",
+  thickness = 30,            # Unstirred water layer thickness
+  thickness_unit = "µm",
+  distribution_type = "poly", # Polydisperse distribution
+  particle_size_distribution = "normal",
+  radius = 10,              # Mean particle radius
+  radius_unit = "µm",
+  radius_sd = 3,            # Standard deviation of radius
+  radius_sd_unit = "µm",
+  radius_min = 1,           # Minimum particle size
+  radius_min_unit = "µm",
+  radius_max = 19,          # Maximum particle size
+  radius_max_unit = "µm",
+  n_bins = 5               # Number of size bins
+)
+
+# Create a zero-order release formulation
+zero_order_form <- create_formulation(
+  name = "Controlled Release",
+  type = "zero",
+  end_time = 120,          # Duration of release
+  end_time_unit = "min"
+)
+
+# Create a first-order release formulation
+first_order_form <- create_formulation(
+  name = "First Order Release",
+  type = "first",
+  thalf = 30,              # Half-life of drug release
+  thalf_unit = "min"
+)
+
+# Create a table-based release profile
+table_form <- create_formulation(
+  name = "Custom Release Profile",
+  type = "table",
+  tableX = c(0, 1, 2, 4, 8, 12),     # Time points (hours)
+  tableY = c(0, 0.2, 0.4, 0.7, 0.9, 1.0),  # Fraction released
+  suspension = TRUE
+)
+```
+
+Each formulation type has specific parameters that control how the drug is 
+released, they can be found in the `?create_formulation` help page.
+
+#### Add formulations to a compound
+Formulations can be added or removed from a ddi project using the `add_formulation()` function:
+
+```r
+# Add formulation to a compound
+add_formulation(myDDI, weibull_form)
+```
+
+They can also be removed from a DDI project using the `remove_formulation()` function:
+
+```r
+# Remove formulation from a compound
+remove_formulation(myDDI, "Tablet Formulation")
 ```
 
 
-## Dependencies
+### Create new simulations
 
-The `{cts}` package relies on several components from the Open Systems Pharmacology Suite:
+The `{cts}` package provides flexible ways to create and customize simulations through the `create_simulation()` function. Here's how to create and configure simulations:
 
-- **R version 4.4.0 or higher**.
-- **External R packages**: `{ospsuite}` for interaction with the PK-Sim core and `{rSharp}` for R and C# integration. These packages are installed automatically when you install `{cts}`.
+#### Basic Simulation Creation
 
-For more details on the installation and dependency requirements for `{ospsuite}`, please visit the `{ospsuiteR}` GitHub page [here](https://github.com/Open-Systems-Pharmacology/OSPSuite-R).
+```r
+# Create a basic simulation with individual
+basic_sim <- create_simulation(
+  simulation_name = "Basic DDI Study",
+  victim = "Rifampicin",
+  perpetrators = "Midazolam",
+  individual = "European Reference"  # Use individual OR population, not both
+)
 
+# Create a simulation with population instead
+pop_sim <- create_simulation(
+  simulation_name = "Population DDI Study",
+  victim = "Rifampicin",
+  perpetrators = "Midazolam",
+  population = "European Population"
+)
+```
+
+#### Customizing Simulations
+
+Once created, simulations can be customized in several ways:
+
+##### 1. Adding Compounds
+
+```r
+# Add a new compound to the simulation
+add_compound(basic_sim, 
+  compound = "New Compound",
+  protocol = "oral 100 mg",  # Optional protocol
+  formulation = list(       # Optional formulation mapping
+    Key = "Formulation 1",
+    Name = "Tablet"
+  )
+)
+```
+
+##### 2. Setting Protocols
+
+```r
+# Change protocol for an existing compound
+set_compound_protocol(basic_sim,
+  compound = "Rifampicin",
+  protocol = "iv 300 mg (0.5 h)",
+  formulation = list(
+    Key = "Formulation 2",
+    Name = "IV Solution"
+  )
+)
+```
+
+##### 3. Configuring Output Intervals
+
+```r
+# Set a single output interval (replaces existing)
+set_output_interval(basic_sim,
+  start_time = 0,
+  end_time = 24,
+  resolution = 10,  # points per unit
+  unit = "h"
+)
+
+# Add additional output interval
+add_output_interval(basic_sim,
+  start_time = 24,
+  end_time = 48,
+  resolution = 5,
+  unit = "h"
+)
+```
+
+#### 4. Managing Interactions and Processes
+
+```r
+# Add specific interactions for a compound
+add_interactions(basic_sim,
+  compound = "Rifampicin",
+  interactions = c("CYP3A4", "P-gp")
+)
+
+# Add specific processes for a compound
+add_processes(basic_sim,
+  compound = "Rifampicin",
+  processes = c("Hepatic Clearance", "Renal Clearance")
+)
+```
+
+##### 5. Configuring Outputs
+
+```r
+# Set specific outputs to track (replaces existing)
+set_outputs(basic_sim, c(
+  "Organism|PeripheralVenousBlood|Rifampicin|Plasma (Peripheral Venous Blood)",
+  "Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)"
+))
+
+# Add additional outputs to track
+add_outputs(basic_sim,
+  "Organism|Liver|Rifampicin|Intracellular"
+)
+```
+
+#### Adding Simulations to DDI Projects
+
+Once configured, simulations can be added to DDI projects with optional settings:
+
+```r
+# Add simulation to DDI project
+add_simulation(myDDI, basic_sim, 
+  options = list(
+    add_interactions = TRUE,  # Automatically add relevant interactions
+    add_processes = TRUE     # Automatically add relevant processes
+  )
+)
+
+# Remove simulation from DDI project
+remove_simulation(myDDI, "Basic DDI Study")
+```
