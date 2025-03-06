@@ -18,6 +18,7 @@ the updated snapshot without the specified formulations
 Remove a formulation from a snapshot
 }
 \examples{
+\dontrun{
 # Remove a single formulation
 snapshot <- remove_formulation(snapshot, "Extended release tablet")
 
@@ -26,4 +27,5 @@ snapshot <- remove_formulation(
   snapshot,
   c("Immediate release solution", "Standard tablet")
 )
+}
 }
