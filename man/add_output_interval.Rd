@@ -24,9 +24,11 @@ The updated \code{Simulation} object.
 Adds an interval to the output schema of the simulation
 }
 \examples{
+\dontrun{
 # Add an output interval for the first hour with high resolution
 sim <- add_output_interval(sim, 0, 1, 60, "h")
 
 # Add another interval for the rest of the day with lower resolution
 sim <- add_output_interval(sim, 1, 24, 10, "h")
+}
 }

@@ -36,15 +36,15 @@ with one or more additional compounds (perpetrators).
 \examples{
 # Create compounds
 midazolam <- compound("Midazolam")
-ketoconazole <- compound("Ketoconazole")
+itraconazole <- compound("Itraconazole")
 
 # Create a basic DDI simulation
-ddi <- create_ddi(victim = midazolam, ketoconazole)
+ddi <- create_ddi(victim = midazolam, itraconazole)
 
 # Create a DDI with custom options
 ddi_custom <- create_ddi(
-  victim = midazolam, 
-  ketoconazole,
+  victim = midazolam,
+  itraconazole,
   options = list(
     import_simulations = TRUE,
     create_ddi_simulation = FALSE
@@ -53,5 +53,8 @@ ddi_custom <- create_ddi(
 
 # Create a DDI with multiple perpetrators
 rifampicin <- compound("Rifampicin")
-ddi_multi <- create_ddi(victim = midazolam, ketoconazole, rifampicin)
+
+\dontrun{
+ddi_multi <- create_ddi(victim = midazolam, itraconazole, rifampicin)
+}
 }

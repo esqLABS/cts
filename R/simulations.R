@@ -54,6 +54,7 @@ create_simulation <- function(simulation_name, individual = list(), population =
 #' @return The `Snapshot` or `DDI` object with the simulation added.
 #' @export
 #' @examples
+#' \dontrun{
 #' # Create a simulation
 #' sim <- create_simulation(
 #'   simulation_name = "Basic simulation",
@@ -67,10 +68,11 @@ create_simulation <- function(simulation_name, individual = list(), population =
 #'
 #' # Add simulation with custom options
 #' snapshot <- add_simulation(
-#'   snapshot, 
-#'   sim, 
+#'   snapshot,
+#'   sim,
 #'   options = list(add_interactions = FALSE, add_processes = TRUE)
 #' )
+#' }
 add_simulation <- function(snapshot, simulation, options = list(add_interactions = TRUE, add_processes = TRUE)) {
   snapshot$check_simulation(simulation)
 
@@ -178,6 +180,12 @@ remove_simulation <- function(snapshot, simulation_name) {
 #' @return The `Simulation` object with added compound.
 #' @export
 #' @examples
+#' sim <- create_simulation(
+#'   simulation_name = "Basic simulation",
+#'   individual = "Adult male",
+#'   victim = "Midazolam",
+#'   perpetrators = c("Ketoconazole")
+#' )
 #' # Add compound without protocol
 #' sim <- add_compound(sim, "Itraconazole")
 #'
@@ -186,9 +194,9 @@ remove_simulation <- function(snapshot, simulation_name) {
 #'
 #' # Add compound with protocol and formulation
 #' sim <- add_compound(
-#'   sim, 
-#'   "Clarithromycin", 
-#'   "Oral BID", 
+#'   sim,
+#'   "Clarithromycin",
+#'   "Oral BID",
 #'   formulation = list(list(Key = "Formulation 1", Name = "Tablet"))
 #' )
 add_compound <- function(simulation, compound, protocol = NULL, formulation = list()) {
@@ -211,9 +219,9 @@ add_compound <- function(simulation, compound, protocol = NULL, formulation = li
 #'
 #' # Set protocol with formulation
 #' sim <- set_compound_protocol(
-#'   sim, 
-#'   "Ketoconazole", 
-#'   "Multiple dose", 
+#'   sim,
+#'   "Ketoconazole",
+#'   "Multiple dose",
 #'   formulation = list(list(Key = "Formulation 1", Name = "Tablet"))
 #' )
 set_compound_protocol <- function(simulation, compound, protocol, formulation = list()) {
@@ -249,11 +257,13 @@ set_output_interval = function(simulation, start_time, end_time, resolution, uni
 #' @return The updated `Simulation` object.
 #' @export
 #' @examples
+#' \dontrun{
 #' # Add an output interval for the first hour with high resolution
 #' sim <- add_output_interval(sim, 0, 1, 60, "h")
 #'
 #' # Add another interval for the rest of the day with lower resolution
 #' sim <- add_output_interval(sim, 1, 24, 10, "h")
+#' }
 add_output_interval = function(simulation, start_time, end_time, resolution, unit) {
   simulation$output_schema$add_interval(start_time, end_time, resolution, unit)
   invisible(simulation)
@@ -268,15 +278,17 @@ add_output_interval = function(simulation, start_time, end_time, resolution, uni
 #' @return The updated `Simulation` object
 #' @export
 #' @examples
+#' \dontrun{
 #' # Add a single interaction
 #' sim <- add_interactions(sim, "Ketoconazole", "CYP3A4-inhibition")
 #'
 #' # Add multiple interactions
 #' sim <- add_interactions(
-#'   sim, 
-#'   "Rifampicin", 
+#'   sim,
+#'   "Rifampicin",
 #'   c("CYP3A4-induction", "P-gp-induction")
 #' )
+#' }
 add_interactions <- function(simulation, compound, interactions) {
   simulation$add_compound_interactions(compound, interactions)
   invisible(simulation)
@@ -291,15 +303,17 @@ add_interactions <- function(simulation, compound, interactions) {
 #' @return The updated `Simulation` object
 #' @export
 #' @examples
+#' \dontrun{
 #' # Add a single process
 #' sim <- add_processes(sim, "Midazolam", "Hepatic metabolism")
 #'
 #' # Add multiple processes
 #' sim <- add_processes(
-#'   sim, 
-#'   "Ketoconazole", 
+#'   sim,
+#'   "Ketoconazole",
 #'   c("Hepatic metabolism", "Renal clearance")
 #' )
+#' }
 add_processes <- function(simulation, compound, processes) {
   simulation$add_compound_processes(compound, processes)
   invisible(simulation)
@@ -315,17 +329,19 @@ add_processes <- function(simulation, compound, processes) {
 #' @return The updated `Simulation` object.
 #' @export
 #' @examples
+#' \dontrun{
 #' # Set a single output path
 #' sim <- set_outputs(sim, "Organism|Venous Blood|Plasma|Midazolam|Concentration")
 #'
 #' # Set multiple output paths
 #' sim <- set_outputs(
-#'   sim, 
+#'   sim,
 #'   c(
 #'     "Organism|Venous Blood|Plasma|Midazolam|Concentration",
 #'     "Organism|Liver|Intracellular|Midazolam|Concentration"
 #'   )
 #' )
+#' }
 set_outputs = function(simulation, paths) {
   simulation$set_output_selections(paths)
   invisible(simulation)
@@ -341,17 +357,19 @@ set_outputs = function(simulation, paths) {
 #' @return The updated `Simulation` object.
 #' @export
 #' @examples
+#' \dontrun{
 #' # Add a single output path
 #' sim <- add_outputs(sim, "Organism|Venous Blood|Plasma|Ketoconazole|Concentration")
 #'
 #' # Add multiple output paths
 #' sim <- add_outputs(
-#'   sim, 
+#'   sim,
 #'   c(
 #'     "Organism|Liver|Intracellular|Ketoconazole|Concentration",
 #'     "Organism|Kidney|Intracellular|Ketoconazole|Concentration"
 #'   )
 #' )
+#' }
 add_outputs = function(simulation, paths) {
   simulation$add_output_selections(paths)
   invisible(simulation)

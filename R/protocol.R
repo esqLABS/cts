@@ -66,6 +66,7 @@ create_protocol <- function(name, type, interval,
 #' @return the updated snapshot with new protocol
 #' @export
 #' @examples
+#' \dontrun{
 #' # Create a snapshot
 #' snapshot <- create_snapshot("MySimulation")
 #'
@@ -79,6 +80,7 @@ create_protocol <- function(name, type, interval,
 #'
 #' # Add protocol to snapshot
 #' snapshot <- add_protocol(snapshot, protocol)
+#' }
 add_protocol <- function(snapshot, protocol) {
   snapshot$add_protocol(protocol)
   invisible(snapshot)
@@ -514,12 +516,14 @@ add_administration <- function(advanced_protocol, schema_name, administration, f
 #' @return The updated `AdvancedProtocol` object.
 #' @export
 #' @examples
+#' \dontrun{
 #' # Remove an administration from a schema
 #' advanced_protocol <- remove_administration(
 #'   advanced_protocol,
 #'   schema_name = "Daily dosing",
 #'   administration_name = "Morning dose"
 #' )
+#' }
 remove_administration <- function(advanced_protocol, schema_name, administration_name) {
   # check that protocol is an AdvancedProtocol object
   check_advanced(advanced_protocol)

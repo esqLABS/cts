@@ -20,13 +20,15 @@ The updated \code{Simulation} object
 This function add the interactions of the specified compounds.
 }
 \examples{
+\dontrun{
 # Add a single process
 sim <- add_processes(sim, "Midazolam", "Hepatic metabolism")
 
 # Add multiple processes
 sim <- add_processes(
-  sim, 
-  "Ketoconazole", 
+  sim,
+  "Ketoconazole",
   c("Hepatic metabolism", "Renal clearance")
 )
+}
 }

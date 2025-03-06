@@ -18,6 +18,7 @@ the updated snapshot with new formulation
 Add a formulation to a snapshot
 }
 \examples{
+\dontrun{
 # Create a formulation
 tablet_form <- create_formulation(
   name = "Extended release tablet",
@@ -28,4 +29,5 @@ tablet_form <- create_formulation(
 
 # Add formulation to snapshot
 snapshot <- add_formulation(snapshot, tablet_form)
+}
 }

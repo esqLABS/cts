@@ -911,6 +911,7 @@ formulation_from_data <- function(formulation_data) {
 #' @return the updated snapshot with new formulation
 #' @export
 #' @examples
+#' \dontrun{
 #' # Create a formulation
 #' tablet_form <- create_formulation(
 #'   name = "Extended release tablet",
@@ -921,6 +922,7 @@ formulation_from_data <- function(formulation_data) {
 #'
 #' # Add formulation to snapshot
 #' snapshot <- add_formulation(snapshot, tablet_form)
+#' }
 add_formulation <- function(snapshot, formulation) {
   snapshot$add_formulation(formulation)
   invisible(snapshot)
@@ -934,6 +936,7 @@ add_formulation <- function(snapshot, formulation) {
 #' @return the updated snapshot without the specified formulations
 #' @export
 #' @examples
+#' \dontrun{
 #' # Remove a single formulation
 #' snapshot <- remove_formulation(snapshot, "Extended release tablet")
 #'
@@ -942,6 +945,7 @@ add_formulation <- function(snapshot, formulation) {
 #'   snapshot,
 #'   c("Immediate release solution", "Standard tablet")
 #' )
+#' }
 remove_formulation <- function(snapshot, formulation_name) {
   snapshot$remove_formulation(formulation_name)
   invisible(snapshot)

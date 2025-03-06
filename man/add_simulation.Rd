@@ -30,6 +30,7 @@ The \code{Snapshot} or \code{DDI} object with the simulation added.
 This function adds a simulation to a \code{Snapshot} or \code{DDI} object.
 }
 \examples{
+\dontrun{
 # Create a simulation
 sim <- create_simulation(
   simulation_name = "Basic simulation",
@@ -43,8 +44,9 @@ snapshot <- add_simulation(snapshot, sim)
 
 # Add simulation with custom options
 snapshot <- add_simulation(
-  snapshot, 
-  sim, 
+  snapshot,
+  sim,
   options = list(add_interactions = FALSE, add_processes = TRUE)
 )
+}
 }

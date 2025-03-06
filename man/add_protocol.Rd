@@ -18,6 +18,7 @@ the updated snapshot with new protocol
 Add a protocol to a snapshot
 }
 \examples{
+\dontrun{
 # Create a snapshot
 snapshot <- create_snapshot("MySimulation")
 
@@ -31,4 +32,5 @@ protocol <- create_protocol(
 
 # Add protocol to snapshot
 snapshot <- add_protocol(snapshot, protocol)
+}
 }

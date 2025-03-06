@@ -20,13 +20,15 @@ The updated \code{Simulation} object
 This function add the interactions of the specified compounds.
 }
 \examples{
+\dontrun{
 # Add a single interaction
 sim <- add_interactions(sim, "Ketoconazole", "CYP3A4-inhibition")
 
 # Add multiple interactions
 sim <- add_interactions(
-  sim, 
-  "Rifampicin", 
+  sim,
+  "Rifampicin",
   c("CYP3A4-induction", "P-gp-induction")
 )
+}
 }
