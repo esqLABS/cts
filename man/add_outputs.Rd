@@ -18,3 +18,16 @@ The updated \code{Simulation} object.
 Add some outputs to be used for plotting to the simulation.
 This add the output to any previously set outputs.
 }
+\examples{
+# Add a single output path
+sim <- add_outputs(sim, "Organism|Venous Blood|Plasma|Ketoconazole|Concentration")
+
+# Add multiple output paths
+sim <- add_outputs(
+  sim, 
+  c(
+    "Organism|Liver|Intracellular|Ketoconazole|Concentration",
+    "Organism|Kidney|Intracellular|Ketoconazole|Concentration"
+  )
+)
+}

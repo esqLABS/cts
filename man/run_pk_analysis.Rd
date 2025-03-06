@@ -16,3 +16,10 @@ results as .csv files at provided location.}
 \description{
 Run Pk-Analysis for DDI simulations defined in the ddi project
 }
+\examples{
+# Run PK analysis without saving results
+pk_results <- run_pk_analysis(ddi)
+
+# Run PK analysis and save results to a directory
+pk_results <- run_pk_analysis(ddi, path = "pk_analysis_results")
+}

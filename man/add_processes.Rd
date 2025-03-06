@@ -19,3 +19,14 @@ The updated \code{Simulation} object
 \description{
 This function add the interactions of the specified compounds.
 }
+\examples{
+# Add a single process
+sim <- add_processes(sim, "Midazolam", "Hepatic metabolism")
+
+# Add multiple processes
+sim <- add_processes(
+  sim, 
+  "Ketoconazole", 
+  c("Hepatic metabolism", "Renal clearance")
+)
+}

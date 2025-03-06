@@ -17,3 +17,15 @@ the updated snapshot with new formulation
 \description{
 Add a formulation to a snapshot
 }
+\examples{
+# Create a formulation
+tablet_form <- create_formulation(
+  name = "Extended release tablet",
+  type = "weibull",
+  dissolution_time = 360,
+  dissolution_shape = 0.75
+)
+
+# Add formulation to snapshot
+snapshot <- add_formulation(snapshot, tablet_form)
+}

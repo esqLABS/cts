@@ -17,3 +17,10 @@ the updated snapshot without the specified protocols
 \description{
 Remove a protocol from a snapshot
 }
+\examples{
+# Remove a protocol from a snapshot
+snapshot <- remove_protocol(snapshot, "Standard dose")
+
+# Remove multiple protocols at once
+snapshot <- remove_protocol(snapshot, c("Protocol 1", "Protocol 2"))
+}

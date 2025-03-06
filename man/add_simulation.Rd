@@ -29,3 +29,22 @@ The \code{Snapshot} or \code{DDI} object with the simulation added.
 \description{
 This function adds a simulation to a \code{Snapshot} or \code{DDI} object.
 }
+\examples{
+# Create a simulation
+sim <- create_simulation(
+  simulation_name = "Basic simulation",
+  individual = "Adult male",
+  victim = "Midazolam",
+  perpetrators = c("Ketoconazole")
+)
+
+# Add simulation to snapshot with default options
+snapshot <- add_simulation(snapshot, sim)
+
+# Add simulation with custom options
+snapshot <- add_simulation(
+  snapshot, 
+  sim, 
+  options = list(add_interactions = FALSE, add_processes = TRUE)
+)
+}

@@ -17,3 +17,10 @@ The \code{Snapshot} or \code{DDI} object with the simulation(s) removed
 \description{
 This function removes a simulation from a \code{Snapshot} or \code{DDI} object.
 }
+\examples{
+# Remove a single simulation
+snapshot <- remove_simulation(snapshot, "Basic simulation")
+
+# Remove multiple simulations
+snapshot <- remove_simulation(snapshot, c("Simulation 1", "Simulation 2"))
+}

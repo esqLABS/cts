@@ -17,3 +17,7 @@ The updated \code{AdvancedProtocol} object.
 \description{
 Remove a schema from an advanced protocol
 }
+\examples{
+# Remove a schema from an advanced protocol
+advanced_protocol <- remove_schema(advanced_protocol, "Weekly dosing")
+}

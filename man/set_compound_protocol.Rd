@@ -21,3 +21,15 @@ The updated \code{Simulation} object
 \description{
 This function set the protocol of the specified compounds.
 }
+\examples{
+# Set protocol for a compound
+sim <- set_compound_protocol(sim, "Midazolam", "Single oral dose")
+
+# Set protocol with formulation
+sim <- set_compound_protocol(
+  sim, 
+  "Ketoconazole", 
+  "Multiple dose", 
+  formulation = list(list(Key = "Formulation 1", Name = "Tablet"))
+)
+}

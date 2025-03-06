@@ -19,3 +19,11 @@ The updated \code{AdvancedProtocol} object.
 \description{
 Remove an administration from an existing schema of an advanced protocol
 }
+\examples{
+# Remove an administration from a schema
+advanced_protocol <- remove_administration(
+  advanced_protocol,
+  schema_name = "Daily dosing",
+  administration_name = "Morning dose"
+)
+}

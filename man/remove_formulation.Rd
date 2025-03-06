@@ -17,3 +17,13 @@ the updated snapshot without the specified formulations
 \description{
 Remove a formulation from a snapshot
 }
+\examples{
+# Remove a single formulation
+snapshot <- remove_formulation(snapshot, "Extended release tablet")
+
+# Remove multiple formulations
+snapshot <- remove_formulation(
+  snapshot, 
+  c("Immediate release solution", "Standard tablet")
+)
+}

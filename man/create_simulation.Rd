@@ -34,3 +34,20 @@ Protocols used by each compounds need to be defined afterwards with set_compound
 New compound can also be added afterwards with add_compound(). Either individual or population should
 be set, but not both.
 }
+\examples{
+# Create a simulation with an individual
+sim <- create_simulation(
+  simulation_name = "Drug interaction study",
+  individual = "Adult male",
+  victim = "Midazolam",
+  perpetrators = c("Ketoconazole")
+)
+
+# Create a simulation with a population
+pop_sim <- create_simulation(
+  simulation_name = "Population study",
+  population = "European adults",
+  victim = "Warfarin",
+  perpetrators = c("Rifampicin")
+)
+}

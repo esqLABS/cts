@@ -15,8 +15,11 @@ export_ddi(ddi, path)
 Export Drug-Drug Interaction (DDI) Simulation to Snapshot
 }
 \examples{
-\dontrun{
-ddi <- create_ddi(rifampicin, midazolam)
-export_ddi(ddi, "Rifampicin-Midazolam-DDI.json")
-}
+# Create a DDI simulation
+midazolam <- compound("Midazolam")
+ketoconazole <- compound("Ketoconazole")
+ddi <- create_ddi(victim = midazolam, ketoconazole)
+
+# Export the DDI to a file
+export_ddi(ddi, "output/Midazolam-Ketoconazole-DDI.json")
 }

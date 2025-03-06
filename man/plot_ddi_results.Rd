@@ -20,3 +20,13 @@ a list of plots
 \description{
 Plot DDI simulations defined in the ddi project
 }
+\examples{
+# Plot all simulation results
+plots <- plot_ddi_results(ddi)
+
+# Plot specific simulations
+plots <- plot_ddi_results(ddi, simulationNames = c("Midazolam_alone", "DDI_simulation"))
+
+# Plot with custom aggregation method
+plots <- plot_ddi_results(ddi, aggregationMethod = "median")
+}

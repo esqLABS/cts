@@ -34,9 +34,24 @@ This function creates a DDI simulation by combining a main compound (victim)
 with one or more additional compounds (perpetrators).
 }
 \examples{
-\dontrun{
-rifampicin <- compound("Rifampicin")
+# Create compounds
 midazolam <- compound("Midazolam")
-create_ddi(victim = rifampicin, perpetrator = midazolam)
-}
+ketoconazole <- compound("Ketoconazole")
+
+# Create a basic DDI simulation
+ddi <- create_ddi(victim = midazolam, ketoconazole)
+
+# Create a DDI with custom options
+ddi_custom <- create_ddi(
+  victim = midazolam, 
+  ketoconazole,
+  options = list(
+    import_simulations = TRUE,
+    create_ddi_simulation = FALSE
+  )
+)
+
+# Create a DDI with multiple perpetrators
+rifampicin <- compound("Rifampicin")
+ddi_multi <- create_ddi(victim = midazolam, ketoconazole, rifampicin)
 }
