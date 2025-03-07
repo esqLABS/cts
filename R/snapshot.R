@@ -84,6 +84,18 @@ Snapshot <- R6::R6Class(
       private$remove_item("protocols", protocol_name)
     },
     #' @description
+    #' add a formulation to the snapshot.
+    #' @param formulation the formulation object to add
+    add_formulation = function(formulation) {
+      private$add_item("formulations", formulation)
+    },
+    #' @description
+    #' remove a formulation from the snapshot.
+    #' @param formulation_name name(s) of the formulation(s) to remove
+    remove_formulation = function(formulation_name) {
+      private$remove_item("formulations", formulation_name)
+    },
+    #' @description
     #' add a simulation to the snapshot.
     #' @param simulation the simulation to add
     add_simulation = function(simulation) {
@@ -327,7 +339,7 @@ Snapshot <- R6::R6Class(
       self[[target]] <- c(self[[target]], list(item))
     },
     remove_item = function(target, name) {
-      if (target == "protocols") {
+      if (target %in% c("protocols", "formulations")) {
         self[[target]] <- purrr::discard(self[[target]], ~ .x$name %in% name)
       } else {
         self[[target]] <- purrr::discard(self[[target]], ~ .x$Name %in% name)
