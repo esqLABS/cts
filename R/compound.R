@@ -9,11 +9,11 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' compound("Rifampicin")
-#' compound("Rifampicin-Model.json")
 #' compound("https://raw.githubusercontent.com/Open-Systems-Pharmacology/Alfentanil-Model/v2.2/Alfentanil-Model.json")
-#' }
+#' \dontrun{
+#' compound("Rifampicin-Model.json")
+#' #' }
 compound <- function(input) {
   Compound$new(input)
 }

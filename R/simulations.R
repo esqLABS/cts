@@ -54,25 +54,30 @@ create_simulation <- function(simulation_name, individual = list(), population =
 #' @return The `Snapshot` or `DDI` object with the simulation added.
 #' @export
 #' @examples
-#' \dontrun{
+#' # Create a compound snapshot first
+#' midazolam <- compound("Midazolam")
+#' itraconazole <- compound("Itraconazole")
+#' 
+#' # Create a DDI object
+#' ddi <- create_ddi(midazolam, itraconazole)
+#' 
 #' # Create a simulation
 #' sim <- create_simulation(
 #'   simulation_name = "Basic simulation",
 #'   individual = "Adult male",
 #'   victim = "Midazolam",
-#'   perpetrators = c("Ketoconazole")
+#'   perpetrators = c("itraconazole")
 #' )
 #'
-#' # Add simulation to snapshot with default options
-#' snapshot <- add_simulation(snapshot, sim)
+#' # Add simulation to DDI with default options
+#' ddi <- add_simulation(ddi, sim)
 #'
 #' # Add simulation with custom options
-#' snapshot <- add_simulation(
-#'   snapshot,
+#' ddi <- add_simulation(
+#'   ddi,
 #'   sim,
 #'   options = list(add_interactions = FALSE, add_processes = TRUE)
 #' )
-#' }
 add_simulation <- function(snapshot, simulation, options = list(add_interactions = TRUE, add_processes = TRUE)) {
   snapshot$check_simulation(simulation)
 
@@ -214,6 +219,14 @@ add_compound <- function(simulation, compound, protocol = NULL, formulation = li
 #' @return The updated `Simulation` object
 #' @export
 #' @examples
+#' # Create a simulation first
+#' sim <- create_simulation(
+#'   simulation_name = "Protocol example",
+#'   individual = "Adult male",
+#'   victim = "Midazolam",
+#'   perpetrators = c("Ketoconazole")
+#' )
+#'
 #' # Set protocol for a compound
 #' sim <- set_compound_protocol(sim, "Midazolam", "Single oral dose")
 #'
@@ -238,6 +251,14 @@ set_compound_protocol <- function(simulation, compound, protocol, formulation = 
 #' @return The updated `Simulation` object.
 #' @export
 #' @examples
+#' # Create a simulation first
+#' sim <- create_simulation(
+#'   simulation_name = "Output interval example",
+#'   individual = "Adult male",
+#'   victim = "Midazolam",
+#'   perpetrators = c("Ketoconazole")
+#' )
+#'
 #' # Set output interval for 24 hours with 10 points per hour
 #' sim <- set_output_interval(sim, 0, 24, 10, "h")
 #'
@@ -257,13 +278,19 @@ set_output_interval = function(simulation, start_time, end_time, resolution, uni
 #' @return The updated `Simulation` object.
 #' @export
 #' @examples
-#' \dontrun{
+#' # Create a simulation first
+#' sim <- create_simulation(
+#'   simulation_name = "Output interval example",
+#'   individual = "Adult male",
+#'   victim = "Midazolam",
+#'   perpetrators = c("itraconazole")
+#' )
+#'
 #' # Add an output interval for the first hour with high resolution
 #' sim <- add_output_interval(sim, 0, 1, 60, "h")
 #'
 #' # Add another interval for the rest of the day with lower resolution
 #' sim <- add_output_interval(sim, 1, 24, 10, "h")
-#' }
 add_output_interval = function(simulation, start_time, end_time, resolution, unit) {
   simulation$output_schema$add_interval(start_time, end_time, resolution, unit)
   invisible(simulation)
@@ -278,7 +305,14 @@ add_output_interval = function(simulation, start_time, end_time, resolution, uni
 #' @return The updated `Simulation` object
 #' @export
 #' @examples
-#' \dontrun{
+#' # Create a simulation first
+#' sim <- create_simulation(
+#'   simulation_name = "Interaction example",
+#'   individual = "Adult male",
+#'   victim = "Midazolam",
+#'   perpetrators = c("Ketoconazole", "Rifampicin")
+#' )
+#'
 #' # Add a single interaction
 #' sim <- add_interactions(sim, "Ketoconazole", "CYP3A4-inhibition")
 #'
@@ -288,7 +322,6 @@ add_output_interval = function(simulation, start_time, end_time, resolution, uni
 #'   "Rifampicin",
 #'   c("CYP3A4-induction", "P-gp-induction")
 #' )
-#' }
 add_interactions <- function(simulation, compound, interactions) {
   simulation$add_compound_interactions(compound, interactions)
   invisible(simulation)
@@ -303,7 +336,14 @@ add_interactions <- function(simulation, compound, interactions) {
 #' @return The updated `Simulation` object
 #' @export
 #' @examples
-#' \dontrun{
+#' # Create a simulation first
+#' sim <- create_simulation(
+#'   simulation_name = "Process example",
+#'   individual = "Adult male",
+#'   victim = "Midazolam",
+#'   perpetrators = c("Ketoconazole")
+#' )
+#'
 #' # Add a single process
 #' sim <- add_processes(sim, "Midazolam", "Hepatic metabolism")
 #'
@@ -313,7 +353,6 @@ add_interactions <- function(simulation, compound, interactions) {
 #'   "Ketoconazole",
 #'   c("Hepatic metabolism", "Renal clearance")
 #' )
-#' }
 add_processes <- function(simulation, compound, processes) {
   simulation$add_compound_processes(compound, processes)
   invisible(simulation)
@@ -329,7 +368,14 @@ add_processes <- function(simulation, compound, processes) {
 #' @return The updated `Simulation` object.
 #' @export
 #' @examples
-#' \dontrun{
+#' # Create a simulation first
+#' sim <- create_simulation(
+#'   simulation_name = "Output example",
+#'   individual = "Adult male",
+#'   victim = "Midazolam",
+#'   perpetrators = c("Ketoconazole")
+#' )
+#'
 #' # Set a single output path
 #' sim <- set_outputs(sim, "Organism|Venous Blood|Plasma|Midazolam|Concentration")
 #'
@@ -341,7 +387,6 @@ add_processes <- function(simulation, compound, processes) {
 #'     "Organism|Liver|Intracellular|Midazolam|Concentration"
 #'   )
 #' )
-#' }
 set_outputs = function(simulation, paths) {
   simulation$set_output_selections(paths)
   invisible(simulation)
@@ -357,7 +402,14 @@ set_outputs = function(simulation, paths) {
 #' @return The updated `Simulation` object.
 #' @export
 #' @examples
-#' \dontrun{
+#' # Create a simulation first
+#' sim <- create_simulation(
+#'   simulation_name = "Add output example",
+#'   individual = "Adult male",
+#'   victim = "Midazolam",
+#'   perpetrators = c("Ketoconazole")
+#' )
+#'
 #' # Add a single output path
 #' sim <- add_outputs(sim, "Organism|Venous Blood|Plasma|Ketoconazole|Concentration")
 #'
@@ -369,7 +421,6 @@ set_outputs = function(simulation, paths) {
 #'     "Organism|Kidney|Intracellular|Ketoconazole|Concentration"
 #'   )
 #' )
-#' }
 add_outputs = function(simulation, paths) {
   simulation$add_output_selections(paths)
   invisible(simulation)

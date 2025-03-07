@@ -84,10 +84,19 @@ import_ddi <- function(input) {
 #' @param path a character string that is the path to the snapshot
 #' @export
 #' @examples
-#' \dontrun{
-#' ddi <- create_ddi(rifampicin, midazolam)
-#' export_ddi(ddi, "Rifampicin-Midazolam-DDI.json")
-#' }
+#' # Create compounds
+#' midazolam <- compound("Midazolam")
+#' rifampicin <- compound("Rifampicin")
+#' 
+#' # Create a DDI simulation
+#' ddi <- create_ddi(victim = midazolam, rifampicin)
+#' 
+#' # Export to a temporary file
+#' temp_file <- tempfile(fileext = ".json")
+#' export_ddi(ddi, temp_file)
+#' 
+#' # Verify the file was created
+#' file.exists(temp_file)
 export_ddi <- function(ddi, path) {
   path <- with_json_suffix(path)
   ddi$export(path)
@@ -101,6 +110,13 @@ export_ddi <- function(ddi, path) {
 #' @param exportPKML logical. Whether to export the PKML files. Default is FALSE.
 #' @export
 #' @examples
+#' # Create compounds
+#' midazolam <- compound("Midazolam")
+#' itraconazole <- compound("Itraconazole")
+#'
+#' # Create a DDI simulation
+#' ddi <- create_ddi(victim = midazolam, itraconazole)
+#'
 #' # Run simulations without saving results
 #' results <- run_ddi(ddi)
 #'
@@ -121,6 +137,13 @@ run_ddi <- function(ddi, path = NULL, exportPKML = FALSE) {
 #' results as .csv files at provided location.
 #' @export
 #' @examples
+#' # Create compounds
+#' midazolam <- compound("Midazolam")
+#' rifampicin <- compound("Rifampicin")
+#' 
+#' # Create a DDI simulation
+#' ddi <- create_ddi(victim = midazolam, rifampicin)
+#'
 #' # Run PK analysis without saving results
 #' pk_results <- run_pk_analysis(ddi)
 #'
@@ -139,13 +162,18 @@ run_pk_analysis <- function(ddi, path = NULL) {
 #' @return a list of plots
 #' @export
 #' @examples
-#' \dontrun{
+#' # Create compounds 
+#' midazolam <- compound("Midazolam")
+#' rifampicin <- compound("Rifampicin")
+#' 
+#' # Create a DDI simulation
+#' ddi <- create_ddi(victim = midazolam, rifampicin)
+#' 
 #' # Plot all simulation results
 #' plots <- plot_ddi_results(ddi)
 #'
 #' # Plot specific simulations
 #' plots <- plot_ddi_results(ddi, simulationNames = c("Midazolam_alone", "DDI_simulation"))
-#' }
 plot_ddi_results <- function(ddi, simulationNames = NULL, ...) {
 
   ddi$create_plots(...)

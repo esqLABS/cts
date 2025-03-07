@@ -66,9 +66,8 @@ create_protocol <- function(name, type, interval,
 #' @return the updated snapshot with new protocol
 #' @export
 #' @examples
-#' \dontrun{
-#' # Create a snapshot
-#' snapshot <- create_snapshot("MySimulation")
+#' # Create a compound snapshot
+#' midazolam <- compound("Midazolam")
 #'
 #' # Create a protocol
 #' protocol <- create_protocol(
@@ -78,9 +77,8 @@ create_protocol <- function(name, type, interval,
 #'   dose = 500
 #' )
 #'
-#' # Add protocol to snapshot
-#' snapshot <- add_protocol(snapshot, protocol)
-#' }
+#' # Add protocol to compound snapshot
+#' midazolam <- add_protocol(midazolam, protocol)
 add_protocol <- function(snapshot, protocol) {
   snapshot$add_protocol(protocol)
   invisible(snapshot)
@@ -94,13 +92,20 @@ add_protocol <- function(snapshot, protocol) {
 #' @return the updated snapshot without the specified protocols
 #' @export
 #' @examples
-#' \dontrun{
+#' # Create a compound snapshot
+#' midazolam <- compound("Midazolam")
+#'
+#' # Create and add some protocols
+#' protocol1 <- create_protocol("Protocol 1", "oral", "single", 100)
+#' protocol2 <- create_protocol("Protocol 2", "iv", "24", 50)
+#' midazolam <- add_protocol(midazolam, protocol1)
+#' midazolam <- add_protocol(midazolam, protocol2)
+#'
 #' # Remove a protocol from a snapshot
-#' snapshot <- remove_protocol(snapshot, "Standard dose")
+#' midazolam <- remove_protocol(midazolam, "Protocol 1")
 #'
 #' # Remove multiple protocols at once
-#' snapshot <- remove_protocol(snapshot, c("Protocol 1", "Protocol 2"))
-#' }
+#' midazolam <- remove_protocol(midazolam, c("Protocol 1", "Protocol 2"))
 remove_protocol <- function(snapshot, protocol_name) {
   snapshot$remove_protocol(protocol_name)
   invisible(snapshot)
@@ -518,14 +523,42 @@ add_administration <- function(advanced_protocol, schema_name, administration, f
 #' @return The updated `AdvancedProtocol` object.
 #' @export
 #' @examples
-#' \dontrun{
+#' # Create an advanced protocol
+#' advanced_protocol <- create_advanced_protocol("Complex regimen")
+#'
+#' # Add a schema
+#' advanced_protocol <- add_schema(
+#'   advanced_protocol,
+#'   start_time = 0,
+#'   start_time_unit = "h",
+#'   rep_nb = 3,
+#'   time_btw_rep = 24,
+#'   time_btw_rep_unit = "h",
+#'   schema_name = "Daily dosing"
+#' )
+#'
+#' # Create and add a single dose protocol
+#' morning_dose <- create_protocol(
+#'   name = "Morning dose",
+#'   type = "oral",
+#'   interval = "single",
+#'   dose = 250,
+#'   dose_unit = "mg"
+#' )
+#'
+#' # Add the administration to the schema
+#' advanced_protocol <- add_administration(
+#'   advanced_protocol,
+#'   schema_name = "Daily dosing",
+#'   administration = morning_dose
+#' )
+#'
 #' # Remove an administration from a schema
 #' advanced_protocol <- remove_administration(
 #'   advanced_protocol,
 #'   schema_name = "Daily dosing",
 #'   administration_name = "Morning dose"
 #' )
-#' }
 remove_administration <- function(advanced_protocol, schema_name, administration_name) {
   # check that protocol is an AdvancedProtocol object
   check_advanced(advanced_protocol)
