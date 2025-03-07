@@ -26,6 +26,7 @@ itraconazole <- compound("Itraconazole")
 # Create a DDI simulation
 ddi <- create_ddi(victim = midazolam, itraconazole)
 
+\dontrun{
 # Run simulations without saving results
 results <- run_ddi(ddi)
 
@@ -34,4 +35,5 @@ results <- run_ddi(ddi, path = "simulation_results")
 
 # Run simulations and export PKML files
 results <- run_ddi(ddi, path = "simulation_results", exportPKML = TRUE)
+}
 }

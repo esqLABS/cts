@@ -15,7 +15,7 @@ set_output_interval(simulation, start_time, end_time, resolution, unit)
 
 \item{resolution}{resolution in points per \code{unit}}
 
-\item{unit}{time unit for the interval.}
+\item{unit}{time unit for the interval. Should be one of ospsuite::ospUnits$Time.}
 }
 \value{
 The updated \code{Simulation} object.
@@ -36,5 +36,5 @@ sim <- create_simulation(
 sim <- set_output_interval(sim, 0, 24, 10, "h")
 
 # Set output interval for 7 days with 24 points per day
-sim <- set_output_interval(sim, 0, 7, 24, "day")
+sim <- set_output_interval(sim, 0, 7, 24, "day(s)")
 }

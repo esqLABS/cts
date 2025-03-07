@@ -290,7 +290,7 @@ run simulations defined in the snapshot
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{path}}{character string to where to export pk analysis as csv file
+\item{\code{path}}{character string to the folder where to export pk analysis as csv file
 Plot Time profile of DDI simulations defined in the ddi project}
 }
 \if{html}{\out{</div>}}

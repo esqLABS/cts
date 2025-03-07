@@ -6,31 +6,6 @@
 \description{
 This class is used to create the json corresponding to a simulation output schema snapshot
 }
-\examples{
-# Create a new output schema
-schema <- SnapshotOutputSchema$new()
-
-# Print the default schema
-schema$print()
-
-# Clear all intervals
-schema$clear()
-
-# Add a high-resolution interval for the first hour
-schema$add_interval(0, 1, 60, "h")
-
-# Add another interval with lower resolution
-schema$add_interval(1, 24, 10, "h")
-
-# Set a single interval (replaces all existing intervals)
-schema$set_interval(0, 48, 6, "h")
-
-# Access the intervals data
-intervals <- schema$intervals
-
-# Get the JSON representation
-json_data <- schema$data
-}
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
@@ -77,7 +52,7 @@ Adds an interval to the schema
 
 \item{\code{resolution}}{resolution in points per \code{unit}}
 
-\item{\code{unit}}{time unit for the interval}
+\item{\code{unit}}{time unit for the interval. Should be one of ospsuite::ospUnits$Time.}
 }
 \if{html}{\out{</div>}}
 }

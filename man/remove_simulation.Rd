@@ -18,9 +18,27 @@ The \code{Snapshot} or \code{DDI} object with the simulation(s) removed
 This function removes a simulation from a \code{Snapshot} or \code{DDI} object.
 }
 \examples{
-# Remove a single simulation
-snapshot <- remove_simulation(snapshot, "Basic simulation")
+# Create a compound snapshot first
+midazolam <- compound("Midazolam")
+itraconazole <- compound("Itraconazole")
 
-# Remove multiple simulations
-snapshot <- remove_simulation(snapshot, c("Simulation 1", "Simulation 2"))
+# Create a DDI object
+ddi <- create_ddi(midazolam, itraconazole)
+
+# Create a simulation
+sim <- create_simulation(
+  simulation_name = "Basic simulation",
+  individual = "European (P-gp modified, CYP3A4 36 h)",
+  victim = "Midazolam",
+  perpetrators = c("Itraconazole")
+)
+
+# Add simulation to DDI with default options
+ddi <- add_simulation(
+  ddi,
+  sim,
+  options = list(add_interactions = FALSE, add_processes = TRUE)
+)
+# Remove a single simulation
+snapshot <- remove_simulation(ddi, "Basic simulation")
 }

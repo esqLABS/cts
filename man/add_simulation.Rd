@@ -40,15 +40,12 @@ ddi <- create_ddi(midazolam, itraconazole)
 # Create a simulation
 sim <- create_simulation(
   simulation_name = "Basic simulation",
-  individual = "Adult male",
+  individual = "European (P-gp modified, CYP3A4 36 h)",
   victim = "Midazolam",
-  perpetrators = c("itraconazole")
+  perpetrators = c("Itraconazole")
 )
 
 # Add simulation to DDI with default options
-ddi <- add_simulation(ddi, sim)
-
-# Add simulation with custom options
 ddi <- add_simulation(
   ddi,
   sim,
