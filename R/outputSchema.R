@@ -52,13 +52,13 @@ SnapshotOutputSchema <- R6::R6Class(
     #' @param start_time Start time for the interval in `unit`
     #' @param end_time End time for the interval in `unit`
     #' @param resolution resolution in points per `unit`
-    #' @param unit time unit for the interval
+    #' @param unit time unit for the interval. Should be one of ospsuite::ospUnits$Time.
     add_interval = function(start_time, end_time, resolution, unit = "h") {
       if (!is.numeric(c(start_time, end_time, resolution))) {
         cli::cli_abort("`start_time`, `end_time` and `resolution` must be numeric.")
       }
       if (!(unit %in% ospsuite::getUnitsForDimension("Time"))) {
-        cli::cli_abort("`unit` must be a valid time unit.")
+        cli::cli_abort("`unit` must be a valid time unit. See `ospsuite::ospUnits$Time` for available units.")
       }
 
       # add interval

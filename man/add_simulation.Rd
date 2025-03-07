@@ -29,3 +29,26 @@ The \code{Snapshot} or \code{DDI} object with the simulation added.
 \description{
 This function adds a simulation to a \code{Snapshot} or \code{DDI} object.
 }
+\examples{
+# Create a compound snapshot first
+midazolam <- compound("Midazolam")
+itraconazole <- compound("Itraconazole")
+
+# Create a DDI object
+ddi <- create_ddi(midazolam, itraconazole)
+
+# Create a simulation
+sim <- create_simulation(
+  simulation_name = "Basic simulation",
+  individual = "European (P-gp modified, CYP3A4 36 h)",
+  victim = "Midazolam",
+  perpetrators = c("Itraconazole")
+)
+
+# Add simulation to DDI with default options
+ddi <- add_simulation(
+  ddi,
+  sim,
+  options = list(add_interactions = FALSE, add_processes = TRUE)
+)
+}

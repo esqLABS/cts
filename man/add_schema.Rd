@@ -35,3 +35,18 @@ The updated \code{AdvancedProtocol} object.
 \description{
 Add a schema to an advanced protocol
 }
+\examples{
+# Create an advanced protocol
+advanced_protocol <- create_advanced_protocol("Weekly dosing")
+
+# Add a schema for weekly administration
+advanced_protocol <- add_schema(
+  advanced_protocol,
+  start_time = 0,
+  start_time_unit = "h",
+  rep_nb = 4,
+  time_btw_rep = 7,
+  time_btw_rep_unit = "day",
+  schema_name = "Weekly dosing"
+)
+}

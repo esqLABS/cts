@@ -759,6 +759,39 @@ Formulation <- R6::R6Class(
 #'  - thalf_unit: Unit of half-life of the drug release process (default min)
 #' @return A new `Formulation` object.
 #' @export
+#' @examples
+#' # Create a dissolved formulation (simplest type)
+#' dissolved_form <- create_formulation(
+#'   name = "Immediate release solution",
+#'   type = "dissolved"
+#' )
+#'
+#' # Create a Weibull tablet formulation
+#' weibull_form <- create_formulation(
+#'   name = "Standard tablet",
+#'   type = "weibull",
+#'   dissolution_time = 180,
+#'   dissolution_time_unit = "min",
+#'   dissolution_shape = 0.85
+#' )
+#'
+#' # Create a particle formulation with monodisperse distribution
+#' particle_form <- create_formulation(
+#'   name = "Suspension",
+#'   type = "particle",
+#'   thickness = 25,
+#'   thickness_unit = "µm",
+#'   radius = 5,
+#'   radius_unit = "µm"
+#' )
+#'
+#' # Create a table-based formulation with custom release profile
+#' table_form <- create_formulation(
+#'   name = "Custom release profile",
+#'   type = "table",
+#'   tableX = c(0, 0.5, 1, 2, 4, 8),
+#'   tableY = c(0, 0.1, 0.3, 0.6, 0.9, 1.0)
+#' )
 create_formulation <- function(name, type, ...) {
   formulation <- Formulation$new(
     name = name,
@@ -877,6 +910,20 @@ formulation_from_data <- function(formulation_data) {
 #'
 #' @return the updated snapshot with new formulation
 #' @export
+#' @examples
+#' # Create a snapshot
+#' snapshot <- compound("Midazolam")
+#'
+#' # Create a formulation
+#' tablet_form <- create_formulation(
+#'   name = "Extended release tablet",
+#'   type = "weibull",
+#'   dissolution_time = 360,
+#'   dissolution_shape = 0.75
+#' )
+#'
+#' # Add formulation to snapshot
+#' snapshot <- add_formulation(snapshot, tablet_form)
 add_formulation <- function(snapshot, formulation) {
   snapshot$add_formulation(formulation)
   invisible(snapshot)
@@ -885,10 +932,28 @@ add_formulation <- function(snapshot, formulation) {
 #' Remove a formulation from a snapshot
 #'
 #' @param snapshot a snapshot object.
-#' @param formualtion_name a character vector of protocol name(s) to remove
+#' @param formulation_name a character vector of protocol name(s) to remove
 #'
 #' @return the updated snapshot without the specified formulations
 #' @export
+#' @examples
+#' # Create a snapshot and add some formulations
+#' snapshot <- compound("Midazolam")
+#' 
+#' # Add a few formulations
+#' f1 <- create_formulation("Immediate release solution", "dissolved")
+#' f2 <- create_formulation("Standard tablet", "weibull")
+#' snapshot <- add_formulation(snapshot, f1)
+#' snapshot <- add_formulation(snapshot, f2)
+#'
+#' # Remove a single formulation
+#' snapshot <- remove_formulation(snapshot, "Immediate release solution")
+#'
+#' # Remove multiple formulations
+#' snapshot <- remove_formulation(
+#'   snapshot,
+#'   c("Immediate release solution", "Standard tablet")
+#' )
 remove_formulation <- function(snapshot, formulation_name) {
   snapshot$remove_formulation(formulation_name)
   invisible(snapshot)

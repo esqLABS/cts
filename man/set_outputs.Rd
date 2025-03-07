@@ -18,3 +18,24 @@ The updated \code{Simulation} object.
 Set the outputs to be used for plotting to the simulation.
 This removes any previously set outputs.
 }
+\examples{
+# Create a simulation first
+sim <- create_simulation(
+  simulation_name = "Output example",
+  individual = "Adult male",
+  victim = "Midazolam",
+  perpetrators = c("Ketoconazole")
+)
+
+# Set a single output path
+sim <- set_outputs(sim, "Organism|Venous Blood|Plasma|Midazolam|Concentration")
+
+# Set multiple output paths
+sim <- set_outputs(
+  sim,
+  c(
+    "Organism|Venous Blood|Plasma|Midazolam|Concentration",
+    "Organism|Liver|Intracellular|Midazolam|Concentration"
+  )
+)
+}

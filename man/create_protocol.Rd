@@ -59,3 +59,24 @@ a Protocol object
 \description{
 Create a new administration protocol
 }
+\examples{
+# Create an oral administration protocol
+oral_protocol <- create_protocol(
+  name = "Oral dose",
+  type = "oral",
+  interval = "single",
+  dose = 500,
+  dose_unit = "mg"
+)
+
+# Create an intravenous protocol with custom infusion time
+iv_protocol <- create_protocol(
+  name = "IV infusion",
+  type = "iv",
+  interval = "12-12",
+  dose = 250,
+  dose_unit = "mg",
+  infusion_time = 30,
+  infusion_time_unit = "min"
+)
+}

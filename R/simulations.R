@@ -14,6 +14,22 @@
 #' be set, but not both.
 #' @return A `Simulation` object
 #' @export
+#' @examples
+#' # Create a simulation with an individual
+#' sim <- create_simulation(
+#'   simulation_name = "Drug interaction study",
+#'   individual = "Adult male",
+#'   victim = "Midazolam",
+#'   perpetrators = c("Ketoconazole")
+#' )
+#'
+#' # Create a simulation with a population
+#' pop_sim <- create_simulation(
+#'   simulation_name = "Population study",
+#'   population = "European adults",
+#'   victim = "Warfarin",
+#'   perpetrators = c("Rifampicin")
+#' )
 create_simulation <- function(simulation_name, individual = list(), population = list(), victim, perpetrators) {
   # Combine Compound, Protocol and Formulation
   sim <- Simulation$new(
@@ -37,6 +53,28 @@ create_simulation <- function(simulation_name, individual = list(), population =
 #'      compound to the simulation (only used if no processes have been defined in the simulation for a compound).
 #' @return The `Snapshot` or `DDI` object with the simulation added.
 #' @export
+#' @examples
+#' # Create a compound snapshot first
+#' midazolam <- compound("Midazolam")
+#' itraconazole <- compound("Itraconazole")
+#'
+#' # Create a DDI object
+#' ddi <- create_ddi(midazolam, itraconazole)
+#'
+#' # Create a simulation
+#' sim <- create_simulation(
+#'   simulation_name = "Basic simulation",
+#'   individual = "European (P-gp modified, CYP3A4 36 h)",
+#'   victim = "Midazolam",
+#'   perpetrators = c("Itraconazole")
+#' )
+#'
+#' # Add simulation to DDI with default options
+#' ddi <- add_simulation(
+#'   ddi,
+#'   sim,
+#'   options = list(add_interactions = FALSE, add_processes = TRUE)
+#' )
 add_simulation <- function(snapshot, simulation, options = list(add_interactions = TRUE, add_processes = TRUE)) {
   snapshot$check_simulation(simulation)
 
@@ -123,6 +161,30 @@ add_simulation <- function(snapshot, simulation, options = list(add_interactions
 #'
 #' @return The `Snapshot` or `DDI` object with the simulation(s) removed
 #' @export
+#' @examples
+#' # Create a compound snapshot first
+#' midazolam <- compound("Midazolam")
+#' itraconazole <- compound("Itraconazole")
+#'
+#' # Create a DDI object
+#' ddi <- create_ddi(midazolam, itraconazole)
+#'
+#' # Create a simulation
+#' sim <- create_simulation(
+#'   simulation_name = "Basic simulation",
+#'   individual = "European (P-gp modified, CYP3A4 36 h)",
+#'   victim = "Midazolam",
+#'   perpetrators = c("Itraconazole")
+#' )
+#'
+#' # Add simulation to DDI with default options
+#' ddi <- add_simulation(
+#'   ddi,
+#'   sim,
+#'   options = list(add_interactions = FALSE, add_processes = TRUE)
+#' )
+#' # Remove a single simulation
+#' snapshot <- remove_simulation(ddi, "Basic simulation")
 remove_simulation <- function(snapshot, simulation_name) {
   snapshot$remove_simulation(simulation_name)
   invisible(snapshot)
@@ -137,6 +199,26 @@ remove_simulation <- function(snapshot, simulation_name) {
 #' @param formulation Formulation key/name mapping for the chosen protocol.
 #' @return The `Simulation` object with added compound.
 #' @export
+#' @examples
+#' sim <- create_simulation(
+#'   simulation_name = "Basic simulation",
+#'   individual = "Adult male",
+#'   victim = "Midazolam",
+#'   perpetrators = c("Ketoconazole")
+#' )
+#' # Add compound without protocol
+#' sim <- add_compound(sim, "Itraconazole")
+#'
+#' # Add compound with protocol
+#' sim <- add_compound(sim, "Fluconazole", "Standard oral dose")
+#'
+#' # Add compound with protocol and formulation
+#' sim <- add_compound(
+#'   sim,
+#'   "Clarithromycin",
+#'   "Oral BID",
+#'   formulation = list(list(Key = "Formulation 1", Name = "Tablet"))
+#' )
 add_compound <- function(simulation, compound, protocol = NULL, formulation = list()) {
   simulation$add_compound(compound, protocol, formulation)
   invisible(simulation)
@@ -151,6 +233,25 @@ add_compound <- function(simulation, compound, protocol = NULL, formulation = li
 #' @param formulation Formulation key/name mapping for the chosen protocol.
 #' @return The updated `Simulation` object
 #' @export
+#' @examples
+#' # Create a simulation first
+#' sim <- create_simulation(
+#'   simulation_name = "Protocol example",
+#'   individual = "Adult male",
+#'   victim = "Midazolam",
+#'   perpetrators = c("Ketoconazole")
+#' )
+#'
+#' # Set protocol for a compound
+#' sim <- set_compound_protocol(sim, "Midazolam", "Single oral dose")
+#'
+#' # Set protocol with formulation
+#' sim <- set_compound_protocol(
+#'   sim,
+#'   "Ketoconazole",
+#'   "Multiple dose",
+#'   formulation = list(list(Key = "Formulation 1", Name = "Tablet"))
+#' )
 set_compound_protocol <- function(simulation, compound, protocol, formulation = list()) {
   simulation$set_compound_protocol(compound, protocol, formulation)
   invisible(simulation)
@@ -161,9 +262,23 @@ set_compound_protocol <- function(simulation, compound, protocol, formulation = 
 #' @param start_time Start time of the interval in `unit`
 #' @param end_time End time of the interval in `unit`
 #' @param resolution resolution in points per `unit`
-#' @param unit time unit for the interval.
+#' @param unit time unit for the interval. Should be one of ospsuite::ospUnits$Time.
 #' @return The updated `Simulation` object.
 #' @export
+#' @examples
+#' # Create a simulation first
+#' sim <- create_simulation(
+#'   simulation_name = "Output interval example",
+#'   individual = "Adult male",
+#'   victim = "Midazolam",
+#'   perpetrators = c("Ketoconazole")
+#' )
+#'
+#' # Set output interval for 24 hours with 10 points per hour
+#' sim <- set_output_interval(sim, 0, 24, 10, "h")
+#'
+#' # Set output interval for 7 days with 24 points per day
+#' sim <- set_output_interval(sim, 0, 7, 24, "day(s)")
 set_output_interval = function(simulation, start_time, end_time, resolution, unit) {
   simulation$output_schema$set_interval(start_time, end_time, resolution, unit)
   invisible(simulation)
@@ -177,6 +292,20 @@ set_output_interval = function(simulation, start_time, end_time, resolution, uni
 #' @param unit time unit for the interval.
 #' @return The updated `Simulation` object.
 #' @export
+#' @examples
+#' # Create a simulation first
+#' sim <- create_simulation(
+#'   simulation_name = "Output interval example",
+#'   individual = "Adult male",
+#'   victim = "Midazolam",
+#'   perpetrators = c("itraconazole")
+#' )
+#'
+#' # Add an output interval for the first hour with high resolution
+#' sim <- add_output_interval(sim, 0, 1, 60, "h")
+#'
+#' # Add another interval for the rest of the day with lower resolution
+#' sim <- add_output_interval(sim, 1, 24, 10, "h")
 add_output_interval = function(simulation, start_time, end_time, resolution, unit) {
   simulation$output_schema$add_interval(start_time, end_time, resolution, unit)
   invisible(simulation)
@@ -190,6 +319,24 @@ add_output_interval = function(simulation, start_time, end_time, resolution, uni
 #' @param interactions name of interactions to use
 #' @return The updated `Simulation` object
 #' @export
+#' @examples
+#' # Create a simulation first
+#' sim <- create_simulation(
+#'   simulation_name = "Interaction example",
+#'   individual = "Adult male",
+#'   victim = "Midazolam",
+#'   perpetrators = c("Ketoconazole", "Rifampicin")
+#' )
+#'
+#' # Add a single interaction
+#' sim <- add_interactions(sim, "Ketoconazole", "CYP3A4-inhibition")
+#'
+#' # Add multiple interactions
+#' sim <- add_interactions(
+#'   sim,
+#'   "Rifampicin",
+#'   c("CYP3A4-induction", "P-gp-induction")
+#' )
 add_interactions <- function(simulation, compound, interactions) {
   simulation$add_compound_interactions(compound, interactions)
   invisible(simulation)
@@ -203,6 +350,24 @@ add_interactions <- function(simulation, compound, interactions) {
 #' @param processes name of interactions to use
 #' @return The updated `Simulation` object
 #' @export
+#' @examples
+#' # Create a simulation first
+#' sim <- create_simulation(
+#'   simulation_name = "Process example",
+#'   individual = "Adult male",
+#'   victim = "Midazolam",
+#'   perpetrators = c("Ketoconazole")
+#' )
+#'
+#' # Add a single process
+#' sim <- add_processes(sim, "Midazolam", "Hepatic metabolism")
+#'
+#' # Add multiple processes
+#' sim <- add_processes(
+#'   sim,
+#'   "Ketoconazole",
+#'   c("Hepatic metabolism", "Renal clearance")
+#' )
 add_processes <- function(simulation, compound, processes) {
   simulation$add_compound_processes(compound, processes)
   invisible(simulation)
@@ -217,6 +382,26 @@ add_processes <- function(simulation, compound, processes) {
 #' @param paths path of the output to use for plotting
 #' @return The updated `Simulation` object.
 #' @export
+#' @examples
+#' # Create a simulation first
+#' sim <- create_simulation(
+#'   simulation_name = "Output example",
+#'   individual = "Adult male",
+#'   victim = "Midazolam",
+#'   perpetrators = c("Ketoconazole")
+#' )
+#'
+#' # Set a single output path
+#' sim <- set_outputs(sim, "Organism|Venous Blood|Plasma|Midazolam|Concentration")
+#'
+#' # Set multiple output paths
+#' sim <- set_outputs(
+#'   sim,
+#'   c(
+#'     "Organism|Venous Blood|Plasma|Midazolam|Concentration",
+#'     "Organism|Liver|Intracellular|Midazolam|Concentration"
+#'   )
+#' )
 set_outputs = function(simulation, paths) {
   simulation$set_output_selections(paths)
   invisible(simulation)
@@ -231,6 +416,26 @@ set_outputs = function(simulation, paths) {
 #' @param paths path of the output to add for plotting
 #' @return The updated `Simulation` object.
 #' @export
+#' @examples
+#' # Create a simulation first
+#' sim <- create_simulation(
+#'   simulation_name = "Add output example",
+#'   individual = "Adult male",
+#'   victim = "Midazolam",
+#'   perpetrators = c("Ketoconazole")
+#' )
+#'
+#' # Add a single output path
+#' sim <- add_outputs(sim, "Organism|Venous Blood|Plasma|Ketoconazole|Concentration")
+#'
+#' # Add multiple output paths
+#' sim <- add_outputs(
+#'   sim,
+#'   c(
+#'     "Organism|Liver|Intracellular|Ketoconazole|Concentration",
+#'     "Organism|Kidney|Intracellular|Ketoconazole|Concentration"
+#'   )
+#' )
 add_outputs = function(simulation, paths) {
   simulation$add_output_selections(paths)
   invisible(simulation)

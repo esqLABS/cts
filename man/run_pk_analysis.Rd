@@ -9,10 +9,27 @@ run_pk_analysis(ddi, path = NULL)
 \arguments{
 \item{ddi}{a DDI object}
 
-\item{path}{a character string representing the path to where to save
+\item{path}{a character string representing the folder where to save
 pk analysis results. Default is NULL. If not NULL, will save the pk analysis
-results as .csv files at provided location.}
+results as .csv files at provided location. If the folder does not exist, it
+will be created.}
 }
 \description{
 Run Pk-Analysis for DDI simulations defined in the ddi project
+}
+\examples{
+# Create compounds
+midazolam <- compound("Midazolam")
+itraconazole <- compound("Itraconazole")
+
+# Create a DDI simulation
+ddi <- create_ddi(victim = midazolam, itraconazole)
+
+\dontrun{
+# Run PK analysis without saving results
+pk_results <- run_pk_analysis(ddi)
+
+# Run PK analysis and save results to a directory
+pk_results <- run_pk_analysis(ddi, path = "pk_analysis_results")
+}
 }

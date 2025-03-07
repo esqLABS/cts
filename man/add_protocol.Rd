@@ -17,3 +17,18 @@ the updated snapshot with new protocol
 \description{
 Add a protocol to a snapshot
 }
+\examples{
+# Create a compound snapshot
+midazolam <- compound("Midazolam")
+
+# Create a protocol
+protocol <- create_protocol(
+  name = "Standard dose",
+  type = "oral",
+  interval = "24",
+  dose = 500
+)
+
+# Add protocol to compound snapshot
+midazolam <- add_protocol(midazolam, protocol)
+}

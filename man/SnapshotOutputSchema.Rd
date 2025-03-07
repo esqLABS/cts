@@ -52,7 +52,7 @@ Adds an interval to the schema
 
 \item{\code{resolution}}{resolution in points per \code{unit}}
 
-\item{\code{unit}}{time unit for the interval}
+\item{\code{unit}}{time unit for the interval. Should be one of ospsuite::ospUnits$Time.}
 }
 \if{html}{\out{</div>}}
 }

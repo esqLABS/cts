@@ -1,0 +1,139 @@
+---
+title: "Working with Compound Models"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Working with Compound Models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "figures/working-with-compounds",
+  out.width = "100%",
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+# Working with Compound Models
+
+The `{cts}` package provides comprehensive methods to import compound models for use in drug-drug interaction (DDI) simulations. This vignette demonstrates all available approaches to import compound models from different sources and explore their properties.
+
+## Loading the Package
+
+First, load the `cts` package:
+
+```{r setup}
+library(cts)
+```
+
+## Available Compound Building Blocks
+
+The `{cts}` package can interface with the Open Systems Pharmacology (OSP) model library to retrieve compound models. You can list all available compounds in the OSP model library using the `list_compounds()` function:
+
+```{r list-compounds}
+# List available compounds building blocks
+list_compounds()
+```
+
+This command outputs a list of compound names available in the OSP model library, which you can select to create your DDI simulations.
+
+## Importing Compound Models
+
+The `compound()` function is the main entry point for importing compound models. It supports multiple sources and formats, providing flexibility in how you obtain your models.
+
+### From OSP Qualified Building Blocks
+
+You can directly import pre-qualified compounds from the OSP model library by specifying the compound name:
+
+```{r import-from-library, eval=FALSE}
+# Import Rifampicin from the OSP model library
+rifampicin <- compound("Rifampicin")
+
+# Import Midazolam from the OSP model library
+midazolam <- compound("Midazolam")
+```
+
+### From Local Files
+
+You can import compound models from local JSON files:
+
+```{r import-from-file, eval=FALSE}
+# Import a compound model from a local file
+local_compound <- compound("path/to/Rifampicin-Model.json")
+```
+
+### From URLs
+
+You can also import compound models directly from URLs:
+
+```{r import-from-url, eval=FALSE}
+# Import a compound model from a URL
+url_compound <- compound("https://raw.githubusercontent.com/Open-Systems-Pharmacology/Alfentanil-Model/v2.2/Alfentanil-Model.json")
+```
+
+## Exploring Compound Properties
+
+After importing a compound model, you can explore its properties and structure.
+
+### Basic Information
+
+You can print a compound object to see its basic structure:
+
+```{r print-compound, eval=FALSE}
+# Print basic information about the compound
+rifampicin
+```
+
+### Extracting Interactions
+
+The `extract_interactions()` function allows you to identify all drug interactions defined in a compound model:
+
+```{r extract-interactions, eval=FALSE}
+# Extract all interactions for a compound
+extract_interactions(rifampicin)
+
+# Extract interactions for specific compounds
+extract_interactions(rifampicin, compounds = "Rifampicin")
+
+# Extract interactions without printing to console
+interactions <- extract_interactions(rifampicin, quietly = TRUE)
+```
+
+### Extracting Processes
+
+The `extract_processes()` function helps you identify all processes defined in a compound model:
+
+```{r extract-processes, eval=FALSE}
+# Extract all processes for a compound
+extract_processes(rifampicin)
+
+# Extract processes for specific compounds
+extract_processes(rifampicin, compounds = "Rifampicin")
+
+# Extract processes without printing to console
+processes <- extract_processes(rifampicin, quietly = TRUE)
+```
+
+## Updating Compound Models
+
+If you need to update a compound model to the latest version, you can use the `update_snapshots()` function:
+
+```{r update-snapshots, eval=FALSE}
+# Update a compound model to the latest version
+updated_rifampicin <- update_snapshots(rifampicin)
+```
+
+## Exporting Compound Models
+
+You can export a compound model to a JSON file using the `export()` method:
+
+```{r export-compound, eval=FALSE}
+# Export a compound model to a JSON file
+rifampicin$export("path/to/exported-rifampicin.json")
+```
+
+

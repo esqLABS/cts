@@ -35,5 +35,82 @@ test_that("Zero order formulation can be created", {
 })
 
 test_that("First order formulation can be created", {
-  expect_snapshot(create_formulation(name = "FirstOrder", type = "first"))
+  expect_snapshot(create_formulation(name = "FirstOrder", type = "first",
+  thalf = "0.01",
+  thalf_unit = "min"))
+})
+
+test_that("Formulation can be added to a snapshot", {
+  # Create a snapshot
+  snapshot <- midazolam$clone()
+  
+  # Create formulations
+  f1 <- create_formulation("Immediate release solution", "dissolved")
+  f2 <- create_formulation(
+    name = "Standard tablet", 
+    type = "weibull",
+    dissolution_time = 180,
+    dissolution_time_unit = "min",
+    lag_time = 0,
+    lag_time_unit = "min",
+    dissolution_shape = 0.85,
+    suspension = TRUE
+  )
+  
+  inital_formulations_n <- length(snapshot$formulations)
+  # Add formulations to snapshot
+  snapshot <- add_formulation(snapshot, f1)
+  snapshot <- add_formulation(snapshot, f2)
+  
+  # Check that formulations were added
+  expect_true("Immediate release solution" %in% snapshot$get_names("formulations"))
+  expect_true("Standard tablet" %in% snapshot$get_names("formulations"))
+  expect_equal(length(snapshot$formulations), inital_formulations_n+2)
+})
+
+test_that("Formulation can be removed from a snapshot", {
+  # Create a snapshot
+  snapshot <- midazolam$clone()
+  
+  # Create and add formulations
+  f1 <- create_formulation("Immediate release solution", "dissolved")
+  f2 <- create_formulation(
+    name = "Standard tablet", 
+    type = "weibull",
+    dissolution_time = 180,
+    dissolution_time_unit = "min",
+    lag_time = 0,
+    lag_time_unit = "min",
+    dissolution_shape = 0.85,
+    suspension = TRUE
+  )
+  f3 <- create_formulation(
+    name = "Extended release tablet", 
+    type = "weibull",
+    dissolution_time = 360,
+    dissolution_time_unit = "min",
+    lag_time = 0,
+    lag_time_unit = "min",
+    dissolution_shape = 0.85,
+    suspension = TRUE
+  )
+  
+  snapshot <- add_formulation(snapshot, f1)
+  snapshot <- add_formulation(snapshot, f2)
+  snapshot <- add_formulation(snapshot, f3)
+
+  inital_formulations_n <- length(snapshot$formulations)
+
+  # Remove a single formulation
+  snapshot <- remove_formulation(snapshot, "Immediate release solution")
+  expect_false("Immediate release solution" %in% snapshot$get_names("formulations"))
+  expect_true("Standard tablet" %in% snapshot$get_names("formulations"))
+  expect_true("Extended release tablet" %in% snapshot$get_names("formulations"))
+  expect_equal(length(snapshot$formulations), inital_formulations_n - 1)
+  
+  # Remove multiple formulations
+  snapshot <- remove_formulation(snapshot, c("Standard tablet", "Extended release tablet"))
+  expect_false("Standard tablet" %in% snapshot$get_names("formulations"))
+  expect_false("Extended release tablet" %in% snapshot$get_names("formulations"))
+  expect_equal(length(snapshot$formulations), inital_formulations_n - 3)
 })

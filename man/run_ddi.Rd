@@ -18,3 +18,22 @@ results as .csv files at provided location.}
 \description{
 Run Drug-Drug Interaction (DDI) Simulations defined in the ddi project
 }
+\examples{
+# Create compounds
+midazolam <- compound("Midazolam")
+itraconazole <- compound("Itraconazole")
+
+# Create a DDI simulation
+ddi <- create_ddi(victim = midazolam, itraconazole)
+
+\dontrun{
+# Run simulations without saving results
+results <- run_ddi(ddi)
+
+# Run simulations and save results to a directory
+results <- run_ddi(ddi, path = "simulation_results")
+
+# Run simulations and export PKML files
+results <- run_ddi(ddi, path = "simulation_results", exportPKML = TRUE)
+}
+}

@@ -19,3 +19,41 @@ The updated \code{AdvancedProtocol} object.
 \description{
 Remove an administration from an existing schema of an advanced protocol
 }
+\examples{
+# Create an advanced protocol
+advanced_protocol <- create_advanced_protocol("Complex regimen")
+
+# Add a schema
+advanced_protocol <- add_schema(
+  advanced_protocol,
+  start_time = 0,
+  start_time_unit = "h",
+  rep_nb = 3,
+  time_btw_rep = 24,
+  time_btw_rep_unit = "h",
+  schema_name = "Daily dosing"
+)
+
+# Create and add a single dose protocol
+morning_dose <- create_protocol(
+  name = "Morning dose",
+  type = "oral",
+  interval = "single",
+  dose = 250,
+  dose_unit = "mg"
+)
+
+# Add the administration to the schema
+advanced_protocol <- add_administration(
+  advanced_protocol,
+  schema_name = "Daily dosing",
+  administration = morning_dose
+)
+
+# Remove an administration from a schema
+advanced_protocol <- remove_administration(
+  advanced_protocol,
+  schema_name = "Daily dosing",
+  administration_name = "Morning dose"
+)
+}

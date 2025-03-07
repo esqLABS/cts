@@ -20,3 +20,16 @@ a list of plots
 \description{
 Plot DDI simulations defined in the ddi project
 }
+\examples{
+# Create compounds
+midazolam <- compound("Midazolam")
+itraconazole <- compound("Itraconazole")
+
+# Create a DDI simulation
+ddi <- create_ddi(victim = midazolam, itraconazole)
+
+# Plot all simulation results
+\dontrun{
+plots <- plot_ddi_results(ddi)
+}
+}

@@ -60,3 +60,37 @@ A new \code{Formulation} object.
 \description{
 Create a formulation
 }
+\examples{
+# Create a dissolved formulation (simplest type)
+dissolved_form <- create_formulation(
+  name = "Immediate release solution",
+  type = "dissolved"
+)
+
+# Create a Weibull tablet formulation
+weibull_form <- create_formulation(
+  name = "Standard tablet",
+  type = "weibull",
+  dissolution_time = 180,
+  dissolution_time_unit = "min",
+  dissolution_shape = 0.85
+)
+
+# Create a particle formulation with monodisperse distribution
+particle_form <- create_formulation(
+  name = "Suspension",
+  type = "particle",
+  thickness = 25,
+  thickness_unit = "µm",
+  radius = 5,
+  radius_unit = "µm"
+)
+
+# Create a table-based formulation with custom release profile
+table_form <- create_formulation(
+  name = "Custom release profile",
+  type = "table",
+  tableX = c(0, 0.5, 1, 2, 4, 8),
+  tableY = c(0, 0.1, 0.3, 0.6, 0.9, 1.0)
+)
+}

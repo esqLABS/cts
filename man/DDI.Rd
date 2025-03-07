@@ -39,12 +39,14 @@ This class is used to import, access and manipulate the data from a DDI snapshot
 \if{html}{\out{
 <details><summary>Inherited methods</summary>
 <ul>
+<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_formulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_formulation'><code>cts::Snapshot$add_formulation()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_protocol"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_protocol'><code>cts::Snapshot$add_protocol()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_simulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_simulation'><code>cts::Snapshot$add_simulation()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="check_simulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-check_simulation'><code>cts::Snapshot$check_simulation()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="create_plots"><a href='../../cts/html/Snapshot.html#method-Snapshot-create_plots'><code>cts::Snapshot$create_plots()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="export"><a href='../../cts/html/Snapshot.html#method-Snapshot-export'><code>cts::Snapshot$export()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="get_names"><a href='../../cts/html/Snapshot.html#method-Snapshot-get_names'><code>cts::Snapshot$get_names()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_formulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_formulation'><code>cts::Snapshot$remove_formulation()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_protocol"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_protocol'><code>cts::Snapshot$remove_protocol()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_simulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_simulation'><code>cts::Snapshot$remove_simulation()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="run_pk_analysis"><a href='../../cts/html/Snapshot.html#method-Snapshot-run_pk_analysis'><code>cts::Snapshot$run_pk_analysis()</code></a></span></li>

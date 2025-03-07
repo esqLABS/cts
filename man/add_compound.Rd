@@ -21,3 +21,24 @@ The \code{Simulation} object with added compound.
 \description{
 This function adds a compounds to a simulation object.
 }
+\examples{
+sim <- create_simulation(
+  simulation_name = "Basic simulation",
+  individual = "Adult male",
+  victim = "Midazolam",
+  perpetrators = c("Ketoconazole")
+)
+# Add compound without protocol
+sim <- add_compound(sim, "Itraconazole")
+
+# Add compound with protocol
+sim <- add_compound(sim, "Fluconazole", "Standard oral dose")
+
+# Add compound with protocol and formulation
+sim <- add_compound(
+  sim,
+  "Clarithromycin",
+  "Oral BID",
+  formulation = list(list(Key = "Formulation 1", Name = "Tablet"))
+)
+}

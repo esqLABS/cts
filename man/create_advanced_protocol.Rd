@@ -15,3 +15,7 @@ an AdvancedProtocol object
 \description{
 Create a new advanced administration protocol
 }
+\examples{
+# Create an advanced protocol for complex dosing regimen
+advanced_protocol <- create_advanced_protocol("Complex dosing regimen")
+}

@@ -1,0 +1,248 @@
+---
+title: "Creating and Managing Simulations"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Creating and Managing Simulations}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "figures/simulations-",
+  out.width = "100%",
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+# Creating and Managing Simulations
+
+The `{cts}` package provides flexible ways to create, customize, and manage simulations for drug-drug interaction (DDI) studies. This vignette demonstrates how to create simulations, customize their properties, and add them to DDI projects.
+
+## Loading the Package
+
+First, load the `cts` package:
+
+```{r setup}
+library(cts)
+```
+
+## Creating Basic Simulations
+
+The `create_simulation()` function is the main entry point for creating simulations. At a minimum, you need to specify a simulation name, a victim compound, one or more perpetrator compounds, and either an individual or a population.
+
+### Creating a Simulation with an Individual
+
+```{r basic-individual}
+# Create a basic simulation with an individual
+basic_sim <- create_simulation(
+  simulation_name = "Basic Individual DDI Study",
+  victim = "Rifampicin",
+  perpetrators = "Midazolam",
+  individual = "European Reference"  # Use individual OR population, not both
+)
+
+# Print the simulation to see its structure
+basic_sim
+```
+
+### Creating a Simulation with a Population
+
+```{r basic-population}
+# Create a simulation with a population instead
+pop_sim <- create_simulation(
+  simulation_name = "Population DDI Study",
+  victim = "Rifampicin",
+  perpetrators = "Midazolam",
+  population = "European Population"
+)
+
+# Print the simulation to see its structure
+pop_sim
+```
+
+### Creating a Simulation with Multiple Perpetrators
+
+You can include multiple perpetrator compounds in a simulation:
+
+```{r multi-perpetrator}
+# Create a simulation with multiple perpetrators
+multi_perp_sim <- create_simulation(
+  simulation_name = "Multi-Perpetrator DDI Study",
+  victim = "Rifampicin",
+  perpetrators = c("Midazolam", "Ketoconazole"),
+  individual = "European Reference"
+)
+
+# Print the simulation to see its structure
+multi_perp_sim
+```
+
+## Customizing Simulations
+
+Once you've created a basic simulation, you can customize it in various ways.
+
+### Adding Compounds
+
+You can add additional compounds to an existing simulation:
+
+```{r add-compound}
+# Add a new compound to the simulation
+basic_sim <- add_compound(
+  basic_sim, 
+  compound = "Ketoconazole",
+  protocol = "oral 100 mg",  # Optional protocol
+  formulation = list(       # Optional formulation mapping
+    Key = "Formulation",
+    Name = "Tablet"
+  )
+)
+
+# Print the updated simulation
+basic_sim
+```
+
+### Setting Protocols for Compounds
+
+You can set or change the protocol for a compound in the simulation:
+
+```{r set-protocol}
+# Change protocol for an existing compound
+basic_sim <- set_compound_protocol(
+  basic_sim,
+  compound = "Rifampicin",
+  protocol = "iv 300 mg (0.5 h)",
+  formulation = list(
+    Key = "Formulation",
+    Name = "IV Solution"
+  )
+)
+
+# Print the updated simulation
+basic_sim
+```
+
+### Configuring Output Intervals
+
+You can configure the time intervals for which simulation results are generated:
+
+```{r output-intervals}
+# Set a single output interval (replaces existing)
+basic_sim <- set_output_interval(
+  basic_sim,
+  start_time = 0,
+  end_time = 24,
+  resolution = 10,  # points per unit
+  unit = "h"
+)
+
+# Add an additional output interval
+basic_sim <- add_output_interval(
+  basic_sim,
+  start_time = 24,
+  end_time = 48,
+  resolution = 5,
+  unit = "h"
+)
+
+# Print the updated simulation
+basic_sim
+```
+
+### Managing Interactions and Processes
+
+You can specify which interactions and processes to include in the simulation:
+
+```{r interactions-processes}
+# Add specific interactions for a compound
+basic_sim <- add_interactions(
+  basic_sim,
+  compound = "Rifampicin",
+  interactions = c("CYP3A4", "P-gp")
+)
+
+# Add specific processes for a compound
+basic_sim <- add_processes(
+  basic_sim,
+  compound = "Rifampicin",
+  processes = c("Hepatic Clearance", "Renal Clearance")
+)
+
+# Print the updated simulation
+basic_sim
+```
+
+### Configuring Outputs
+
+You can specify which model outputs to track during the simulation:
+
+```{r outputs}
+# Set specific outputs to track (replaces existing)
+basic_sim <- set_outputs(
+  basic_sim, 
+  c(
+    "Organism|PeripheralVenousBlood|Rifampicin|Plasma (Peripheral Venous Blood)",
+    "Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)"
+  )
+)
+
+# Add additional outputs to track
+basic_sim <- add_outputs(
+  basic_sim,
+  "Organism|Liver|Rifampicin|Intracellular"
+)
+
+# Print the updated simulation
+basic_sim
+```
+
+## Adding Simulations to DDI Projects
+
+Once you've created and customized a simulation, you can add it to a DDI project.
+
+### Setting Up a DDI Project
+
+First, let's create a simple DDI project:
+
+```{r setup-ddi, eval=FALSE}
+# Import compound models
+rifampicin <- compound("Rifampicin")
+midazolam <- compound("Midazolam")
+
+# Create a basic DDI project
+myDDI <- create_ddi(victim = rifampicin, midazolam)
+```
+
+### Adding a Simulation to a DDI Project
+
+You can add a simulation to a DDI project using the `add_simulation()` function:
+
+```{r add-simulation, eval=FALSE}
+# Add simulation to DDI project
+myDDI <- add_simulation(
+  myDDI, 
+  basic_sim, 
+  options = list(
+    add_interactions = TRUE,  # Automatically add relevant interactions
+    add_processes = TRUE     # Automatically add relevant processes
+  )
+)
+
+# Print the DDI project to see the added simulation
+myDDI
+```
+
+### Removing a Simulation from a DDI Project
+
+You can remove a simulation from a DDI project using the `remove_simulation()` function:
+
+```{r remove-simulation, eval=FALSE}
+# Remove simulation from DDI project
+myDDI <- remove_simulation(myDDI, "Basic Individual DDI Study")
+
+# Print the DDI project to confirm removal
+myDDI
+```
