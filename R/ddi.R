@@ -84,17 +84,18 @@ import_ddi <- function(input) {
 #' @param path a character string that is the path to the snapshot
 #' @export
 #' @examples
+#'
 #' # Create compounds
 #' midazolam <- compound("Midazolam")
-#' rifampicin <- compound("Rifampicin")
-#' 
+#' itraconazole <- compound("Itraconazole")
+#'
 #' # Create a DDI simulation
-#' ddi <- create_ddi(victim = midazolam, rifampicin)
-#' 
+#' ddi <- create_ddi(victim = midazolam, itraconazole)
+#'
 #' # Export to a temporary file
 #' temp_file <- tempfile(fileext = ".json")
 #' export_ddi(ddi, temp_file)
-#' 
+#'
 #' # Verify the file was created
 #' file.exists(temp_file)
 export_ddi <- function(ddi, path) {
@@ -117,6 +118,7 @@ export_ddi <- function(ddi, path) {
 #' # Create a DDI simulation
 #' ddi <- create_ddi(victim = midazolam, itraconazole)
 #'
+#' \dontrun{
 #' # Run simulations without saving results
 #' results <- run_ddi(ddi)
 #'
@@ -125,6 +127,7 @@ export_ddi <- function(ddi, path) {
 #'
 #' # Run simulations and export PKML files
 #' results <- run_ddi(ddi, path = "simulation_results", exportPKML = TRUE)
+#' }
 run_ddi <- function(ddi, path = NULL, exportPKML = FALSE) {
   ddi$run_simulations(path, exportPKML)
   return(ddi$simulation_results)
@@ -132,23 +135,26 @@ run_ddi <- function(ddi, path = NULL, exportPKML = FALSE) {
 
 #' Run Pk-Analysis for DDI simulations defined in the ddi project
 #' @param ddi a DDI object
-#' @param path a character string representing the path to where to save
+#' @param path a character string representing the folder where to save
 #' pk analysis results. Default is NULL. If not NULL, will save the pk analysis
-#' results as .csv files at provided location.
+#' results as .csv files at provided location. If the folder does not exist, it
+#' will be created.
 #' @export
 #' @examples
 #' # Create compounds
 #' midazolam <- compound("Midazolam")
-#' rifampicin <- compound("Rifampicin")
-#' 
-#' # Create a DDI simulation
-#' ddi <- create_ddi(victim = midazolam, rifampicin)
+#' itraconazole <- compound("Itraconazole")
 #'
+#' # Create a DDI simulation
+#' ddi <- create_ddi(victim = midazolam, itraconazole)
+#'
+#' \dontrun{
 #' # Run PK analysis without saving results
 #' pk_results <- run_pk_analysis(ddi)
 #'
 #' # Run PK analysis and save results to a directory
 #' pk_results <- run_pk_analysis(ddi, path = "pk_analysis_results")
+#' }
 run_pk_analysis <- function(ddi, path = NULL) {
   ddi$run_pk_analysis(path)
   return(ddi$pk_analysis_results)
@@ -162,18 +168,17 @@ run_pk_analysis <- function(ddi, path = NULL) {
 #' @return a list of plots
 #' @export
 #' @examples
-#' # Create compounds 
+#' # Create compounds
 #' midazolam <- compound("Midazolam")
-#' rifampicin <- compound("Rifampicin")
-#' 
-#' # Create a DDI simulation
-#' ddi <- create_ddi(victim = midazolam, rifampicin)
-#' 
-#' # Plot all simulation results
-#' plots <- plot_ddi_results(ddi)
+#' itraconazole <- compound("Itraconazole")
 #'
-#' # Plot specific simulations
-#' plots <- plot_ddi_results(ddi, simulationNames = c("Midazolam_alone", "DDI_simulation"))
+#' # Create a DDI simulation
+#' ddi <- create_ddi(victim = midazolam, itraconazole)
+#'
+#' # Plot all simulation results
+#' \dontrun{
+#' plots <- plot_ddi_results(ddi)
+#' }
 plot_ddi_results <- function(ddi, simulationNames = NULL, ...) {
 
   ddi$create_plots(...)

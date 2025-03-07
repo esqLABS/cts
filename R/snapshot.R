@@ -218,7 +218,7 @@ Snapshot <- R6::R6Class(
     },
     #' @description
     #' run simulations defined in the snapshot
-    #' @param path character string to where to export pk analysis as csv file
+    #' @param path character string to the folder where to export pk analysis as csv file
     run_pk_analysis = function(path = NULL) {
       if (is.null(private$.sim_results)) {
         cli::cli_alert_info("DDI simulations results were not found. Running them.")
@@ -240,6 +240,10 @@ Snapshot <- R6::R6Class(
       )
 
       if (!is.null(path)) {
+        # create a directory if it does not exist
+        if (!fs::dir_exists(path)) {
+          fs::dir_create(path)
+        }
         for (i in seq_len(length(pk_analysis))) {
           ospsuite::exportPKAnalysesToCSV(
             pkAnalyses = pk_analysis[[i]],

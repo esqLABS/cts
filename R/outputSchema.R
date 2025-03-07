@@ -2,30 +2,6 @@
 #'
 #' @description
 #' This class is used to create the json corresponding to a simulation output schema snapshot
-#' @examples
-#' # Create a new output schema
-#' schema <- SnapshotOutputSchema$new()
-#'
-#' # Print the default schema
-#' schema$print()
-#'
-#' # Clear all intervals
-#' schema$clear()
-#'
-#' # Add a high-resolution interval for the first hour
-#' schema$add_interval(0, 1, 60, "h")
-#'
-#' # Add another interval with lower resolution
-#' schema$add_interval(1, 24, 10, "h")
-#'
-#' # Set a single interval (replaces all existing intervals)
-#' schema$set_interval(0, 48, 6, "h")
-#'
-#' # Access the intervals data
-#' intervals <- schema$intervals
-#'
-#' # Get the JSON representation
-#' json_data <- schema$data
 SnapshotOutputSchema <- R6::R6Class(
   "SnapshotOutputSchema",
   cloneable = FALSE,
@@ -76,13 +52,13 @@ SnapshotOutputSchema <- R6::R6Class(
     #' @param start_time Start time for the interval in `unit`
     #' @param end_time End time for the interval in `unit`
     #' @param resolution resolution in points per `unit`
-    #' @param unit time unit for the interval
+    #' @param unit time unit for the interval. Should be one of ospsuite::ospUnits$Time.
     add_interval = function(start_time, end_time, resolution, unit = "h") {
       if (!is.numeric(c(start_time, end_time, resolution))) {
         cli::cli_abort("`start_time`, `end_time` and `resolution` must be numeric.")
       }
       if (!(unit %in% ospsuite::getUnitsForDimension("Time"))) {
-        cli::cli_abort("`unit` must be a valid time unit.")
+        cli::cli_abort("`unit` must be a valid time unit. See `ospsuite::ospUnits$Time` for available units.")
       }
 
       # add interval
@@ -104,7 +80,7 @@ SnapshotOutputSchema <- R6::R6Class(
     #' @param ... Same parameters as add_interval
     set_interval = function(...) {
       self$clear()
-      self$add_interval(...)
+      # self$add_interval(...)
     },
     #' @description
     #' Print the object to the console

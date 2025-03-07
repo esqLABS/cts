@@ -456,6 +456,20 @@ add_schema <- function(advanced_protocol, start_time, start_time_unit, rep_nb, t
 #'
 #' @export
 #' @examples
+#' #' # Create an advanced protocol
+#' advanced_protocol <- create_advanced_protocol("Weekly dosing")
+#'
+#' # Add a schema for weekly administration
+#' advanced_protocol <- add_schema(
+#'   advanced_protocol,
+#'   start_time = 0,
+#'   start_time_unit = "h",
+#'   rep_nb = 4,
+#'   time_btw_rep = 7,
+#'   time_btw_rep_unit = "day",
+#'   schema_name = "Weekly dosing"
+#' )
+#'
 #' # Remove a schema from an advanced protocol
 #' advanced_protocol <- remove_schema(advanced_protocol, "Weekly dosing")
 remove_schema <- function(advanced_protocol, schema_name) {

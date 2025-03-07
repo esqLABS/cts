@@ -57,22 +57,19 @@ create_simulation <- function(simulation_name, individual = list(), population =
 #' # Create a compound snapshot first
 #' midazolam <- compound("Midazolam")
 #' itraconazole <- compound("Itraconazole")
-#' 
+#'
 #' # Create a DDI object
 #' ddi <- create_ddi(midazolam, itraconazole)
-#' 
+#'
 #' # Create a simulation
 #' sim <- create_simulation(
 #'   simulation_name = "Basic simulation",
-#'   individual = "Adult male",
+#'   individual = "European (P-gp modified, CYP3A4 36 h)",
 #'   victim = "Midazolam",
-#'   perpetrators = c("itraconazole")
+#'   perpetrators = c("Itraconazole")
 #' )
 #'
 #' # Add simulation to DDI with default options
-#' ddi <- add_simulation(ddi, sim)
-#'
-#' # Add simulation with custom options
 #' ddi <- add_simulation(
 #'   ddi,
 #'   sim,
@@ -165,11 +162,29 @@ add_simulation <- function(snapshot, simulation, options = list(add_interactions
 #' @return The `Snapshot` or `DDI` object with the simulation(s) removed
 #' @export
 #' @examples
-#' # Remove a single simulation
-#' snapshot <- remove_simulation(snapshot, "Basic simulation")
+#' # Create a compound snapshot first
+#' midazolam <- compound("Midazolam")
+#' itraconazole <- compound("Itraconazole")
 #'
-#' # Remove multiple simulations
-#' snapshot <- remove_simulation(snapshot, c("Simulation 1", "Simulation 2"))
+#' # Create a DDI object
+#' ddi <- create_ddi(midazolam, itraconazole)
+#'
+#' # Create a simulation
+#' sim <- create_simulation(
+#'   simulation_name = "Basic simulation",
+#'   individual = "European (P-gp modified, CYP3A4 36 h)",
+#'   victim = "Midazolam",
+#'   perpetrators = c("Itraconazole")
+#' )
+#'
+#' # Add simulation to DDI with default options
+#' ddi <- add_simulation(
+#'   ddi,
+#'   sim,
+#'   options = list(add_interactions = FALSE, add_processes = TRUE)
+#' )
+#' # Remove a single simulation
+#' snapshot <- remove_simulation(ddi, "Basic simulation")
 remove_simulation <- function(snapshot, simulation_name) {
   snapshot$remove_simulation(simulation_name)
   invisible(snapshot)
@@ -247,7 +262,7 @@ set_compound_protocol <- function(simulation, compound, protocol, formulation = 
 #' @param start_time Start time of the interval in `unit`
 #' @param end_time End time of the interval in `unit`
 #' @param resolution resolution in points per `unit`
-#' @param unit time unit for the interval.
+#' @param unit time unit for the interval. Should be one of ospsuite::ospUnits$Time.
 #' @return The updated `Simulation` object.
 #' @export
 #' @examples
@@ -263,7 +278,7 @@ set_compound_protocol <- function(simulation, compound, protocol, formulation = 
 #' sim <- set_output_interval(sim, 0, 24, 10, "h")
 #'
 #' # Set output interval for 7 days with 24 points per day
-#' sim <- set_output_interval(sim, 0, 7, 24, "day")
+#' sim <- set_output_interval(sim, 0, 7, 24, "day(s)")
 set_output_interval = function(simulation, start_time, end_time, resolution, unit) {
   simulation$output_schema$set_interval(start_time, end_time, resolution, unit)
   invisible(simulation)
