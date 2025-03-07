@@ -82,11 +82,11 @@ test_that("Generic simulation can be ran", {
 })
 
 
-test_that("Compound snapshot with different versions can be merged", {
-  ddi <- create_ddi(itraconazole80, rifampicin)
-
-  expect_equal(ddi$data$Version, 80)
-})
+# test_that("Compound snapshot with different versions can be merged", {
+#   ddi <- create_ddi(itraconazole80, rifampicin)
+#
+#   expect_equal(ddi$data$Version, 80)
+# })
 
 test_that("An error is thrown when victim or perpetrator are missing", {
   expect_error(

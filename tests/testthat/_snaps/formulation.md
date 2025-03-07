@@ -160,10 +160,8 @@
 # First order formulation can be created
 
     Code
-      create_formulation(name = "FirstOrder", type = "first")
-    Condition
-      Warning:
-      ! No `thalf` provided, using default unit of 0.01 min.
+      create_formulation(name = "FirstOrder", type = "first", thalf = "0.01",
+        thalf_unit = "min")
     Message
       FirstOrder
       * Type: FirstOrder
