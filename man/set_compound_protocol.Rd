@@ -22,6 +22,14 @@ The updated \code{Simulation} object
 This function set the protocol of the specified compounds.
 }
 \examples{
+# Create a simulation first
+sim <- create_simulation(
+  simulation_name = "Protocol example",
+  individual = "Adult male",
+  victim = "Midazolam",
+  perpetrators = c("Ketoconazole")
+)
+
 # Set protocol for a compound
 sim <- set_compound_protocol(sim, "Midazolam", "Single oral dose")
 

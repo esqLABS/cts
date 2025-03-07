@@ -18,9 +18,8 @@ the updated snapshot with new protocol
 Add a protocol to a snapshot
 }
 \examples{
-\dontrun{
-# Create a snapshot
-snapshot <- create_snapshot("MySimulation")
+# Create a compound snapshot
+midazolam <- compound("Midazolam")
 
 # Create a protocol
 protocol <- create_protocol(
@@ -30,7 +29,6 @@ protocol <- create_protocol(
   dose = 500
 )
 
-# Add protocol to snapshot
-snapshot <- add_protocol(snapshot, protocol)
-}
+# Add protocol to compound snapshot
+midazolam <- add_protocol(midazolam, protocol)
 }

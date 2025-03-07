@@ -18,9 +18,18 @@ the updated snapshot without the specified protocols
 Remove a protocol from a snapshot
 }
 \examples{
+# Create a compound snapshot
+midazolam <- compound("Midazolam")
+
+# Create and add some protocols
+protocol1 <- create_protocol("Protocol 1", "oral", "single", 100)
+protocol2 <- create_protocol("Protocol 2", "iv", "24", 50)
+midazolam <- add_protocol(midazolam, protocol1)
+midazolam <- add_protocol(midazolam, protocol2)
+
 # Remove a protocol from a snapshot
-snapshot <- remove_protocol(snapshot, "Standard dose")
+midazolam <- remove_protocol(midazolam, "Protocol 1")
 
 # Remove multiple protocols at once
-snapshot <- remove_protocol(snapshot, c("Protocol 1", "Protocol 2"))
+midazolam <- remove_protocol(midazolam, c("Protocol 1", "Protocol 2"))
 }

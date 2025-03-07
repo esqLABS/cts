@@ -18,14 +18,21 @@ the updated snapshot without the specified formulations
 Remove a formulation from a snapshot
 }
 \examples{
-\dontrun{
+# Create a snapshot and add some formulations
+snapshot <- compound("Midazolam")
+
+# Add a few formulations
+f1 <- create_formulation("Immediate release solution", "dissolved")
+f2 <- create_formulation("Standard tablet", "weibull")
+snapshot <- add_formulation(snapshot, f1)
+snapshot <- add_formulation(snapshot, f2)
+
 # Remove a single formulation
-snapshot <- remove_formulation(snapshot, "Extended release tablet")
+snapshot <- remove_formulation(snapshot, "Immediate release solution")
 
 # Remove multiple formulations
 snapshot <- remove_formulation(
   snapshot,
   c("Immediate release solution", "Standard tablet")
 )
-}
 }

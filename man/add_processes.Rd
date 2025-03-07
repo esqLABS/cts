@@ -20,7 +20,14 @@ The updated \code{Simulation} object
 This function add the interactions of the specified compounds.
 }
 \examples{
-\dontrun{
+# Create a simulation first
+sim <- create_simulation(
+  simulation_name = "Process example",
+  individual = "Adult male",
+  victim = "Midazolam",
+  perpetrators = c("Ketoconazole")
+)
+
 # Add a single process
 sim <- add_processes(sim, "Midazolam", "Hepatic metabolism")
 
@@ -30,5 +37,4 @@ sim <- add_processes(
   "Ketoconazole",
   c("Hepatic metabolism", "Renal clearance")
 )
-}
 }

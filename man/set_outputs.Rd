@@ -19,7 +19,14 @@ Set the outputs to be used for plotting to the simulation.
 This removes any previously set outputs.
 }
 \examples{
-\dontrun{
+# Create a simulation first
+sim <- create_simulation(
+  simulation_name = "Output example",
+  individual = "Adult male",
+  victim = "Midazolam",
+  perpetrators = c("Ketoconazole")
+)
+
 # Set a single output path
 sim <- set_outputs(sim, "Organism|Venous Blood|Plasma|Midazolam|Concentration")
 
@@ -31,5 +38,4 @@ sim <- set_outputs(
     "Organism|Liver|Intracellular|Midazolam|Concentration"
   )
 )
-}
 }

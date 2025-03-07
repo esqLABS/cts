@@ -30,23 +30,28 @@ The \code{Snapshot} or \code{DDI} object with the simulation added.
 This function adds a simulation to a \code{Snapshot} or \code{DDI} object.
 }
 \examples{
-\dontrun{
+# Create a compound snapshot first
+midazolam <- compound("Midazolam")
+itraconazole <- compound("Itraconazole")
+
+# Create a DDI object
+ddi <- create_ddi(midazolam, itraconazole)
+
 # Create a simulation
 sim <- create_simulation(
   simulation_name = "Basic simulation",
   individual = "Adult male",
   victim = "Midazolam",
-  perpetrators = c("Ketoconazole")
+  perpetrators = c("itraconazole")
 )
 
-# Add simulation to snapshot with default options
-snapshot <- add_simulation(snapshot, sim)
+# Add simulation to DDI with default options
+ddi <- add_simulation(ddi, sim)
 
 # Add simulation with custom options
-snapshot <- add_simulation(
-  snapshot,
+ddi <- add_simulation(
+  ddi,
   sim,
   options = list(add_interactions = FALSE, add_processes = TRUE)
 )
-}
 }

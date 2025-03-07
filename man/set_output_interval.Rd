@@ -24,6 +24,14 @@ The updated \code{Simulation} object.
 Clears the output interval from the simulation and adds a new one.
 }
 \examples{
+# Create a simulation first
+sim <- create_simulation(
+  simulation_name = "Output interval example",
+  individual = "Adult male",
+  victim = "Midazolam",
+  perpetrators = c("Ketoconazole")
+)
+
 # Set output interval for 24 hours with 10 points per hour
 sim <- set_output_interval(sim, 0, 24, 10, "h")
 

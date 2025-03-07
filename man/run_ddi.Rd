@@ -19,6 +19,13 @@ results as .csv files at provided location.}
 Run Drug-Drug Interaction (DDI) Simulations defined in the ddi project
 }
 \examples{
+# Create compounds
+midazolam <- compound("Midazolam")
+itraconazole <- compound("Itraconazole")
+
+# Create a DDI simulation
+ddi <- create_ddi(victim = midazolam, itraconazole)
+
 # Run simulations without saving results
 results <- run_ddi(ddi)
 

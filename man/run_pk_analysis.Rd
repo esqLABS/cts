@@ -17,6 +17,13 @@ results as .csv files at provided location.}
 Run Pk-Analysis for DDI simulations defined in the ddi project
 }
 \examples{
+# Create compounds
+midazolam <- compound("Midazolam")
+rifampicin <- compound("Rifampicin")
+
+# Create a DDI simulation
+ddi <- create_ddi(victim = midazolam, rifampicin)
+
 # Run PK analysis without saving results
 pk_results <- run_pk_analysis(ddi)
 
