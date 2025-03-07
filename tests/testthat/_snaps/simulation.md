@@ -221,10 +221,6 @@
       * Interactions:
       Output schema:
       * Interval 1
-        * Start time: 0 h
-        * End time: 2 h
-        * Resolution: 20 pts/h
-      * Interval 2
         * Start time: 2 h
         * End time: 48 h
         * Resolution: 1 pts/h
