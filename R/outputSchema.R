@@ -80,7 +80,7 @@ SnapshotOutputSchema <- R6::R6Class(
     #' @param ... Same parameters as add_interval
     set_interval = function(...) {
       self$clear()
-      # self$add_interval(...)
+      self$add_interval(...)
     },
     #' @description
     #' Print the object to the console
