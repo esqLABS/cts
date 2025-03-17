@@ -621,13 +621,20 @@ Simulation <- R6::R6Class(
       } else {
         cli::cli_text("Individual: ", self$individual)
       }
-      purrr::map(private$.compounds, \(x) {
+      purrr::walk(private$.compounds, \(x) {
         cli::cli_text("Compound: ", x$Name)
         cli::cli_li(paste0("Protocol: ", x$Protocol$Name))
         cli::cli_li("Formulations: ")
-        purrr::map(x$Protocol$Formulations, \(f) {
-          cli::cli_ol(paste0(f$Key, ": ", f$Name))
-        })
+        # if formulation is not empty
+        if (length(x$Protocol$Formulations) > 0) {
+          if(is.list(x$Protocol$Formulations[[1]])) {
+            purrr::walk(x$Protocol$Formulations, \(f) {
+              cli::cli_ol(paste0(f$Key, ": ", f$Name))
+            })
+          } else {
+            cli::cli_ol(paste0(x$Protocol$Formulations$Key, ": ", x$Protocol$Formulations$Name))
+          }
+        }
         cli::cli_li("Processes: ")
         ol <- cli::cli_ol()
         purrr::map(x$Processes, \(p) {
