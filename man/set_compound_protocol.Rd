@@ -11,9 +11,12 @@ set_compound_protocol(simulation, compound, protocol, formulation = list())
 
 \item{compound}{Name of the compound for which to set the protocol.}
 
-\item{protocol}{Name of protocol used for \code{compound}.}
+\item{protocol}{either a protocol object (Protocol or AdvancedProtocol object) or a protocol name to be used for \code{compound}.
+If a protocol name is used, the formulations should be set with each corresponding
+formulation key required from the protocol.}
 
-\item{formulation}{Formulation key/name mapping for the chosen protocol.}
+\item{formulation}{either a character vector of formulation names if a protocol object is given or a list of Formulation
+key/name mapping for the chosen protocol if only its name is given.}
 }
 \value{
 The updated \code{Simulation} object

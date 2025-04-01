@@ -24,6 +24,80 @@ test_that("`add_compound` can add compounds to the simulation.", {
   expect_snapshot(my_sim)
 })
 
+test_that("`set_compound_protocol` does not work with wrong protocol formualtion combinaisons.", {
+  my_sim <- create_simulation(
+    simulation_name = "Test",
+    victim = "Rifampicin",
+    perpetrators = "Midazolam",
+    individual = "European (P-gp modified, CYP3A4 36 h)"
+  )
+  expect_error(
+    set_compound_protocol(my_sim, compound = "Midazolam", protocol = "po 3.5 mg", formulation = "Tablet (Dormicum)"),
+    "List of formulation key/name mapping should be given when only supplying protocol name."
+  )
+
+  protocol <- create_advanced_protocol("oral_750u_start_14d") |>
+    add_schema(
+      schema_name = "Loading Dose",
+      start_time = 0, # Start immediately
+      start_time_unit = "day(s)",
+      rep_nb = 1, # 16 days
+      time_btw_rep = 0, # Once daily
+      time_btw_rep_unit = "h"
+    ) |>
+    # Dose definition
+    add_administration(
+      schema_name = "Loading Dose",
+      create_protocol(
+        name = "Loading Dose",
+        type = "oral",
+        interval = "single",
+        dose = 5, # Loading dose
+        dose_unit = "mg",
+        water_vol_per_body_weight = 3.5
+      )
+    ) |>
+    # Schema definition
+    add_schema(
+      schema_name = "Maintenance phase",
+      start_time = 12, # Start immediately
+      start_time_unit = "h",
+      rep_nb = 16, # 16 days
+      time_btw_rep = 24, # Once daily
+      time_btw_rep_unit = "h"
+    ) |>
+    # Dose definition
+    add_administration(
+      schema_name = "Maintenance phase",
+      create_protocol(
+        name = "Maintenance Dose",
+        type = "oral",
+        interval = "single",
+        dose = 0.750, # Lower maintenance dose
+        dose_unit = "mg",
+        water_vol_per_body_weight = 3.5
+      )
+    )
+
+  expect_error(
+    set_compound_protocol(my_sim, compound = "Midazolam", protocol = protocol, formulation = list(Key = "Formulation", Name = "Tablet (Dormicum)")),
+    "All keys supplied in the `formulation` should be present in the protocol."
+  )
+  expect_error(
+    set_compound_protocol(my_sim, compound = "Midazolam", protocol = protocol, formulation = c("IR dissolved", "Tablet (Dormicum)", "Tablet")),
+    "Number of formulations should match the number of existing formulation keys in the protocol (expecting 2 formulations names)",
+    fixed = TRUE
+  )
+  expect_error(
+    set_compound_protocol(my_sim, compound = "Midazolam", protocol = protocol, formulation = 1),
+    "Argument `formulation` is not supplied in the correct format."
+  )
+  expect_error(
+    set_compound_protocol(my_sim, compound = "Midazolam", protocol = protocol, formulation = list(list(key = "a", name = "b"))),
+    "Formulation should be in the form of `list(list(Key = ..., Name = ...), ...)`.", fixed = T
+  )
+})
+
 test_that("`set_compound_protocol` can set a new protocol for a compound.", {
   my_sim <- create_simulation(
     simulation_name = "Test",
@@ -34,6 +108,64 @@ test_that("`set_compound_protocol` can set a new protocol for a compound.", {
   expect_no_message(set_compound_protocol(my_sim, compound = "Rifampicin", protocol = "iv 300 mg (0.5 h)"))
   expect_no_message(set_compound_protocol(my_sim, compound = "Midazolam", protocol = "po 3.5 mg", formulation = list(list(Key = "Formulation", Name = "Tablet (Dormicum)"))))
   expect_snapshot(my_sim)
+
+  # test other allowed type of formulation/protocol
+  expect_no_message(set_compound_protocol(my_sim, compound = "Midazolam", protocol = "po 3.5 mg", formulation = list(Key = "Formulation", Name = "Tablet (Dormicum)")))
+
+  protocol <- create_advanced_protocol("oral_750u_start_14d") |>
+    add_schema(
+      schema_name = "Loading Dose",
+      start_time = 0, # Start immediately
+      start_time_unit = "day(s)",
+      rep_nb = 1, # 16 days
+      time_btw_rep = 0, # Once daily
+      time_btw_rep_unit = "h"
+    ) |>
+    # Dose definition
+    add_administration(
+      schema_name = "Loading Dose",
+      create_protocol(
+        name = "Loading Dose",
+        type = "oral",
+        interval = "single",
+        dose = 5, # Loading dose
+        dose_unit = "mg",
+        water_vol_per_body_weight = 3.5
+      )
+    ) |>
+    # Schema definition
+    add_schema(
+      schema_name = "Maintenance phase",
+      start_time = 12, # Start immediately
+      start_time_unit = "h",
+      rep_nb = 16, # 16 days
+      time_btw_rep = 24, # Once daily
+      time_btw_rep_unit = "h"
+    ) |>
+    # Dose definition
+    add_administration(
+      schema_name = "Maintenance phase",
+      create_protocol(
+        name = "Maintenance Dose",
+        type = "oral",
+        interval = "single",
+        dose = 0.750, # Lower maintenance dose
+        dose_unit = "mg",
+        water_vol_per_body_weight = 3.5
+      )
+    )
+  expect_no_message(set_compound_protocol(my_sim, compound = "Midazolam", protocol = protocol, formulation = "Tablet (Dormicum)"))
+  expect_no_message(set_compound_protocol(my_sim, compound = "Midazolam", protocol = protocol, formulation = c("IR dissolved", "Tablet (Dormicum)")))
+
+  protocol <- create_protocol(
+    name = "Oral Dose",
+    type = "oral",
+    interval = "single",
+    dose = 0.750, # Lower maintenance dose
+    dose_unit = "mg",
+    water_vol_per_body_weight = 3.5
+  )
+  expect_no_message(set_compound_protocol(my_sim, compound = "Midazolam", protocol = protocol, formulation = "IR dissolved"))
 })
 
 test_that("Adding population to a simulation compound works.", {

@@ -229,8 +229,11 @@ add_compound <- function(simulation, compound, protocol = NULL, formulation = li
 #' This function set the protocol of the specified compounds.
 #' @param simulation The `Simulation` object (as created by `create_simulation`).
 #' @param compound Name of the compound for which to set the protocol.
-#' @param protocol Name of protocol used for `compound`.
-#' @param formulation Formulation key/name mapping for the chosen protocol.
+#' @param protocol either a protocol object (Protocol or AdvancedProtocol object) or a protocol name to be used for `compound`.
+#' If a protocol name is used, the formulations should be set with each corresponding
+#' formulation key required from the protocol.
+#' @param formulation either a character vector of formulation names if a protocol object is given or a list of Formulation
+#' key/name mapping for the chosen protocol if only its name is given.
 #' @return The updated `Simulation` object
 #' @export
 #' @examples
@@ -253,6 +256,83 @@ add_compound <- function(simulation, compound, protocol = NULL, formulation = li
 #'   formulation = list(list(Key = "Formulation 1", Name = "Tablet"))
 #' )
 set_compound_protocol <- function(simulation, compound, protocol, formulation = list()) {
+
+  # ensure formulation is given in the correct format
+  if (is.list(formulation)) {
+    if (length(formulation) > 0) {
+      is_list_of_list <- all(unlist(purrr::map(formulation, \(x) {is.list(x)})))
+      if (!is_list_of_list) {
+        # transform to list of list
+        formulation <- list(formulation)
+      }
+
+      # check that all elements are in the form of list(Key = , Name =)
+      correct_sublist <- purrr::map(formulation, \(x) {
+        all(names(x) %in% c("Key", "Name")) && all(unlist(purrr::map(x,  \(y) {is.character(y) && length(y) == 1})))
+      })
+
+      if (!all(unlist(correct_sublist))) {
+        cli_abort("Formulation should be in the form of {.code list(list(Key = ..., Name = ...), ...)}.")
+      }
+    }
+  } else if (!is.character(formulation)) {
+    cli_abort("Argument {.arg formulation} is not supplied in the correct format.")
+  }
+
+  # if protocol name is given expect a list of formulations key/name mapping
+  if (is.character(protocol) && length(protocol) == 1) {
+    if (!is.list(formulation)) {
+      cli_abort("List of formulation key/name mapping should be given when only supplying protocol name.")
+    }
+  }
+
+  # if protocol is given and only formulation name is given automatically map to needed formulations
+  if (any(c("Protocol", "AdvancedProtocol") %in% class(protocol))) {
+    if ("Protocol" %in% class(protocol)) {
+      existing_formulations_key <- "Formulation"
+    } else {
+      existing_formulations_key <- unlist(
+        purrr::map(protocol$schemas, \(x) {
+          purrr:::map(x$SchemaItems, \(y) {
+            y$formulation_key
+          })
+        }),
+        recursive = T
+      )
+    }
+
+    if (is.character(formulation) && length(formulation) > 0) {
+      # if only single formulation given, repeat as needed
+      if (length(formulation) == 1) {
+        formulation <- purrr::map(existing_formulations_key, ~ list(Key = .x, Name = formulation))
+      } else {
+        # otherwise should give as many formulation as keys in the protocol
+        if (length(formulation) != length(existing_formulations_key)) {
+          cli_abort(
+            paste("Number of formulations should match the number of existing formulation keys",
+                  "in the protocol (expecting ", length(existing_formulations_key), " formulations names).")
+          )
+        } else {
+          formulation <- purrr::map2(existing_formulations_key, formulation, \(x, y) {
+            list(Key = x, Name = y)
+          })
+        }
+      }
+    }
+
+    # if formulation is given as a list check that all keys are present in the protocol
+    if (is.list(formulation)) {
+      given_keys <- purrr::list_c(purrr::map(formulation, \(x) {x$Key}))
+
+      if (!all(given_keys %in% existing_formulations_key)) {
+        cli_abort("All keys supplied in the {.arg formulation} should be present in the protocol.")
+      }
+    }
+
+    # retain only protocol name to create simulation
+    protocol <- protocol$Name
+  }
+
   simulation$set_compound_protocol(compound, protocol, formulation)
   invisible(simulation)
 }

@@ -665,12 +665,18 @@ AdvancedProtocol <- R6::R6Class(
       }
       # If the protocol is Oral add a formulation key (default "Formulation X"), the formulation name is not already used for a different formulation
       if (protocol$type == "oral" && is.null(formulation_key)) {
-        existing_formulation_key <- purrr::map(private$.schemas, \(x) {
-          purrr:::map(x$SchemaItems, \(y) {
-            y$formulation_key
-          })
-        })
-        protocol$formulation_key <- paste0("Formulation ", length(existing_formulation_key) + 1)
+        existing_formulation_key <- unlist(
+          purrr::map(private$.schemas, \(x) {
+            purrr:::map(x$SchemaItems, \(y) {
+              y$formulation_key
+            })
+          }),
+          recursive = T
+        )
+
+        # take first potential formulation key
+        tentative_formulation_key <- paste0("Formulation ", 1:(length(existing_formulation_key) + 1))
+        protocol$formulation_key <- tentative_formulation_key[which.min(tentative_formulation_key %in% existing_formulation_key)]
       } else {
         # update protocol with correct formulation key
         protocol$formulation_key <- formulation_key
@@ -679,7 +685,7 @@ AdvancedProtocol <- R6::R6Class(
       # get schema index from name
       schema_index <- private$.get_schema_index(schema_name)
 
-      if(protocol$name %in% list_c(purrr::map(private$.schemas[[schema_index]]$SchemaItems, "name"))) {
+      if (protocol$name %in% list_c(purrr::map(private$.schemas[[schema_index]]$SchemaItems, "name"))) {
         # rename protocol to ensure uniqueness
         og_name <- protocol$name
         protocol$name <-
