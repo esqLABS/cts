@@ -27,8 +27,14 @@ Snapshot <- R6::R6Class(
       self$compounds <- self$source_data$Compounds
       self$individuals <- self$source_data$Individuals
       self$populations <- self$source_data$Populations
-      self$formulations <- purrr::map(self$source_data$Formulations, formulation_from_data)
-      self$protocols <- purrr::map(self$source_data$Protocols, protocol_from_data)
+      self$formulations <- purrr::map(
+        self$source_data$Formulations,
+        formulation_from_data
+      )
+      self$protocols <- purrr::map(
+        self$source_data$Protocols,
+        protocol_from_data
+      )
       self$expression_profiles <- self$source_data$ExpressionProfiles
       self$observer_sets <- self$source_data$ObserverSets
       self$events <- self$source_data$Events
@@ -39,24 +45,29 @@ Snapshot <- R6::R6Class(
     #' @description
     #' Pretty print the snapshot data.
     print = function() {
-      compounds <- cli_ul()
-      private$print_names("compounds")
-      individuals <- cli_ul()
-      private$print_names("individuals")
-      populations <- cli_ul()
-      private$print_names("populations")
-      formulations <- cli_ul()
-      private$print_names("formulations")
-      protocols <- cli_ul()
-      private$print_names("protocols")
-      observerSets <- cli_ul()
-      private$print_names("observer_sets")
-      events <- cli_ul()
-      private$print_names("events")
-      simulations <- cli_ul()
-      private$print_names("simulations")
-      observedData <- cli_ul()
-      private$print_names("observed_data")
+      cat(
+        cli::cli_format_method({
+          compounds <- cli_ul()
+          private$print_names("compounds")
+          individuals <- cli_ul()
+          private$print_names("individuals")
+          populations <- cli_ul()
+          private$print_names("populations")
+          formulations <- cli_ul()
+          private$print_names("formulations")
+          protocols <- cli_ul()
+          private$print_names("protocols")
+          observerSets <- cli_ul()
+          private$print_names("observer_sets")
+          events <- cli_ul()
+          private$print_names("events")
+          simulations <- cli_ul()
+          private$print_names("simulations")
+          observedData <- cli_ul()
+          private$print_names("observed_data")
+        }),
+        sep = "\n"
+      )
       invisible(self)
     },
     #' @description
@@ -113,59 +124,101 @@ Snapshot <- R6::R6Class(
     check_simulation = function(simulation) {
       # check that no simulation has the same name
       if (simulation$name %in% self$get_names("simulations")) {
-        cli_abort("Simulation with name {.code {simulation$name}} already exists.")
+        cli_abort(
+          "Simulation with name {.code {simulation$name}} already exists."
+        )
       }
       # check that compounds are defined
-      sim_compounds <- purrr::list_c(purrr::map(simulation$compounds, ~ .x$Name))
+      sim_compounds <- purrr::list_c(purrr::map(
+        simulation$compounds,
+        ~ .x$Name
+      ))
       missing_compounds <- !(sim_compounds %in% self$get_names("compounds"))
       if (any(missing_compounds)) {
-        cli_abort("Compounds {.code {sim_compounds[missing_compounds]}} not found in snapshot.")
+        cli_abort(
+          "Compounds {.code {sim_compounds[missing_compounds]}} not found in snapshot."
+        )
       }
       # check that individual or population is defined
-      if (length(simulation$individual) > 0 ) {
+      if (length(simulation$individual) > 0) {
         if (!(simulation$individual %in% self$get_names("individuals"))) {
-          cli_abort("Individual {.code {simulation$individual}} not found in snapshot.")
+          cli_abort(
+            "Individual {.code {simulation$individual}} not found in snapshot."
+          )
         }
       } else if (length(simulation$population) > 0) {
         if (!(simulation$population %in% self$get_names("populations"))) {
-          cli_abort("Population {.code {simulation$population}} not found in snapshot.")
+          cli_abort(
+            "Population {.code {simulation$population}} not found in snapshot."
+          )
         }
       } else {
         cli_abort("No individual or population defined in simulation.")
       }
       # check that protocols are defined
-      sim_protocols <- purrr::list_c(purrr::map(simulation$compounds, ~ .x$Protocol$Name))
+      sim_protocols <- purrr::list_c(purrr::map(
+        simulation$compounds,
+        ~ .x$Protocol$Name
+      ))
 
       if (!all(sim_protocols %in% self$get_names("protocols"))) {
-        missing_protocols <- sim_protocols[!(sim_protocols %in% self$get_names("protocols"))]
-        cli_abort("Protocols {.code {missing_protocols}} not found in snapshot.")
+        missing_protocols <- sim_protocols[
+          !(sim_protocols %in% self$get_names("protocols"))
+        ]
+        cli_abort(
+          "Protocols {.code {missing_protocols}} not found in snapshot."
+        )
       }
       # check that formulations are defined
-      sim_formulations <- purrr:::list_c(purrr::map(simulation$compounds,
-                                                    ~ purrr::list_c(purrr::map(.x$Protocol$Formulations,
-                                                                               ~ .x$Name))))
+      sim_formulations <- purrr:::list_c(purrr::map(
+        simulation$compounds,
+        ~ purrr::list_c(purrr::map(.x$Protocol$Formulations, ~ .x$Name))
+      ))
       if (!all(sim_formulations %in% self$get_names("formulations"))) {
-        missing_formulations <- sim_formulations[!(sim_formulations %in% self$get_names("formulations"))]
-        cli_abort("Formulations {.code {missing_formulations}} not found in snapshot.")
+        missing_formulations <- sim_formulations[
+          !(sim_formulations %in% self$get_names("formulations"))
+        ]
+        cli_abort(
+          "Formulations {.code {missing_formulations}} not found in snapshot."
+        )
       }
 
       # check that correct number of formulations key-name mapping are defined
-      for (protocolIdx in seq_along(purrr::compact(purrr::map(simulation$compounds, ~ .x$Protocol)))) {
-        protocol_name <- purrr::map(simulation$compounds, ~ .x$Protocol$Name)[[protocolIdx]]
-        given_formulation_keys <- purrr::list_c(purrr::map(purrr::map(simulation$compounds, ~ .x$Protocol)[[protocolIdx]]$Formulations,  ~ (.x$Key)))
+      for (protocolIdx in seq_along(purrr::compact(purrr::map(
+        simulation$compounds,
+        ~ .x$Protocol
+      )))) {
+        protocol_name <- purrr::map(simulation$compounds, ~ .x$Protocol$Name)[[
+          protocolIdx
+        ]]
+        given_formulation_keys <- purrr::list_c(purrr::map(
+          purrr::map(simulation$compounds, ~ .x$Protocol)[[
+            protocolIdx
+          ]]$Formulations,
+          ~ (.x$Key)
+        ))
 
-        snap_protocol <- self$protocols[[which(self$get_names("protocols") == protocol_name)]]
+        snap_protocol <- self$protocols[[which(
+          self$get_names("protocols") == protocol_name
+        )]]
         needed_formulation_keys <- c()
         # For simple protocol with oral or user defined administration, simulation need a `Formulation` key but key is not explicitly defined in the protocol
-        if (snap_protocol$type %in% c("oral", "user")) {
+        if (
+          !is.null(snap_protocol$type) &&
+            snap_protocol$type %in% c("oral", "user")
+        ) {
           needed_formulation_keys <- c("Formulation")
         }
         # For advanced protocol look at all defined formulation keys
 
         # Check that all needed key are given
         if (!all(needed_formulation_keys %in% given_formulation_keys)) {
-          missing_formulation_keys <- needed_formulation_keys[!needed_formulation_keys %in% given_formulation_keys]
-          cli_abort("Missing formulation key(s) {.code {missing_formulation_keys}} for protocol {.code {protocol_name}}.")
+          missing_formulation_keys <- needed_formulation_keys[
+            !needed_formulation_keys %in% given_formulation_keys
+          ]
+          cli_abort(
+            "Missing formulation key(s) {.code {missing_formulation_keys}} for protocol {.code {protocol_name}}."
+          )
         }
       }
     },
@@ -182,15 +235,18 @@ Snapshot <- R6::R6Class(
       temp_file_name <- basename(fs::path_ext_remove(temp_file))
       private$write_json(self$data, temp_file)
       # run simulations
-      ospsuite::runSimulationsFromSnapshot(temp_file,
+      ospsuite::runSimulationsFromSnapshot(
+        temp_file,
         output = temp_dir,
         exportCSV = TRUE,
         exportPKML = TRUE
       )
 
-
       # recreate simulation results objects
-      sim_results_files <- list.files(temp_dir, pattern = glue("{temp_file_name}-.*-Results\\.csv$"))
+      sim_results_files <- list.files(
+        temp_dir,
+        pattern = glue("{temp_file_name}-.*-Results\\.csv$")
+      )
       sim_names <- gsub(glue("{temp_file_name}-"), "", sim_results_files) %>%
         gsub(glue("-Results"), "", .) %>%
         fs::path_ext_remove()
@@ -200,9 +256,17 @@ Snapshot <- R6::R6Class(
 
       for (i in seq_along(sim_results_files)) {
         sim_name <- sim_names[i]
-        simulation <- ospsuite::loadSimulation(file.path(temp_dir, glue(temp_file_name, "-", sim_name, ".pkml")))
-        results_obj[[sim_name]] <- ospsuite::importResultsFromCSV(simulation, file.path(temp_dir, sim_results_files[i]))
-        results_tibble[[sim_name]] <- ospsuite::simulationResultsToTibble(results_obj[[sim_name]])
+        simulation <- ospsuite::loadSimulation(file.path(
+          temp_dir,
+          glue(temp_file_name, "-", sim_name, ".pkml")
+        ))
+        results_obj[[sim_name]] <- ospsuite::importResultsFromCSV(
+          simulation,
+          file.path(temp_dir, sim_results_files[i])
+        )
+        results_tibble[[
+          sim_name
+        ]] <- ospsuite::simulationResultsToTibble(results_obj[[sim_name]])
       }
 
       private$.sim_results_obj <- results_obj
@@ -212,7 +276,10 @@ Snapshot <- R6::R6Class(
         # copy simulation results and pkml to the output directory
         fs::file_copy(fs::path(temp_dir, sim_results_files), path)
         if (exportPKML) {
-          fs::file_copy(list.files(temp_dir, pattern = ".pkml$", full.names = T), path)
+          fs::file_copy(
+            list.files(temp_dir, pattern = ".pkml$", full.names = T),
+            path
+          )
         }
       }
     },
@@ -221,22 +288,36 @@ Snapshot <- R6::R6Class(
     #' @param path character string to the folder where to export pk analysis as csv file
     run_pk_analysis = function(path = NULL) {
       if (is.null(private$.sim_results)) {
-        cli::cli_alert_info("DDI simulations results were not found. Running them.")
+        cli::cli_alert_info(
+          "DDI simulations results were not found. Running them."
+        )
         self$run_simulations()
       }
 
       # validate object, should be a list of SimulationResults
-      lapply(private$.sim_results_obj, ospsuite.utils::validateIsOfType, type = "SimulationResults")
+      lapply(
+        private$.sim_results_obj,
+        ospsuite.utils::validateIsOfType,
+        type = "SimulationResults"
+      )
 
       # run PK analysis
-      pk_analysis <- lapply(private$.sim_results_obj, ospsuite::calculatePKAnalyses)
-      private$.pk_analysis_results_raw <- lapply(pk_analysis, ospsuite::pkAnalysesToTibble)
+      pk_analysis <- lapply(
+        private$.sim_results_obj,
+        ospsuite::calculatePKAnalyses
+      )
+      private$.pk_analysis_results_raw <- lapply(
+        pk_analysis,
+        ospsuite::pkAnalysesToTibble
+      )
 
       compound_names <- self$get_names("compounds")
 
       # PK analysis results to wider
       private$.pk_analysis_results <- lapply(
-        private$.pk_analysis_results_raw, pivot_pk_analysis, compound_names
+        private$.pk_analysis_results_raw,
+        pivot_pk_analysis,
+        compound_names
       )
 
       if (!is.null(path)) {
@@ -247,7 +328,10 @@ Snapshot <- R6::R6Class(
         for (i in seq_len(length(pk_analysis))) {
           ospsuite::exportPKAnalysesToCSV(
             pkAnalyses = pk_analysis[[i]],
-            filePath = file.path(path, glue("{names(pk_analysis)[i]}", "-PKAnalysis.csv"))
+            filePath = file.path(
+              path,
+              glue("{names(pk_analysis)[i]}", "-PKAnalysis.csv")
+            )
           )
         }
       }
@@ -273,7 +357,9 @@ Snapshot <- R6::R6Class(
       for (simulationName in simulationNames) {
         # get all paths
         paths <- purrr::map_chr(
-          private$.sim_results_obj[[simulationName]]$simulation$outputSelections$allOutputs,
+          private$.sim_results_obj[[
+            simulationName
+          ]]$simulation$outputSelections$allOutputs,
           ~ .x$path
         )
 
@@ -285,11 +371,14 @@ Snapshot <- R6::R6Class(
           paths = paths,
           container = private$.sim_results_obj[[simulationName]]$simulation
         )
-        dimensions <- purrr::map(quantities,"dimension") %>% list_c()
-        names(dimensions) <- map(quantities,"path") %>% list_c()
+        dimensions <- purrr::map(quantities, "dimension") %>% list_c()
+        names(dimensions) <- map(quantities, "path") %>% list_c()
 
         # initialize one plot per dimension
-        plotLists[[simulationName]] <- vector("list", length(unique(dimensions)))
+        plotLists[[simulationName]] <- vector(
+          "list",
+          length(unique(dimensions))
+        )
         names(plotLists[[simulationName]]) <- unique(dimensions)
 
         for (dimension in unique(dimensions)) {
@@ -298,17 +387,27 @@ Snapshot <- R6::R6Class(
             simulationResults = private$.sim_results_obj[[simulationName]],
             quantitiesOrPaths = names(dimensions)[dimensions == dimension]
           )
-          if (length(private$.sim_results_obj[[simulationName]]$allIndividualIds) > 1) {
-            plotLists[[simulationName]][[dimension]] <- ospsuite::plotPopulationTimeProfile(
+          if (
+            length(
+              private$.sim_results_obj[[simulationName]]$allIndividualIds
+            ) >
+              1
+          ) {
+            plotLists[[simulationName]][[
+              dimension
+            ]] <- ospsuite::plotPopulationTimeProfile(
               dataCombined = dataCombined,
               defaultPlotConfiguration = individualTimeProfileConfiguration,
               ...
             )
           } else {
-            plotLists[[simulationName]][[dimension]] <- ospsuite::plotIndividualTimeProfile(dataCombined,
-                                                                                            individualTimeProfileConfiguration)
+            plotLists[[simulationName]][[
+              dimension
+            ]] <- ospsuite::plotIndividualTimeProfile(
+              dataCombined,
+              individualTimeProfileConfiguration
+            )
           }
-
         }
       }
 
@@ -318,21 +417,27 @@ Snapshot <- R6::R6Class(
   private = list(
     print_names = function(field) {
       names <- self$get_names(field)
-      cli_text(snakecase::to_title_case(field), ":", if (length(names) == 0) {
-        " None"
-      })
+      cli_text(
+        snakecase::to_title_case(field),
+        ":",
+        if (length(names) == 0) {
+          " None"
+        }
+      )
       if (length(names) > 0) {
         cli_ul(names)
       }
     },
     read_json = function(source) {
-      jsonlite::fromJSON(source,
+      jsonlite::fromJSON(
+        source,
         simplifyDataFrame = FALSE,
         simplifyVector = FALSE
       )
     },
     write_json = function(data, path) {
-      jsonlite::write_json(data,
+      jsonlite::write_json(
+        data,
         path = path,
         pretty = TRUE,
         auto_unbox = TRUE,
@@ -504,7 +609,12 @@ get_source <- function(input) {
 
     cli_process_start(msg = "Downloading {input} Building Block Data")
   } else {
-    cli_abort(message = c(x = "Invalid input type.", i = "Please provide a valid compound name, URL or path to a local file."))
+    cli_abort(
+      message = c(
+        x = "Invalid input type.",
+        i = "Please provide a valid compound name, URL or path to a local file."
+      )
+    )
   }
   return(source)
 }
@@ -518,7 +628,8 @@ update_snapshots <- function(snapshots) {
 
   suppressMessages({
     # Convert snapshot to project to upgrade them to latest version
-    ospsuite::convertSnapshot(paths,
+    ospsuite::convertSnapshot(
+      paths,
       format = "project",
       output = temp_dir,
       runSimulations = FALSE
@@ -534,10 +645,7 @@ update_snapshots <- function(snapshots) {
 
   # Create Snapshots/Compounds objects from new jsons.
   snapshots <- map(
-    list.files(temp_dir,
-      pattern = ".json",
-      full.names = TRUE
-    ),
+    list.files(temp_dir, pattern = ".json", full.names = TRUE),
     ~ Compound$new(input = .x)
   )
   if (length(snapshots) == 1) {
@@ -566,7 +674,10 @@ extract_interactions <- function(snapshot, compounds = NULL, quietly = FALSE) {
       # in each process
       for (p in c$Processes) {
         # if InternalName of process is "CompetitiveInhibition" or "Induction"
-        if (stringr::str_detect(string = p$InternalName, pattern = "Inhibition") | p$InternalName == "Induction") {
+        if (
+          stringr::str_detect(string = p$InternalName, pattern = "Inhibition") |
+            p$InternalName == "Induction"
+        ) {
           all_interactions[[i]] <- list(
             Name = glue::glue("{p$Molecule}-{p$DataSource}"),
             MoleculeName = p$Molecule,
@@ -583,7 +694,9 @@ extract_interactions <- function(snapshot, compounds = NULL, quietly = FALSE) {
       cli::cli_text("Compound: ", c)
       purrr::map(
         all_interactions,
-        ~ if(.x$CompoundName == c) { cli::cli_ul(.x$Name) }
+        ~ if (.x$CompoundName == c) {
+          cli::cli_ul(.x$Name)
+        }
       )
     }
   }
@@ -608,13 +721,31 @@ extract_processes <- function(snapshot, compounds = NULL, quietly = FALSE) {
     all_processes[[compound]] <- list()
     i <- 1
 
-    for (p in snapshot$compounds[[which(snapshot$get_names("compounds") == compound)]]$Processes) {
-      if (p$InternalName %in% c("LiverClearance", "HepatocytesHalfTime", "HepatocytesRes", "LiverMicrosomeHalfTime", "LiverMicrosomeRes")) {
+    for (p in snapshot$compounds[[which(
+      snapshot$get_names("compounds") == compound
+    )]]$Processes) {
+      if (
+        p$InternalName %in%
+          c(
+            "LiverClearance",
+            "HepatocytesHalfTime",
+            "HepatocytesRes",
+            "LiverMicrosomeHalfTime",
+            "LiverMicrosomeRes"
+          )
+      ) {
         all_processes[[compound]][[i]] <- list(
           Name = glue::glue("Total Hepatic Clearance-{p$DataSource}"),
           SystemicProcessType = "Hepatic"
         )
-      } else if (p$InternalName %in% c("KidneyClearance", "TubularSecretion_FirstOrder", "TubularSecretion_MM")) {
+      } else if (
+        p$InternalName %in%
+          c(
+            "KidneyClearance",
+            "TubularSecretion_FirstOrder",
+            "TubularSecretion_MM"
+          )
+      ) {
         all_processes[[compound]][[i]] <- list(
           Name = glue::glue("Renal Clearances-{p$DataSource}"),
           SystemicProcessType = "Renal"
@@ -629,7 +760,14 @@ extract_processes <- function(snapshot, compounds = NULL, quietly = FALSE) {
           Name = glue::glue("Biliary Clearance-{p$DataSource}"),
           SystemicProcessType = "Biliary"
         )
-      } else if (!is.null(p$Molecule) && !(stringr::str_detect(string = p$InternalName, pattern = "Inhibition") | p$InternalName == "Induction")) {
+      } else if (
+        !is.null(p$Molecule) &&
+          !(stringr::str_detect(
+            string = p$InternalName,
+            pattern = "Inhibition"
+          ) |
+            p$InternalName == "Induction")
+      ) {
         all_processes[[compound]][[i]] <- list(
           Name = glue::glue("{p$Molecule}-{p$DataSource}"),
           MoleculeName = p$Molecule

@@ -8,12 +8,12 @@ formulation_types <- list(
   first = list(human = "FirstOrder", pksim = "Formulation_FirstOrder")
 )
 
-particle_size_dist_types = list(
+particle_size_dist_types <- list(
   mono = list(human = "Monodisperse", pksim = 0),
   poly = list(human = "Polydisperse", pksim = 1)
 )
 
-particle_size_dists = list(
+particle_size_dists <- list(
   normal = list(human = "Normal", pksim = 0),
   lognormal = list(human = "Log Normal", pksim = 1)
 )
@@ -25,7 +25,9 @@ Formulation <- R6::R6Class(
     #' @field type Type of Formulation
     type = function(value) {
       if (!missing(value)) {
-        cli_abort(c("x" = "Formulation {.code type} cannot be changed, create a new one instead."))
+        cli_abort(c(
+          "x" = "Formulation {.code type} cannot be changed, create a new one instead."
+        ))
       }
 
       return(private$.type)
@@ -126,7 +128,9 @@ Formulation <- R6::R6Class(
     #' @field distribution_type Type of the particle formulation
     distribution_type = function(value) {
       if (!missing(value)) {
-        cli_abort(c("x" = "Formulation {.code distribution_type} cannot be changed, create a new one instead."))
+        cli_abort(c(
+          "x" = "Formulation {.code distribution_type} cannot be changed, create a new one instead."
+        ))
       }
 
       return(private$.distribution_type)
@@ -153,7 +157,9 @@ Formulation <- R6::R6Class(
     #' @field particle_size_distribution Distribution of the particle size (normal or lognormal)
     particle_size_distribution = function(value) {
       if (!missing(value)) {
-        cli_abort(c("x" = "Formulation {.code particle_size_distribution} cannot be changed, create a new one instead."))
+        cli_abort(c(
+          "x" = "Formulation {.code particle_size_distribution} cannot be changed, create a new one instead."
+        ))
       }
 
       return(private$.particle_size_distribution)
@@ -162,7 +168,9 @@ Formulation <- R6::R6Class(
     radius_sd = function(value) {
       if (!missing(value)) {
         if (!is.numeric(value)) {
-          cli::cli_abort(c("x" = "Radius standard deviation should be numeric value."))
+          cli::cli_abort(c(
+            "x" = "Radius standard deviation should be numeric value."
+          ))
         }
         private$.radius_sd <- value
       }
@@ -191,7 +199,9 @@ Formulation <- R6::R6Class(
     radius_min = function(value) {
       if (!missing(value)) {
         if (!is.numeric(value)) {
-          cli::cli_abort(c("x" = "Radius standard deviation should be numeric value."))
+          cli::cli_abort(c(
+            "x" = "Radius standard deviation should be numeric value."
+          ))
         }
         private$.radius_min <- value
       }
@@ -210,7 +220,9 @@ Formulation <- R6::R6Class(
     radius_max = function(value) {
       if (!missing(value)) {
         if (!is.numeric(value)) {
-          cli::cli_abort(c("x" = "Radius standard deviation should be numeric value."))
+          cli::cli_abort(c(
+            "x" = "Radius standard deviation should be numeric value."
+          ))
         }
         private$.radius_max <- value
       }
@@ -309,14 +321,22 @@ Formulation <- R6::R6Class(
 
       additional_args <- list(...)
       if (!is.null(additional_args$distribution_type)) {
-        if (!(additional_args$distribution_type %in% names(particle_size_dist_types))) {
+        if (
+          !(additional_args$distribution_type %in%
+            names(particle_size_dist_types))
+        ) {
           cli::cli_abort(c("x" = "Invalid {.var distribution_type} provided."))
         }
         private$.distribution_type <- additional_args$distribution_type
       }
       if (!is.null(additional_args$particle_size_distribution)) {
-        if (!(additional_args$particle_size_distribution %in% names(particle_size_dists))) {
-          cli::cli_abort(c("x" = "Invalid {.var particle_size_distribution} provided."))
+        if (
+          !(additional_args$particle_size_distribution %in%
+            names(particle_size_dists))
+        ) {
+          cli::cli_abort(c(
+            "x" = "Invalid {.var particle_size_distribution} provided."
+          ))
         }
         private$.particle_size_distribution <- additional_args$particle_size_distribution
       }
@@ -349,102 +369,142 @@ Formulation <- R6::R6Class(
 
       if (self$type %in% c("weibull", "lint80")) {
         if (is.null(private$.dissolution_time)) {
-          cli::cli_warn(c("!" = "No {.code dissolution_time} provided, using default value of 240 min."))
+          cli::cli_warn(c(
+            "!" = "No {.code dissolution_time} provided, using default value of 240 min."
+          ))
           private$.dissolution_time <- 240
           private$.dissolution_time_unit <- "min"
         }
         if (is.null(private$.dissolution_time_unit)) {
-          cli::cli_warn(c("!" = "No {.code dissolution_time_unit} provided, using default unit of 'min'."))
+          cli::cli_warn(c(
+            "!" = "No {.code dissolution_time_unit} provided, using default unit of 'min'."
+          ))
           private$.dissolution_time_unit <- "min"
         }
         if (is.null(private$.lag_time)) {
-          cli::cli_warn(c("!" = "No {.code lag_time} provided, using default value of 0 min."))
+          cli::cli_warn(c(
+            "!" = "No {.code lag_time} provided, using default value of 0 min."
+          ))
           private$.lag_time <- 0
           private$.lag_time_unit <- "min"
         }
         if (is.null(private$.lag_time_unit)) {
-          cli::cli_warn(c("!" = "No {.code lag_time_unit} provided, using default unit of 'min'."))
+          cli::cli_warn(c(
+            "!" = "No {.code lag_time_unit} provided, using default unit of 'min'."
+          ))
           private$.lag_time_unit <- "min"
         }
         if (is.null(private$.suspension)) {
-          cli::cli_warn(c("!" = "No {.code suspension} provided, using default of 'TRUE'."))
+          cli::cli_warn(c(
+            "!" = "No {.code suspension} provided, using default of 'TRUE'."
+          ))
           private$.suspension <- TRUE
         }
 
         if (self$type == "weibull" && is.null(private$.dissolution_shape)) {
-          cli::cli_warn(c("!" = "No {.code dissolution_shape} provided, using default value of 0.92."))
+          cli::cli_warn(c(
+            "!" = "No {.code dissolution_shape} provided, using default value of 0.92."
+          ))
           private$.dissolution_shape <- 0.92
         }
       }
 
       if (self$type == "particle") {
         if (is.null(private$.thickness)) {
-          cli::cli_warn(c("!" = "No {.code thickness} provided, using default value of 30 µm."))
+          cli::cli_warn(c(
+            "!" = "No {.code thickness} provided, using default value of 30 µm."
+          ))
           private$.thickness <- 30
           private$.thickness_unit <- "µm"
         }
         if (is.null(private$.thickness_unit)) {
-          cli::cli_warn(c("!" = "No {.code thickness_unit} provided, using default unit of µm."))
+          cli::cli_warn(c(
+            "!" = "No {.code thickness_unit} provided, using default unit of µm."
+          ))
           private$.thickness_unit <- "µm"
         }
 
         if (is.null(private$.distribution_type)) {
-          cli::cli_warn(c("!" = "No {.code distribution_type} provided, using default of 'mono'."))
+          cli::cli_warn(c(
+            "!" = "No {.code distribution_type} provided, using default of 'mono'."
+          ))
           private$.distribution_type <- "mono"
         }
 
         if (is.null(private$.radius)) {
-          cli::cli_warn(c("!" = "No {.code radius} provided, using default value of 10 µm."))
+          cli::cli_warn(c(
+            "!" = "No {.code radius} provided, using default value of 10 µm."
+          ))
           private$.radius <- 10
           private$.radius_unit <- "µm"
         }
         if (is.null(private$.radius_unit)) {
-          cli::cli_warn(c("!" = "No {.code radius_unit} provided, using default unit of µm."))
+          cli::cli_warn(c(
+            "!" = "No {.code radius_unit} provided, using default unit of µm."
+          ))
           private$.radius_unit <- "µm"
         }
 
         if (private$.distribution_type == "poly") {
           if (is.null(private$.particle_size_distribution)) {
-            cli::cli_warn(c("!" = "No {.code particle_size_distribution} provided, using default of 'normal'."))
+            cli::cli_warn(c(
+              "!" = "No {.code particle_size_distribution} provided, using default of 'normal'."
+            ))
             private$.particle_size_distribution <- "normal"
           }
 
           if (is.null(private$.radius_min)) {
-            cli::cli_warn(c("!" = "No {.code radius_min} provided, using default value of 1 µm."))
+            cli::cli_warn(c(
+              "!" = "No {.code radius_min} provided, using default value of 1 µm."
+            ))
             private$.radius_min <- 1
             private$.radius_min_unit <- "µm"
           }
           if (is.null(private$.radius_min_unit)) {
-            cli::cli_warn(c("!" = "No {.code radius_min_unit} provided, using default unit of µm."))
+            cli::cli_warn(c(
+              "!" = "No {.code radius_min_unit} provided, using default unit of µm."
+            ))
             private$.radius_min_unit <- "µm"
           }
           if (is.null(private$.radius_max)) {
-            cli::cli_warn(c("!" = "No {.code radius_max} provided, using default value of 19 µm."))
+            cli::cli_warn(c(
+              "!" = "No {.code radius_max} provided, using default value of 19 µm."
+            ))
             private$.radius_max <- 19
             private$.radius_max_unit <- "µm"
           }
           if (is.null(private$.radius_max_unit)) {
-            cli::cli_warn(c("!" = "No {.code radius_max_unit} provided, using default unit of µm."))
+            cli::cli_warn(c(
+              "!" = "No {.code radius_max_unit} provided, using default unit of µm."
+            ))
             private$.radius_max_unit <- "µm"
           }
           if (is.null(private$.n_bins)) {
-            cli::cli_warn(c("!" = "No {.code n_bins} provided, using default value of 3."))
+            cli::cli_warn(c(
+              "!" = "No {.code n_bins} provided, using default value of 3."
+            ))
             private$.n_bins <- 3
           }
 
           if (private$.particle_size_distribution == "normal") {
             if (is.null(private$.radius_sd)) {
-              cli::cli_warn(c("!" = "No {.code radius_sd} provided, using default value of 3 µm."))
+              cli::cli_warn(c(
+                "!" = "No {.code radius_sd} provided, using default value of 3 µm."
+              ))
               private$.radius_sd <- 3
               private$.radius_sd_unit <- "µm"
             }
             if (is.null(private$.radius_sd_unit)) {
-              cli::cli_warn(c("!" = "No {.code radius_sd_unit} provided, using default unit of µm."))
+              cli::cli_warn(c(
+                "!" = "No {.code radius_sd_unit} provided, using default unit of µm."
+              ))
               private$.radius_sd_unit <- "µm"
             }
           } else {
             if (is.null(private$.radius_cv)) {
-              cli::cli_warn(c("!" = "No {.code radius_cv} provided, using default value of 1.5."))
+              cli::cli_warn(c(
+                "!" = "No {.code radius_cv} provided, using default value of 1.5."
+              ))
               private$.radius_cv <- 1.5
             }
           }
@@ -453,37 +513,51 @@ Formulation <- R6::R6Class(
 
       if (self$type == "zero") {
         if (is.null(private$.end_time)) {
-          cli::cli_warn(c("!" = "No {.code end_time} provided, using default unit of 60 min."))
+          cli::cli_warn(c(
+            "!" = "No {.code end_time} provided, using default unit of 60 min."
+          ))
           private$.end_time <- 60
           private$.end_time_unit <- "min"
         }
         if (is.null(private$.end_time_unit)) {
-          cli::cli_warn(c("!" = "No {.code end_time_unit} provided, using default unit of min."))
+          cli::cli_warn(c(
+            "!" = "No {.code end_time_unit} provided, using default unit of min."
+          ))
           private$.end_time_unit <- "min"
         }
       }
 
       if (self$type == "first") {
         if (is.null(private$.thalf)) {
-          cli::cli_warn(c("!" = "No {.code thalf} provided, using default unit of 0.01 min."))
+          cli::cli_warn(c(
+            "!" = "No {.code thalf} provided, using default unit of 0.01 min."
+          ))
           private$.thalf <- 0.01
           private$.thalf_unit <- "min"
         }
         if (is.null(private$.thalf_unit)) {
-          cli::cli_warn(c("!" = "No {.code thalf_unit} provided, using default unit of min."))
+          cli::cli_warn(c(
+            "!" = "No {.code thalf_unit} provided, using default unit of min."
+          ))
           private$.thalf_unit <- "min"
         }
       }
 
       if (self$type == "table") {
         if (is.null(private$.tableX) || is.null(private$.tableY)) {
-          cli::cli_abort(c("x" = "No {.code tableX} or {.code tableY} provided. For table formulation, provide release time profile."))
+          cli::cli_abort(c(
+            "x" = "No {.code tableX} or {.code tableY} provided. For table formulation, provide release time profile."
+          ))
         }
         if (length(private$.tableX) != length(private$.tableY)) {
-          cli::cli_abort(c("x" = "{.code tableX} and {.code tableY} should have the same length."))
+          cli::cli_abort(c(
+            "x" = "{.code tableX} and {.code tableY} should have the same length."
+          ))
         }
         if (is.null(private$.suspension)) {
-          cli::cli_warn(c("x" = "No {.code suspension} provided, using default of 'TRUE'."))
+          cli::cli_warn(c(
+            "x" = "No {.code suspension} provided, using default of 'TRUE'."
+          ))
           private$.suspension <- TRUE
         }
       }
@@ -494,36 +568,55 @@ Formulation <- R6::R6Class(
     #' Print the object to the console
     #' @param ... Rest arguments.
     print = function(...) {
-      cli::cli_text(self$name)
-      cli::cli_li(paste("Type:", formulation_types[[self$type]]$human))
+      cat(
+        cli::cli_format_method({
+          cli::cli_text(self$name)
+          cli::cli_li(paste("Type:", formulation_types[[self$type]]$human))
 
-      for (param in private$.parameters()) {
-        if (param$Name == "Type of particle size distribution") {
-          cli::cli_li(
-            paste(
-              paste0(param$Name, ":"),
-              purrr::keep(particle_size_dist_types, ~ .x$pksim == param$Value)[[1]]$human
-            )
-          )
-        } else if (param$Name == "Particle size distribution") {
-          cli::cli_li(
-            paste(
-              paste0(param$Name, ":"),
-              purrr::keep(particle_size_dists, ~ .x$pksim == param$Value)[[1]]$human
-            )
-          )
-        } else if (self$type == "table" && param$Name == "Fraction (dose)") {
-          cli::cli_li("Release profile:")
-          cli::cli_ul()
-          print(
-            data.frame("Time [h]" = private$.tableX, "Fraction (dose)" = private$.tableY,
-                       check.names = FALSE),
-            row.names = FALSE
-          )
-        } else {
-          cli::cli_li(paste(paste0(param$Name, ":"), param$Value, param$Unit))
-        }
-      }
+          for (param in private$.parameters()) {
+            if (param$Name == "Type of particle size distribution") {
+              cli::cli_li(
+                paste(
+                  paste0(param$Name, ":"),
+                  purrr::keep(
+                    particle_size_dist_types,
+                    ~ .x$pksim == param$Value
+                  )[[1]]$human
+                )
+              )
+            } else if (param$Name == "Particle size distribution") {
+              cli::cli_li(
+                paste(
+                  paste0(param$Name, ":"),
+                  purrr::keep(particle_size_dists, ~ .x$pksim == param$Value)[[
+                    1
+                  ]]$human
+                )
+              )
+            } else if (
+              self$type == "table" && param$Name == "Fraction (dose)"
+            ) {
+              cli::cli_li("Release profile:")
+              cli::cli_ul()
+              print(
+                data.frame(
+                  "Time [h]" = private$.tableX,
+                  "Fraction (dose)" = private$.tableY,
+                  check.names = FALSE
+                ),
+                row.names = FALSE
+              )
+            } else {
+              cli::cli_li(paste(
+                paste0(param$Name, ":"),
+                param$Value,
+                param$Unit
+              ))
+            }
+          }
+        }),
+        sep = "\n"
+      )
       invisible(self)
     }
   ),
@@ -533,7 +626,7 @@ Formulation <- R6::R6Class(
     .dissolution_time = NULL,
     .dissolution_time_unit = NULL,
     .lag_time = NULL,
-    .lag_time_unit  = NULL,
+    .lag_time_unit = NULL,
     .dissolution_shape = NULL,
     .suspension = NULL,
     .thickness = NULL,
@@ -561,7 +654,11 @@ Formulation <- R6::R6Class(
       if (self$type %in% c("weibull", "lint80")) {
         param_list <- list(
           list(
-            Name = paste0("Dissolution time (", ifelse(self$type == "weibull", "50%", "80%"), " dissolved)"),
+            Name = paste0(
+              "Dissolution time (",
+              ifelse(self$type == "weibull", "50%", "80%"),
+              " dissolved)"
+            ),
             Value = private$.dissolution_time,
             Unit = private$.dissolution_time_unit
           ),
@@ -573,21 +670,27 @@ Formulation <- R6::R6Class(
         )
 
         if (self$type == "weibull") {
-          param_list <- c(param_list, list(
+          param_list <- c(
+            param_list,
             list(
-              Name = "Dissolution shape",
-              Value = private$.dissolution_shape,
-              Unit = ""
+              list(
+                Name = "Dissolution shape",
+                Value = private$.dissolution_shape,
+                Unit = ""
+              )
             )
-          ))
+          )
         }
 
-        param_list <- c(param_list, list(
+        param_list <- c(
+          param_list,
           list(
-            Name = "Use as suspension",
-            Value = as.numeric(private$.suspension)
+            list(
+              Name = "Use as suspension",
+              Value = as.numeric(private$.suspension)
+            )
           )
-        ))
+        )
       }
 
       if (self$type == "particle") {
@@ -595,7 +698,7 @@ Formulation <- R6::R6Class(
           list(
             Name = "Thickness (unstirred water layer)",
             Value = private$.thickness,
-            Unit =  private$.thickness_unit
+            Unit = private$.thickness_unit
           ),
           list(
             Name = "Type of particle size distribution",
@@ -603,55 +706,81 @@ Formulation <- R6::R6Class(
           )
         )
 
-        param_list <- c(param_list, list(
+        param_list <- c(
+          param_list,
           list(
-            Name = paste0("Particle radius (", ifelse(private$.distribution_type == "mono" || private$.particle_size_distribution == "lognormal", "", "geo"), "mean)"),
-            Value = private$.radius,
-            Unit = private$.radius_unit
+            list(
+              Name = paste0(
+                "Particle radius (",
+                ifelse(
+                  private$.distribution_type == "mono" ||
+                    private$.particle_size_distribution == "lognormal",
+                  "",
+                  "geo"
+                ),
+                "mean)"
+              ),
+              Value = private$.radius,
+              Unit = private$.radius_unit
+            )
           )
-        ))
+        )
 
         if (private$.distribution_type == "poly") {
-          param_list <- c(param_list, list(
+          param_list <- c(
+            param_list,
             list(
-              Name = "Particle size distribution",
-              Value = particle_size_dists[[private$.particle_size_distribution]]$pksim
+              list(
+                Name = "Particle size distribution",
+                Value = particle_size_dists[[
+                  private$.particle_size_distribution
+                ]]$pksim
+              )
             )
-          ))
+          )
 
           if (private$.particle_size_distribution == "normal") {
-            param_list <- c(param_list, list(
+            param_list <- c(
+              param_list,
               list(
-                Name = "Particle radius (SD)",
-                Value = private$.radius_sd,
-                Unit = private$.radius_sd_unit
+                list(
+                  Name = "Particle radius (SD)",
+                  Value = private$.radius_sd,
+                  Unit = private$.radius_sd_unit
+                )
               )
-            ))
+            )
           } else {
-            param_list <- c(param_list, list(
+            param_list <- c(
+              param_list,
               list(
-                Name = "Coefficient of variation",
-                Value = private$.radius_cv
+                list(
+                  Name = "Coefficient of variation",
+                  Value = private$.radius_cv
+                )
               )
-            ))
+            )
           }
 
-          param_list <- c(param_list, list(
+          param_list <- c(
+            param_list,
             list(
-              Name = "Particle radius (min)",
-              Value = private$.radius_min,
-              Unit = private$.radius_min_unit
-            ),
-            list(
-              Name = "Particle radius (max)",
-              Value = private$.radius_max,
-              Unit = private$.radius_max_unit
-            ),
-            list(
-              Name = "Number of bins",
-              Value = private$.n_bins
+              list(
+                Name = "Particle radius (min)",
+                Value = private$.radius_min,
+                Unit = private$.radius_min_unit
+              ),
+              list(
+                Name = "Particle radius (max)",
+                Value = private$.radius_max,
+                Unit = private$.radius_max_unit
+              ),
+              list(
+                Name = "Number of bins",
+                Value = private$.n_bins
+              )
             )
-          ))
+          )
         }
       }
 
@@ -682,30 +811,33 @@ Formulation <- R6::R6Class(
             Value = as.numeric(private$.suspension)
           )
         )
-        param_list <- c(param_list, list(
+        param_list <- c(
+          param_list,
           list(
-            Name = "Fraction (dose)",
-            Value = private$.tableY[1],
-            TableFormula = list(
+            list(
               Name = "Fraction (dose)",
-              XName = "Time",
-              XDimension = "Time",
-              XUnit = "h",
-              YName = "Fraction (dose)",
-              YDimension = "Dimensionless",
-              UseDerivedValues = TRUE,
-              Points = list(
-                lapply(seq_along(private$.tableX), \(i) {
-                  list(
-                    X = private$.tableX[i],
-                    Y = private$.tableY[i],
-                    RestartSolver = FALSE
-                  )
-                })
+              Value = private$.tableY[1],
+              TableFormula = list(
+                Name = "Fraction (dose)",
+                XName = "Time",
+                XDimension = "Time",
+                XUnit = "h",
+                YName = "Fraction (dose)",
+                YDimension = "Dimensionless",
+                UseDerivedValues = TRUE,
+                Points = list(
+                  lapply(seq_along(private$.tableX), \(i) {
+                    list(
+                      X = private$.tableX[i],
+                      Y = private$.tableY[i],
+                      RestartSolver = FALSE
+                    )
+                  })
+                )
               )
             )
           )
-        ))
+        )
       }
       return(param_list)
     }
@@ -804,100 +936,150 @@ create_formulation <- function(name, type, ...) {
 formulation_from_data <- function(formulation_data) {
   name <- formulation_data$Name
 
-  type <- names(purrr::keep(formulation_types, ~ .x$pksim == formulation_data$FormulationType))
+  type <- names(purrr::keep(
+    formulation_types,
+    ~ .x$pksim == formulation_data$FormulationType
+  ))
 
   # if (type != "table") {
-    disso_time <- purrr::keep(formulation_data$Parameters, ~ .x$Name %in% paste0("Dissolution time (", c(50,80), "% dissolved)"))
-    disso_time_value <- purrr::pluck(disso_time, 1, "Value")
-    disso_time_unit <- purrr::pluck(disso_time, 1, "Unit")
+  disso_time <- purrr::keep(
+    formulation_data$Parameters,
+    ~ .x$Name %in% paste0("Dissolution time (", c(50, 80), "% dissolved)")
+  )
+  disso_time_value <- purrr::pluck(disso_time, 1, "Value")
+  disso_time_unit <- purrr::pluck(disso_time, 1, "Unit")
 
-    lag_time <- purrr::keep(formulation_data$Parameters, ~ .x$Name == "Lag time")
-    lag_time_value <- purrr::pluck(lag_time, 1, "Value")
-    lag_time_unit <- purrr::pluck(lag_time, 1, "Unit")
+  lag_time <- purrr::keep(formulation_data$Parameters, ~ .x$Name == "Lag time")
+  lag_time_value <- purrr::pluck(lag_time, 1, "Value")
+  lag_time_unit <- purrr::pluck(lag_time, 1, "Unit")
 
-    disso_shape <- purrr::keep(formulation_data$Parameters, ~ .x$Name == "Dissolution shape")
-    disso_shape_value <- purrr::pluck(disso_shape, 1, "Value")
+  disso_shape <- purrr::keep(
+    formulation_data$Parameters,
+    ~ .x$Name == "Dissolution shape"
+  )
+  disso_shape_value <- purrr::pluck(disso_shape, 1, "Value")
 
-    suspension <- purrr::keep(formulation_data$Parameters, ~ .x$Name == "Use as suspension")
-    suspension_value <- as.logical(purrr::pluck(suspension, 1, "Value"))
+  suspension <- purrr::keep(
+    formulation_data$Parameters,
+    ~ .x$Name == "Use as suspension"
+  )
+  suspension_value <- as.logical(purrr::pluck(suspension, 1, "Value"))
 
-    thickness <- purrr::keep(formulation_data$Parameters, ~ .x$Name == "Thickness (unstirred water layer)")
-    thickness_value <- purrr::pluck(thickness, 1, "Value")
-    thickness_unit <- purrr::pluck(thickness, 1, "Unit")
+  thickness <- purrr::keep(
+    formulation_data$Parameters,
+    ~ .x$Name == "Thickness (unstirred water layer)"
+  )
+  thickness_value <- purrr::pluck(thickness, 1, "Value")
+  thickness_unit <- purrr::pluck(thickness, 1, "Unit")
 
-    distrib_type <- purrr::keep(formulation_data$Parameters, ~ .x$Name == "Type of particle size distribution")
-    distrib_type_value <- purrr::pluck(distrib_type, 1, "Value")
+  distrib_type <- purrr::keep(
+    formulation_data$Parameters,
+    ~ .x$Name == "Type of particle size distribution"
+  )
+  distrib_type_value <- purrr::pluck(distrib_type, 1, "Value")
 
-    distrib <- purrr::keep(formulation_data$Parameters, ~ .x$Name == "Particle size distribution")
-    distrib_value <- purrr::pluck(distrib, 1, "Value")
+  distrib <- purrr::keep(
+    formulation_data$Parameters,
+    ~ .x$Name == "Particle size distribution"
+  )
+  distrib_value <- purrr::pluck(distrib, 1, "Value")
 
-    radius <- purrr::keep(formulation_data$Parameters, ~ .x$Name %in% paste0("Particle radius (", c("","geo"), "mean)"))
-    radius_value <- purrr::pluck(radius, 1, "Value")
-    radius_unit <- purrr::pluck(radius, 1, "Unit")
+  radius <- purrr::keep(
+    formulation_data$Parameters,
+    ~ .x$Name %in% paste0("Particle radius (", c("", "geo"), "mean)")
+  )
+  radius_value <- purrr::pluck(radius, 1, "Value")
+  radius_unit <- purrr::pluck(radius, 1, "Unit")
 
-    radius_cv <- purrr::keep(formulation_data$Parameters, ~ .x$Name == "Coefficient of variation")
-    radius_cv_value <- purrr::pluck(radius, 1, "Value")
+  radius_cv <- purrr::keep(
+    formulation_data$Parameters,
+    ~ .x$Name == "Coefficient of variation"
+  )
+  radius_cv_value <- purrr::pluck(radius, 1, "Value")
 
-    radius_sd <- purrr::keep(formulation_data$Parameters, ~ .x$Name == "Particle radius (SD)")
-    radius_sd_value <- purrr::pluck(radius_sd, 1, "Value")
-    radius_sd_unit <- purrr::pluck(radius_sd, 1, "Unit")
+  radius_sd <- purrr::keep(
+    formulation_data$Parameters,
+    ~ .x$Name == "Particle radius (SD)"
+  )
+  radius_sd_value <- purrr::pluck(radius_sd, 1, "Value")
+  radius_sd_unit <- purrr::pluck(radius_sd, 1, "Unit")
 
-    radius_min <- purrr::keep(formulation_data$Parameters, ~ .x$Name == "Particle radius (min)")
-    radius_min_value <- purrr::pluck(radius_min, 1, "Value")
-    radius_min_unit <- purrr::pluck(radius_min, 1, "Unit")
+  radius_min <- purrr::keep(
+    formulation_data$Parameters,
+    ~ .x$Name == "Particle radius (min)"
+  )
+  radius_min_value <- purrr::pluck(radius_min, 1, "Value")
+  radius_min_unit <- purrr::pluck(radius_min, 1, "Unit")
 
-    radius_max <- purrr::keep(formulation_data$Parameters, ~ .x$Name == "Particle radius (max)")
-    radius_max_value <- purrr::pluck(radius_max, 1, "Value")
-    radius_max_unit <- purrr::pluck(radius_max, 1, "Unit")
+  radius_max <- purrr::keep(
+    formulation_data$Parameters,
+    ~ .x$Name == "Particle radius (max)"
+  )
+  radius_max_value <- purrr::pluck(radius_max, 1, "Value")
+  radius_max_unit <- purrr::pluck(radius_max, 1, "Unit")
 
-    n_bins <- purrr::keep(formulation_data$Parameters, ~ .x$Name == "Number of bins")
-    n_bins_value <- purrr::pluck(n_bins, 1, "Value")
+  n_bins <- purrr::keep(
+    formulation_data$Parameters,
+    ~ .x$Name == "Number of bins"
+  )
+  n_bins_value <- purrr::pluck(n_bins, 1, "Value")
 
-    end_time <- purrr::keep(formulation_data$Parameters, ~ .x$Name == "End time")
-    end_time_value <- purrr::pluck(end_time, 1, "Value")
-    end_time_unit <- purrr::pluck(end_time, 1, "Unit")
+  end_time <- purrr::keep(formulation_data$Parameters, ~ .x$Name == "End time")
+  end_time_value <- purrr::pluck(end_time, 1, "Value")
+  end_time_unit <- purrr::pluck(end_time, 1, "Unit")
 
-    thalf <- purrr::keep(formulation_data$Parameters, ~ .x$Name == "t1/2")
-    thalf_value <- purrr::pluck(thalf, 1, "Value")
-    thalf_unit <- purrr::pluck(thalf, 1, "Unit")
+  thalf <- purrr::keep(formulation_data$Parameters, ~ .x$Name == "t1/2")
+  thalf_value <- purrr::pluck(thalf, 1, "Value")
+  thalf_unit <- purrr::pluck(thalf, 1, "Unit")
 
-    table <- purrr::keep(formulation_data$Parameters, ~ .x$Name == "Fraction (dose)")
-    tablePoints <- purrr::pluck(table, 1, "TableFormula", "Points")
-    tableXValues <- purrr::list_c(purrr::map(tablePoints, ~ .x$X))
-    tableYValues <- purrr::list_c(purrr::map(tablePoints, ~ .x$Y))
+  table <- purrr::keep(
+    formulation_data$Parameters,
+    ~ .x$Name == "Fraction (dose)"
+  )
+  tablePoints <- purrr::pluck(table, 1, "TableFormula", "Points")
+  tableXValues <- purrr::list_c(purrr::map(tablePoints, ~ .x$X))
+  tableYValues <- purrr::list_c(purrr::map(tablePoints, ~ .x$Y))
 
-    return(
-      Formulation$new(
-        name = name,
-        type = type,
-        dissolution_time = disso_time_value,
-        dissolution_time_unit = disso_time_unit,
-        lag_time = lag_time_value,
-        lag_time_unit = lag_time_unit,
-        dissolution_shape = disso_shape_value,
-        suspension = suspension_value,
-        thickness = thickness_value,
-        thickness_unit = thickness_unit,
-        distribution_type = if (!is.null(distrib_type_value)) { names(keep(particle_size_dist_types, ~ .x$pksim == distrib_type_value))} else { NULL },
-        particle_size_distribution = if (!is.null(distrib_value)) { names(keep(particle_size_dists, ~ .x$pksim == distrib_value))} else { NULL },
-        radius = radius_value,
-        radius_unit = radius_unit,
-        radius_cv = radius_cv_value,
-        radius_sd = radius_sd_value,
-        radius_sd_unit = radius_sd_unit,
-        radius_min = radius_min_value,
-        radius_min_unit = radius_min_unit,
-        radius_max = radius_max_value,
-        radius_max_unit = radius_max_unit,
-        n_bins = n_bins_value,
-        end_time = end_time_value,
-        end_time_unit = end_time_unit,
-        thalf = thalf_value,
-        thalf_unit = thalf_unit,
-        tableX = tableXValues,
-        tableY = tableYValues
-      )
+  return(
+    Formulation$new(
+      name = name,
+      type = type,
+      dissolution_time = disso_time_value,
+      dissolution_time_unit = disso_time_unit,
+      lag_time = lag_time_value,
+      lag_time_unit = lag_time_unit,
+      dissolution_shape = disso_shape_value,
+      suspension = suspension_value,
+      thickness = thickness_value,
+      thickness_unit = thickness_unit,
+      distribution_type = if (!is.null(distrib_type_value)) {
+        names(keep(particle_size_dist_types, ~ .x$pksim == distrib_type_value))
+      } else {
+        NULL
+      },
+      particle_size_distribution = if (!is.null(distrib_value)) {
+        names(keep(particle_size_dists, ~ .x$pksim == distrib_value))
+      } else {
+        NULL
+      },
+      radius = radius_value,
+      radius_unit = radius_unit,
+      radius_cv = radius_cv_value,
+      radius_sd = radius_sd_value,
+      radius_sd_unit = radius_sd_unit,
+      radius_min = radius_min_value,
+      radius_min_unit = radius_min_unit,
+      radius_max = radius_max_value,
+      radius_max_unit = radius_max_unit,
+      n_bins = n_bins_value,
+      end_time = end_time_value,
+      end_time_unit = end_time_unit,
+      thalf = thalf_value,
+      thalf_unit = thalf_unit,
+      tableX = tableXValues,
+      tableY = tableYValues
     )
+  )
   # } else {
   #   return(formulation_data)
   # }
@@ -939,7 +1121,7 @@ add_formulation <- function(snapshot, formulation) {
 #' @examples
 #' # Create a snapshot and add some formulations
 #' snapshot <- compound("Midazolam")
-#' 
+#'
 #' # Add a few formulations
 #' f1 <- create_formulation("Immediate release solution", "dissolved")
 #' f2 <- create_formulation("Standard tablet", "weibull")

@@ -7,7 +7,7 @@
 #' @param simulation_name Name of the simulation to be created.
 #' @param individual Name of the individual to be used in the simulation.
 #' @param population Name of the population to be used in the simulation.
-#' @param victim Name of the victim compound to be used in the simulation.
+#' @param victim Name of the victim compound to be used in the simulation
 #' @param perpetrators Vector of names of the compounds to be used as perpetrators in the simulation
 #' @details Protocols used by each compounds need to be defined afterwards with set_compound_protocol().
 #' New compound can also be added afterwards with add_compound(). Either individual or population should
@@ -30,11 +30,16 @@
 #'   victim = "Warfarin",
 #'   perpetrators = c("Rifampicin")
 #' )
-create_simulation <- function(simulation_name, individual = list(), population = list(), victim, perpetrators) {
+create_simulation <- function(
+    simulation_name,
+    individual = list(),
+    population = list(),
+    victim,
+    perpetrators) {
   # Combine Compound, Protocol and Formulation
   sim <- Simulation$new(
     name = simulation_name,
-    compounds = purrr::map(c(victim, perpetrators), ~list(Name = .x)),
+    compounds = purrr::map(c(victim, perpetrators), ~ list(Name = .x)),
     individual = individual,
     population = population
   )
@@ -75,14 +80,26 @@ create_simulation <- function(simulation_name, individual = list(), population =
 #'   sim,
 #'   options = list(add_interactions = FALSE, add_processes = TRUE)
 #' )
-add_simulation <- function(snapshot, simulation, options = list(add_interactions = TRUE, add_processes = TRUE)) {
+add_simulation <- function(
+    snapshot,
+    simulation,
+    options = list(add_interactions = TRUE, add_processes = TRUE)) {
   snapshot$check_simulation(simulation)
 
   # get all defined interactions in snapshot
   all_interactions <- extract_interactions(snapshot, quietly = TRUE)
-  all_interactions_compounds <- purrr::list_c(purrr::map(all_interactions, ~ .x$CompoundName))
-  all_interactions_molecules <- purrr::list_c(purrr::map(all_interactions, ~ .x$MoleculeName))
-  all_interactions_names <- purrr::list_c(purrr::map(all_interactions, ~ .x$Name))
+  all_interactions_compounds <- purrr::list_c(purrr::map(
+    all_interactions,
+    ~ .x$CompoundName
+  ))
+  all_interactions_molecules <- purrr::list_c(purrr::map(
+    all_interactions,
+    ~ .x$MoleculeName
+  ))
+  all_interactions_names <- purrr::list_c(purrr::map(
+    all_interactions,
+    ~ .x$Name
+  ))
 
   # add molecule to used interactions in sim as defined in snapshot
   # (can't just split name by `-` as some molecule have `-` in their name)
@@ -95,7 +112,9 @@ add_simulation <- function(snapshot, simulation, options = list(add_interactions
 
       # check that the interaction is valid
       if (length(index) == 0) {
-        cli::cli_warn("Interaction {.code {x$Name}} not found for compound {.code {x$CompoundName}} in snapshot. Skipping.")
+        cli::cli_warn(
+          "Interaction {.code {x$Name}} not found for compound {.code {x$CompoundName}} in snapshot. Skipping."
+        )
         return(NULL)
       } else {
         x$MoleculeName <- all_interactions[[index]]$MoleculeName
@@ -103,12 +122,19 @@ add_simulation <- function(snapshot, simulation, options = list(add_interactions
       }
     })
     simulation$interactions <- purrr::compact(valid_interactions)
-
   } else {
     if (isTRUE(options$add_interactions)) {
-      cli::cli_warn(c('Automatically adding interactions to the simulation.', 'Using first interaction found for each enzyme/compound pair.'))
+      cli::cli_warn(c(
+        "Automatically adding interactions to the simulation.",
+        "Using first interaction found for each enzyme/compound pair."
+      ))
 
-      selected_interactions <- which(!duplicated(interaction(all_interactions_compounds, all_interactions_molecules)))
+      selected_interactions <- which(
+        !duplicated(interaction(
+          all_interactions_compounds,
+          all_interactions_molecules
+        ))
+      )
       simulation$interactions <- all_interactions[selected_interactions]
     }
   }
@@ -124,9 +150,16 @@ add_simulation <- function(snapshot, simulation, options = list(add_interactions
     if (length(compound$Processes) > 0) {
       for (i in seq_along(compound$Processes)) {
         p_name <- compound$Processes[[i]]$Name
-        index <- which(purrr::list_c(purrr::map(compound_processes, ~ {.x$Name == p_name})))
+        index <- which(purrr::list_c(purrr::map(
+          compound_processes,
+          ~ {
+            .x$Name == p_name
+          }
+        )))
         if (length(index) == 0) {
-          cli::cli_warn("Process {.code {p_name}} not found for compound {.code {compound_name}} in snapshot. Skipping.")
+          cli::cli_warn(
+            "Process {.code {p_name}} not found for compound {.code {compound_name}} in snapshot. Skipping."
+          )
           compound$Processes[[i]] <- NULL
         } else {
           compound$Processes[[i]] <- compound_processes[[index]]
@@ -135,10 +168,19 @@ add_simulation <- function(snapshot, simulation, options = list(add_interactions
     } else {
       # if not processes are defined and add_processes is TRUE, add the first processes of each type/molecule found for each compound
       if (isTRUE(options$add_processes)) {
-        cli::cli_warn(c('Automatically adding processes to the simulation for compound {.code {compound_name}}.',
-                        'Using first processes of each type and of each metabolizing enzyme found.'))
+        cli::cli_warn(c(
+          "Automatically adding processes to the simulation for compound {.code {compound_name}}.",
+          "Using first processes of each type and of each metabolizing enzyme found."
+        ))
 
-        processes_types <- purrr::map(compound_processes, ~ ifelse(!is.null(.x$MoleculeName), .x$MoleculeName, .x$SystemicProcessType))
+        processes_types <- purrr::map(
+          compound_processes,
+          ~ ifelse(
+            !is.null(.x$MoleculeName),
+            .x$MoleculeName,
+            .x$SystemicProcessType
+          )
+        )
 
         # Using first processes of each type/molecule found for each compound pair.
         selected_processes <- which(!duplicated(processes_types))
@@ -146,7 +188,9 @@ add_simulation <- function(snapshot, simulation, options = list(add_interactions
       }
     }
 
-    simulation$compounds[[compound_index]]$Processes <- purrr::compact(compound$Processes)
+    simulation$compounds[[compound_index]]$Processes <- purrr::compact(
+      compound$Processes
+    )
   }
 
   snapshot$add_simulation(simulation$data)
@@ -219,7 +263,11 @@ remove_simulation <- function(snapshot, simulation_name) {
 #'   "Oral BID",
 #'   formulation = list(list(Key = "Formulation 1", Name = "Tablet"))
 #' )
-add_compound <- function(simulation, compound, protocol = NULL, formulation = list()) {
+add_compound <- function(
+    simulation,
+    compound,
+    protocol = NULL,
+    formulation = list()) {
   simulation$add_compound(compound, protocol, formulation)
   invisible(simulation)
 }
@@ -252,7 +300,11 @@ add_compound <- function(simulation, compound, protocol = NULL, formulation = li
 #'   "Multiple dose",
 #'   formulation = list(list(Key = "Formulation 1", Name = "Tablet"))
 #' )
-set_compound_protocol <- function(simulation, compound, protocol, formulation = list()) {
+set_compound_protocol <- function(
+    simulation,
+    compound,
+    protocol,
+    formulation = list()) {
   simulation$set_compound_protocol(compound, protocol, formulation)
   invisible(simulation)
 }
@@ -279,7 +331,12 @@ set_compound_protocol <- function(simulation, compound, protocol, formulation = 
 #'
 #' # Set output interval for 7 days with 24 points per day
 #' sim <- set_output_interval(sim, 0, 7, 24, "day(s)")
-set_output_interval = function(simulation, start_time, end_time, resolution, unit) {
+set_output_interval <- function(
+    simulation,
+    start_time,
+    end_time,
+    resolution,
+    unit) {
   simulation$output_schema$set_interval(start_time, end_time, resolution, unit)
   invisible(simulation)
 }
@@ -306,7 +363,12 @@ set_output_interval = function(simulation, start_time, end_time, resolution, uni
 #'
 #' # Add another interval for the rest of the day with lower resolution
 #' sim <- add_output_interval(sim, 1, 24, 10, "h")
-add_output_interval = function(simulation, start_time, end_time, resolution, unit) {
+add_output_interval <- function(
+    simulation,
+    start_time,
+    end_time,
+    resolution,
+    unit) {
   simulation$output_schema$add_interval(start_time, end_time, resolution, unit)
   invisible(simulation)
 }
@@ -402,7 +464,7 @@ add_processes <- function(simulation, compound, processes) {
 #'     "Organism|Liver|Intracellular|Midazolam|Concentration"
 #'   )
 #' )
-set_outputs = function(simulation, paths) {
+set_outputs <- function(simulation, paths) {
   simulation$set_output_selections(paths)
   invisible(simulation)
 }
@@ -436,11 +498,10 @@ set_outputs = function(simulation, paths) {
 #'     "Organism|Kidney|Intracellular|Ketoconazole|Concentration"
 #'   )
 #' )
-add_outputs = function(simulation, paths) {
+add_outputs <- function(simulation, paths) {
   simulation$add_output_selections(paths)
   invisible(simulation)
 }
-
 
 
 # Object definition -------------------------------------------------------
@@ -463,7 +524,10 @@ Simulation <- R6::R6Class(
     #' @param individual name of the individual used in the simulation.
     #' @param population name of the population used in the simulation.
     #' @return A new `Simulation` object.
-    initialize = function(name, compounds = list(), individual = list(), population = list()) {
+    initialize = function(name,
+                          compounds = list(),
+                          individual = list(),
+                          population = list()) {
       self$name <- name
       self$compounds <- compounds
       if (length(individual) > 0 && length(population) > 0) {
@@ -523,12 +587,19 @@ Simulation <- R6::R6Class(
         cli_abort("Protocol can only be set for a single compound at a time.")
       }
 
-      compoundIdx <- which(purrr::list_c(purrr::map(self$compounds, ~.x$Name)) == compound)
+      compoundIdx <- which(
+        purrr::list_c(purrr::map(self$compounds, ~ .x$Name)) == compound
+      )
       if (length(compoundIdx) == 0) {
-        cli_abort("`compound` not found. Use `add_compound()` to add a new compound.")
+        cli_abort(
+          "`compound` not found. Use `add_compound()` to add a new compound."
+        )
       }
 
-      self$compounds[[compoundIdx]]$Protocol <- list(Name = protocol, Formulations = formulation)
+      self$compounds[[compoundIdx]]$Protocol <- list(
+        Name = protocol,
+        Formulations = formulation
+      )
       invisible(self)
     },
     #' @description
@@ -568,7 +639,10 @@ Simulation <- R6::R6Class(
         cli_abort("Interactions for a single compound can be set at a time.")
       }
 
-      self$interactions <- c(self$interactions, purrr::map(interactions, ~ list(Name = .x, CompoundName = compound)))
+      self$interactions <- c(
+        self$interactions,
+        purrr::map(interactions, ~ list(Name = .x, CompoundName = compound))
+      )
       invisible(self)
     },
     #' @description
@@ -587,8 +661,11 @@ Simulation <- R6::R6Class(
         cli_abort("Interactions for a single compound can be set at a time.")
       }
 
-      compound_index <- which(purrr::map(self$compounds, ~.x$Name) == compound)
-      self$compounds[[compound_index]]$Processes <- c(self$processes, purrr::map(processes, ~ list(Name = .x)))
+      compound_index <- which(purrr::map(self$compounds, ~ .x$Name) == compound)
+      self$compounds[[compound_index]]$Processes <- c(
+        self$processes,
+        purrr::map(processes, ~ list(Name = .x))
+      )
       invisible(self)
     },
     # set_output_schema = function()
@@ -615,44 +692,53 @@ Simulation <- R6::R6Class(
     #' @description
     #' Pretty print the simulation object.
     print = function() {
-      cli::cli_text("Simulation name: ", self$name)
-      if (length(self$population) > 0) {
-        cli::cli_text("Population: ", self$population)
-      } else {
-        cli::cli_text("Individual: ", self$individual)
-      }
-      purrr::walk(private$.compounds, \(x) {
-        cli::cli_text("Compound: ", x$Name)
-        cli::cli_li(paste0("Protocol: ", x$Protocol$Name))
-        cli::cli_li("Formulations: ")
-        # if formulation is not empty
-        if (length(x$Protocol$Formulations) > 0) {
-          if(is.list(x$Protocol$Formulations[[1]])) {
-            purrr::walk(x$Protocol$Formulations, \(f) {
-              cli::cli_ol(paste0(f$Key, ": ", f$Name))
-            })
+      cat(
+        cli::cli_format_method({
+          cli::cli_text("Simulation name: ", self$name)
+          if (length(self$population) > 0) {
+            cli::cli_text("Population: ", self$population)
           } else {
-            cli::cli_ol(paste0(x$Protocol$Formulations$Key, ": ", x$Protocol$Formulations$Name))
+            cli::cli_text("Individual: ", self$individual)
           }
-        }
-        cli::cli_li("Processes: ")
-        ol <- cli::cli_ol()
-        purrr::map(x$Processes, \(p) {
-          cli::cli_li(paste0(p$Name))
-        })
-        cli::cli_end(ol)
-        cli::cli_li("Interactions: ")
-        ol <- cli::cli_ol()
-        purrr::map(private$.interactions, \(y) {
-          if (y$CompoundName == x$Name) {
-            cli::cli_li(y$Name)
-          }
-        })
-        cli::cli_end(ol)
-      })
-      self$output_schema$print()
-      cli::cli_text("Outputs: ")
-      cli::cli_li(self$output_selections)
+          purrr::walk(private$.compounds, \(x) {
+            cli::cli_text("Compound: ", x$Name)
+            cli::cli_li(paste0("Protocol: ", x$Protocol$Name))
+            cli::cli_li("Formulations: ")
+            # if formulation is not empty
+            if (length(x$Protocol$Formulations) > 0) {
+              if (is.list(x$Protocol$Formulations[[1]])) {
+                purrr::walk(x$Protocol$Formulations, \(f) {
+                  cli::cli_ol(paste0(f$Key, ": ", f$Name))
+                })
+              } else {
+                cli::cli_ol(paste0(
+                  x$Protocol$Formulations$Key,
+                  ": ",
+                  x$Protocol$Formulations$Name
+                ))
+              }
+            }
+            cli::cli_li("Processes: ")
+            ol <- cli::cli_ol()
+            purrr::map(x$Processes, \(p) {
+              cli::cli_li(paste0(p$Name))
+            })
+            cli::cli_end(ol)
+            cli::cli_li("Interactions: ")
+            ol <- cli::cli_ol()
+            purrr::map(private$.interactions, \(y) {
+              if (y$CompoundName == x$Name) {
+                cli::cli_li(y$Name)
+              }
+            })
+            cli::cli_end(ol)
+          })
+          self$output_schema$print()
+          cli::cli_text("Outputs: ")
+          cli::cli_li(self$output_selections)
+        }),
+        sep = "\n"
+      )
       invisible(self)
     }
   ),
@@ -668,7 +754,6 @@ Simulation <- R6::R6Class(
     .interactions = list(),
     .has_results = FALSE
   ),
-
   active = list(
     #' @field data dynamic json representation of the simulation object
     data = function() {
@@ -687,9 +772,9 @@ Simulation <- R6::R6Class(
       )
 
       if (length(self$individual) == 0) {
-        data <-  purrr::discard_at(data, "Individual")
+        data <- purrr::discard_at(data, "Individual")
       } else if (length(self$population) == 0) {
-        data <-  purrr::discard_at(data, "Population")
+        data <- purrr::discard_at(data, "Population")
       }
 
       return(data)

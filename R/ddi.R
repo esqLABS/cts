@@ -180,14 +180,15 @@ run_pk_analysis <- function(ddi, path = NULL) {
 #' plots <- plot_ddi_results(ddi)
 #' }
 plot_ddi_results <- function(ddi, simulationNames = NULL, ...) {
-
   ddi$create_plots(...)
   # By default return all simulations plots
   if (is.null(simulationNames)) {
     return(ddi$plots)
   } else {
     if (any(!simulationNames %in% ddi$get_names("simulations"))) {
-      cli::cli_alert_warning("Some simulation names are not found in the DDI project. Returning only found simulations.")
+      cli::cli_alert_warning(
+        "Some simulation names are not found in the DDI project. Returning only found simulations."
+      )
     }
     return(purrr::compact(ddi$plots[simulationNames]))
   }
@@ -215,7 +216,7 @@ DDI <- R6::R6Class(
     #' @param file a character string representing the path to the snapshot file to import.
     #' @param options a named list of options to customize the DDI simulation. Default is to use `default_options`.
     #' @return A new `DDI` object.
-    initialize = function(victim=NULL, ..., file = NULL, options = NULL) {
+    initialize = function(victim = NULL, ..., file = NULL, options = NULL) {
       self$source <- NULL
 
       self$metadata <- list()
@@ -242,18 +243,26 @@ DDI <- R6::R6Class(
     #' Nicely print the DDI object.
     print = function() {
       if (is.null(self$source)) {
-        cli::cli_abort("DDI have not been initialized. Use {.code create_ddi()} or {.code import_ddi()} to create a DDI object.")
+        cli::cli_abort(
+          "DDI have not been initialized. Use {.code create_ddi()} or {.code import_ddi()} to create a DDI object."
+        )
       }
 
-      compound_names <- suppressMessages(self$compoundsNames)
-
-      cli_text("DDI project containing:")
-      cli::cli_text("{.strong Victim compound:}")
-      cli::cli_li(self$victim)
-      cli::cli_text("{.strong Perpetrator {qty(self$perpetrators)}compound{?s}:}")
-      cli::cli_li(self$perpetrators)
-      cli::cli_text("{.strong {qty(self$simulations)}Simulation{?s}:}")
-      cli::cli_li(self$get_names("simulations"))
+      cat(
+        cli::cli_format_method({
+          compound_names <- suppressMessages(self$compoundsNames)
+          cli_text("DDI project containing:")
+          cli::cli_text("{.strong Victim compound:}")
+          cli::cli_li(self$victim)
+          cli::cli_text(
+            "{.strong Perpetrator {qty(self$perpetrators)}compound{?s}:}"
+          )
+          cli::cli_li(self$perpetrators)
+          cli::cli_text("{.strong {qty(self$simulations)}Simulation{?s}:}")
+          cli::cli_li(self$get_names("simulations"))
+        }),
+        sep = "\n"
+      )
       invisible(self)
     }
   ),
@@ -267,15 +276,22 @@ DDI <- R6::R6Class(
 
       # check options is supported
       if (!all(names(options) %in% names(default_options))) {
-        unsuported_options <- names(options)[!names(options) %in% names(default_options)]
+        unsuported_options <- names(options)[
+          !names(options) %in% names(default_options)
+        ]
         cli_abort("Unsupported options found: {unsuported_options}")
       }
 
       # check options types
-      types_comparison <- list_c(purrr::imap(options, ~ typeof(.x) == typeof(default_options[[.y]])))
+      types_comparison <- list_c(purrr::imap(
+        options,
+        ~ typeof(.x) == typeof(default_options[[.y]])
+      ))
       if (!all(types_comparison)) {
         for (i in seq_along(types_comparison)) {
-          cli::cli_alert_danger("Option {names(options)[i]} must be of type {typeof(default_options[[i]])}.")
+          cli::cli_alert_danger(
+            "Option {names(options)[i]} must be of type {typeof(default_options[[i]])}."
+          )
         }
         cli::cli_abort("Some options have invalid types.")
       }
@@ -284,12 +300,18 @@ DDI <- R6::R6Class(
     # @param compounds A list of compound objects to validate.
     validate_compounds = function(compounds) {
       is_compound <- vapply(
-        compounds, \(comp) inherits(comp, "Compound"), logical(1)
+        compounds,
+        \(comp) inherits(comp, "Compound"),
+        logical(1)
       )
 
       if (!all(is_compound)) {
         invalid_indices <- which(!is_compound)
-        invalid_classes <- vapply(compounds[invalid_indices], class, character(1))
+        invalid_classes <- vapply(
+          compounds[invalid_indices],
+          class,
+          character(1)
+        )
 
         invalid_details <- paste0("[", invalid_indices, "] ", invalid_classes)
         cli::cli_abort(c(
@@ -312,7 +334,9 @@ DDI <- R6::R6Class(
 
       # If Snapshots have different versions
       if (length(unique(snapshot_versions)) > 1) {
-        cli_process_start("Multiple versions detected. Converting to the latest version.")
+        cli_process_start(
+          "Multiple versions detected. Converting to the latest version."
+        )
 
         snapshots <- update_snapshots(snapshots)
       }
@@ -320,9 +344,17 @@ DDI <- R6::R6Class(
       self$version <- unique(map_int(snapshots, ~ .x$version))
 
       self$metadata$protocols$victim <- snapshots[[1]]$get_names("protocols")
-      self$metadata$protocols$perpetrators <- list_c(purrr::map(snapshots[-1], ~ .x$get_names("protocols")))
-      self$metadata$formulations$victim <- snapshots[[1]]$get_names("formulations")
-      self$metadata$formulations$perpetrators <- list_c(purrr::map(snapshots[-1], ~ .x$get_names("formulations")))
+      self$metadata$protocols$perpetrators <- list_c(purrr::map(
+        snapshots[-1],
+        ~ .x$get_names("protocols")
+      ))
+      self$metadata$formulations$victim <- snapshots[[1]]$get_names(
+        "formulations"
+      )
+      self$metadata$formulations$perpetrators <- list_c(purrr::map(
+        snapshots[-1],
+        ~ .x$get_names("formulations")
+      ))
 
       sections_to_merge <- c(
         "compounds",
@@ -366,27 +398,43 @@ DDI <- R6::R6Class(
 
       if (self$options$create_ddi_simulation) {
         # Set simulated time to maximum protocol duration + 1 day
-        protocols <- purrr::keep(self$protocols, ~ .x$name %in% c(self$metadata$protocols$victim[1], self$metadata$protocols$perpetrators[1]))
+        protocols <- purrr::keep(
+          self$protocols,
+          ~ .x$name %in%
+            c(
+              self$metadata$protocols$victim[1],
+              self$metadata$protocols$perpetrators[1]
+            )
+        )
         max_protocol_duration <- c(0)
         for (p in protocols) {
           # transform protocol duration in seconds
-          protocol_duration <- p$end_time * translate_end_time_unit(p$end_time_unit)
-          if (protocol_duration == max(max_protocol_duration, protocol_duration)) {
+          protocol_duration <- p$end_time *
+            translate_end_time_unit(p$end_time_unit)
+          if (
+            protocol_duration == max(max_protocol_duration, protocol_duration)
+          ) {
             max_protocol_duration <- protocol_duration
           }
         }
         max_protocol_duration <- max_protocol_duration + 86400
 
-
         # Add generic ddi simulation
         generic_simulation <-
-          create_generic_simulation(self,
-            system.file("extdata", "generic_simulation_template.json", package = "cts"),
+          create_generic_simulation(
+            self,
+            system.file(
+              "extdata",
+              "generic_simulation_template.json",
+              package = "cts"
+            ),
             max_protocol_duration = max_protocol_duration,
             victim = self$victim,
             perpetrator = self$perpetrators[1],
             victim_formulation = self$metadata$formulations$victim[1],
-            perpetrator_formulation = self$metadata$formulations$perpetrators[1],
+            perpetrator_formulation = self$metadata$formulations$perpetrators[
+              1
+            ],
             victim_protocol = self$metadata$protocols$victim[1],
             perpetrator_protocol = self$metadata$protocols$perpetrators[1],
             individual = self$individuals[[1]]$Name
