@@ -137,9 +137,8 @@ pivot_pk_analysis <- function(df, compound_names) {
     dplyr::relocate(QuantityPath)
 }
 
-translate_end_time_unit <- function(end_time_unit){
-  switch(
-    end_time_unit,
+translate_end_time_unit <- function(end_time_unit) {
+  switch(end_time_unit,
     "s" = 1,
     "min" = 60,
     "ks" = 1000,

@@ -26,5 +26,3 @@ get_test_ddi <- function() {
 
   return(the$.test_ddi$clone())
 }
-
-

@@ -42,7 +42,7 @@ basic_sim <- create_simulation(
   simulation_name = "Basic Individual DDI Study",
   victim = "Rifampicin",
   perpetrators = "Midazolam",
-  individual = "European Reference"  # Use individual OR population, not both
+  individual = "European Reference" # Use individual OR population, not both
 )
 
 # Print the simulation to see its structure
@@ -92,10 +92,10 @@ You can add additional compounds to an existing simulation:
 ```{r add-compound}
 # Add a new compound to the simulation
 basic_sim <- add_compound(
-  basic_sim, 
+  basic_sim,
   compound = "Ketoconazole",
-  protocol = "oral 100 mg",  # Optional protocol
-  formulation = list(       # Optional formulation mapping
+  protocol = "oral 100 mg", # Optional protocol
+  formulation = list( # Optional formulation mapping
     Key = "Formulation",
     Name = "Tablet"
   )
@@ -135,7 +135,7 @@ basic_sim <- set_output_interval(
   basic_sim,
   start_time = 0,
   end_time = 24,
-  resolution = 10,  # points per unit
+  resolution = 10, # points per unit
   unit = "h"
 )
 
@@ -182,7 +182,7 @@ You can specify which model outputs to track during the simulation:
 ```{r outputs}
 # Set specific outputs to track (replaces existing)
 basic_sim <- set_outputs(
-  basic_sim, 
+  basic_sim,
   c(
     "Organism|PeripheralVenousBlood|Rifampicin|Plasma (Peripheral Venous Blood)",
     "Organism|PeripheralVenousBlood|Midazolam|Plasma (Peripheral Venous Blood)"
@@ -223,11 +223,11 @@ You can add a simulation to a DDI project using the `add_simulation()` function:
 ```{r add-simulation, eval=FALSE}
 # Add simulation to DDI project
 myDDI <- add_simulation(
-  myDDI, 
-  basic_sim, 
+  myDDI,
+  basic_sim,
   options = list(
-    add_interactions = TRUE,  # Automatically add relevant interactions
-    add_processes = TRUE     # Automatically add relevant processes
+    add_interactions = TRUE, # Automatically add relevant interactions
+    add_processes = TRUE # Automatically add relevant processes
   )
 )
 

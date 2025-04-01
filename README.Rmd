@@ -72,10 +72,10 @@ midazolam <- compound("Midazolam")
 ```{r, eval=FALSE}
 # Create a DDI project with victim and perpetrator compounds
 myDDI <- create_ddi(
-  victim = rifampicin, 
+  victim = rifampicin,
   midazolam,
   options = list(
-    create_ddi_simulation = TRUE  # Automatically create a generic simulation
+    create_ddi_simulation = TRUE # Automatically create a generic simulation
   )
 )
 ```
