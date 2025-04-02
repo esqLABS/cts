@@ -84,7 +84,6 @@ add_simulation <- function(
     snapshot,
     simulation,
     options = list(add_interactions = TRUE, add_processes = TRUE)) {
-  snapshot$check_simulation(simulation)
 
   # Match protocols with formulations from snapshot
   for (compound_index in seq_along(simulation$compounds)) {
@@ -295,6 +294,7 @@ add_simulation <- function(
     )
   }
 
+  snapshot$check_simulation(simulation)
   snapshot$add_simulation(simulation$data)
   invisible(snapshot)
 }
