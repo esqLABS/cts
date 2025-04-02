@@ -4,13 +4,13 @@
       my_sim
     Message
       Simulation name: Test
-      Individual: European (P-gp modified, CYP3A4 36 h)
-      Compound: Rifampicin
+      Individual: Woman
+      Compound: Levonorgestrel 1
       * Protocol:
       * Formulations:
       * Processes:
       * Interactions:
-      Compound: Midazolam
+      Compound: Itraconazole
       * Protocol:
       * Formulations:
       * Processes:
@@ -18,31 +18,6 @@
       Compound: Test compound 2
       * Protocol: New protocol
       * Formulations:
-      * Processes:
-      * Interactions:
-      Output schema:
-      * Interval 1
-        * Start time: 0 h
-        * End time: 24 h
-        * Resolution: 4 pts/h
-      Outputs:
-
-# `set_compound_protocol` can set a new protocol for a compound.
-
-    Code
-      my_sim
-    Message
-      Simulation name: Test
-      Individual: European (P-gp modified, CYP3A4 36 h)
-      Compound: Rifampicin
-      * Protocol: iv 300 mg (0.5 h)
-      * Formulations:
-      * Processes:
-      * Interactions:
-      Compound: Midazolam
-      * Protocol: po 3.5 mg
-      * Formulations:
-        1. Formulation: Tablet (Dormicum)
       * Processes:
       * Interactions:
       Output schema:
@@ -61,14 +36,12 @@
       Population: Women
       Compound: Levonorgestrel 1
       * Protocol: LNG_150 ug_21 Days
-      * Formulations:
-        1. Formulation: Microlut
+      * Formulations: Microlut
       * Processes:
       * Interactions:
       Compound: Itraconazole
       * Protocol: ITZ 100mg 21 days
-      * Formulations:
-        1. Formulation: IR Dissolved
+      * Formulations: IR Dissolved
       * Processes:
       * Interactions:
       Output schema:
@@ -132,13 +105,13 @@
       my_sim
     Message
       Simulation name: Test
-      Individual: European (P-gp modified, CYP3A4 36 h)
-      Compound: Rifampicin
+      Individual: Woman
+      Compound: Levonorgestrel 1
       * Protocol:
       * Formulations:
       * Processes:
       * Interactions:
-      Compound: Midazolam
+      Compound: Itraconazole
       * Protocol:
       * Formulations:
       * Processes:
@@ -156,13 +129,13 @@
       my_sim
     Message
       Simulation name: Test
-      Individual: European (P-gp modified, CYP3A4 36 h)
-      Compound: Rifampicin
+      Individual: Woman
+      Compound: Levonorgestrel 1
       * Protocol:
       * Formulations:
       * Processes:
       * Interactions:
-      Compound: Midazolam
+      Compound: Itraconazole
       * Protocol:
       * Formulations:
       * Processes:
@@ -173,7 +146,7 @@
         * End time: 24 h
         * Resolution: 4 pts/h
       Outputs:
-      * Organism|ArterialBlood|Plasma|Rifampicin|Concentration in container
+      * Organism|ArterialBlood|Plasma|Levonorgestrel 1|Concentration in container
 
 ---
 
@@ -181,13 +154,13 @@
       my_sim
     Message
       Simulation name: Test
-      Individual: European (P-gp modified, CYP3A4 36 h)
-      Compound: Rifampicin
+      Individual: Woman
+      Compound: Levonorgestrel 1
       * Protocol:
       * Formulations:
       * Processes:
       * Interactions:
-      Compound: Midazolam
+      Compound: Itraconazole
       * Protocol:
       * Formulations:
       * Processes:
@@ -198,8 +171,8 @@
         * End time: 24 h
         * Resolution: 4 pts/h
       Outputs:
-      * Organism|VenousBlood|Plasma|Midazolam|Concentration in container
-      * Organism|VenousBlood|Plasma|Rifampicin|Concentration in container
+      * Organism|VenousBlood|Plasma|Itraconazole|Concentration in container
+      * Organism|VenousBlood|Plasma|Levonorgestrel 1|Concentration in container
 
 # Simulation output interval can be set and added
 
@@ -207,16 +180,15 @@
       my_sim
     Message
       Simulation name: Test
-      Individual: European (P-gp modified, CYP3A4 36 h)
-      Compound: Rifampicin
-      * Protocol: iv 300 mg (0.5 h)
-      * Formulations:
+      Individual: Woman
+      Compound: Levonorgestrel 1
+      * Protocol: LNG_150 ug_21 Days
+      * Formulations: Microlut
       * Processes:
       * Interactions:
-      Compound: Midazolam
-      * Protocol: po 3.5 mg
-      * Formulations:
-        1. Formulation: Tablet (Dormicum)
+      Compound: Itraconazole
+      * Protocol: ITZ 100mg 21 days
+      * Formulations: IR Dissolved
       * Processes:
       * Interactions:
       Output schema:
@@ -239,10 +211,10 @@
       Automatically adding interactions to the simulation.
       Using first interaction found for each enzyme/compound pair.
       Warning:
-      Automatically adding processes to the simulation for compound `Rifampicin`.
+      Automatically adding processes to the simulation for compound `Levonorgestrel 1`.
       Using first processes of each type and of each metabolizing enzyme found.
       Warning:
-      Automatically adding processes to the simulation for compound `Midazolam`.
+      Automatically adding processes to the simulation for compound `Itraconazole`.
       Using first processes of each type and of each metabolizing enzyme found.
 
 # Adding default interactions works.
@@ -250,27 +222,20 @@
     Code
       my_sim
     Message
-      Simulation name: Test
-      Individual: European (P-gp modified, CYP3A4 36 h)
-      Compound: Rifampicin
-      * Protocol: iv 300 mg (0.5 h)
-      * Formulations:
+      Simulation name: Test2
+      Individual: Woman
+      Compound: Levonorgestrel 1
+      * Protocol: LNG_150 ug_21 Days
+      * Formulations: Microlut
       * Processes:
       * Interactions:
-        1. CYP3A4-Kajosaari 2005
-        2. P-gp-Reitman 2011
-        3. OATP1B1-Dixit 2007
-        4. AADAC-Assumed
-        5. CYP2C8-Kajosaari 2005
-        6. CYP1A2-Chen 2010
-        7. CYP2E1-Rae 2001
-        8. OATP1B3-Annaert 2010
-      Compound: Midazolam
-      * Protocol: po 3.5 mg
-      * Formulations:
-        1. Formulation: Oral solution
+      Compound: Itraconazole
+      * Protocol: ITZ 100mg 21 days
+      * Formulations: IR Dissolved
       * Processes:
       * Interactions:
+        1. CYP3A4-Isoherranen, 2004
+        2. ABCB1-Shityakov 2014
       Output schema:
       * Interval 1
         * Start time: 0 h
@@ -283,18 +248,16 @@
     Code
       my_sim
     Message
-      Simulation name: Test
-      Individual: European (P-gp modified, CYP3A4 36 h)
-      Compound: Rifampicin
-      * Protocol: iv 300 mg (0.5 h)
-      * Formulations:
+      Simulation name: Test4
+      Individual: Woman
+      Compound: Levonorgestrel 1
+      * Protocol: LNG_150 ug_21 Days
+      * Formulations: Microlut
       * Processes:
       * Interactions:
-        1. P-gp-Reitman 2011
-      Compound: Midazolam
-      * Protocol: po 3.5 mg
-      * Formulations:
-        1. Formulation: Oral solution
+      Compound: Itraconazole
+      * Protocol: ITZ 100mg 21 days
+      * Formulations: IR Dissolved
       * Processes:
       * Interactions:
       Output schema:
@@ -309,26 +272,23 @@
     Code
       my_sim
     Message
-      Simulation name: Test
-      Individual: European (P-gp modified, CYP3A4 36 h)
-      Compound: Rifampicin
-      * Protocol: iv 300 mg (0.5 h)
-      * Formulations:
+      Simulation name: Test5
+      Individual: Woman
+      Compound: Levonorgestrel 1
+      * Protocol: LNG_150 ug_21 Days
+      * Formulations: Microlut
       * Processes:
-        1. AADAC-Nakajima 2011
-        2. P-gp-Collett 2004
-        3. OATP1B1-Tirona 2003
-        4. Glomerular Filtration-GFR
+        1. Total Hepatic Clearance-Parameter identification
+        2. CYP3A4-Parameter Identification
+        3. SHBG-Qi-Gui & Humpel 1990
+        4. ALB-Bayer report
       * Interactions:
-      Compound: Midazolam
-      * Protocol: po 3.5 mg
-      * Formulations:
-        1. Formulation: Oral solution
+      Compound: Itraconazole
+      * Protocol: ITZ 100mg 21 days
+      * Formulations: IR Dissolved
       * Processes:
-        1. GABRG2-Buhr 1997
-        2. Glomerular Filtration-Optimized
-        3. CYP3A4-Optimized
-        4. UGT1A4-Optimized
+        1. Glomerular Filtration-GFR
+        2. CYP3A4-Isoherranen 2004
       * Interactions:
       Output schema:
       * Interval 1
@@ -342,17 +302,16 @@
     Code
       my_sim
     Message
-      Simulation name: Test
-      Individual: European (P-gp modified, CYP3A4 36 h)
-      Compound: Rifampicin
-      * Protocol: iv 300 mg (0.5 h)
-      * Formulations:
+      Simulation name: Test6
+      Individual: Woman
+      Compound: Levonorgestrel 1
+      * Protocol: LNG_150 ug_21 Days
+      * Formulations: Microlut
       * Processes:
       * Interactions:
-      Compound: Midazolam
-      * Protocol: po 3.5 mg
-      * Formulations:
-        1. Formulation: Oral solution
+      Compound: Itraconazole
+      * Protocol: ITZ 100mg 21 days
+      * Formulations: IR Dissolved
       * Processes:
       * Interactions:
       Output schema:
@@ -367,21 +326,20 @@
     Code
       my_sim
     Message
-      Simulation name: Test
-      Individual: European (P-gp modified, CYP3A4 36 h)
-      Compound: Rifampicin
-      * Protocol: iv 300 mg (0.5 h)
-      * Formulations:
+      Simulation name: Test6
+      Individual: Woman
+      Compound: Levonorgestrel 1
+      * Protocol: LNG_150 ug_21 Days
+      * Formulations: Microlut
       * Processes:
-        1. AADAC-Nakajima 2011
-        2. P-gp-Collett 2004
+        1. CYP3A4-Levonorgestrel
+        2. P-gp-Levonorgestrel
       * Interactions:
-      Compound: Midazolam
-      * Protocol: po 3.5 mg
-      * Formulations:
-        1. Formulation: Oral solution
+      Compound: Itraconazole
+      * Protocol: ITZ 100mg 21 days
+      * Formulations: IR Dissolved
       * Processes:
-        1. CYP3A4-Optimized
+        1. CYP3A4-Itraconazole
       * Interactions:
       Output schema:
       * Interval 1
@@ -395,17 +353,16 @@
     Code
       my_sim
     Message
-      Simulation name: Test
-      Individual: European (P-gp modified, CYP3A4 36 h)
-      Compound: Rifampicin
-      * Protocol: iv 300 mg (0.5 h)
-      * Formulations:
+      Simulation name: Test7
+      Individual: Woman
+      Compound: Levonorgestrel 1
+      * Protocol: LNG_150 ug_21 Days
+      * Formulations: Microlut
       * Processes:
       * Interactions:
-      Compound: Midazolam
-      * Protocol: po 3.5 mg
-      * Formulations:
-        1. Formulation: Oral solution
+      Compound: Itraconazole
+      * Protocol: ITZ 100mg 21 days
+      * Formulations: IR Dissolved
       * Processes:
       * Interactions:
       Output schema:
@@ -421,13 +378,13 @@
       my_sim
     Message
       Simulation name: Test
-      Individual: European (P-gp modified, CYP3A4 36 h)
-      Compound: Rifampicin
+      Individual: Woman
+      Compound: Levonorgestrel 1
       * Protocol:
       * Formulations:
       * Processes:
       * Interactions:
-      Compound: Midazolam
+      Compound: Itraconazole
       * Protocol:
       * Formulations:
       * Processes:
@@ -448,14 +405,12 @@
       Population: UnknowPop
       Compound: Levonorgestrel 1
       * Protocol: LNG_150 ug_21 Days
-      * Formulations:
-        1. Formulation: Microlut
+      * Formulations: Microlut
       * Processes:
       * Interactions:
       Compound: Itraconazole
       * Protocol: ITZ 100mg 21 days
-      * Formulations:
-        1. Formulation: IR Dissolved
+      * Formulations: IR Dissolved
       * Processes:
       * Interactions:
       Output schema:

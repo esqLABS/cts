@@ -31,11 +31,11 @@
 #'   perpetrators = c("Rifampicin")
 #' )
 create_simulation <- function(
-simulation_name,
-individual = list(),
-population = list(),
-victim,
-perpetrators) {
+    simulation_name,
+    individual = list(),
+    population = list(),
+    victim,
+    perpetrators) {
   # Combine Compound, Protocol and Formulation
   sim <- Simulation$new(
     name = simulation_name,
@@ -81,25 +81,126 @@ perpetrators) {
 #'   options = list(add_interactions = FALSE, add_processes = TRUE)
 #' )
 add_simulation <- function(
-snapshot,
-simulation,
-options = list(add_interactions = TRUE, add_processes = TRUE)) {
+    snapshot,
+    simulation,
+    options = list(add_interactions = TRUE, add_processes = TRUE)) {
   snapshot$check_simulation(simulation)
+
+  # Match protocols with formulations from snapshot
+  for (compound_index in seq_along(simulation$compounds)) {
+    compound <- simulation$compounds[[compound_index]]
+    if (!is.null(compound$Protocol)) {
+      # Find protocol in snapshot by name
+      protocol_name <- compound$Protocol$Name
+      protocol_found <- FALSE
+
+      for (protocol in snapshot$protocols) {
+        if (protocol$name == protocol_name) {
+          protocol_found <- TRUE
+
+          # Get formulation keys based on protocol type
+          if ("Protocol" %in% class(protocol)) {
+            formulation_keys <- list("Formulation")
+          } else if ("AdvancedProtocol" %in% class(protocol)) {
+            # For advanced protocols, get formulation keys from schema items
+            formulation_keys <- unlist(
+              purrr::map(protocol$schemas, \(x) {
+                purrr::map(x$SchemaItems, \(y) y$formulation_key)
+              }),
+              recursive = TRUE
+            )
+          } else {
+            # Default to Formulation if we can't determine
+            formulation_keys <- list("Formulation")
+          }
+
+          # Match provided formulations with protocol keys
+          if (length(compound$Protocol$Formulations) > 0) {
+            # Extract formulation names from the list structure
+            formulation_names <- purrr::map_chr(
+              compound$Protocol$Formulations,
+              "Name"
+            )
+
+            if (length(formulation_names) == 1) {
+              # If single formulation provided, use it for all keys
+              simulation$compounds[[
+                compound_index
+              ]]$Protocol$Formulations <- purrr::map(
+                formulation_keys,
+                \(key) {
+                  list(Key = key, Name = formulation_names[1])
+                }
+              )
+            } else {
+              # Otherwise, ensure we have the right number of formulations
+              if (length(formulation_names) != length(formulation_keys)) {
+                cli_abort(c(
+                  "Number of formulations doesn't match protocol requirements for compound {.val {compound$Name}}.",
+                  "i" = "Protocol requires {length(formulation_keys)} formulation(s)."
+                ))
+              }
+              # Assign keys in order
+              simulation$compounds[[
+                compound_index
+              ]]$Protocol$Formulations <- purrr::map2(
+                formulation_keys,
+                formulation_names,
+                \(key, name) {
+                  list(Key = key, Name = name)
+                }
+              )
+            }
+
+            # Validate that formulations exist in snapshot
+            formulation_names_to_check <- purrr::map_chr(
+              simulation$compounds[[compound_index]]$Protocol$Formulations,
+              "Name"
+            )
+            for (formulation_name in formulation_names_to_check) {
+              exists <- any(purrr::map_lgl(
+                snapshot$formulations,
+                ~ .x$name == formulation_name
+              ))
+              if (!exists) {
+                cli_abort(
+                  "Formulations `{formulation_name}` not found in snapshot."
+                )
+              }
+            }
+          } else if (length(formulation_keys) > 0) {
+            # No formulations provided but they are required by the protocol
+            cli_abort(
+              "Missing formulation key(s) `{paste(formulation_keys, collapse = '`, `')}` for protocol `{protocol_name}`."
+            )
+          }
+
+          break # Found the protocol, no need to continue loop
+        }
+      }
+
+      if (!protocol_found) {
+        cli_abort(
+          "Protocol {.val {protocol_name}} not found in snapshot for compound {.val {compound$Name}}."
+        )
+      }
+    }
+  }
 
   # get all defined interactions in snapshot
   all_interactions <- extract_interactions(snapshot, quietly = TRUE)
   all_interactions_compounds <- purrr::list_c(purrr::map(
-all_interactions,
-~ .x$CompoundName
-))
+    all_interactions,
+    ~ .x$CompoundName
+  ))
   all_interactions_molecules <- purrr::list_c(purrr::map(
-all_interactions,
-~ .x$MoleculeName
-))
+    all_interactions,
+    ~ .x$MoleculeName
+  ))
   all_interactions_names <- purrr::list_c(purrr::map(
-all_interactions,
-~ .x$Name
-))
+    all_interactions,
+    ~ .x$Name
+  ))
 
   # add molecule to used interactions in sim as defined in snapshot
   # (can't just split name by `-` as some molecule have `-` in their name)
@@ -113,8 +214,8 @@ all_interactions,
       # check that the interaction is valid
       if (length(index) == 0) {
         cli::cli_warn(
-"Interaction {.code {x$Name}} not found for compound {.code {x$CompoundName}} in snapshot. Skipping."
-)
+          "Interaction {.code {x$Name}} not found for compound {.code {x$CompoundName}} in snapshot. Skipping."
+        )
         return(NULL)
       } else {
         x$MoleculeName <- all_interactions[[index]]$MoleculeName
@@ -127,14 +228,14 @@ all_interactions,
       cli::cli_warn(c(
         "Automatically adding interactions to the simulation.",
         "Using first interaction found for each enzyme/compound pair."
-))
+      ))
 
       selected_interactions <- which(
-!duplicated(interaction(
-all_interactions_compounds,
-all_interactions_molecules
+        !duplicated(interaction(
+          all_interactions_compounds,
+          all_interactions_molecules
         ))
-)
+      )
       simulation$interactions <- all_interactions[selected_interactions]
     }
   }
@@ -151,14 +252,14 @@ all_interactions_molecules
       valid_processes <- purrr::map(compound$Processes, \(p) {
         p_name <- p$Name
         index <- which(purrr::list_c(purrr::map(
-compound_processes,
-~ {
-.x$Name == p_name
+          compound_processes,
+          ~ {
+            .x$Name == p_name
           }
-)))
+        )))
         if (length(index) == 0) {
           cli::cli_warn(
-"Process {.code {p_name}} not found for compound {.code {compound_name}} in snapshot. Skipping."
+            "Process {.code {p_name}} not found for compound {.code {compound_name}} in snapshot. Skipping."
           )
           return(NULL)
         } else {
@@ -172,16 +273,16 @@ compound_processes,
         cli::cli_warn(c(
           "Automatically adding processes to the simulation for compound {.code {compound_name}}.",
           "Using first processes of each type and of each metabolizing enzyme found."
-))
+        ))
 
         processes_types <- purrr::map(
-compound_processes,
-~ ifelse(
-!is.null(.x$MoleculeName),
-.x$MoleculeName,
-.x$SystemicProcessType
+          compound_processes,
+          ~ ifelse(
+            !is.null(.x$MoleculeName),
+            .x$MoleculeName,
+            .x$SystemicProcessType
           )
-)
+        )
 
         # Using first processes of each type/molecule found for each compound pair.
         selected_processes <- which(!duplicated(processes_types))
@@ -190,8 +291,8 @@ compound_processes,
     }
 
     simulation$compounds[[compound_index]]$Processes <- purrr::compact(
-compound$Processes
-)
+      compound$Processes
+    )
   }
 
   snapshot$add_simulation(simulation$data)
@@ -262,120 +363,77 @@ remove_simulation <- function(snapshot, simulation_name) {
 #'   sim,
 #'   "Clarithromycin",
 #'   "Oral BID",
-#'   formulation = list(list(Key = "Formulation 1", Name = "Tablet"))
+#'   formulation = "Tablet"
 #' )
-add_compound <- function(simulation, compound, protocol = NULL, formulation = list()) {
+add_compound <- function(
+    simulation,
+    compound,
+    protocol = NULL,
+    formulation = list()) {
   simulation$add_compound(compound, protocol, formulation)
   invisible(simulation)
 }
 
-#' Set protocol for an already used compound from a `Simulation` object
+#' Set Protocol and Formulation for a Compound in a Simulation
 #'
-#' This function set the protocol of the specified compounds.
-#' @param simulation The `Simulation` object (as created by `create_simulation`).
-#' @param compound Name of the compound for which to set the protocol.
-#' @param protocol either a protocol object (Protocol or AdvancedProtocol object) or a protocol name to be used for `compound`.
-#' If a protocol name is used, the formulations should be set with each corresponding
-#' formulation key required from the protocol.
-#' @param formulation either a character vector of formulation names if a protocol object is given or a list of Formulation
-#' key/name mapping for the chosen protocol if only its name is given.
-#' @return The updated `Simulation` object
-#' @export
+#' @description
+#' Sets the protocol and formulation for a compound in a simulation.
+#'
+#' @param simulation A Simulation object
+#' @param compound Name of the compound
+#' @param protocol A character string specifying the protocol name
+#' @param formulation Optional. Either a character string or a character vector of formulation names.
+#'   If a single formulation is provided, it will be used for all protocol keys.
+#'   If multiple formulations are provided, they will be mapped in order to the protocol keys.
+#'
+#' @return The simulation object (invisibly)
+#'
 #' @examples
-#' # Create a simulation first
 #' sim <- create_simulation(
-#'   simulation_name = "Protocol example",
-#'   individual = "Adult male",
-#'   victim = "Midazolam",
-#'   perpetrators = c("Ketoconazole")
+#'   simulation_name = "Test",
+#'   victim = "Rifampicin",
+#'   perpetrators = "Midazolam",
+#'   individual = "European (P-gp modified, CYP3A4 36 h)"
 #' )
+#' sim <- set_compound_protocol(sim, "Midazolam", "Single oral dose", "Tablet")
 #'
-#' # Set protocol for a compound
-#' sim <- set_compound_protocol(sim, "Midazolam", "Single oral dose")
-#'
-#' # Set protocol with formulation
-#' sim <- set_compound_protocol(
-#'   sim,
-#'   "Ketoconazole",
-#'   "Multiple dose",
-#'   formulation = list(list(Key = "Formulation 1", Name = "Tablet"))
-#' )
-set_compound_protocol <- function(simulation, compound, protocol, formulation = list()) {
-
-  # ensure formulation is given in the correct format
-  if (is.list(formulation)) {
-    if (length(formulation) > 0) {
-      is_list_of_list <- all(unlist(purrr::map(formulation, \(x) {is.list(x)})))
-      if (!is_list_of_list) {
-        # transform to list of list
-        formulation <- list(formulation)
-      }
-
-      # check that all elements are in the form of list(Key = , Name =)
-      correct_sublist <- purrr::map(formulation, \(x) {
-        all(names(x) %in% c("Key", "Name")) && all(unlist(purrr::map(x,  \(y) {is.character(y) && length(y) == 1})))
-      })
-
-      if (!all(unlist(correct_sublist))) {
-        cli_abort("Formulation should be in the form of {.code list(list(Key = ..., Name = ...), ...)}.")
-      }
-    }
-  } else if (!is.character(formulation)) {
-    cli_abort("Argument {.arg formulation} is not supplied in the correct format.")
+#' @export
+set_compound_protocol <- function(
+    simulation,
+    compound,
+    protocol,
+    formulation = list()) {
+  # ensure protocol is a character string
+  if (!is.character(protocol) || length(protocol) != 1) {
+    cli_abort("Protocol must be a single character string.")
   }
 
-  # if protocol name is given expect a list of formulations key/name mapping
-  if (is.character(protocol) && length(protocol) == 1) {
-    if (!is.list(formulation)) {
-      cli_abort("List of formulation key/name mapping should be given when only supplying protocol name.")
-    }
-  }
-
-  # if protocol is given and only formulation name is given automatically map to needed formulations
-  if (any(c("Protocol", "AdvancedProtocol") %in% class(protocol))) {
-    if ("Protocol" %in% class(protocol)) {
-      existing_formulations_key <- "Formulation"
+  # ensure formulation is given in the correct format if provided
+  if (length(formulation) > 0) {
+    if (is.character(formulation)) {
+      # Convert character vector to list of formulation specifications with Key/Name format
+      formulation <- purrr::map(
+        formulation,
+        \(x) list(Key = "Formulation", Name = x)
+      )
+    } else if (is.list(formulation)) {
+      # Check if all elements are character (now required)
+      if (all(unlist(purrr::map(formulation, is.character)))) {
+        # Convert list of characters to Key/Name format
+        formulation <- purrr::map(
+          formulation,
+          \(x) list(Key = "Formulation", Name = x)
+        )
+      } else {
+        cli_abort(
+          "Formulation must be either a character string or a character vector of formulation names."
+        )
+      }
     } else {
-      existing_formulations_key <- unlist(
-        purrr::map(protocol$schemas, \(x) {
-          purrr:::map(x$SchemaItems, \(y) {
-            y$formulation_key
-          })
-        }),
-        recursive = T
+      cli_abort(
+        "Formulation must be either a character string or a character vector of formulation names."
       )
     }
-
-    if (is.character(formulation) && length(formulation) > 0) {
-      # if only single formulation given, repeat as needed
-      if (length(formulation) == 1) {
-        formulation <- purrr::map(existing_formulations_key, ~ list(Key = .x, Name = formulation))
-      } else {
-        # otherwise should give as many formulation as keys in the protocol
-        if (length(formulation) != length(existing_formulations_key)) {
-          cli_abort(
-            paste("Number of formulations should match the number of existing formulation keys",
-                  "in the protocol (expecting ", length(existing_formulations_key), " formulations names).")
-          )
-        } else {
-          formulation <- purrr::map2(existing_formulations_key, formulation, \(x, y) {
-            list(Key = x, Name = y)
-          })
-        }
-      }
-    }
-
-    # if formulation is given as a list check that all keys are present in the protocol
-    if (is.list(formulation)) {
-      given_keys <- purrr::list_c(purrr::map(formulation, \(x) {x$Key}))
-
-      if (!all(given_keys %in% existing_formulations_key)) {
-        cli_abort("All keys supplied in the {.arg formulation} should be present in the protocol.")
-      }
-    }
-
-    # retain only protocol name to create simulation
-    protocol <- protocol$Name
   }
 
   simulation$set_compound_protocol(compound, protocol, formulation)
@@ -405,11 +463,11 @@ set_compound_protocol <- function(simulation, compound, protocol, formulation = 
 #' # Set output interval for 7 days with 24 points per day
 #' sim <- set_output_interval(sim, 0, 7, 24, "day(s)")
 set_output_interval <- function(
-simulation,
-start_time,
-end_time,
-resolution,
-unit) {
+    simulation,
+    start_time,
+    end_time,
+    resolution,
+    unit) {
   simulation$output_schema$set_interval(start_time, end_time, resolution, unit)
   invisible(simulation)
 }
@@ -437,11 +495,11 @@ unit) {
 #' # Add another interval for the rest of the day with lower resolution
 #' sim <- add_output_interval(sim, 1, 24, 10, "h")
 add_output_interval <- function(
-simulation,
-start_time,
-end_time,
-resolution,
-unit) {
+    simulation,
+    start_time,
+    end_time,
+    resolution,
+    unit) {
   simulation$output_schema$add_interval(start_time, end_time, resolution, unit)
   invisible(simulation)
 }
@@ -598,9 +656,9 @@ Simulation <- R6::R6Class(
     #' @param population name of the population used in the simulation.
     #' @return A new `Simulation` object.
     initialize = function(name,
-compounds = list(),
-individual = list(),
-population = list()) {
+                          compounds = list(),
+                          individual = list(),
+                          population = list()) {
       self$name <- name
       self$compounds <- compounds
       if (length(individual) > 0 && length(population) > 0) {
@@ -661,18 +719,18 @@ population = list()) {
       }
 
       compoundIdx <- which(
-purrr::list_c(purrr::map(self$compounds, ~ .x$Name)) == compound
-)
+        purrr::list_c(purrr::map(self$compounds, ~ .x$Name)) == compound
+      )
       if (length(compoundIdx) == 0) {
         cli_abort(
-"`compound` not found. Use `add_compound()` to add a new compound."
-)
+          "`compound` not found. Use `add_compound()` to add a new compound."
+        )
       }
 
       self$compounds[[compoundIdx]]$Protocol <- list(
-Name = protocol,
-Formulations = formulation
-)
+        Name = protocol,
+        Formulations = formulation
+      )
       invisible(self)
     },
     #' @description
@@ -713,9 +771,9 @@ Formulations = formulation
       }
 
       self$interactions <- c(
-self$interactions,
-purrr::map(interactions, ~ list(Name = .x, CompoundName = compound))
-)
+        self$interactions,
+        purrr::map(interactions, ~ list(Name = .x, CompoundName = compound))
+      )
       invisible(self)
     },
     #' @description
@@ -736,9 +794,9 @@ purrr::map(interactions, ~ list(Name = .x, CompoundName = compound))
 
       compound_index <- which(purrr::map(self$compounds, ~ .x$Name) == compound)
       self$compounds[[compound_index]]$Processes <- c(
-self$processes,
-purrr::map(processes, ~ list(Name = .x))
-)
+        self$processes,
+        purrr::map(processes, ~ list(Name = .x))
+      )
       invisible(self)
     },
     # set_output_schema = function()
@@ -780,14 +838,14 @@ purrr::map(processes, ~ list(Name = .x))
             # Single formulation - print on same line
             cli::cli_li("Formulations: {x$Protocol$Formulations[[1]]$Name}")
           } else {
-# Multiple formulations - print as nested list
+            # Multiple formulations - print as nested list
             cli::cli_li("Formulations: ")
             purrr::walk(x$Protocol$Formulations, \(f) {
               cli::cli_ol("{f$Key}: {f$Name}")
             })
-}
-          } else {
-            cli::cli_li("Formulations: ")
+          }
+        } else {
+          cli::cli_li("Formulations: ")
         }
         cli::cli_li("Processes: ")
         ol <- cli::cli_ol()
