@@ -197,14 +197,26 @@ Snapshot <- R6::R6Class(
           self$get_names("protocols") == protocol_name
         )]]
         needed_formulation_keys <- c()
-        # For simple protocol with oral or user defined administration, simulation need a `Formulation` key but key is not explicitly defined in the protocol
-        if (
-          !is.null(snap_protocol$type) &&
-            snap_protocol$type %in% c("oral", "user")
-        ) {
-          needed_formulation_keys <- c("Formulation")
+
+        if ("Protocol" %in% class(snap_protocol)) {
+          # For simple protocol with oral or user defined administration, simulation
+          # need a `Formulation` key but key is not explicitly defined in the protocol
+          if (snap_protocol$type %in% c("oral", "user")) {
+            needed_formulation_keys <- c("Formulation")
+          }
+        } else if ("AdvancedProtocol" %in% class(snap_protocol)) {
+          # For advanced protocol look at all defined formulation keys
+          needed_formulation_keys <- unique(
+            unlist(
+              purrr::map(snap_protocol$schemas, \(x) {
+                purrr::map(x$SchemaItems, \(y) {
+                  y$formulation_key
+                })
+              }),
+              recursive = TRUE
+            )
+          )
         }
-        # For advanced protocol look at all defined formulation keys
 
         # Check that all needed key are given
         if (!all(needed_formulation_keys %in% given_formulation_keys)) {
