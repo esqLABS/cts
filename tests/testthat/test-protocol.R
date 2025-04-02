@@ -39,15 +39,15 @@ test_that("Administration can be added, replaced and removed to/from schema.", {
 
   expect_message(
     prot |>
-    add_administration(
-      administration = create_protocol(name = "Test protocol", type = "ivb", interval = "single", dose = 400),
-      schema_name = "my Schema"
-    )
-    )
+      add_administration(
+        administration = create_protocol(name = "Test protocol", type = "ivb", interval = "single", dose = 400),
+        schema_name = "my Schema"
+      )
+  )
 
   expect_no_error(
     prot |>
-    remove_administration(schema_name = "my Schema", administration_name = "Test protocol (schema item 2)")
+      remove_administration(schema_name = "my Schema", administration_name = "Test protocol (schema item 2)")
   )
 })
 

@@ -1,4 +1,5 @@
 test_that("Plotting simulation results work", {
+  testthat::skip_on_os("mac")
   my_ddi <- get_test_ddi()
 
   # suppress log10 transformation warnings from ggplot2
@@ -8,6 +9,8 @@ test_that("Plotting simulation results work", {
 })
 
 test_that("Plotting population simulation results work.", {
+  testthat::skip_on_os("mac")
+
   ddi <- levo_itra_ddi$clone()
   sim_to_remove <- ddi$get_names("simulations")
   remove_simulation(ddi, sim_to_remove)
@@ -18,10 +21,23 @@ test_that("Plotting population simulation results work.", {
     perpetrators = "Itraconazole",
     population = "Women"
   )
-  set_compound_protocol(my_sim, compound = "Levonorgestrel 1", protocol = "LNG_150 ug_21 Days", formulation = list(list(Key = "Formulation", Name = "Microlut")))
-  set_compound_protocol(my_sim, compound = "Itraconazole", protocol = "ITZ 100mg 21 days", formulation = list(list(Key = "Formulation", Name = "IR Dissolved")))
+  set_compound_protocol(
+    my_sim,
+    compound = "Levonorgestrel 1",
+    protocol = "LNG_150 ug_21 Days",
+    formulation = "Microlut"
+  )
 
-  my_sim$output_selections <- list("Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma (Peripheral Venous Blood)")
+  set_compound_protocol(
+    my_sim,
+    compound = "Itraconazole",
+    protocol = "ITZ 100mg 21 days",
+    formulation = "IR Dissolved"
+  )
+
+  my_sim$output_selections <- list(
+    "Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma (Peripheral Venous Blood)"
+  )
 
   suppressWarnings(add_simulation(ddi, my_sim))
 

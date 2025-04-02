@@ -17,7 +17,9 @@ test_that("Creating Compound from file works", {
 test_that("Creating Compound from url works", {
   expect_no_error(
     suppressMessages({
-      compound("https://raw.githubusercontent.com/Open-Systems-Pharmacology/Alfentanil-Model/v2.2/Alfentanil-Model.json")
+      compound(
+        "https://raw.githubusercontent.com/Open-Systems-Pharmacology/Alfentanil-Model/v2.2/Alfentanil-Model.json"
+      )
     })
   )
 })
