@@ -27,8 +27,10 @@ test_that("`add_interval` works", {
 
 test_that("`set interval` check numeric value of input.", {
   output_schema <- SnapshotOutputSchema$new()
-  expect_error(output_schema$set_interval(start_time = "a", end_time = 60, resolution = 1, unit = "min"),
-  "`start_time`, `end_time` and `resolution` must be numeric.")
+  expect_error(
+    output_schema$set_interval(start_time = "a", end_time = 60, resolution = 1, unit = "min"),
+    "`start_time`, `end_time` and `resolution` must be numeric."
+  )
 })
 
 test_that("`set interval` check validity of unit", {

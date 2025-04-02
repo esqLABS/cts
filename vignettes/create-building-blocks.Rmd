@@ -42,7 +42,7 @@ Simple protocols can be created using the `create_protocol()` function:
 # Create a simple oral protocol
 oral_protocol <- create_protocol(
   name = "oral 10 mg",
-  type = "oral", 
+  type = "oral",
   interval = "single",
   dose = 10,
   dose_unit = "mg",
@@ -53,7 +53,7 @@ oral_protocol <- create_protocol(
 iv_protocol <- create_protocol(
   name = "iv 300 mg (0.5 h)",
   type = "iv",
-  interval = "single", 
+  interval = "single",
   dose = 300,
   dose_unit = "mg",
   infusion_time = 0.5,
@@ -78,16 +78,16 @@ Advanced protocols allow for more complex dosing regimens by combining multiple 
 
 ```{r advanced-protocols}
 # Create an advanced protocol for a loading dose followed by maintenance doses
-advanced_protocol <- 
+advanced_protocol <-
   create_advanced_protocol(name = "Loading + Maintenance Protocol")
 
 # Add first schema for loading dose (single high dose)
 advanced_protocol <- add_schema(
   advanced_protocol,
   schema_name = "Loading Phase",
-  start_time = 0,    # Start immediately
+  start_time = 0, # Start immediately
   start_time_unit = "h",
-  rep_nb = 1,        # Just once
+  rep_nb = 1, # Just once
   time_btw_rep = 24, # Not relevant for single rep but required
   time_btw_rep_unit = "h"
 )
@@ -97,7 +97,7 @@ loading_dose <- create_protocol(
   name = "Loading Dose",
   type = "oral",
   interval = "single", # Must be single for advanced protocols
-  dose = 200,         # Higher initial dose
+  dose = 200, # Higher initial dose
   dose_unit = "mg",
   water_vol_per_body_weight = 3.5
 )
@@ -113,10 +113,10 @@ advanced_protocol <- add_administration(
 advanced_protocol <- add_schema(
   advanced_protocol,
   schema_name = "Maintenance Phase",
-  start_time = 24,    # Start 24h after beginning
+  start_time = 24, # Start 24h after beginning
   start_time_unit = "h",
-  rep_nb = 5,         # Repeat 5 times
-  time_btw_rep = 12,  # Every 12 hours
+  rep_nb = 5, # Repeat 5 times
+  time_btw_rep = 12, # Every 12 hours
   time_btw_rep_unit = "h"
 )
 
@@ -125,7 +125,7 @@ maintenance_dose <- create_protocol(
   name = "Maintenance Dose",
   type = "oral",
   interval = "single",
-  dose = 100,         # Lower maintenance dose
+  dose = 100, # Lower maintenance dose
   dose_unit = "mg",
   water_vol_per_body_weight = 3.5
 )
@@ -149,45 +149,45 @@ Formulations define how a drug is released into the system. The `{cts}` package 
 # Create a simple dissolved formulation
 dissolved_form <- create_formulation(
   name = "Simple Solution",
-  type = "dissolved"  # Immediately available drug
+  type = "dissolved" # Immediately available drug
 )
 
 # Create a Weibull tablet formulation
 weibull_form <- create_formulation(
   name = "Tablet Formulation",
   type = "weibull",
-  dissolution_time = 240,     # Time to achieve 50% dissolution
+  dissolution_time = 240, # Time to achieve 50% dissolution
   dissolution_time_unit = "min",
-  lag_time = 10,             # Delay before dissolution starts
+  lag_time = 10, # Delay before dissolution starts
   lag_time_unit = "min",
-  dissolution_shape = 0.92,   # Shape parameter
-  suspension = FALSE          # Use as tablet, not suspension
+  dissolution_shape = 0.92, # Shape parameter
+  suspension = FALSE # Use as tablet, not suspension
 )
 
 # Create a particle formulation with polydisperse distribution
 particle_form <- create_formulation(
   name = "Particle Formulation",
   type = "particle",
-  thickness = 30,            # Unstirred water layer thickness
+  thickness = 30, # Unstirred water layer thickness
   thickness_unit = "µm",
   distribution_type = "poly", # Polydisperse distribution
   particle_size_distribution = "normal",
-  radius = 10,              # Mean particle radius
+  radius = 10, # Mean particle radius
   radius_unit = "µm",
-  radius_sd = 3,            # Standard deviation of radius
+  radius_sd = 3, # Standard deviation of radius
   radius_sd_unit = "µm",
-  radius_min = 1,           # Minimum particle size
+  radius_min = 1, # Minimum particle size
   radius_min_unit = "µm",
-  radius_max = 19,          # Maximum particle size
+  radius_max = 19, # Maximum particle size
   radius_max_unit = "µm",
-  n_bins = 5               # Number of size bins
+  n_bins = 5 # Number of size bins
 )
 
 # Create a zero-order release formulation
 zero_order_form <- create_formulation(
   name = "Controlled Release",
   type = "zero",
-  end_time = 120,          # Duration of release
+  end_time = 120, # Duration of release
   end_time_unit = "min"
 )
 
@@ -195,7 +195,7 @@ zero_order_form <- create_formulation(
 first_order_form <- create_formulation(
   name = "First Order Release",
   type = "first",
-  thalf = 30,              # Half-life of drug release
+  thalf = 30, # Half-life of drug release
   thalf_unit = "min"
 )
 
@@ -203,8 +203,8 @@ first_order_form <- create_formulation(
 table_form <- create_formulation(
   name = "Custom Release Profile",
   type = "table",
-  tableX = c(0, 1, 2, 4, 8, 12),     # Time points (hours)
-  tableY = c(0, 0.2, 0.4, 0.7, 0.9, 1.0),  # Fraction released
+  tableX = c(0, 1, 2, 4, 8, 12), # Time points (hours)
+  tableY = c(0, 0.2, 0.4, 0.7, 0.9, 1.0), # Fraction released
   suspension = TRUE
 )
 ```

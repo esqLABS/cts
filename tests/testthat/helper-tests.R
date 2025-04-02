@@ -12,9 +12,11 @@ try(
 
     # DDI
     ## imported
-    levo_itra_ddi <- import_ddi(test_path("data/Levonorgestrel-Itraconazole-DDI.json"))
+    levo_itra_ddi <- import_ddi(test_path(
+      "data/Levonorgestrel-Itraconazole-DDI.json"
+    ))
   },
-  silent = T
+  silent = TRUE
 )
 
 
@@ -26,5 +28,3 @@ get_test_ddi <- function() {
 
   return(the$.test_ddi$clone())
 }
-
-

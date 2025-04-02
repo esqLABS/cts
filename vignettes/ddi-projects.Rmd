@@ -56,11 +56,11 @@ You can customize the DDI project creation by providing options:
 ```{r custom-ddi, eval=FALSE}
 # Create a DDI project with custom options
 myDDI <- create_ddi(
-  victim = rifampicin, 
+  victim = rifampicin,
   midazolam,
   options = list(
-    import_simulations = FALSE,  # Don't import simulations from compound models
-    create_ddi_simulation = TRUE  # Create a generic DDI simulation
+    import_simulations = FALSE, # Don't import simulations from compound models
+    create_ddi_simulation = TRUE # Create a generic DDI simulation
   )
 )
 ```
@@ -80,8 +80,8 @@ ketoconazole <- compound("Ketoconazole")
 
 # Create a DDI project with multiple perpetrators
 multiDDI <- create_ddi(
-  victim = midazolam, 
-  rifampicin, 
+  victim = midazolam,
+  rifampicin,
   ketoconazole
 )
 ```

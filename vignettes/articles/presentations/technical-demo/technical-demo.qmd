@@ -159,7 +159,7 @@ cat("
 ```{r}
 rifampicin <- compound("Rifampicin")
 
-str(rifampicin,max.level = 1)
+str(rifampicin, max.level = 1)
 ```
 
 . . .

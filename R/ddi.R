@@ -180,7 +180,6 @@ run_pk_analysis <- function(ddi, path = NULL) {
 #' plots <- plot_ddi_results(ddi)
 #' }
 plot_ddi_results <- function(ddi, simulationNames = NULL, ...) {
-
   ddi$create_plots(...)
   # By default return all simulations plots
   if (is.null(simulationNames)) {
@@ -215,7 +214,7 @@ DDI <- R6::R6Class(
     #' @param file a character string representing the path to the snapshot file to import.
     #' @param options a named list of options to customize the DDI simulation. Default is to use `default_options`.
     #' @return A new `DDI` object.
-    initialize = function(victim=NULL, ..., file = NULL, options = NULL) {
+    initialize = function(victim = NULL, ..., file = NULL, options = NULL) {
       self$source <- NULL
 
       self$metadata <- list()

@@ -32,7 +32,7 @@ SnapshotOutputSchema <- R6::R6Class(
             list(
               Name = "Resolution",
               Value = x$resolution,
-              Unit = paste0("pts/",x$unit)
+              Unit = paste0("pts/", x$unit)
             )
           )
         )
@@ -55,10 +55,14 @@ SnapshotOutputSchema <- R6::R6Class(
     #' @param unit time unit for the interval. Should be one of ospsuite::ospUnits$Time.
     add_interval = function(start_time, end_time, resolution, unit = "h") {
       if (!is.numeric(c(start_time, end_time, resolution))) {
-        cli::cli_abort("`start_time`, `end_time` and `resolution` must be numeric.")
+        cli::cli_abort(
+          "`start_time`, `end_time` and `resolution` must be numeric."
+        )
       }
       if (!(unit %in% ospsuite::getUnitsForDimension("Time"))) {
-        cli::cli_abort("`unit` must be a valid time unit. See `ospsuite::ospUnits$Time` for available units.")
+        cli::cli_abort(
+          "`unit` must be a valid time unit. See `ospsuite::ospUnits$Time` for available units."
+        )
       }
 
       # add interval
@@ -86,18 +90,29 @@ SnapshotOutputSchema <- R6::R6Class(
     #' Print the object to the console
     print = function() {
       cli::cli_text("Output schema: ")
-      for (i in seq_along(self$intervals)) {
-        cli::cli_li(paste0("Interval ", i))
+      purrr::iwalk(self$intervals, function(interval, i) {
+        cli::cli_li("Interval {i}")
         ul <- cli::cli_ul()
-        cli::cli_li(paste0("Start time: ", self$intervals[[i]]$start_time, " ", self$intervals[[i]]$unit))
-        cli::cli_li(paste0("End time: ", self$intervals[[i]]$end_time, " ", self$intervals[[i]]$unit))
-        cli::cli_li(paste0("Resolution: ", self$intervals[[i]]$resolution, " pts/", self$intervals[[i]]$unit))
+        cli::cli_li(
+          "Start time: {interval$start_time} {interval$unit}"
+        )
+        cli::cli_li(
+          "End time: {interval$end_time} {interval$unit}"
+        )
+        cli::cli_li(
+          "Resolution: {interval$resolution} pts/{interval$unit}"
+        )
         cli::cli_end(ul)
-      }
+      })
       invisible(self)
     }
   ),
   private = list(
-    .intervals = list(list(start_time = 0, end_time = 24, resolution = 4, unit = "h"))
+    .intervals = list(list(
+      start_time = 0,
+      end_time = 24,
+      resolution = 4,
+      unit = "h"
+    ))
   )
 )

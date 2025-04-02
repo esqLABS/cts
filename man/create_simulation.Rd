@@ -19,7 +19,7 @@ create_simulation(
 
 \item{population}{Name of the population to be used in the simulation.}
 
-\item{victim}{Name of the victim compound to be used in the simulation.}
+\item{victim}{Name of the victim compound to be used in the simulation}
 
 \item{perpetrators}{Vector of names of the compounds to be used as perpetrators in the simulation}
 }
