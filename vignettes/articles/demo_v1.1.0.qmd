@@ -51,7 +51,7 @@ available_compounds <- list_compounds()
 #| tbl-cap: "Available Compounds in OSP Library"
 # Display as formatted table
 data.frame(
-  Compound = available_compounds
+    Compound = available_compounds
 )
 ```
 
@@ -81,11 +81,11 @@ A DDI project is created using `create_ddi()`, which sets up the framework for s
 
 # Create DDI project
 ddi_project <- create_ddi(
-  victim = lng,
-  itr,
-  options = list(
-    create_ddi_simulation = FALSE
-  )
+    victim = lng,
+    itr, # Several compounds can be passed as separate arguments
+    options = list(
+        create_ddi_simulation = FALSE
+    )
 )
 
 # Display project information
@@ -114,13 +114,13 @@ We can create custom formulations using `create_formulation()`. Here, we'll crea
 
 # Create a new Lint80 formulation
 lint8030 <- create_formulation(
-  name = "Lint80-30",
-  type = "lint80",
-  dissolution_time = 30,
-  dissolution_time_unit = "min",
-  lag_time = 10,
-  lag_time_unit = "min",
-  suspension = FALSE
+    name = "Lint80-30",
+    type = "lint80",
+    dissolution_time = 30,
+    dissolution_time_unit = "min",
+    lag_time = 10,
+    lag_time_unit = "min",
+    suspension = FALSE
 )
 ```
 
@@ -159,14 +159,14 @@ We can create both simple and advanced protocols. Simple protocols are created u
 
 # Create a new dose protocol for daily administration over 30 days
 oral_150ug_over_30d <- create_protocol(
-  name = "oral_150ug_over_30d",
-  type = "oral",
-  interval = "24",
-  dose = 0.15,
-  dose_unit = "mg",
-  end_time = 30,
-  end_time_unit = "day(s)",
-  water_vol_per_body_weight = 3.5
+    name = "oral_150ug_over_30d",
+    type = "oral",
+    interval = "24",
+    dose = 0.15,
+    dose_unit = "mg",
+    end_time = 30,
+    end_time_unit = "day(s)",
+    water_vol_per_body_weight = 3.5
 )
 
 oral_150ug_over_30d
@@ -181,27 +181,27 @@ For more complex dosing regimens, we use `create_advanced_protocol()` which allo
 
 # Create an advanced protocol with a 14-day lead-in phase
 oral_750u_start_14d <- create_advanced_protocol("oral_750u_start_14d") |>
-  # Schema definition for the DDI phase
-  add_schema(
-    schema_name = "DDI phase",
-    start_time = 14, # Start after 14 days
-    start_time_unit = "day(s)",
-    rep_nb = 16, # 16 days duration
-    time_btw_rep = 24, # Once daily
-    time_btw_rep_unit = "h"
-  ) |>
-  # Dose definition
-  add_administration(
-    schema_name = "DDI phase",
-    create_protocol(
-      name = "DDI Dose",
-      type = "oral",
-      interval = "single",
-      dose = 0.750, # Maintenance dose
-      dose_unit = "mg",
-      water_vol_per_body_weight = 3.5
+    # Schema definition for the DDI phase
+    add_schema(
+        schema_name = "DDI phase",
+        start_time = 14, # Start after 14 days
+        start_time_unit = "day(s)",
+        rep_nb = 16, # 16 days duration
+        time_btw_rep = 24, # Once daily
+        time_btw_rep_unit = "h"
+    ) |>
+    # Dose definition
+    add_administration(
+        schema_name = "DDI phase",
+        create_protocol(
+            name = "DDI Dose",
+            type = "oral",
+            interval = "single",
+            dose = 0.750, # Maintenance dose
+            dose_unit = "mg",
+            water_vol_per_body_weight = 3.5
+        )
     )
-  )
 
 oral_750u_start_14d
 ```
@@ -230,10 +230,10 @@ Now we'll create a custom simulation using `create_simulation()`. This defines t
 #| class-output: txt
 
 new_simulation <- create_simulation(
-  simulation_name = "LNG_ITR_DDI_150_750_30d_14d",
-  victim = "Levonorgestrel 1",
-  perpetrators = "Itraconazole",
-  individual = "Woman"
+    simulation_name = "LNG_ITR_DDI_150_750_30d_14d",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
 )
 
 new_simulation
@@ -250,16 +250,16 @@ We need to specify which protocols and formulations to use for each compound in 
 #| class-output: txt
 
 new_simulation |>
-  set_compound_protocol(
-    compound = "Levonorgestrel 1",
-    protocol = "oral_150ug_over_30d",
-    formulation = list(list(Key = "Formulation", Name = "Lint80-30"))
-  ) |>
-  set_compound_protocol(
-    compound = "Itraconazole",
-    protocol = "oral_750u_start_14d",
-    formulation = list(list(Key = "Formulation 2", Name = "IR Dissolved"))
-  )
+    set_compound_protocol(
+        compound = "Levonorgestrel 1",
+        protocol = "oral_150ug_over_30d",
+        formulation = "Lint80-30"
+    ) |>
+    set_compound_protocol(
+        compound = "Itraconazole",
+        protocol = "oral_750u_start_14d",
+        formulation = "IR Dissolved"
+    )
 
 new_simulation
 ```
@@ -279,21 +279,21 @@ The output interval defines when and how frequently the simulation calculates re
 
 # Set initial output interval with higher resolution
 new_simulation |>
-  set_output_interval(
-    start_time = 0,
-    end_time = 14,
-    resolution = 24 * 5, # 5 points per hour
-    unit = "day(s)"
-  )
+    set_output_interval(
+        start_time = 0,
+        end_time = 14,
+        resolution = 24 * 5, # 5 points per hour
+        unit = "day(s)"
+    )
 
 # Add another interval with different resolution
 new_simulation |>
-  add_output_interval(
-    start_time = 15,
-    end_time = 30,
-    resolution = 24 * 10, # 10 points per hour
-    unit = "day(s)"
-  )
+    add_output_interval(
+        start_time = 15,
+        end_time = 30,
+        resolution = 24 * 10, # 10 points per hour
+        unit = "day(s)"
+    )
 
 new_simulation$output_schema
 ```
@@ -308,15 +308,48 @@ Here we specify which quantities to track during the simulation. For DDI studies
 
 # Set outputs to track plasma concentrations
 new_simulation <- set_outputs(
-  new_simulation,
-  c(
-    "Organism|Venous Blood|Plasma|Levonorgestrel 1|Concentration",
-    "Organism|Venous Blood|Plasma|Itraconazole|Concentration"
-  )
+    new_simulation,
+    c(
+        "Organism|Venous Blood|Plasma|Levonorgestrel 1|Concentration",
+        "Organism|Venous Blood|Plasma|Itraconazole|Concentration"
+    )
 )
 
 # Display the simulation configuration
 new_simulation$output_selections
 ```
 
+## 8. Add Simulation to DDI Project
+
+Now that we have configured our simulation, we can add it to our DDI project. This step registers the simulation settings and prepares it for execution.
+
+```{r}
+#| label: add simulation to ddi project
+#| class-output: txt
+
+# Add the simulation to the DDI project
+ddi_project <- add_simulation(ddi_project, new_simulation)
+
+# Verify the simulation was added
+ddi_project
+```
+
+## 9. Run Simulation
+
+Finally, we can run the simulation using the `run()` method. This will execute the DDI study with all our configured parameters and return the results.
+
+```{r}
+#| label: run simulation
+#| class-output: txt
+#| eval: false
+
+# Run the simulation
+results <- ddi_project$run()
+
+# Display basic information about the results
+results
+
+# Plot the plasma concentrations over time
+plot(results)
+```
 
