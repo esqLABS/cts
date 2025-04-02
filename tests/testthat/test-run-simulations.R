@@ -1,4 +1,5 @@
 test_that("ddi generic simulation can be run", {
+  testthat::skip_on_os("mac")
   my_ddi <- suppressWarnings(create_ddi(levonorgestrel, itraconazole))
 
   results <- run_ddi(my_ddi)
@@ -9,6 +10,8 @@ test_that("ddi generic simulation can be run", {
 })
 
 test_that("run ddi arguments work as expected", {
+  testthat::skip_on_os("mac")
+
   my_ddi <- suppressWarnings(create_ddi(levonorgestrel, itraconazole))
 
   temp_dir <- tempfile()

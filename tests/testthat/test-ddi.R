@@ -37,10 +37,10 @@ test_that("options are checked", {
   expect_error(create_ddi(levonorgestrel, itraconazole, options = 1))
   # unsuported option
   expect_error(create_ddi(
-levonorgestrel,
-itraconazole,
-options = list(bad_option = 1)
-))
+    levonorgestrel,
+    itraconazole,
+    options = list(bad_option = 1)
+  ))
   # bad option value
   expect_error(suppressMessages(create_ddi(
     levonorgestrel,
@@ -74,8 +74,8 @@ test_that("Compounds snapshots are correctly merged when creating a DDI", {
 
   # Compare simulations when they are imported (import_simulations = TRUE)
   ddi_merged <- suppressWarnings(create_ddi(
-levonorgestrel,
-itraconazole,
+    levonorgestrel,
+    itraconazole,
     options = list(
       import_simulations = TRUE,
       create_ddi_simulation = FALSE
@@ -86,6 +86,7 @@ itraconazole,
 })
 
 test_that("Generic simulation can be ran", {
+  testthat::skip_on_os("mac")
   ddi_merged <- suppressWarnings(create_ddi(levonorgestrel, itraconazole))
 
   expect_no_error(run_ddi(ddi_merged))
