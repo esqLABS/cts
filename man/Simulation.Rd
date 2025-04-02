@@ -145,7 +145,7 @@ Add the compounds to be used in the simulation.
 
 \item{\code{protocol}}{name of the protocol used for the compound.}
 
-\item{\code{formulation}}{oral formulation key mapping for the protocol if needed}
+\item{\code{formulation}}{character string or vector of formulation names to use with the protocol.}
 }
 \if{html}{\out{</div>}}
 }

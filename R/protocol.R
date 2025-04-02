@@ -47,14 +47,15 @@
 #'   infusion_time_unit = "min"
 #' )
 create_protocol <- function(
-    name,
-    type,
-    interval,
-    dose,
-    dose_unit = "mg",
-    end_time = 24,
-    end_time_unit = "h",
-    ...) {
+  name,
+  type,
+  interval,
+  dose,
+  dose_unit = "mg",
+  end_time = 24,
+  end_time_unit = "h",
+  ...
+) {
   Protocol$new(
     name,
     type,
@@ -145,14 +146,16 @@ Protocol <- R6::R6Class(
   "Protocol",
   public = list(
     name = NULL,
-    initialize = function(name,
-                          type,
-                          interval,
-                          dose,
-                          dose_unit = "mg",
-                          end_time = 24,
-                          end_time_unit = "h",
-                          ...) {
+    initialize = function(
+      name,
+      type,
+      interval,
+      dose,
+      dose_unit = "mg",
+      end_time = 24,
+      end_time_unit = "h",
+      ...
+    ) {
       self$name <- name
 
       rlang::arg_match(type, values = names(protocol_types), error_arg = "type")
@@ -182,7 +185,7 @@ Protocol <- R6::R6Class(
 
       if (
         !is.null(self$water_vol_per_body_weight) &
-        is.null(self$water_vol_per_body_weight_unit)
+          is.null(self$water_vol_per_body_weight_unit)
       ) {
         self$water_vol_per_body_weight_unit <- "ml/kg"
       }
@@ -198,9 +201,9 @@ Protocol <- R6::R6Class(
         self$infusion_time_unit <- "min"
       }
     },
-    format_method = function(advanced = FALSE){
+    format_method = function(advanced = FALSE) {
       cli::cli({
-        if(!advanced) cli_text(self$name)
+        if (!advanced) cli_text(self$name)
         cli_li("Application Type: {protocol_types[[self$type]]$human}")
         if (!advanced) {
           cli_li("Dosing Interval: {intervals[[self$interval]]$human}")
@@ -226,7 +229,7 @@ Protocol <- R6::R6Class(
       })
     },
     print = function(advanced = FALSE) {
-      cat(cli::cli_format_method(self$format_method(advanced)),sep = "\n")
+      cat(cli::cli_format_method(self$format_method(advanced)), sep = "\n")
       invisible(self)
     }
   ),
@@ -281,7 +284,7 @@ Protocol <- R6::R6Class(
       # don't write if default value
       if (
         self$type == "iv" &&
-        !(self$infusion_time == 60 && self$infusion_time_unit == "min")
+          !(self$infusion_time == 60 && self$infusion_time_unit == "min")
       ) {
         data$Parameters <- c(
           data$Parameters,
@@ -479,13 +482,14 @@ create_advanced_protocol <- function(name) {
 #'   schema_name = "Weekly dosing"
 #' )
 add_schema <- function(
-    advanced_protocol,
-    start_time,
-    start_time_unit,
-    rep_nb,
-    time_btw_rep,
-    time_btw_rep_unit,
-    schema_name = NULL) {
+  advanced_protocol,
+  start_time,
+  start_time_unit,
+  rep_nb,
+  time_btw_rep,
+  time_btw_rep_unit,
+  schema_name = NULL
+) {
   # check that protocol is an AdvancedProtocol object
   check_advanced(advanced_protocol)
 
@@ -574,10 +578,11 @@ remove_schema <- function(advanced_protocol, schema_name) {
 #'   administration = single_dose
 #' )
 add_administration <- function(
-    advanced_protocol,
-    schema_name,
-    administration,
-    formulation_key = NULL) {
+  advanced_protocol,
+  schema_name,
+  administration,
+  formulation_key = NULL
+) {
   # check that protocol is an AdvancedProtocol object
   check_advanced(advanced_protocol)
 
@@ -634,9 +639,10 @@ add_administration <- function(
 #'   administration_name = "Morning dose"
 #' )
 remove_administration <- function(
-    advanced_protocol,
-    schema_name,
-    administration_name) {
+  advanced_protocol,
+  schema_name,
+  administration_name
+) {
   # check that protocol is an AdvancedProtocol object
   check_advanced(advanced_protocol)
 
@@ -674,12 +680,14 @@ AdvancedProtocol <- R6::R6Class(
     #' @param time_btw_rep_unit Time unit for `time_btw_rep` of the schema
     #' @param schema_name Name of the schema
     #' @return The updated `AdvancedProtocol` object.
-    add_schema = function(start_time,
-                          start_time_unit,
-                          rep_nb,
-                          time_btw_rep,
-                          time_btw_rep_unit,
-                          schema_name) {
+    add_schema = function(
+      start_time,
+      start_time_unit,
+      rep_nb,
+      time_btw_rep,
+      time_btw_rep_unit,
+      schema_name
+    ) {
       # add default schema_name if not given
       if (is.null(schema_name)) {
         schema_name <- paste0("Schema ", length(self$schemas) + 1)
@@ -688,9 +696,9 @@ AdvancedProtocol <- R6::R6Class(
       # ensure schema name does not exist
       if (
         schema_name %in%
-        sapply(self$schemas, \(x) {
-          x$Name
-        })
+          sapply(self$schemas, \(x) {
+            x$Name
+          })
       ) {
         cli::cli_abort(c("x" = "Schema {.var {schema_name}} already exists."))
       }
@@ -729,9 +737,11 @@ AdvancedProtocol <- R6::R6Class(
     #' @param formulation_key Formulation key for mapping to formulation for oral protocol. If NULL
     #' it will be automatically assigned
     #' @return The updated `AdvancedProtocol` object.
-    add_administration = function(protocol,
-                                  schema_name,
-                                  formulation_key = NULL) {
+    add_administration = function(
+      protocol,
+      schema_name,
+      formulation_key = NULL
+    ) {
       # check that schema exists
       private$.check_schema(schema_name)
 
@@ -743,15 +753,23 @@ AdvancedProtocol <- R6::R6Class(
       }
       # If the protocol is Oral add a formulation key (default "Formulation X"), the formulation name is not already used for a different formulation
       if (protocol$type == "oral" && is.null(formulation_key)) {
-        existing_formulation_key <- purrr::map(private$.schemas, \(x) {
-          purrr:::map(x$SchemaItems, \(y) {
-            y$formulation_key
-          })
-        })
-        protocol$formulation_key <- paste0(
-          "Formulation ",
-          length(existing_formulation_key) + 1
+        existing_formulation_key <- unlist(
+          purrr::map(private$.schemas, \(x) {
+            purrr:::map(x$SchemaItems, \(y) {
+              y$formulation_key
+            })
+          }),
+          recursive = T
         )
+
+        # take first potential formulation key
+        tentative_formulation_key <- paste0(
+          "Formulation ",
+          1:(length(existing_formulation_key) + 1)
+        )
+        protocol$formulation_key <- tentative_formulation_key[which.min(
+          tentative_formulation_key %in% existing_formulation_key
+        )]
       } else {
         # update protocol with correct formulation key
         protocol$formulation_key <- formulation_key
@@ -762,10 +780,10 @@ AdvancedProtocol <- R6::R6Class(
 
       if (
         protocol$name %in%
-        list_c(purrr::map(
-          private$.schemas[[schema_index]]$SchemaItems,
-          "name"
-        ))
+          list_c(purrr::map(
+            private$.schemas[[schema_index]]$SchemaItems,
+            "name"
+          ))
       ) {
         # rename protocol to ensure uniqueness
         og_name <- protocol$name
@@ -810,17 +828,14 @@ AdvancedProtocol <- R6::R6Class(
       cat(
         cli::cli_format_method({
           cli::cli_text(self$name)
-          purrr::imap(self$schemas, \(x, i) {
-            cli::cli_li(paste0("Schema: ", x$Name))
-            ul2 <- cli::cli_ul()
-            cli::cli_li(paste0("Start time: ", x$StartTime, " ", x$StartTimeUnit))
-            cli::cli_li(paste0("Number of repetitions: ", x$NumberOfRepetitions))
-            cli::cli_li(paste0(
-              "Time between repetitions: ",
-              x$TimeBetweenRepetitions,
-              " ",
-              x$TimeBetweenRepetitionsUnit
-            ))
+          purrr::walk(self$schemas, \(x) {
+            cli::cli_li("Schema: {x$Name}")
+            ul <- cli::cli_ul()
+            cli::cli_li("Start time: {x$StartTime} {x$StartTimeUnit}")
+            cli::cli_li("Number of repetitions: {x$NumberOfRepetitions}")
+            cli::cli_li(
+              "Time between repetitions: {x$TimeBetweenRepetitions} {x$TimeBetweenRepetitionsUnit}"
+            )
             purrr::imap(x$SchemaItems, \(y, j) {
               cli::cli_ol(y$name)
               ul3 <- cli::cli_ul()
@@ -829,9 +844,9 @@ AdvancedProtocol <- R6::R6Class(
             })
             cli::cli_end(ul2)
           })
-
         }),
-        sep="\n")
+        sep = "\n"
+      )
       invisible(self)
     }
   ),
@@ -899,7 +914,7 @@ AdvancedProtocol <- R6::R6Class(
           sapply(private$.schemas, \(x) {
             x$Name
           }) ==
-          schema_name
+            schema_name
         )
       ) {
         cli::cli_abort(c("x" = "Could not find schema {.var {schema_name}}."))
@@ -918,7 +933,7 @@ AdvancedProtocol <- R6::R6Class(
               x$name
             }
           ) ==
-          protocol_name
+            protocol_name
         )
       ) {
         cli::cli_abort(c(

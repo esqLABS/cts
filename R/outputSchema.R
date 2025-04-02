@@ -92,29 +92,20 @@ SnapshotOutputSchema <- R6::R6Class(
       cat(
         cli::cli_format_method({
           cli::cli_text("Output schema: ")
-          for (i in seq_along(self$intervals)) {
-            cli::cli_li(paste0("Interval ", i))
+          purrr::iwalk(self$intervals, function(interval, i) {
+            cli::cli_li("Interval {i}")
             ul <- cli::cli_ul()
-            cli::cli_li(paste0(
-              "Start time: ",
-              self$intervals[[i]]$start_time,
-              " ",
-              self$intervals[[i]]$unit
-            ))
-            cli::cli_li(paste0(
-              "End time: ",
-              self$intervals[[i]]$end_time,
-              " ",
-              self$intervals[[i]]$unit
-            ))
-            cli::cli_li(paste0(
-              "Resolution: ",
-              self$intervals[[i]]$resolution,
-              " pts/",
-              self$intervals[[i]]$unit
-            ))
+            cli::cli_li(
+              "Start time: {interval$start_time} {interval$unit}"
+            )
+            cli::cli_li(
+              "End time: {interval$end_time} {interval$unit}"
+            )
+            cli::cli_li(
+              "Resolution: {interval$resolution} pts/{interval$unit}"
+            )
             cli::cli_end(ul)
-          }
+          })
         }),
         sep = "\n"
       )

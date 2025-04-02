@@ -691,7 +691,7 @@ extract_interactions <- function(snapshot, compounds = NULL, quietly = FALSE) {
 
   if (!quietly) {
     for (c in compounds) {
-      cli::cli_text("Compound: ", c)
+      cli::cli_text("Compound: {c}")
       purrr::map(
         all_interactions,
         ~ if (.x$CompoundName == c) {
@@ -779,7 +779,7 @@ extract_processes <- function(snapshot, compounds = NULL, quietly = FALSE) {
 
   if (!quietly) {
     for (c in compounds) {
-      cli::cli_text("Compound: ", c)
+      cli::cli_text("Compound: {c}")
       purrr::map(
         all_processes[[c]],
         ~ cli::cli_ul(.x$Name)

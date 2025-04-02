@@ -4,9 +4,9 @@ test_that("Simulation can be initialized.", {
   expect_no_message(
     create_simulation(
       simulation_name = "Test",
-      victim = "Rifampicin",
-      perpetrators = "Midazolam",
-      individual = "European (P-gp modified, CYP3A4 36 h)"
+      victim = "Levonorgestrel 1",
+      perpetrators = "Itraconazole",
+      individual = "Woman"
     )
   )
 })
@@ -16,25 +16,233 @@ test_that("Simulation can be initialized.", {
 test_that("`add_compound` can add compounds to the simulation.", {
   my_sim <- create_simulation(
     simulation_name = "Test",
-    victim = "Rifampicin",
-    perpetrators = "Midazolam",
-    individual = "European (P-gp modified, CYP3A4 36 h)"
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
   )
-  expect_no_message(my_sim$add_compound(compound = "Test compound 2", protocol = "New protocol"))
+  expect_no_message(my_sim$add_compound(
+    compound = "Test compound 2",
+    protocol = "New protocol"
+  ))
   expect_snapshot(my_sim)
 })
 
-test_that("`set_compound_protocol` can set a new protocol for a compound.", {
+test_that("`set_compound_protocol` validates input formats correctly", {
   my_sim <- create_simulation(
     simulation_name = "Test",
-    victim = "Rifampicin",
-    perpetrators = "Midazolam",
-    individual = "European (P-gp modified, CYP3A4 36 h)"
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
   )
-  expect_no_message(set_compound_protocol(my_sim, compound = "Rifampicin", protocol = "iv 300 mg (0.5 h)"))
-  expect_no_message(set_compound_protocol(my_sim, compound = "Midazolam", protocol = "po 3.5 mg", formulation = list(list(Key = "Formulation", Name = "Tablet (Dormicum)"))))
-  expect_snapshot(my_sim)
+
+  # Protocol must be string
+  expect_error(
+    set_compound_protocol(my_sim, compound = "Itraconazole", protocol = 123),
+    "Protocol must be a single character string."
+  )
+
+  # Formulation must be character or list of characters
+  expect_error(
+    set_compound_protocol(
+      my_sim,
+      compound = "Itraconazole",
+      protocol = "ITZ 100mg 21 days",
+      formulation = 123
+    ),
+    "Formulation must be either a character string or a character vector of formulation names."
+  )
+
+  # List must contain only character values
+  expect_error(
+    set_compound_protocol(
+      my_sim,
+      compound = "Itraconazole",
+      protocol = "ITZ 100mg 21 days",
+      formulation = list(1, 2)
+    ),
+    "Formulation must be either a character string or a character vector of formulation names."
+  )
 })
+
+test_that("`set_compound_protocol` accepts various formulation formats", {
+  my_sim <- create_simulation(
+    simulation_name = "Test",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
+  )
+
+  # Single formulation name
+  expect_no_message(
+    set_compound_protocol(
+      my_sim,
+      "Itraconazole",
+      "ITZ 100mg 21 days",
+      "IR Dissolved"
+    )
+  )
+
+  # Multiple formulation names as vector
+  expect_no_message(
+    set_compound_protocol(
+      my_sim,
+      "Levonorgestrel 1",
+      "LNG_150 ug_21 Days",
+      c("Microlut", "IR Dissolved")
+    )
+  )
+
+  # Multiple formulation names as list
+  expect_no_message(
+    set_compound_protocol(
+      my_sim,
+      "Itraconazole",
+      "ITZ 100mg 21 days",
+      list("IR Dissolved", "Tablet")
+    )
+  )
+})
+
+
+test_that("Formulation keys are correctly assigned when adding simulation", {
+  ddi <- levo_itra_ddi$clone()
+  sim_to_remove <- ddi$get_names("simulations")
+  remove_simulation(ddi, sim_to_remove)
+
+  my_sim <- create_simulation(
+    simulation_name = "Test1",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
+  )
+
+  # Single formulation gets mapped to all keys
+  set_compound_protocol(
+    my_sim,
+    "Levonorgestrel 1",
+    "LNG_150 ug_21 Days",
+    "Microlut"
+  )
+  expect_no_error(add_simulation(ddi, my_sim))
+
+  # Create a new simulation with a different name for the second test
+  my_sim2 <- create_simulation(
+    simulation_name = "Test1b",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
+  )
+
+  # Multiple formulations get mapped in order - use valid formulations for this DDI
+  set_compound_protocol(
+    my_sim2,
+    "Levonorgestrel 1",
+    "LNG_150 ug_21 Days",
+    "Microlut"
+  )
+  set_compound_protocol(
+    my_sim2,
+    "Itraconazole",
+    "ITZ 100mg 21 days",
+    "IR Dissolved"
+  )
+  expect_no_error(add_simulation(ddi, my_sim2))
+})
+
+test_that("Formulation keys are correctly assigned when adding simulation with advanced protocol", {
+  ddi <- levo_itra_ddi$clone()
+  sim_to_remove <- ddi$get_names("simulations")
+  remove_simulation(ddi, sim_to_remove)
+
+  # Create advanced protocol with loading dose and maintenance dose
+  advanced_protocol <- create_advanced_protocol("ITZ Loading Dose")
+
+  # Add loading dose schema (first day, higher dose)
+  add_schema(
+    advanced_protocol,
+    start_time = 0,
+    start_time_unit = "h",
+    rep_nb = 1,
+    time_btw_rep = 24,
+    time_btw_rep_unit = "h",
+    schema_name = "Loading Dose"
+  )
+
+  # Add maintenance dose schema (following days, lower dose)
+  add_schema(
+    advanced_protocol,
+    start_time = 24,
+    start_time_unit = "h",
+    rep_nb = 13,
+    time_btw_rep = 24,
+    time_btw_rep_unit = "h",
+    schema_name = "Maintenance Dose"
+  )
+
+  # Create loading dose protocol (200mg twice daily)
+  loading_dose <- create_protocol(
+    name = "Loading 200mg",
+    type = "oral",
+    interval = "single",
+    dose = 200,
+    dose_unit = "mg"
+  )
+
+  # Create maintenance dose protocol (100mg daily)
+  maintenance_dose <- create_protocol(
+    name = "Maintenance 100mg",
+    type = "oral",
+    interval = "single",
+    dose = 100,
+    dose_unit = "mg"
+  )
+
+  # Add protocols to their respective schemas
+  add_administration(
+    advanced_protocol,
+    schema_name = "Loading Dose",
+    administration = loading_dose,
+    # formulation_key = "Loading"
+  )
+
+  add_administration(
+    advanced_protocol,
+    schema_name = "Maintenance Dose",
+    administration = maintenance_dose,
+    # formulation_key = "Maintenance"
+  )
+
+  # Add the advanced protocol to the DDI snapshot
+  expect_no_error(add_protocol(ddi, advanced_protocol))
+
+  # Create simulation with advanced protocol
+  my_sim <- create_simulation(
+    simulation_name = "Test_Advanced_Multi",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
+  )
+
+  # Set the advanced protocol for Itraconazole
+  set_compound_protocol(
+    my_sim,
+    "Itraconazole",
+    "ITZ Loading Dose",
+    c("IR Dissolved", "Plan B One Step") # Use 2 different formulations
+  )
+
+  # Set protocol for Levonorgestrel
+  set_compound_protocol(
+    my_sim,
+    "Levonorgestrel 1",
+    "LNG_150 ug_21 Days",
+    "Microlut"
+  )
+
+  # Add to snapshot to verify everything works
+  expect_no_error(add_simulation(ddi, my_sim))
+})
+
 
 test_that("Adding population to a simulation compound works.", {
   ddi <- levo_itra_ddi$clone()
@@ -47,8 +255,18 @@ test_that("Adding population to a simulation compound works.", {
     perpetrators = "Itraconazole",
     population = "Women"
   )
-  set_compound_protocol(my_sim, compound = "Levonorgestrel 1", protocol = "LNG_150 ug_21 Days", formulation = list(list(Key = "Formulation", Name = "Microlut")))
-  set_compound_protocol(my_sim, compound = "Itraconazole", protocol = "ITZ 100mg 21 days", formulation = list(list(Key = "Formulation", Name = "IR Dissolved")))
+  set_compound_protocol(
+    my_sim,
+    compound = "Levonorgestrel 1",
+    protocol = "LNG_150 ug_21 Days",
+    formulation = "Microlut"
+  )
+  set_compound_protocol(
+    my_sim,
+    compound = "Itraconazole",
+    protocol = "ITZ 100mg 21 days",
+    formulation = "IR Dissolved"
+  )
 
   expect_snapshot(my_sim)
 })
@@ -85,37 +303,65 @@ test_that("Setting a population in a simulation remove defined individual and vi
 test_that("Adding/setting outptuts to a simulation object works.", {
   my_sim <- create_simulation(
     simulation_name = "Test",
-    victim = "Rifampicin",
-    perpetrators = "Midazolam",
-    individual = "European (P-gp modified, CYP3A4 36 h)"
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
   )
   expect_snapshot(my_sim)
 
-  add_outputs(my_sim, "Organism|ArterialBlood|Plasma|Rifampicin|Concentration in container")
+  add_outputs(
+    my_sim,
+    "Organism|ArterialBlood|Plasma|Levonorgestrel 1|Concentration in container"
+  )
   expect_snapshot(my_sim)
 
   set_outputs(
     my_sim,
     c(
-      "Organism|VenousBlood|Plasma|Midazolam|Concentration in container",
-      "Organism|VenousBlood|Plasma|Rifampicin|Concentration in container"
+      "Organism|VenousBlood|Plasma|Itraconazole|Concentration in container",
+      "Organism|VenousBlood|Plasma|Levonorgestrel 1|Concentration in container"
     )
   )
   expect_snapshot(my_sim)
 })
 
 test_that("Simulation output interval can be set and added", {
-  ddi <- suppressWarnings(create_ddi(rifampicin, midazolam))
+  ddi <- levo_itra_ddi$clone()
+  sim_to_remove <- ddi$get_names("simulations")
+  remove_simulation(ddi, sim_to_remove)
+
   my_sim <- create_simulation(
     simulation_name = "Test",
-    victim = "Rifampicin",
-    perpetrators = "Midazolam",
-    individual = "European (P-gp modified, CYP3A4 36 h)"
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
   )
-  set_compound_protocol(my_sim, compound = "Rifampicin", protocol = "iv 300 mg (0.5 h)")
-  set_compound_protocol(my_sim, compound = "Midazolam", protocol = "po 3.5 mg", formulation = list(list(Key = "Formulation", Name = "Tablet (Dormicum)")))
-  expect_no_message(set_output_interval(my_sim, start_time = 0, end_time = 2, resolution = 20, unit = "h"))
-  expect_no_message(add_output_interval(my_sim, start_time = 2, end_time = 48, resolution = 1, unit = "h"))
+  set_compound_protocol(
+    my_sim,
+    compound = "Levonorgestrel 1",
+    protocol = "LNG_150 ug_21 Days",
+    formulation = "Microlut"
+  )
+  set_compound_protocol(
+    my_sim,
+    compound = "Itraconazole",
+    protocol = "ITZ 100mg 21 days",
+    formulation = "IR Dissolved"
+  )
+  expect_no_message(set_output_interval(
+    my_sim,
+    start_time = 0,
+    end_time = 2,
+    resolution = 20,
+    unit = "h"
+  ))
+  expect_no_message(add_output_interval(
+    my_sim,
+    start_time = 2,
+    end_time = 48,
+    resolution = 1,
+    unit = "h"
+  ))
   expect_snapshot(my_sim)
   expect_snapshot(add_simulation(ddi, my_sim))
 })
@@ -124,206 +370,426 @@ test_that("Simulation output interval can be set and added", {
 # Simulations parameters checked when added to snapshot -------------------
 
 test_that("Adding default interactions works.", {
-  ddi <- suppressWarnings(create_ddi(rifampicin, midazolam))
-  my_sim <- create_simulation(
-    simulation_name = "Test",
-    victim = "Rifampicin",
-    perpetrators = "Midazolam",
-    individual = "European (P-gp modified, CYP3A4 36 h)"
-  )
-  set_compound_protocol(my_sim, compound = "Rifampicin", protocol = "iv 300 mg (0.5 h)")
-  set_compound_protocol(my_sim, compound = "Midazolam", protocol = "po 3.5 mg", formulation = list(list(Key = "Formulation", Name = "Oral solution")))
+  ddi <- levo_itra_ddi$clone()
+  sim_to_remove <- ddi$get_names("simulations")
+  remove_simulation(ddi, sim_to_remove)
 
-  expect_warning(add_simulation(ddi, my_sim, options = list(add_interactions = TRUE, add_processes = FALSE)), "Automatically adding interactions to the simulation.\nUsing first interaction found for each enzyme/compound pair.")
+  my_sim <- create_simulation(
+    simulation_name = "Test2",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
+  )
+  set_compound_protocol(
+    my_sim,
+    compound = "Levonorgestrel 1",
+    protocol = "LNG_150 ug_21 Days",
+    formulation = "Microlut"
+  )
+  set_compound_protocol(
+    my_sim,
+    compound = "Itraconazole",
+    protocol = "ITZ 100mg 21 days",
+    formulation = "IR Dissolved"
+  )
+
+  expect_warning(
+    add_simulation(
+      ddi,
+      my_sim,
+      options = list(add_interactions = TRUE, add_processes = FALSE)
+    ),
+    "Automatically adding interactions to the simulation.\nUsing first interaction found for each enzyme/compound pair."
+  )
   expect_snapshot(my_sim)
 })
 
 test_that("Adding manual interactions works.", {
-  ddi <- suppressWarnings(create_ddi(rifampicin, midazolam))
+  ddi <- levo_itra_ddi$clone()
+  sim_to_remove <- ddi$get_names("simulations")
+  remove_simulation(ddi, sim_to_remove)
+
   my_sim <- create_simulation(
-    simulation_name = "Test",
-    victim = "Rifampicin",
-    perpetrators = "Midazolam",
-    individual = "European (P-gp modified, CYP3A4 36 h)"
+    simulation_name = "Test3",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
   )
-  set_compound_protocol(my_sim, compound = "Rifampicin", protocol = "iv 300 mg (0.5 h)")
-  set_compound_protocol(my_sim, compound = "Midazolam", protocol = "po 3.5 mg", formulation = list(list(Key = "Formulation", Name = "Oral solution")))
+  set_compound_protocol(
+    my_sim,
+    compound = "Levonorgestrel 1",
+    protocol = "LNG_150 ug_21 Days",
+    formulation = "Microlut"
+  )
+  set_compound_protocol(
+    my_sim,
+    compound = "Itraconazole",
+    protocol = "ITZ 100mg 21 days",
+    formulation = "IR Dissolved"
+  )
 
-  add_interactions(my_sim, "Rifampicin", interactions = c("CYP3A4-Kajosaari 2005", "P-gp-Reitman 2011"))
+  add_interactions(
+    my_sim,
+    "Itraconazole",
+    interactions = c("CYP3A4-Itraconazole", "P-gp-Itraconazole")
+  )
 
-  expect_no_message(add_simulation(ddi, my_sim, list(add_interactions = FALSE, add_processes = FALSE)))
+  expect_no_message(add_simulation(
+    ddi,
+    my_sim,
+    list(add_interactions = FALSE, add_processes = FALSE)
+  ))
 })
 
 test_that("Adding unknown interactions throws a warning.", {
-  ddi <- suppressWarnings(create_ddi(rifampicin, midazolam))
+  ddi <- levo_itra_ddi$clone()
+  sim_to_remove <- ddi$get_names("simulations")
+  remove_simulation(ddi, sim_to_remove)
+
   my_sim <- create_simulation(
-    simulation_name = "Test",
-    victim = "Rifampicin",
-    perpetrators = "Midazolam",
-    individual = "European (P-gp modified, CYP3A4 36 h)"
+    simulation_name = "Test4",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
   )
-  set_compound_protocol(my_sim, compound = "Rifampicin", protocol = "iv 300 mg (0.5 h)")
-  set_compound_protocol(my_sim, compound = "Midazolam", protocol = "po 3.5 mg", formulation = list(list(Key = "Formulation", Name = "Oral solution")))
+  set_compound_protocol(
+    my_sim,
+    compound = "Levonorgestrel 1",
+    protocol = "LNG_150 ug_21 Days",
+    formulation = "Microlut"
+  )
+  set_compound_protocol(
+    my_sim,
+    compound = "Itraconazole",
+    protocol = "ITZ 100mg 21 days",
+    formulation = "IR Dissolved"
+  )
 
-  add_interactions(my_sim, "Rifampicin", interactions = c("CYP3A8-Kajo", "P-gp-Reitman 2011"))
+  add_interactions(
+    my_sim,
+    "Itraconazole",
+    interactions = c("CYP3A8-Unknown", "P-gp-Itraconazole")
+  )
 
-  expect_warning(add_simulation(ddi, my_sim, list(add_interactions = FALSE, add_processes = FALSE)), "Interaction `CYP3A8-Kajo` not found for compound `Rifampicin` in snapshot. Skipping.")
+  expect_warning(
+    add_simulation(
+      ddi,
+      my_sim,
+      list(add_interactions = FALSE, add_processes = FALSE)
+    ),
+    "Interaction `CYP3A8-Unknown` not found for compound `Itraconazole` in snapshot. Skipping."
+  )
   expect_snapshot(my_sim)
 })
 
 
 test_that("Adding default processes works.", {
-  ddi <- suppressWarnings(create_ddi(rifampicin, midazolam))
-  my_sim <- create_simulation(
-    simulation_name = "Test",
-    victim = "Rifampicin",
-    perpetrators = "Midazolam",
-    individual = "European (P-gp modified, CYP3A4 36 h)"
-  )
-  set_compound_protocol(my_sim, compound = "Rifampicin", protocol = "iv 300 mg (0.5 h)")
-  set_compound_protocol(my_sim, compound = "Midazolam", protocol = "po 3.5 mg", formulation = list(list(Key = "Formulation", Name = "Oral solution")))
+  ddi <- levo_itra_ddi$clone()
+  sim_to_remove <- ddi$get_names("simulations")
+  remove_simulation(ddi, sim_to_remove)
 
-  # nested test of Rifampicin and Midazolam warnings
+  my_sim <- create_simulation(
+    simulation_name = "Test5",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
+  )
+  set_compound_protocol(
+    my_sim,
+    compound = "Levonorgestrel 1",
+    protocol = "LNG_150 ug_21 Days",
+    formulation = "Microlut"
+  )
+  set_compound_protocol(
+    my_sim,
+    compound = "Itraconazole",
+    protocol = "ITZ 100mg 21 days",
+    formulation = "IR Dissolved"
+  )
+
+  # nested test of Levonorgestrel and Itraconazole warnings
   expect_warning(
     expect_warning(
-      add_simulation(ddi, my_sim, options = list(add_interactions = FALSE, add_processes = TRUE)),
-      "Automatically adding processes to the simulation for compound `Rifampicin`.\nUsing first processes of each type and of each metabolizing enzyme found."
+      add_simulation(
+        ddi,
+        my_sim,
+        options = list(add_interactions = FALSE, add_processes = TRUE)
+      ),
+      "Automatically adding processes to the simulation for compound `Levonorgestrel 1`.\nUsing first processes of each type and of each metabolizing enzyme found."
     ),
-    "Automatically adding processes to the simulation for compound `Midazolam`.\nUsing first processes of each type and of each metabolizing enzyme found."
+    "Automatically adding processes to the simulation for compound `Itraconazole`.\nUsing first processes of each type and of each metabolizing enzyme found."
   )
 
   expect_snapshot(my_sim)
 })
 
 test_that("Adding processes to a simulation compound works.", {
-  ddi <- suppressWarnings(create_ddi(rifampicin, midazolam))
+  ddi <- levo_itra_ddi$clone()
+  sim_to_remove <- ddi$get_names("simulations")
+  remove_simulation(ddi, sim_to_remove)
 
   my_sim <- create_simulation(
-    simulation_name = "Test",
-    victim = "Rifampicin",
-    perpetrators = "Midazolam",
-    individual = "European (P-gp modified, CYP3A4 36 h)"
+    simulation_name = "Test6",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
   )
-  set_compound_protocol(my_sim, compound = "Rifampicin", protocol = "iv 300 mg (0.5 h)")
-  set_compound_protocol(my_sim, compound = "Midazolam", protocol = "po 3.5 mg", formulation = list(list(Key = "Formulation", Name = "Oral solution")))
+  set_compound_protocol(
+    my_sim,
+    compound = "Levonorgestrel 1",
+    protocol = "LNG_150 ug_21 Days",
+    formulation = "Microlut"
+  )
+  set_compound_protocol(
+    my_sim,
+    compound = "Itraconazole",
+    protocol = "ITZ 100mg 21 days",
+    formulation = "IR Dissolved"
+  )
 
   expect_snapshot(my_sim)
 
-  add_processes(my_sim, compound = "Rifampicin", c("AADAC-Nakajima 2011", "P-gp-Collett 2004"))
-  add_processes(my_sim, compound = "Midazolam", "CYP3A4-Optimized")
+  add_processes(
+    my_sim,
+    compound = "Levonorgestrel 1",
+    c("CYP3A4-Levonorgestrel", "P-gp-Levonorgestrel")
+  )
+  add_processes(my_sim, compound = "Itraconazole", "CYP3A4-Itraconazole")
   expect_snapshot(my_sim)
 
-  expect_no_message(add_simulation(ddi, my_sim, options = list(add_interactions = FALSE)))
+  expect_no_message(add_simulation(
+    ddi,
+    my_sim,
+    options = list(add_interactions = FALSE)
+  ))
 })
 
 test_that("Adding unknown processes throws a warning.", {
-  ddi <- suppressWarnings(create_ddi(rifampicin, midazolam))
+  ddi <- levo_itra_ddi$clone()
+  sim_to_remove <- ddi$get_names("simulations")
+  remove_simulation(ddi, sim_to_remove)
+
   my_sim <- create_simulation(
-    simulation_name = "Test",
-    victim = "Rifampicin",
-    perpetrators = "Midazolam",
-    individual = "European (P-gp modified, CYP3A4 36 h)"
+    simulation_name = "Test7",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
   )
-  set_compound_protocol(my_sim, compound = "Rifampicin", protocol = "iv 300 mg (0.5 h)")
-  set_compound_protocol(my_sim, compound = "Midazolam", protocol = "po 3.5 mg", formulation = list(list(Key = "Formulation", Name = "Oral solution")))
+  set_compound_protocol(
+    my_sim,
+    compound = "Levonorgestrel 1",
+    protocol = "LNG_150 ug_21 Days",
+    formulation = "Microlut"
+  )
+  set_compound_protocol(
+    my_sim,
+    compound = "Itraconazole",
+    protocol = "ITZ 100mg 21 days",
+    formulation = "IR Dissolved"
+  )
 
-  add_processes(my_sim, "Rifampicin", "CYP3A8-Kajo")
+  add_processes(my_sim, "Itraconazole", "CYP3A8-Unknown")
 
-  expect_warning(add_simulation(ddi, my_sim, options = list(add_processes = FALSE)), "Process `CYP3A8-Kajo` not found for compound `Rifampicin` in snapshot. Skipping.")
+  expect_warning(
+    add_simulation(ddi, my_sim, options = list(add_processes = FALSE)),
+    "Process `CYP3A8-Unknown` not found for compound `Itraconazole` in snapshot. Skipping."
+  )
   expect_snapshot(my_sim)
 })
-
 
 
 # Add Simulation to snapshot ----------------------------------------------
 
 test_that("Add a valid simulation works", {
-  ddi <- suppressWarnings(create_ddi(rifampicin, midazolam))
-  my_sim <- create_simulation(
-    simulation_name = "Test",
-    victim = "Rifampicin",
-    perpetrators = "Midazolam",
-    individual = "European (P-gp modified, CYP3A4 36 h)"
-  )
-  set_compound_protocol(my_sim, compound = "Rifampicin", protocol = "iv 300 mg (0.5 h)")
-  set_compound_protocol(my_sim, compound = "Midazolam", protocol = "po 3.5 mg", formulation = list(list(Key = "Formulation", Name = "Tablet (Dormicum)")))
+  ddi <- levo_itra_ddi$clone()
+  sim_to_remove <- ddi$get_names("simulations")
+  remove_simulation(ddi, sim_to_remove)
 
-  expect_no_message(add_simulation(ddi, my_sim, options = list(add_interactions = FALSE, add_processes = FALSE)))
+  my_sim <- create_simulation(
+    simulation_name = "Test8",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
+  )
+  set_compound_protocol(
+    my_sim,
+    compound = "Levonorgestrel 1",
+    protocol = "LNG_150 ug_21 Days",
+    formulation = "Microlut"
+  )
+  set_compound_protocol(
+    my_sim,
+    compound = "Itraconazole",
+    protocol = "ITZ 100mg 21 days",
+    formulation = "IR Dissolved"
+  )
+
+  expect_no_message(add_simulation(
+    ddi,
+    my_sim,
+    options = list(add_interactions = FALSE, add_processes = FALSE)
+  ))
 })
 
 test_that("Add simulation without compound protocol works", {
-  ddi <- suppressWarnings(create_ddi(rifampicin, midazolam))
+  ddi <- levo_itra_ddi$clone()
+  sim_to_remove <- ddi$get_names("simulations")
+  remove_simulation(ddi, sim_to_remove)
+
   my_sim <- create_simulation(
     simulation_name = "Test",
-    victim = "Rifampicin",
-    perpetrators = "Midazolam",
-    individual = "European (P-gp modified, CYP3A4 36 h)"
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
   )
-  expect_no_message(add_simulation(ddi, my_sim, options = list(add_interactions = FALSE, add_processes = FALSE)))
+  expect_no_message(add_simulation(
+    ddi,
+    my_sim,
+    options = list(add_interactions = FALSE, add_processes = FALSE)
+  ))
   expect_snapshot(my_sim)
 })
 
 
 test_that("Add simulation with identical name throws an error.", {
-  ddi <- suppressWarnings(create_ddi(rifampicin, midazolam))
+  ddi <- levo_itra_ddi$clone()
+  sim_to_remove <- ddi$get_names("simulations")
+  remove_simulation(ddi, sim_to_remove)
+
+  # First add a simulation
   my_sim <- create_simulation(
-    simulation_name = "Generic DDI simulation",
-    victim = "Rifampicin",
-    perpetrators = "Midazolam",
-    individual = "European (P-gp modified, CYP3A4 36 h)"
+    simulation_name = "Test9",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
   )
-  expect_error(add_simulation(ddi, my_sim), "Simulation with name `Generic DDI simulation` already exists.", fixed = TRUE)
+  set_compound_protocol(
+    my_sim,
+    compound = "Levonorgestrel 1",
+    protocol = "LNG_150 ug_21 Days",
+    formulation = "Microlut"
+  )
+  set_compound_protocol(
+    my_sim,
+    compound = "Itraconazole",
+    protocol = "ITZ 100mg 21 days",
+    formulation = "IR Dissolved"
+  )
+  add_simulation(ddi, my_sim)
+
+  # Try to add another with the same name
+  expect_error(
+    add_simulation(ddi, my_sim),
+    "Simulation with name `Test9` already exists.",
+    fixed = TRUE
+  )
 })
 
 test_that("Add simulation with inexistant individual throws an error.", {
-  ddi <- suppressWarnings(create_ddi(rifampicin, midazolam))
+  ddi <- levo_itra_ddi$clone()
+  sim_to_remove <- ddi$get_names("simulations")
+  remove_simulation(ddi, sim_to_remove)
+
   my_sim <- create_simulation(
     simulation_name = "Test",
-    victim = "Rifampicin",
-    perpetrators = "Midazolam",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
     individual = "Human"
   )
-  expect_error(add_simulation(ddi, my_sim), "Individual `Human` not found in snapshot.", fixed = TRUE)
+  expect_error(
+    add_simulation(ddi, my_sim),
+    "Individual `Human` not found in snapshot.",
+    fixed = TRUE
+  )
 })
 
 test_that("Add a simulation with inexistant protocol throws an error.", {
-  ddi <- suppressWarnings(create_ddi(rifampicin, midazolam))
+  ddi <- levo_itra_ddi$clone()
+  sim_to_remove <- ddi$get_names("simulations")
+  remove_simulation(ddi, sim_to_remove)
+
   my_sim <- create_simulation(
     simulation_name = "Test",
-    victim = "Rifampicin",
-    perpetrators = "Midazolam",
-    individual = "European (P-gp modified, CYP3A4 36 h)"
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
   )
-  set_compound_protocol(my_sim, compound = "Rifampicin", protocol = "Inexistant Protocol")
-  set_compound_protocol(my_sim, compound = "Midazolam", protocol = "Inexistant Protocol2")
+  set_compound_protocol(
+    my_sim,
+    compound = "Levonorgestrel 1",
+    protocol = "Inexistant Protocol"
+  )
+  set_compound_protocol(
+    my_sim,
+    compound = "Itraconazole",
+    protocol = "Inexistant Protocol2"
+  )
 
-  expect_error(add_simulation(ddi, my_sim), "Protocols `Inexistant Protocol` and `Inexistant Protocol2` not found in snapshot.", fixed = TRUE)
+  expect_error(
+    add_simulation(ddi, my_sim),
+    "Protocols `Inexistant Protocol` and `Inexistant Protocol2` not found in snapshot.",
+    fixed = TRUE
+  )
 })
 
 test_that("Add a simulation with inexistant formulation throws an error.", {
-  ddi <- suppressWarnings(create_ddi(rifampicin, midazolam))
+  ddi <- levo_itra_ddi$clone()
+  sim_to_remove <- ddi$get_names("simulations")
+  remove_simulation(ddi, sim_to_remove)
+
   my_sim <- create_simulation(
-    simulation_name = "Test",
-    victim = "Rifampicin",
-    perpetrators = "Midazolam",
-    individual = "European (P-gp modified, CYP3A4 36 h)"
+    simulation_name = "Test10",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
   )
-  set_compound_protocol(my_sim, compound = "Rifampicin", protocol = "iv 300 mg (0.5 h)")
-  set_compound_protocol(my_sim, compound = "Midazolam", protocol = "po 3.5 mg", formulation = list(list(Key = "Formulation", Name = "Inexistant Formulation")))
-  expect_error(add_simulation(ddi, my_sim), "Formulations `Inexistant Formulation` not found in snapshot.", fixed = TRUE)
+  set_compound_protocol(
+    my_sim,
+    compound = "Levonorgestrel 1",
+    protocol = "LNG_150 ug_21 Days",
+    formulation = "Microlut"
+  )
+  set_compound_protocol(
+    my_sim,
+    compound = "Itraconazole",
+    protocol = "ITZ 100mg 21 days",
+    formulation = "Inexistant Formulation"
+  )
+  expect_error(
+    add_simulation(ddi, my_sim),
+    "Formulations `Inexistant Formulation` not found in snapshot.",
+    fixed = TRUE
+  )
 })
 
 test_that("Add a simulation with missing formulation for a protocol throws an error.", {
-  ddi <- suppressWarnings(create_ddi(rifampicin, midazolam))
+  ddi <- levo_itra_ddi$clone()
+  sim_to_remove <- ddi$get_names("simulations")
+  remove_simulation(ddi, sim_to_remove)
+
   my_sim <- create_simulation(
-    simulation_name = "Test",
-    victim = "Rifampicin",
-    perpetrators = "Midazolam",
-    individual = "European (P-gp modified, CYP3A4 36 h)"
+    simulation_name = "Test11",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
   )
-  set_compound_protocol(my_sim, compound = "Rifampicin", protocol = "iv 300 mg (0.5 h)")
-  set_compound_protocol(my_sim, compound = "Midazolam", protocol = "po 3.5 mg")
-  expect_error(add_simulation(ddi, my_sim), "Missing formulation key(s) `Formulation` for protocol `po 3.5 mg`.", fixed = TRUE)
+  set_compound_protocol(
+    my_sim,
+    compound = "Levonorgestrel 1",
+    protocol = "LNG_150 ug_21 Days",
+    formulation = "Microlut"
+  )
+  # Missing formulation for Itraconazole
+  set_compound_protocol(
+    my_sim,
+    compound = "Itraconazole",
+    protocol = "ITZ 100mg 21 days"
+  )
+  expect_error(
+    add_simulation(ddi, my_sim),
+    "Missing formulation key(s) `Formulation` for protocol `ITZ 100mg 21 days`.",
+    fixed = TRUE
+  )
 })
 
 test_that("Add a simulation with an unknown population throws an error", {
@@ -337,10 +803,23 @@ test_that("Add a simulation with an unknown population throws an error", {
     perpetrators = "Itraconazole",
     population = "UnknowPop"
   )
-  set_compound_protocol(my_sim, compound = "Levonorgestrel 1", protocol = "LNG_150 ug_21 Days", formulation = list(list(Key = "Formulation", Name = "Microlut")))
-  set_compound_protocol(my_sim, compound = "Itraconazole", protocol = "ITZ 100mg 21 days", formulation = list(list(Key = "Formulation", Name = "IR Dissolved")))
+  set_compound_protocol(
+    my_sim,
+    compound = "Levonorgestrel 1",
+    protocol = "LNG_150 ug_21 Days",
+    formulation = "Microlut"
+  )
+  set_compound_protocol(
+    my_sim,
+    compound = "Itraconazole",
+    protocol = "ITZ 100mg 21 days",
+    formulation = "IR Dissolved"
+  )
 
   expect_snapshot(my_sim)
 
-  expect_error(add_simulation(ddi, my_sim), "Population `UnknowPop` not found in snapshot.")
+  expect_error(
+    add_simulation(ddi, my_sim),
+    "Population `UnknowPop` not found in snapshot."
+  )
 })
