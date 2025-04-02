@@ -63,6 +63,7 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item \href{#method-Snapshot-add_formulation}{\code{Snapshot$add_formulation()}}
 \item \href{#method-Snapshot-remove_formulation}{\code{Snapshot$remove_formulation()}}
 \item \href{#method-Snapshot-add_simulation}{\code{Snapshot$add_simulation()}}
+\item \href{#method-Snapshot-add_simulation_interactive}{\code{Snapshot$add_simulation_interactive()}}
 \item \href{#method-Snapshot-remove_simulation}{\code{Snapshot$remove_simulation()}}
 \item \href{#method-Snapshot-check_simulation}{\code{Snapshot$check_simulation()}}
 \item \href{#method-Snapshot-run_simulations}{\code{Snapshot$run_simulations()}}
@@ -224,6 +225,16 @@ add a simulation to the snapshot.
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-add_simulation_interactive"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-add_simulation_interactive}{}}}
+\subsection{Method \code{add_simulation_interactive()}}{
+add a simulation interactively to the snapshot.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$add_simulation_interactive()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-remove_simulation"></a>}}
