@@ -2,7 +2,7 @@
 
     Code
       my_sim
-    Message
+    Output
       Simulation name: Test
       Individual: Woman
       Compound: Levonorgestrel 1
@@ -31,7 +31,7 @@
 
     Code
       my_sim
-    Message
+    Output
       Simulation name: Test
       Population: Women
       Compound: Levonorgestrel 1
@@ -55,7 +55,7 @@
 
     Code
       sim
-    Message
+    Output
       Simulation name: Test
       Population: Women
       Compound: Levonorgestrel 1
@@ -79,7 +79,7 @@
 
     Code
       sim
-    Message
+    Output
       Simulation name: Test
       Individual: Woman SHBG 40% more
       Compound: Levonorgestrel 1
@@ -103,7 +103,7 @@
 
     Code
       my_sim
-    Message
+    Output
       Simulation name: Test
       Individual: Woman
       Compound: Levonorgestrel 1
@@ -127,7 +127,7 @@
 
     Code
       my_sim
-    Message
+    Output
       Simulation name: Test
       Individual: Woman
       Compound: Levonorgestrel 1
@@ -152,7 +152,7 @@
 
     Code
       my_sim
-    Message
+    Output
       Simulation name: Test
       Individual: Woman
       Compound: Levonorgestrel 1
@@ -178,7 +178,7 @@
 
     Code
       my_sim
-    Message
+    Output
       Simulation name: Test
       Individual: Woman
       Compound: Levonorgestrel 1
@@ -221,7 +221,7 @@
 
     Code
       my_sim
-    Message
+    Output
       Simulation name: Test2
       Individual: Woman
       Compound: Levonorgestrel 1
@@ -247,7 +247,7 @@
 
     Code
       my_sim
-    Message
+    Output
       Simulation name: Test4
       Individual: Woman
       Compound: Levonorgestrel 1
@@ -271,7 +271,7 @@
 
     Code
       my_sim
-    Message
+    Output
       Simulation name: Test5
       Individual: Woman
       Compound: Levonorgestrel 1
@@ -301,7 +301,7 @@
 
     Code
       my_sim
-    Message
+    Output
       Simulation name: Test6
       Individual: Woman
       Compound: Levonorgestrel 1
@@ -325,7 +325,7 @@
 
     Code
       my_sim
-    Message
+    Output
       Simulation name: Test6
       Individual: Woman
       Compound: Levonorgestrel 1
@@ -352,7 +352,7 @@
 
     Code
       my_sim
-    Message
+    Output
       Simulation name: Test7
       Individual: Woman
       Compound: Levonorgestrel 1
@@ -376,7 +376,7 @@
 
     Code
       my_sim
-    Message
+    Output
       Simulation name: Test
       Individual: Woman
       Compound: Levonorgestrel 1
@@ -400,7 +400,7 @@
 
     Code
       my_sim
-    Message
+    Output
       Simulation name: Test
       Population: UnknowPop
       Compound: Levonorgestrel 1

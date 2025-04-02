@@ -2,7 +2,7 @@
 
     Code
       create_formulation(name = "Solution", type = "dissolved")
-    Message
+    Output
       Solution
       * Type: Dissolved
 
@@ -19,7 +19,7 @@
       ! No `suspension` provided, using default of 'TRUE'.
       Warning:
       ! No `dissolution_shape` provided, using default value of 0.92.
-    Message
+    Output
       Weibull
       * Type: Weibull
       * Dissolution time (50% dissolved): 240 min
@@ -38,7 +38,7 @@
       ! No `lag_time` provided, using default value of 0 min.
       Warning:
       ! No `suspension` provided, using default of 'TRUE'.
-    Message
+    Output
       Lint
       * Type: Lint80
       * Dissolution time (80% dissolved): 240 min
@@ -56,7 +56,7 @@
       ! No `distribution_type` provided, using default of 'mono'.
       Warning:
       ! No `radius` provided, using default value of 10 µm.
-    Message
+    Output
       ParticleMono
       * Type: Particle
       * Thickness (unstirred water layer): 30 µm
@@ -83,7 +83,7 @@
       ! No `n_bins` provided, using default value of 3.
       Warning:
       ! No `radius_sd` provided, using default value of 3 µm.
-    Message
+    Output
       ParticlePolyNormal
       * Type: Particle
       * Thickness (unstirred water layer): 30 µm
@@ -113,7 +113,7 @@
       ! No `n_bins` provided, using default value of 3.
       Warning:
       ! No `radius_cv` provided, using default value of 1.5.
-    Message
+    Output
       ParticlePolyLogNormal
       * Type: Particle
       * Thickness (unstirred water layer): 30 µm
@@ -133,12 +133,11 @@
     Condition
       Warning:
       x No `suspension` provided, using default of 'TRUE'.
-    Message
+    Output
       Table
       * Type: Table
       * Use as suspension: 1
       * Release profile:
-    Output
        Time [h] Fraction (dose)
               0             0.0
               1             0.2
@@ -152,7 +151,7 @@
     Condition
       Warning:
       ! No `end_time` provided, using default unit of 60 min.
-    Message
+    Output
       ZeroOrder
       * Type: ZeroOrder
       * End time: 60 min
@@ -162,7 +161,7 @@
     Code
       create_formulation(name = "FirstOrder", type = "first", thalf = "0.01",
         thalf_unit = "min")
-    Message
+    Output
       FirstOrder
       * Type: FirstOrder
       * t1/2: 0.01 min

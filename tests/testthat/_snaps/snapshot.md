@@ -2,7 +2,7 @@
 
     Code
       rifampicin
-    Message
+    Output
       Compounds:
         * Rifampicin
       Individuals:
@@ -203,18 +203,18 @@
       extract_interactions(rifampicin)
     Message
       Compound: Rifampicin
-        * CYP3A4-Kajosaari 2005
-        * P-gp-Reitman 2011
-        * CYP3A4-Templeton 2011
-        * P-gp-Greiner 1999
-        * OATP1B1-Dixit 2007
-        * AADAC-Assumed
-        * CYP2C8-Kajosaari 2005
-        * OATP1B1-Hirano 2006
-        * CYP2C8-Buckley 2014
-        * CYP1A2-Chen 2010
-        * CYP2E1-Rae 2001
-        * OATP1B3-Annaert 2010
+      * CYP3A4-Kajosaari 2005
+      * P-gp-Reitman 2011
+      * CYP3A4-Templeton 2011
+      * P-gp-Greiner 1999
+      * OATP1B1-Dixit 2007
+      * AADAC-Assumed
+      * CYP2C8-Kajosaari 2005
+      * OATP1B1-Hirano 2006
+      * CYP2C8-Buckley 2014
+      * CYP1A2-Chen 2010
+      * CYP2E1-Rae 2001
+      * OATP1B3-Annaert 2010
 
 # Compounds process can be extracted
 
@@ -222,8 +222,8 @@
       extract_processes(rifampicin)
     Message
       Compound: Rifampicin
-        * AADAC-Nakajima 2011
-        * P-gp-Collett 2004
-        * OATP1B1-Tirona 2003
-        * Glomerular Filtration-GFR
+      * AADAC-Nakajima 2011
+      * P-gp-Collett 2004
+      * OATP1B1-Tirona 2003
+      * Glomerular Filtration-GFR
 
