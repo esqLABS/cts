@@ -2,45 +2,34 @@
 % Please edit documentation in R/simulations.R
 \name{set_compound_protocol}
 \alias{set_compound_protocol}
-\title{Set protocol for an already used compound from a \code{Simulation} object}
+\title{Set Protocol and Formulation for a Compound in a Simulation}
 \usage{
 set_compound_protocol(simulation, compound, protocol, formulation = list())
 }
 \arguments{
-\item{simulation}{The \code{Simulation} object (as created by \code{create_simulation}).}
+\item{simulation}{A Simulation object}
 
-\item{compound}{Name of the compound for which to set the protocol.}
+\item{compound}{Name of the compound}
 
-\item{protocol}{either a protocol object (Protocol or AdvancedProtocol object) or a protocol name to be used for \code{compound}.
-If a protocol name is used, the formulations should be set with each corresponding
-formulation key required from the protocol.}
+\item{protocol}{A character string specifying the protocol name}
 
-\item{formulation}{either a character vector of formulation names if a protocol object is given or a list of Formulation
-key/name mapping for the chosen protocol if only its name is given.}
+\item{formulation}{Optional. Either a character string or a character vector of formulation names.
+If a single formulation is provided, it will be used for all protocol keys.
+If multiple formulations are provided, they will be mapped in order to the protocol keys.}
 }
 \value{
-The updated \code{Simulation} object
+The simulation object (invisibly)
 }
 \description{
-This function set the protocol of the specified compounds.
+Sets the protocol and formulation for a compound in a simulation.
 }
 \examples{
-# Create a simulation first
 sim <- create_simulation(
-  simulation_name = "Protocol example",
-  individual = "Adult male",
-  victim = "Midazolam",
-  perpetrators = c("Ketoconazole")
+  simulation_name = "Test",
+  victim = "Rifampicin",
+  perpetrators = "Midazolam",
+  individual = "European (P-gp modified, CYP3A4 36 h)"
 )
+sim <- set_compound_protocol(sim, "Midazolam", "Single oral dose", "Tablet")
 
-# Set protocol for a compound
-sim <- set_compound_protocol(sim, "Midazolam", "Single oral dose")
-
-# Set protocol with formulation
-sim <- set_compound_protocol(
-  sim,
-  "Ketoconazole",
-  "Multiple dose",
-  formulation = list(list(Key = "Formulation 1", Name = "Tablet"))
-)
 }

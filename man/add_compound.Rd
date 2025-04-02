@@ -39,6 +39,6 @@ sim <- add_compound(
   sim,
   "Clarithromycin",
   "Oral BID",
-  formulation = list(list(Key = "Formulation 1", Name = "Tablet"))
+  formulation = "Tablet"
 )
 }
