@@ -838,11 +838,11 @@ AdvancedProtocol <- R6::R6Class(
             )
             purrr::imap(x$SchemaItems, \(y, j) {
               cli::cli_ol(y$name)
-              ul3 <- cli::cli_ul()
+              ul2 <- cli::cli_ul()
               cli::cli_li(y$format_method(advanced = TRUE))
-              cli::cli_end(ul3)
+              cli::cli_end(ul2)
             })
-            cli::cli_end(ul2)
+            cli::cli_end(ul)
           })
         }),
         sep = "\n"

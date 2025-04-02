@@ -606,6 +606,7 @@ Formulation <- R6::R6Class(
                 ),
                 row.names = FALSE
               )
+              cli::cli_end() # Close the unordered list
             } else {
               cli::cli_li(paste(
                 paste0(param$Name, ":"),
