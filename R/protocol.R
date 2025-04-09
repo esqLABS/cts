@@ -47,14 +47,15 @@
 #'   infusion_time_unit = "min"
 #' )
 create_protocol <- function(
-    name,
-    type,
-    interval,
-    dose,
-    dose_unit = "mg",
-    end_time = 24,
-    end_time_unit = "h",
-    ...) {
+  name,
+  type,
+  interval,
+  dose,
+  dose_unit = "mg",
+  end_time = 24,
+  end_time_unit = "h",
+  ...
+) {
   Protocol$new(
     name,
     type,
@@ -145,14 +146,16 @@ Protocol <- R6::R6Class(
   "Protocol",
   public = list(
     name = NULL,
-    initialize = function(name,
-                          type,
-                          interval,
-                          dose,
-                          dose_unit = "mg",
-                          end_time = 24,
-                          end_time_unit = "h",
-                          ...) {
+    initialize = function(
+      name,
+      type,
+      interval,
+      dose,
+      dose_unit = "mg",
+      end_time = 24,
+      end_time_unit = "h",
+      ...
+    ) {
       self$name <- name
 
       rlang::arg_match(type, values = names(protocol_types), error_arg = "type")
@@ -198,28 +201,35 @@ Protocol <- R6::R6Class(
         self$infusion_time_unit <- "min"
       }
     },
-    print = function(advanced = FALSE) {
-      cli_text(self$name)
-      cli_li("Application Type: {protocol_types[[self$type]]$human}")
-      if (!advanced) {
-        cli_li("Dosing Interval: {intervals[[self$interval]]$human}")
-      } else {
-        if (!is.null(private$.formulation_key)) {
-          cli_li("FormulationKey: {private$.formulation_key}")
+    format_method = function(advanced = FALSE) {
+      cli::cli({
+        if (!advanced) cli_text(self$name)
+        cli_li("Application Type: {protocol_types[[self$type]]$human}")
+        if (!advanced) {
+          cli_li("Dosing Interval: {intervals[[self$interval]]$human}")
+        } else {
+          if (!is.null(private$.formulation_key)) {
+            cli_li("FormulationKey: {private$.formulation_key}")
+          }
         }
-      }
-      cli_li("Dose: {self$dose} {self$dose_unit}")
-      if (self$interval != "single") {
-        cli_li("End Time: {self$end_time} {self$end_time_unit}")
-      }
-      if (self$type == "oral") {
-        cli_li(
-          "Volume of water/body weight: {self$water_vol_per_body_weight} {self$water_vol_per_body_weight_unit}"
-        )
-      }
-      if (self$type == "iv") {
-        cli_li("Infusion Time: {self$infusion_time} {self$infusion_time_unit}")
-      }
+        cli_li("Dose: {self$dose} {self$dose_unit}")
+        if (self$interval != "single") {
+          cli_li("End Time: {self$end_time} {self$end_time_unit}")
+        }
+        if (self$type == "oral") {
+          cli_li(
+            "Volume of water/body weight: {self$water_vol_per_body_weight} {self$water_vol_per_body_weight_unit}"
+          )
+        }
+        if (self$type == "iv") {
+          cli_li(
+            "Infusion Time: {self$infusion_time} {self$infusion_time_unit}"
+          )
+        }
+      })
+    },
+    print = function(advanced = FALSE) {
+      cat(cli::cli_format_method(self$format_method(advanced)), sep = "\n")
       invisible(self)
     }
   ),
@@ -472,13 +482,14 @@ create_advanced_protocol <- function(name) {
 #'   schema_name = "Weekly dosing"
 #' )
 add_schema <- function(
-    advanced_protocol,
-    start_time,
-    start_time_unit,
-    rep_nb,
-    time_btw_rep,
-    time_btw_rep_unit,
-    schema_name = NULL) {
+  advanced_protocol,
+  start_time,
+  start_time_unit,
+  rep_nb,
+  time_btw_rep,
+  time_btw_rep_unit,
+  schema_name = NULL
+) {
   # check that protocol is an AdvancedProtocol object
   check_advanced(advanced_protocol)
 
@@ -567,10 +578,11 @@ remove_schema <- function(advanced_protocol, schema_name) {
 #'   administration = single_dose
 #' )
 add_administration <- function(
-    advanced_protocol,
-    schema_name,
-    administration,
-    formulation_key = NULL) {
+  advanced_protocol,
+  schema_name,
+  administration,
+  formulation_key = NULL
+) {
   # check that protocol is an AdvancedProtocol object
   check_advanced(advanced_protocol)
 
@@ -627,9 +639,10 @@ add_administration <- function(
 #'   administration_name = "Morning dose"
 #' )
 remove_administration <- function(
-    advanced_protocol,
-    schema_name,
-    administration_name) {
+  advanced_protocol,
+  schema_name,
+  administration_name
+) {
   # check that protocol is an AdvancedProtocol object
   check_advanced(advanced_protocol)
 
@@ -667,12 +680,14 @@ AdvancedProtocol <- R6::R6Class(
     #' @param time_btw_rep_unit Time unit for `time_btw_rep` of the schema
     #' @param schema_name Name of the schema
     #' @return The updated `AdvancedProtocol` object.
-    add_schema = function(start_time,
-                          start_time_unit,
-                          rep_nb,
-                          time_btw_rep,
-                          time_btw_rep_unit,
-                          schema_name) {
+    add_schema = function(
+      start_time,
+      start_time_unit,
+      rep_nb,
+      time_btw_rep,
+      time_btw_rep_unit,
+      schema_name
+    ) {
       # add default schema_name if not given
       if (is.null(schema_name)) {
         schema_name <- paste0("Schema ", length(self$schemas) + 1)
@@ -722,9 +737,11 @@ AdvancedProtocol <- R6::R6Class(
     #' @param formulation_key Formulation key for mapping to formulation for oral protocol. If NULL
     #' it will be automatically assigned
     #' @return The updated `AdvancedProtocol` object.
-    add_administration = function(protocol,
-                                  schema_name,
-                                  formulation_key = NULL) {
+    add_administration = function(
+      protocol,
+      schema_name,
+      formulation_key = NULL
+    ) {
       # check that schema exists
       private$.check_schema(schema_name)
 
@@ -808,21 +825,28 @@ AdvancedProtocol <- R6::R6Class(
     #' @description
     #' Print the object to the console
     print = function() {
-      cli::cli_text(self$name)
-      purrr::walk(self$schemas, \(x) {
-        cli::cli_li("Schema: {x$Name}")
-        ul <- cli::cli_ul()
-        cli::cli_li("Start time: {x$StartTime} {x$StartTimeUnit}")
-        cli::cli_li("Number of repetitions: {x$NumberOfRepetitions}")
-        cli::cli_li(
-          "Time between repetitions: {x$TimeBetweenRepetitions} {x$TimeBetweenRepetitionsUnit}"
-        )
-        purrr::walk(x$SchemaItems, \(y) {
-          cli::cli_li()
-          y$print()
-        })
-        cli::cli_end(ul)
-      })
+      cat(
+        cli::cli_format_method({
+          cli::cli_text(self$name)
+          purrr::walk(self$schemas, \(x) {
+            cli::cli_li("Schema: {x$Name}")
+            ul <- cli::cli_ul()
+            cli::cli_li("Start time: {x$StartTime} {x$StartTimeUnit}")
+            cli::cli_li("Number of repetitions: {x$NumberOfRepetitions}")
+            cli::cli_li(
+              "Time between repetitions: {x$TimeBetweenRepetitions} {x$TimeBetweenRepetitionsUnit}"
+            )
+            purrr::imap(x$SchemaItems, \(y, j) {
+              cli::cli_ol(y$name)
+              ul2 <- cli::cli_ul()
+              cli::cli_li(y$format_method(advanced = TRUE))
+              cli::cli_end(ul2)
+            })
+            cli::cli_end(ul)
+          })
+        }),
+        sep = "\n"
+      )
       invisible(self)
     }
   ),

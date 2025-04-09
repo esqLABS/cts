@@ -2,7 +2,7 @@
 
     Code
       SnapshotOutputSchema$new()
-    Message
+    Output
       Output schema:
       * Interval 1
         * Start time: 0 h
@@ -13,7 +13,7 @@
 
     Code
       output_schema
-    Message
+    Output
       Output schema:
       * Interval 1
         * Start time: 0 min
@@ -24,7 +24,7 @@
 
     Code
       output_schema
-    Message
+    Output
       Output schema:
       * Interval 1
         * Start time: 0 h
