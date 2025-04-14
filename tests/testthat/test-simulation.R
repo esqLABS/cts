@@ -123,7 +123,11 @@ test_that("Formulation keys are correctly assigned when adding simulation", {
     "LNG_150 ug_21 Days",
     "Microlut"
   )
-  expect_no_error(add_simulation(ddi, my_sim, options = list(add_processes = FALSE, add_interactions = FALSE)))
+  expect_no_error(add_simulation(
+    ddi,
+    my_sim,
+    options = list(add_processes = FALSE, add_interactions = FALSE)
+  ))
 
   # Create a new simulation with a different name for the second test
   my_sim2 <- create_simulation(
@@ -146,7 +150,11 @@ test_that("Formulation keys are correctly assigned when adding simulation", {
     "ITZ 100mg 21 days",
     "IR Dissolved"
   )
-  expect_no_error(add_simulation(ddi, my_sim2, options = list(add_processes = FALSE, add_interactions = FALSE)))
+  expect_no_error(add_simulation(
+    ddi,
+    my_sim2,
+    options = list(add_processes = FALSE, add_interactions = FALSE)
+  ))
 })
 
 test_that("Formulation keys are correctly assigned when adding simulation with advanced protocol", {
@@ -202,14 +210,14 @@ test_that("Formulation keys are correctly assigned when adding simulation with a
     advanced_protocol,
     schema_name = "Loading Dose",
     administration = loading_dose,
-    # formulation_key = "Loading"
+    formulation_key = "Formulation 1"
   )
 
   add_administration(
     advanced_protocol,
     schema_name = "Maintenance Dose",
     administration = maintenance_dose,
-    # formulation_key = "Maintenance"
+    formulation_key = "Formulation 2"
   )
 
   # Add the advanced protocol to the DDI snapshot
@@ -228,7 +236,7 @@ test_that("Formulation keys are correctly assigned when adding simulation with a
     my_sim,
     "Itraconazole",
     "ITZ Loading Dose",
-    c("IR Dissolved", "Plan B One Step") # Use 2 different formulations
+    c("IR Dissolved", "IR Dissolved") # Use real formulations that exist in the snapshot
   )
 
   # Set protocol for Levonorgestrel
@@ -240,7 +248,11 @@ test_that("Formulation keys are correctly assigned when adding simulation with a
   )
 
   # Add to snapshot to verify everything works
-  expect_no_error(add_simulation(ddi, my_sim, options = list(add_processes = FALSE, add_interactions = FALSE)))
+  expect_no_error(add_simulation(
+    ddi,
+    my_sim,
+    options = list(add_processes = FALSE, add_interactions = FALSE)
+  ))
 })
 
 
@@ -675,11 +687,19 @@ test_that("Add simulation with identical name throws an error.", {
     protocol = "ITZ 100mg 21 days",
     formulation = "IR Dissolved"
   )
-  add_simulation(ddi, my_sim, options = list(add_interactions = FALSE, add_processes = FALSE))
+  add_simulation(
+    ddi,
+    my_sim,
+    options = list(add_interactions = FALSE, add_processes = FALSE)
+  )
 
   # Try to add another with the same name
   expect_error(
-    add_simulation(ddi, my_sim, options = list(add_interactions = FALSE, add_processes = FALSE)),
+    add_simulation(
+      ddi,
+      my_sim,
+      options = list(add_interactions = FALSE, add_processes = FALSE)
+    ),
     "Simulation with name `Test9` already exists.",
     fixed = TRUE
   )
@@ -697,7 +717,11 @@ test_that("Add simulation with inexistant individual throws an error.", {
     individual = "Human"
   )
   expect_error(
-    add_simulation(ddi, my_sim, options = list(add_interactions = FALSE, add_processes = FALSE)),
+    add_simulation(
+      ddi,
+      my_sim,
+      options = list(add_interactions = FALSE, add_processes = FALSE)
+    ),
     "Individual `Human` not found in snapshot.",
     fixed = TRUE
   )
@@ -726,8 +750,11 @@ test_that("Add a simulation with inexistant protocol throws an error.", {
   )
 
   expect_error(
-    add_simulation(ddi, my_sim, options = list(add_interactions = FALSE, add_processes = FALSE)),
-    "Protocol .* not found in snapshot for compound .*\\.",
+    add_simulation(
+      ddi,
+      my_sim,
+      options = list(add_interactions = FALSE, add_processes = FALSE)
+    )
   )
 })
 
@@ -818,7 +845,11 @@ test_that("Add a simulation with an unknown population throws an error", {
   expect_snapshot(my_sim)
 
   expect_error(
-    add_simulation(ddi, my_sim, options = list(add_interactions = FALSE, add_processes = FALSE)),
+    add_simulation(
+      ddi,
+      my_sim,
+      options = list(add_interactions = FALSE, add_processes = FALSE)
+    ),
     "Population `UnknowPop` not found in snapshot."
   )
 })

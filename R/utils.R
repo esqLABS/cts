@@ -114,17 +114,24 @@ pivot_pk_analysis <- function(df, compound_names) {
 
   df <- df %>%
     dplyr::mutate(
-      UniqueQuantityPath = stringr::str_remove(
-        QuantityPath, paste0("\\|?(", compound_pattern, ")\\|?")
+      UniqueQuantityPath = stringr::str_replace(
+        QuantityPath,
+        paste0("\\|(", compound_pattern, ")\\|"),
+        "|"
       )
     ) %>%
-    dplyr::mutate(df,
-      Compound = purrr::map_chr(QuantityPath, ~ {
-        match <- compound_names[stringr::str_detect(
-          .x, stringr::regex(compound_names, ignore_case = TRUE)
-        )]
-        if (length(match) > 0) match[1] else NA_character_
-      })
+    dplyr::mutate(
+      df,
+      Compound = purrr::map_chr(
+        QuantityPath,
+        ~ {
+          match <- compound_names[stringr::str_detect(
+            .x,
+            stringr::regex(compound_names, ignore_case = TRUE)
+          )]
+          if (length(match) > 0) match[1] else NA_character_
+        }
+      )
     ) %>%
     dplyr::select(-dplyr::any_of(c("IndividualId", "QuantityPath")))
 
@@ -138,7 +145,8 @@ pivot_pk_analysis <- function(df, compound_names) {
 }
 
 translate_end_time_unit <- function(end_time_unit) {
-  switch(end_time_unit,
+  switch(
+    end_time_unit,
     "s" = 1,
     "min" = 60,
     "ks" = 1000,
