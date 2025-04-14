@@ -31,11 +31,12 @@
 #'   perpetrators = c("Rifampicin")
 #' )
 create_simulation <- function(
-    simulation_name,
-    individual = list(),
-    population = list(),
-    victim,
-    perpetrators) {
+  simulation_name,
+  individual = list(),
+  population = list(),
+  victim,
+  perpetrators
+) {
   # Combine Compound, Protocol and Formulation
   sim <- Simulation$new(
     name = simulation_name,
@@ -81,9 +82,10 @@ create_simulation <- function(
 #'   options = list(add_interactions = FALSE, add_processes = TRUE)
 #' )
 add_simulation <- function(
-    snapshot,
-    simulation,
-    options = list(add_interactions = TRUE, add_processes = TRUE)) {
+  snapshot,
+  simulation,
+  options = list(add_interactions = TRUE, add_processes = TRUE)
+) {
   snapshot$check_simulation(simulation)
 
   # Match protocols with formulations from snapshot
@@ -103,11 +105,15 @@ add_simulation <- function(
             formulation_keys <- list("Formulation")
           } else if ("AdvancedProtocol" %in% class(protocol)) {
             # For advanced protocols, get formulation keys from schema items
-            formulation_keys <- unlist(
-              purrr::map(protocol$schemas, \(x) {
-                purrr::map(x$SchemaItems, \(y) y$formulation_key)
-              }),
-              recursive = TRUE
+            formulation_keys <- unique(
+              unlist(
+                purrr::map(protocol$schemas, \(x) {
+                  purrr::map(x$SchemaItems, \(y) {
+                    y$formulation_key
+                  })
+                }),
+                recursive = TRUE
+              )
             )
           } else {
             # Default to Formulation if we can't determine
@@ -137,10 +143,10 @@ add_simulation <- function(
               if (length(formulation_names) != length(formulation_keys)) {
                 cli_abort(c(
                   "Number of formulations doesn't match protocol requirements for compound {.val {compound$Name}}.",
-                  "i" = "Protocol requires {length(formulation_keys)} formulation(s)."
+                  "i" = "Protocol requires {length(formulation_keys)} formulation(s), but {length(formulation_names)} provided."
                 ))
               }
-              # Assign keys in order
+              # Assign keys in order - use the specific keys from the protocol definition
               simulation$compounds[[
                 compound_index
               ]]$Protocol$Formulations <- purrr::map2(
@@ -164,7 +170,7 @@ add_simulation <- function(
               ))
               if (!exists) {
                 cli_abort(
-                  "Formulations `{formulation_name}` not found in snapshot."
+                  "Formulation `{formulation_name}` not found in snapshot."
                 )
               }
             }
@@ -367,10 +373,11 @@ remove_simulation <- function(snapshot, simulation_name) {
 #'   formulation = "Tablet"
 #' )
 add_compound <- function(
-    simulation,
-    compound,
-    protocol = NULL,
-    formulation = list()) {
+  simulation,
+  compound,
+  protocol = NULL,
+  formulation = list()
+) {
   simulation$add_compound(compound, protocol, formulation)
   invisible(simulation)
 }
@@ -400,10 +407,11 @@ add_compound <- function(
 #'
 #' @export
 set_compound_protocol <- function(
-    simulation,
-    compound,
-    protocol,
-    formulation = list()) {
+  simulation,
+  compound,
+  protocol,
+  formulation = list()
+) {
   # ensure protocol is a character string
   if (!is.character(protocol) || length(protocol) != 1) {
     cli_abort("Protocol must be a single character string.")
@@ -412,7 +420,9 @@ set_compound_protocol <- function(
   # ensure formulation is given in the correct format if provided
   if (length(formulation) > 0) {
     if (is.character(formulation)) {
-      # Convert character vector to list of formulation specifications with Key/Name format
+      # Convert character vector to list of formulation specifications
+      # For simple protocol or when we don't yet know what keys to use,
+      # just use "Formulation" as the key - the actual keys will be determined in add_simulation
       formulation <- purrr::map(
         formulation,
         \(x) list(Key = "Formulation", Name = x)
@@ -464,11 +474,12 @@ set_compound_protocol <- function(
 #' # Set output interval for 7 days with 24 points per day
 #' sim <- set_output_interval(sim, 0, 7, 24, "day(s)")
 set_output_interval <- function(
-    simulation,
-    start_time,
-    end_time,
-    resolution,
-    unit) {
+  simulation,
+  start_time,
+  end_time,
+  resolution,
+  unit
+) {
   simulation$output_schema$set_interval(start_time, end_time, resolution, unit)
   invisible(simulation)
 }
@@ -496,11 +507,12 @@ set_output_interval <- function(
 #' # Add another interval for the rest of the day with lower resolution
 #' sim <- add_output_interval(sim, 1, 24, 10, "h")
 add_output_interval <- function(
-    simulation,
-    start_time,
-    end_time,
-    resolution,
-    unit) {
+  simulation,
+  start_time,
+  end_time,
+  resolution,
+  unit
+) {
   simulation$output_schema$add_interval(start_time, end_time, resolution, unit)
   invisible(simulation)
 }
@@ -657,10 +669,11 @@ Simulation <- R6::R6Class(
     #' @param population name of the population used in the simulation.
     #' @return A new `Simulation` object.
     initialize = function(
-        name,
-        compounds = list(),
-        individual = list(),
-        population = list()) {
+      name,
+      compounds = list(),
+      individual = list(),
+      population = list()
+    ) {
       self$name <- name
       self$compounds <- compounds
       if (length(individual) > 0 && length(population) > 0) {
@@ -726,6 +739,19 @@ Simulation <- R6::R6Class(
       if (length(compoundIdx) == 0) {
         cli_abort(
           "`compound` not found. Use `add_compound()` to add a new compound."
+        )
+      }
+
+      # If we have multiple formulations, assign sequential keys
+      if (length(formulation) > 1) {
+        # For multiple formulations, use sequential keys like "Formulation 1", "Formulation 2", etc.
+        formulation <- purrr::map2(
+          seq_along(formulation),
+          formulation,
+          function(i, form) {
+            form$Key <- paste("Formulation", i)
+            return(form)
+          }
         )
       }
 
