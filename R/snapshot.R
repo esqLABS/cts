@@ -45,24 +45,29 @@ Snapshot <- R6::R6Class(
     #' @description
     #' Pretty print the snapshot data.
     print = function() {
-      compounds <- cli_ul()
-      private$print_names("compounds")
-      individuals <- cli_ul()
-      private$print_names("individuals")
-      populations <- cli_ul()
-      private$print_names("populations")
-      formulations <- cli_ul()
-      private$print_names("formulations")
-      protocols <- cli_ul()
-      private$print_names("protocols")
-      observerSets <- cli_ul()
-      private$print_names("observer_sets")
-      events <- cli_ul()
-      private$print_names("events")
-      simulations <- cli_ul()
-      private$print_names("simulations")
-      observedData <- cli_ul()
-      private$print_names("observed_data")
+      cat(
+        cli::cli_format_method({
+          compounds <- cli_ul()
+          private$print_names("compounds")
+          individuals <- cli_ul()
+          private$print_names("individuals")
+          populations <- cli_ul()
+          private$print_names("populations")
+          formulations <- cli_ul()
+          private$print_names("formulations")
+          protocols <- cli_ul()
+          private$print_names("protocols")
+          observerSets <- cli_ul()
+          private$print_names("observer_sets")
+          events <- cli_ul()
+          private$print_names("events")
+          simulations <- cli_ul()
+          private$print_names("simulations")
+          observedData <- cli_ul()
+          private$print_names("observed_data")
+        }),
+        sep = "\n"
+      )
       invisible(self)
     },
     #' @description

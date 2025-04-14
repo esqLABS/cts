@@ -568,43 +568,56 @@ Formulation <- R6::R6Class(
     #' Print the object to the console
     #' @param ... Rest arguments.
     print = function(...) {
-      cli::cli_text(self$name)
-      cli::cli_li(paste("Type:", formulation_types[[self$type]]$human))
+      cat(
+        cli::cli_format_method({
+          cli::cli_text(self$name)
+          cli::cli_li(paste("Type:", formulation_types[[self$type]]$human))
 
-      for (param in private$.parameters()) {
-        if (param$Name == "Type of particle size distribution") {
-          cli::cli_li(
-            paste(
-              paste0(param$Name, ":"),
-              purrr::keep(particle_size_dist_types, ~ .x$pksim == param$Value)[[
-                1
-              ]]$human
-            )
-          )
-        } else if (param$Name == "Particle size distribution") {
-          cli::cli_li(
-            paste(
-              paste0(param$Name, ":"),
-              purrr::keep(particle_size_dists, ~ .x$pksim == param$Value)[[
-                1
-              ]]$human
-            )
-          )
-        } else if (self$type == "table" && param$Name == "Fraction (dose)") {
-          cli::cli_li("Release profile:")
-          cli::cli_ul()
-          print(
-            data.frame(
-              "Time [h]" = private$.tableX,
-              "Fraction (dose)" = private$.tableY,
-              check.names = FALSE
-            ),
-            row.names = FALSE
-          )
-        } else {
-          cli::cli_li(paste(paste0(param$Name, ":"), param$Value, param$Unit))
-        }
-      }
+          for (param in private$.parameters()) {
+            if (param$Name == "Type of particle size distribution") {
+              cli::cli_li(
+                paste(
+                  paste0(param$Name, ":"),
+                  purrr::keep(
+                    particle_size_dist_types,
+                    ~ .x$pksim == param$Value
+                  )[[1]]$human
+                )
+              )
+            } else if (param$Name == "Particle size distribution") {
+              cli::cli_li(
+                paste(
+                  paste0(param$Name, ":"),
+                  purrr::keep(particle_size_dists, ~ .x$pksim == param$Value)[[
+                    1
+                  ]]$human
+                )
+              )
+            } else if (
+              self$type == "table" && param$Name == "Fraction (dose)"
+            ) {
+              cli::cli_li("Release profile:")
+              cli::cli_ul()
+              print(
+                data.frame(
+                  "Time [h]" = private$.tableX,
+                  "Fraction (dose)" = private$.tableY,
+                  check.names = FALSE
+                ),
+                row.names = FALSE
+              )
+              cli::cli_end() # Close the unordered list
+            } else {
+              cli::cli_li(paste(
+                paste0(param$Name, ":"),
+                param$Value,
+                param$Unit
+              ))
+            }
+          }
+        }),
+        sep = "\n"
+      )
       invisible(self)
     }
   ),

@@ -84,6 +84,7 @@ add_simulation <- function(
     snapshot,
     simulation,
     options = list(add_interactions = TRUE, add_processes = TRUE)) {
+  snapshot$check_simulation(simulation)
 
   # Match protocols with formulations from snapshot
   for (compound_index in seq_along(simulation$compounds)) {
@@ -655,10 +656,11 @@ Simulation <- R6::R6Class(
     #' @param individual name of the individual used in the simulation.
     #' @param population name of the population used in the simulation.
     #' @return A new `Simulation` object.
-    initialize = function(name,
-                          compounds = list(),
-                          individual = list(),
-                          population = list()) {
+    initialize = function(
+        name,
+        compounds = list(),
+        individual = list(),
+        population = list()) {
       self$name <- name
       self$compounds <- compounds
       if (length(individual) > 0 && length(population) > 0) {
@@ -823,48 +825,53 @@ Simulation <- R6::R6Class(
     #' @description
     #' Pretty print the simulation object.
     print = function() {
-      cli::cli_text("Simulation name: {self$name}")
-      if (length(self$population) > 0) {
-        cli::cli_text("Population: {self$population}")
-      } else {
-        cli::cli_text("Individual: {self$individual}")
-      }
-      purrr::walk(private$.compounds, \(x) {
-        cli::cli_text("Compound: {x$Name}")
-        cli::cli_li("Protocol: {x$Protocol$Name}")
-        # if formulation is not empty
-        if (length(x$Protocol$Formulations) > 0) {
-          if (length(x$Protocol$Formulations) == 1) {
-            # Single formulation - print on same line
-            cli::cli_li("Formulations: {x$Protocol$Formulations[[1]]$Name}")
+      cat(
+        cli::cli_format_method({
+          cli::cli_text("Simulation name: {self$name}")
+          if (length(self$population) > 0) {
+            cli::cli_text("Population: {self$population}")
           } else {
-            # Multiple formulations - print as nested list
-            cli::cli_li("Formulations: ")
-            purrr::walk(x$Protocol$Formulations, \(f) {
-              cli::cli_ol("{f$Key}: {f$Name}")
+            cli::cli_text("Individual: {self$individual}")
+          }
+          purrr::walk(private$.compounds, \(x) {
+            cli::cli_text("Compound: {x$Name}")
+            cli::cli_li("Protocol: {x$Protocol$Name}")
+            # if formulation is not empty
+            if (length(x$Protocol$Formulations) > 0) {
+              if (length(x$Protocol$Formulations) == 1) {
+                # Single formulation - print on same line
+                cli::cli_li("Formulations: {x$Protocol$Formulations[[1]]$Name}")
+              } else {
+                # Multiple formulations - print as nested list
+                cli::cli_li("Formulations: ")
+                purrr::walk(x$Protocol$Formulations, \(f) {
+                  cli::cli_ol("{f$Key}: {f$Name}")
+                })
+              }
+            } else {
+              cli::cli_li("Formulations: ")
+            }
+            cli::cli_li("Processes: ")
+            ol <- cli::cli_ol()
+            purrr::map(x$Processes, \(p) {
+              cli::cli_li(p$Name)
             })
-          }
-        } else {
-          cli::cli_li("Formulations: ")
-        }
-        cli::cli_li("Processes: ")
-        ol <- cli::cli_ol()
-        purrr::map(x$Processes, \(p) {
-          cli::cli_li(p$Name)
-        })
-        cli::cli_end(ol)
-        cli::cli_li("Interactions: ")
-        ol <- cli::cli_ol()
-        purrr::map(private$.interactions, \(y) {
-          if (y$CompoundName == x$Name) {
-            cli::cli_li(y$Name)
-          }
-        })
-        cli::cli_end(ol)
-      })
-      self$output_schema$print()
-      cli::cli_text("Outputs: ")
-      cli::cli_li(self$output_selections)
+            cli::cli_end(ol)
+            cli::cli_li("Interactions: ")
+            ol <- cli::cli_ol()
+            purrr::map(private$.interactions, \(y) {
+              if (y$CompoundName == x$Name) {
+                cli::cli_li(y$Name)
+              }
+            })
+            cli::cli_end(ol)
+          })
+          self$output_schema$print()
+          cli::cli_text("Outputs: ")
+          cli::cli_li(self$output_selections)
+        }),
+        sep = "\n"
+      )
       invisible(self)
     }
   ),

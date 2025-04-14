@@ -198,28 +198,35 @@ Protocol <- R6::R6Class(
         self$infusion_time_unit <- "min"
       }
     },
-    print = function(advanced = FALSE) {
-      cli_text(self$name)
-      cli_li("Application Type: {protocol_types[[self$type]]$human}")
-      if (!advanced) {
-        cli_li("Dosing Interval: {intervals[[self$interval]]$human}")
-      } else {
-        if (!is.null(private$.formulation_key)) {
-          cli_li("FormulationKey: {private$.formulation_key}")
+    format_method = function(advanced = FALSE) {
+      cli::cli({
+        if (!advanced) cli_text(self$name)
+        cli_li("Application Type: {protocol_types[[self$type]]$human}")
+        if (!advanced) {
+          cli_li("Dosing Interval: {intervals[[self$interval]]$human}")
+        } else {
+          if (!is.null(private$.formulation_key)) {
+            cli_li("FormulationKey: {private$.formulation_key}")
+          }
         }
-      }
-      cli_li("Dose: {self$dose} {self$dose_unit}")
-      if (self$interval != "single") {
-        cli_li("End Time: {self$end_time} {self$end_time_unit}")
-      }
-      if (self$type == "oral") {
-        cli_li(
-          "Volume of water/body weight: {self$water_vol_per_body_weight} {self$water_vol_per_body_weight_unit}"
-        )
-      }
-      if (self$type == "iv") {
-        cli_li("Infusion Time: {self$infusion_time} {self$infusion_time_unit}")
-      }
+        cli_li("Dose: {self$dose} {self$dose_unit}")
+        if (self$interval != "single") {
+          cli_li("End Time: {self$end_time} {self$end_time_unit}")
+        }
+        if (self$type == "oral") {
+          cli_li(
+            "Volume of water/body weight: {self$water_vol_per_body_weight} {self$water_vol_per_body_weight_unit}"
+          )
+        }
+        if (self$type == "iv") {
+          cli_li(
+            "Infusion Time: {self$infusion_time} {self$infusion_time_unit}"
+          )
+        }
+      })
+    },
+    print = function(advanced = FALSE) {
+      cat(cli::cli_format_method(self$format_method(advanced)), sep = "\n")
       invisible(self)
     }
   ),
@@ -808,21 +815,28 @@ AdvancedProtocol <- R6::R6Class(
     #' @description
     #' Print the object to the console
     print = function() {
-      cli::cli_text(self$name)
-      purrr::walk(self$schemas, \(x) {
-        cli::cli_li("Schema: {x$Name}")
-        ul <- cli::cli_ul()
-        cli::cli_li("Start time: {x$StartTime} {x$StartTimeUnit}")
-        cli::cli_li("Number of repetitions: {x$NumberOfRepetitions}")
-        cli::cli_li(
-          "Time between repetitions: {x$TimeBetweenRepetitions} {x$TimeBetweenRepetitionsUnit}"
-        )
-        purrr::walk(x$SchemaItems, \(y) {
-          cli::cli_li()
-          y$print()
-        })
-        cli::cli_end(ul)
-      })
+      cat(
+        cli::cli_format_method({
+          cli::cli_text(self$name)
+          purrr::walk(self$schemas, \(x) {
+            cli::cli_li("Schema: {x$Name}")
+            ul <- cli::cli_ul()
+            cli::cli_li("Start time: {x$StartTime} {x$StartTimeUnit}")
+            cli::cli_li("Number of repetitions: {x$NumberOfRepetitions}")
+            cli::cli_li(
+              "Time between repetitions: {x$TimeBetweenRepetitions} {x$TimeBetweenRepetitionsUnit}"
+            )
+            purrr::imap(x$SchemaItems, \(y, j) {
+              cli::cli_ol(y$name)
+              ul2 <- cli::cli_ul()
+              cli::cli_li(y$format_method(advanced = TRUE))
+              cli::cli_end(ul2)
+            })
+            cli::cli_end(ul)
+          })
+        }),
+        sep = "\n"
+      )
       invisible(self)
     }
   ),

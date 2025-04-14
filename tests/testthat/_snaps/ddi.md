@@ -10,7 +10,7 @@
 
     Code
       levo_itra_ddi
-    Message
+    Output
       DDI project containing:
       Victim compound:
       * Levonorgestrel 1
