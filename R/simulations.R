@@ -105,11 +105,15 @@ add_simulation <- function(
             formulation_keys <- list("Formulation")
           } else if ("AdvancedProtocol" %in% class(protocol)) {
             # For advanced protocols, get formulation keys from schema items
-            formulation_keys <- unlist(
-              purrr::map(protocol$schemas, \(x) {
-                purrr::map(x$SchemaItems, \(y) y$formulation_key)
-              }),
-              recursive = TRUE
+            formulation_keys <- unique(
+              unlist(
+                purrr::map(protocol$schemas, \(x) {
+                  purrr::map(x$SchemaItems, \(y) {
+                    y$formulation_key
+                  })
+                }),
+                recursive = TRUE
+              )
             )
           } else {
             # Default to Formulation if we can't determine
@@ -139,10 +143,10 @@ add_simulation <- function(
               if (length(formulation_names) != length(formulation_keys)) {
                 cli_abort(c(
                   "Number of formulations doesn't match protocol requirements for compound {.val {compound$Name}}.",
-                  "i" = "Protocol requires {length(formulation_keys)} formulation(s)."
+                  "i" = "Protocol requires {length(formulation_keys)} formulation(s), but {length(formulation_names)} provided."
                 ))
               }
-              # Assign keys in order
+              # Assign keys in order - use the specific keys from the protocol definition
               simulation$compounds[[
                 compound_index
               ]]$Protocol$Formulations <- purrr::map2(
@@ -166,7 +170,7 @@ add_simulation <- function(
               ))
               if (!exists) {
                 cli_abort(
-                  "Formulations `{formulation_name}` not found in snapshot."
+                  "Formulation `{formulation_name}` not found in snapshot."
                 )
               }
             }
@@ -297,6 +301,7 @@ add_simulation <- function(
     )
   }
 
+  snapshot$check_simulation(simulation)
   snapshot$add_simulation(simulation$data)
   invisible(snapshot)
 }
@@ -415,7 +420,9 @@ set_compound_protocol <- function(
   # ensure formulation is given in the correct format if provided
   if (length(formulation) > 0) {
     if (is.character(formulation)) {
-      # Convert character vector to list of formulation specifications with Key/Name format
+      # Convert character vector to list of formulation specifications
+      # For simple protocol or when we don't yet know what keys to use,
+      # just use "Formulation" as the key - the actual keys will be determined in add_simulation
       formulation <- purrr::map(
         formulation,
         \(x) list(Key = "Formulation", Name = x)
@@ -732,6 +739,19 @@ Simulation <- R6::R6Class(
       if (length(compoundIdx) == 0) {
         cli_abort(
           "`compound` not found. Use `add_compound()` to add a new compound."
+        )
+      }
+
+      # If we have multiple formulations, assign sequential keys
+      if (length(formulation) > 1) {
+        # For multiple formulations, use sequential keys like "Formulation 1", "Formulation 2", etc.
+        formulation <- purrr::map2(
+          seq_along(formulation),
+          formulation,
+          function(i, form) {
+            form$Key <- paste("Formulation", i)
+            return(form)
+          }
         )
       }
 

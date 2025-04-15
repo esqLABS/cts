@@ -332,14 +332,13 @@
       * Protocol: LNG_150 ug_21 Days
       * Formulations: Microlut
       * Processes:
-        1. CYP3A4-Levonorgestrel
-        2. P-gp-Levonorgestrel
+        1. CYP3A4-Parameter Identification
       * Interactions:
       Compound: Itraconazole
       * Protocol: ITZ 100mg 21 days
       * Formulations: IR Dissolved
       * Processes:
-        1. CYP3A4-Itraconazole
+        1. CYP3A4-Isoherranen 2004
       * Interactions:
       Output schema:
       * Interval 1
