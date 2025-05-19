@@ -126,7 +126,6 @@ test_that("Adding and removing formulations works", {
     )
   })
 
-
   # Add the formulation to the snapshot
   temp_snap$add_formulation(test_formulation)
 
@@ -290,4 +289,104 @@ test_that("Snapshot print_names method formats output correctly", {
 
   # Restore original events
   temp_snap$events <- original_events
+})
+
+test_that("Creating Snapshot from R list works", {
+  # First create a snapshot from a known source
+  sample_snapshot <- Snapshot$new(rifampicin$source)
+
+  # Extract the source_data list
+  sample_data <- sample_snapshot$source_data
+
+  # Create a new snapshot directly from the list data
+  expect_no_error({
+    list_snapshot <- Snapshot$new(sample_data)
+  })
+
+  # Create a new snapshot and verify it has the same data as the original
+  list_snapshot <- Snapshot$new(sample_data)
+
+  # Check that key properties match
+  expect_equal(list_snapshot$version, sample_snapshot$version)
+  expect_equal(
+    list_snapshot$get_names("compounds"),
+    sample_snapshot$get_names("compounds")
+  )
+  expect_equal(
+    list_snapshot$get_names("formulations"),
+    sample_snapshot$get_names("formulations")
+  )
+  expect_equal(
+    list_snapshot$get_names("protocols"),
+    sample_snapshot$get_names("protocols")
+  )
+
+  # The source should be "R list" for the new snapshot
+  expect_equal(list_snapshot$source, "R list")
+})
+
+test_that("Creating Snapshot from a minimal custom R list works", {
+  # Create a minimal R list that has the required structure
+  minimal_snapshot_data <- list(
+    Version = 80,
+    Compounds = list(),
+    Individuals = list(),
+    Populations = list(),
+    Formulations = list(),
+    Protocols = list(),
+    ExpressionProfiles = list(),
+    ObserverSets = list(),
+    Events = list(),
+    Simulations = list(),
+    ObservedData = list()
+  )
+
+  # Create a snapshot from the minimal list
+  expect_no_error({
+    minimal_snapshot <- Snapshot$new(minimal_snapshot_data)
+  })
+
+  # Verify the snapshot was created correctly
+  minimal_snapshot <- Snapshot$new(minimal_snapshot_data)
+  expect_equal(minimal_snapshot$version, 80)
+  expect_equal(minimal_snapshot$source, "R list")
+  expect_equal(length(minimal_snapshot$compounds), 0)
+  expect_equal(length(minimal_snapshot$formulations), 0)
+  expect_equal(length(minimal_snapshot$protocols), 0)
+
+  # The data method should work properly
+  snapshot_data <- minimal_snapshot$data
+  expect_equal(snapshot_data$Version, 80)
+
+  # Test with only Version and Compounds
+  version_compounds_data <- list(
+    Version = 80,
+    Compounds = list(
+      list(
+        Name = "TestCompound",
+        Processes = list()
+      )
+    )
+  )
+  expect_no_error({
+    vc_snapshot <- Snapshot$new(version_compounds_data)
+  })
+
+  # Verify the snapshot with only Version and Compounds
+  vc_snapshot <- Snapshot$new(version_compounds_data)
+  expect_equal(vc_snapshot$version, 80)
+  expect_equal(vc_snapshot$get_names("compounds"), "TestCompound")
+  expect_equal(length(vc_snapshot$formulations), 0) # Should initialize empty lists for missing fields
+})
+
+test_that("Creating Snapshot fails with invalid input type", {
+  # Test with a numeric input
+  expect_error(Snapshot$new(123), "Invalid input type")
+
+  # Test with NULL
+  expect_error(Snapshot$new(NULL), "Invalid input type")
+
+  # Test with an incomplete list (missing required fields)
+  incomplete_data <- list(Version = 80)
+  expect_error(Snapshot$new(incomplete_data))
 })

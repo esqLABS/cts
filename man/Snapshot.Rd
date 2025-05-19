@@ -88,6 +88,7 @@ Create a Snapshot object.
 \item a compound name from the list of available compounds \code{list_compounds()}.
 \item a URL to a compound building block.
 \item a Path to a local file.
+OR an R list containing snapshot data
 }}
 }
 \if{html}{\out{</div>}}

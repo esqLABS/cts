@@ -19,10 +19,23 @@ Snapshot <- R6::R6Class(
     #' - a compound name from the list of available compounds `list_compounds()`.
     #' - a URL to a compound building block.
     #' - a Path to a local file.
+    #' OR an R list containing snapshot data
     #' @return A new `Snapshot` object.
     initialize = function(input) {
-      self$source <- get_source(input)
-      self$source_data <- private$read_json(self$source)
+      if (is.character(input)) {
+        self$source <- get_source(input)
+        self$source_data <- private$read_json(self$source)
+      } else if (is.list(input)) {
+        self$source <- "R list"
+        self$source_data <- input
+      } else {
+        cli_abort(
+          message = c(
+            x = "Invalid input type.",
+            i = "Please provide a valid compound name, URL, path to a local file, or an R list."
+          )
+        )
+      }
       self$version <- self$source_data$Version
       self$compounds <- self$source_data$Compounds
       self$individuals <- self$source_data$Individuals

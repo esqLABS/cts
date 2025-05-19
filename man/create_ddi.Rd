@@ -10,13 +10,13 @@ create_ddi(victim, ..., options = NULL)
 \item{victim}{The main compound in the DDI interaction, created by \code{compound()},
 mandatory.}
 
-\item{...}{Additional \code{Compounds} objects to be added as perpetrators in the
+\item{...}{(optional) Additional \code{Compounds} objects to be added as perpetrators in the
 DDI interaction,}
 
 \item{options}{a named list of options to customize the DDI simulation. Default is to use \code{default_options}.
 \itemize{
 \item import_simulations: logical, whether to import the simulations from the victim and perpetrators. default is FALSE.
-\item create_ddi_simulation: logical, whether to create a generic simulation template. default is TRUE.
+\item create_ddi_simulation: logical, whether to create a generic simulation template. default is TRUE. Only if perpetrator was provided.
 generic simulation will use:
 \itemize{
 \item the first compound defined as perpetrator,

@@ -1,8 +1,7 @@
 test_that("ddi generic simulation can be run", {
   testthat::skip_on_os("mac")
 
-  expect_snapshot(print(get_test_ddi_results()[[1]], n = Inf))
-
+  expect_snapshot(dplyr::glimpse(get_test_ddi_results()[[1]]))
 })
 
 test_that("run ddi arguments work as expected", {
@@ -80,8 +79,6 @@ test_that("Run added simulations works", {
 
   results <- run_ddi(ddi)
 
-  expect_snapshot(print(results[[1]],n = Inf))
-
-  expect_snapshot(print(results[[2]],n = Inf))
-
+  expect_snapshot(dplyr::glimpse(results[[1]]))
+  expect_snapshot(dplyr::glimpse(results[[2]]))
 })

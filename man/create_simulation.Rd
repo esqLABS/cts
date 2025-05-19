@@ -9,7 +9,7 @@ create_simulation(
   individual = list(),
   population = list(),
   victim,
-  perpetrators
+  perpetrators = NULL
 )
 }
 \arguments{
@@ -21,7 +21,7 @@ create_simulation(
 
 \item{victim}{Name of the victim compound to be used in the simulation}
 
-\item{perpetrators}{Vector of names of the compounds to be used as perpetrators in the simulation}
+\item{perpetrators}{(optional) Vector of names of the compounds to be used as perpetrators in the simulation.}
 }
 \value{
 A \code{Simulation} object
