@@ -85,13 +85,6 @@ test_that("Compounds snapshots are correctly merged when creating a DDI", {
   expect_equal(ddi_merged$simulations, ddi_ref$simulations)
 })
 
-test_that("Generic simulation can be ran", {
-  testthat::skip_on_os("mac")
-  ddi_merged <- suppressWarnings(create_ddi(levonorgestrel, itraconazole))
-
-  expect_no_error(run_ddi(ddi_merged))
-})
-
 
 # test_that("Compound snapshot with different versions can be merged", {
 #   ddi <- create_ddi(itraconazole80, rifampicin)
@@ -99,16 +92,12 @@ test_that("Generic simulation can be ran", {
 #   expect_equal(ddi$data$Version, 80)
 # })
 
-test_that("An error is thrown when victim or perpetrator are missing", {
+test_that("An error is thrown when victim is missing", {
   expect_error(
     create_ddi(victim = NULL, perpetrator = midazolam),
     "At least one victim compound must be provided."
   )
 
-  expect_error(
-    create_ddi(victim = rifampicin),
-    "At least one perpetrator compound must be provided."
-  )
 })
 
 test_that("An error is thrown when victim is not length 1", {

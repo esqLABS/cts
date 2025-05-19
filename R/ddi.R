@@ -1,198 +1,4 @@
-#' Create a Drug-Drug Interaction (DDI) Simulation
-#'
-#' This function creates a DDI simulation by combining a main compound (victim)
-#' with one or more additional compounds (perpetrators).
-#'
-#' @param victim The main compound in the DDI interaction, created by `compound()`,
-#'  mandatory.
-#' @param ... Additional `Compounds` objects to be added as perpetrators in the
-#' DDI interaction,
-#'
-#' @param options a named list of options to customize the DDI simulation. Default is to use `default_options`.
-#'   - import_simulations: logical, whether to import the simulations from the victim and perpetrators. default is FALSE.
-#'   - create_ddi_simulation: logical, whether to create a generic simulation template. default is TRUE.
-#'      generic simulation will use:
-#'        - the first compound defined as perpetrator,
-#'        - the first protocol of the victim and perpetrator compounds,
-#'        - the first formulation of the victim and perpetrator compounds,
-#'        - the first individual defined in victim compounds.
-#'
-#' @return a Drug-Drug Interaction (DDI) simulation object
-#' @export
-#'
-#' @examples
-#' # Create compounds
-#' midazolam <- compound("Midazolam")
-#' itraconazole <- compound("Itraconazole")
-#'
-#' # Create a basic DDI simulation
-#' ddi <- create_ddi(victim = midazolam, itraconazole)
-#'
-#' # Create a DDI with custom options
-#' ddi_custom <- create_ddi(
-#'   victim = midazolam,
-#'   itraconazole,
-#'   options = list(
-#'     import_simulations = TRUE,
-#'     create_ddi_simulation = FALSE
-#'   )
-#' )
-#'
-#' # Create a DDI with multiple perpetrators
-#' rifampicin <- compound("Rifampicin")
-#'
-#' \dontrun{
-#' ddi_multi <- create_ddi(victim = midazolam, itraconazole, rifampicin)
-#' }
-create_ddi <- function(victim, ..., options = NULL) {
-  if (is.null(victim)) {
-    cli::cli_abort("At least one victim compound must be provided.")
-  }
-
-  perpetrators <- c(...)
-
-  if (length(perpetrators) == 0) {
-    cli::cli_abort("At least one perpetrator compound must be provided.")
-  }
-  if (length(to_list(victim)) > 1) {
-    cli::cli_abort("Please provide exactly one victim compound.")
-  }
-
-  ddi <- DDI$new(victim = victim, perpetrators, options = options)
-
-  ddi
-}
-
-#' Import Drug-Drug Interaction (DDI) Simulation from Snapshot
-#'
-#' @inheritParams get_source
-#'
-#' @return a DDI object
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' import_ddi("Rifampicin-Midazolam-DDI.json")
-#' }
-import_ddi <- function(input) {
-  ddi <- DDI$new(file = input)
-  ddi
-}
-
-#' Export Drug-Drug Interaction (DDI) Simulation to Snapshot
-#' @param ddi a DDI object
-#' @param path a character string that is the path to the snapshot
-#' @export
-#' @examples
-#'
-#' # Create compounds
-#' midazolam <- compound("Midazolam")
-#' itraconazole <- compound("Itraconazole")
-#'
-#' # Create a DDI simulation
-#' ddi <- create_ddi(victim = midazolam, itraconazole)
-#'
-#' # Export to a temporary file
-#' temp_file <- tempfile(fileext = ".json")
-#' export_ddi(ddi, temp_file)
-#'
-#' # Verify the file was created
-#' file.exists(temp_file)
-export_ddi <- function(ddi, path) {
-  path <- with_json_suffix(path)
-  ddi$export(path)
-}
-
-#' Run Drug-Drug Interaction (DDI) Simulations defined in the ddi project
-#' @param ddi a DDI object
-#' @param path a character string representing the path to where to save
-#' simulations results. Default is NULL. If not NULL, will save the simulation
-#' results as .csv files at provided location.
-#' @param exportPKML logical. Whether to export the PKML files. Default is FALSE.
-#' @export
-#' @examples
-#' # Create compounds
-#' midazolam <- compound("Midazolam")
-#' itraconazole <- compound("Itraconazole")
-#'
-#' # Create a DDI simulation
-#' ddi <- create_ddi(victim = midazolam, itraconazole)
-#'
-#' \dontrun{
-#' # Run simulations without saving results
-#' results <- run_ddi(ddi)
-#'
-#' # Run simulations and save results to a directory
-#' results <- run_ddi(ddi, path = "simulation_results")
-#'
-#' # Run simulations and export PKML files
-#' results <- run_ddi(ddi, path = "simulation_results", exportPKML = TRUE)
-#' }
-run_ddi <- function(ddi, path = NULL, exportPKML = FALSE) {
-  ddi$run_simulations(path, exportPKML)
-  return(ddi$simulation_results)
-}
-
-#' Run Pk-Analysis for DDI simulations defined in the ddi project
-#' @param ddi a DDI object
-#' @param path a character string representing the folder where to save
-#' pk analysis results. Default is NULL. If not NULL, will save the pk analysis
-#' results as .csv files at provided location. If the folder does not exist, it
-#' will be created.
-#' @export
-#' @examples
-#' # Create compounds
-#' midazolam <- compound("Midazolam")
-#' itraconazole <- compound("Itraconazole")
-#'
-#' # Create a DDI simulation
-#' ddi <- create_ddi(victim = midazolam, itraconazole)
-#'
-#' \dontrun{
-#' # Run PK analysis without saving results
-#' pk_results <- run_pk_analysis(ddi)
-#'
-#' # Run PK analysis and save results to a directory
-#' pk_results <- run_pk_analysis(ddi, path = "pk_analysis_results")
-#' }
-run_pk_analysis <- function(ddi, path = NULL) {
-  ddi$run_pk_analysis(path)
-  return(ddi$pk_analysis_results)
-}
-
-#' Plot DDI simulations defined in the ddi project
-#' @param ddi a DDI object
-#' @param simulationNames a character vector of simulation names for which to generate plots.
-#' Default is NULL, i.e. plots will be generated for all simulations.
-#' @param ... additional arguments to pass to the plotPopulationTimeProfile (for example aggregation method)
-#' @return a list of plots
-#' @export
-#' @examples
-#' # Create compounds
-#' midazolam <- compound("Midazolam")
-#' itraconazole <- compound("Itraconazole")
-#'
-#' # Create a DDI simulation
-#' ddi <- create_ddi(victim = midazolam, itraconazole)
-#'
-#' # Plot all simulation results
-#' \dontrun{
-#' plots <- plot_ddi_results(ddi)
-#' }
-plot_ddi_results <- function(ddi, simulationNames = NULL, ...) {
-  ddi$create_plots(...)
-  # By default return all simulations plots
-  if (is.null(simulationNames)) {
-    return(ddi$plots)
-  } else {
-    if (any(!simulationNames %in% ddi$get_names("simulations"))) {
-      cli::cli_alert_warning(
-        "Some simulation names are not found in the DDI project. Returning only found simulations."
-      )
-    }
-    return(purrr::compact(ddi$plots[simulationNames]))
-  }
-}
+# DDI object definition ---------------------------------------------------
 
 #' R6 Class Representing a DDI Snapshot
 #'
@@ -344,17 +150,21 @@ DDI <- R6::R6Class(
       self$version <- unique(map_int(snapshots, ~ .x$version))
 
       self$metadata$protocols$victim <- snapshots[[1]]$get_names("protocols")
-      self$metadata$protocols$perpetrators <- list_c(purrr::map(
-        snapshots[-1],
-        ~ .x$get_names("protocols")
-      ))
       self$metadata$formulations$victim <- snapshots[[1]]$get_names(
         "formulations"
       )
-      self$metadata$formulations$perpetrators <- list_c(purrr::map(
-        snapshots[-1],
-        ~ .x$get_names("formulations")
-      ))
+
+      if (length(snapshots) > 1) {
+        self$metadata$protocols$perpetrators <- list_c(purrr::map(
+          snapshots[-1],
+          ~ .x$get_names("protocols")
+        ))
+
+        self$metadata$formulations$perpetrators <- list_c(purrr::map(
+          snapshots[-1],
+          ~ .x$get_names("formulations")
+        ))
+      }
 
       sections_to_merge <- c(
         "compounds",
@@ -396,7 +206,7 @@ DDI <- R6::R6Class(
         self[[s]] <- section_unique
       })
 
-      if (self$options$create_ddi_simulation) {
+      if (self$options$create_ddi_simulation & length(snapshots) > 1) {
         # Set simulated time to maximum protocol duration + 1 day
         protocols <- purrr::keep(
           self$protocols,
@@ -467,8 +277,205 @@ DDI <- R6::R6Class(
   )
 )
 
+
 default_options <-
   list(
     import_simulations = FALSE,
     create_ddi_simulation = TRUE
   )
+
+
+# User Functions ----------------------------------------------------------
+
+#' Create a Drug-Drug Interaction (DDI) Simulation
+#'
+#' This function creates a DDI simulation by combining a main compound (victim)
+#' with one or more additional compounds (perpetrators).
+#'
+#' @param victim The main compound in the DDI interaction, created by `compound()`,
+#'  mandatory.
+#' @param ... (optional) Additional `Compounds` objects to be added as perpetrators in the
+#' DDI interaction,
+#'
+#' @param options a named list of options to customize the DDI simulation. Default is to use `default_options`.
+#'   - import_simulations: logical, whether to import the simulations from the victim and perpetrators. default is FALSE.
+#'   - create_ddi_simulation: logical, whether to create a generic simulation template. default is TRUE. Only if perpetrator was provided.
+#'      generic simulation will use:
+#'        - the first compound defined as perpetrator,
+#'        - the first protocol of the victim and perpetrator compounds,
+#'        - the first formulation of the victim and perpetrator compounds,
+#'        - the first individual defined in victim compounds.
+#'
+#' @return a Drug-Drug Interaction (DDI) simulation object
+#' @export
+#'
+#' @examples
+#' # Create compounds
+#' midazolam <- compound("Midazolam")
+#' itraconazole <- compound("Itraconazole")
+#'
+#' # Create a basic DDI simulation
+#' ddi <- create_ddi(victim = midazolam, itraconazole)
+#'
+#' # Create a DDI with custom options
+#' ddi_custom <- create_ddi(
+#'   victim = midazolam,
+#'   itraconazole,
+#'   options = list(
+#'     import_simulations = TRUE,
+#'     create_ddi_simulation = FALSE
+#'   )
+#' )
+#'
+#' # Create a DDI with multiple perpetrators
+#' rifampicin <- compound("Rifampicin")
+#'
+#' \dontrun{
+#' ddi_multi <- create_ddi(victim = midazolam, itraconazole, rifampicin)
+#' }
+create_ddi <- function(victim, ..., options = NULL) {
+  if (is.null(victim)) {
+    cli::cli_abort("At least one victim compound must be provided.")
+  }
+
+  perpetrators <- c(...)
+
+  if (length(to_list(victim)) > 1) {
+    cli::cli_abort("Please provide exactly one victim compound.")
+  }
+
+  ddi <- DDI$new(victim = victim, perpetrators, options = options)
+
+  ddi
+}
+
+#' Import Drug-Drug Interaction (DDI) Simulation from Snapshot
+#'
+#' @inheritParams get_source
+#'
+#' @return a DDI object
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' import_ddi("Rifampicin-Midazolam-DDI.json")
+#' }
+import_ddi <- function(input) {
+  ddi <- DDI$new(file = input)
+  ddi
+}
+
+#' Export Drug-Drug Interaction (DDI) Simulation to Snapshot
+#' @param ddi a DDI object
+#' @param path a character string that is the path to the snapshot
+#' @export
+#' @examples
+#'
+#' # Create compounds
+#' midazolam <- compound("Midazolam")
+#' itraconazole <- compound("Itraconazole")
+#'
+#' # Create a DDI simulation
+#' ddi <- create_ddi(victim = midazolam, itraconazole)
+#'
+#' # Export to a temporary file
+#' temp_file <- tempfile(fileext = ".json")
+#' export_ddi(ddi, temp_file)
+#'
+#' # Verify the file was created
+#' file.exists(temp_file)
+export_ddi <- function(ddi, path) {
+  path <- with_json_suffix(path)
+  ddi$export(path)
+}
+
+#' Run Drug-Drug Interaction (DDI) Simulations defined in the ddi project
+#' @param ddi a DDI object
+#' @param path a character string representing the path to where to save
+#' simulations results. Default is NULL. If not NULL, will save the simulation
+#' results as .csv files at provided location.
+#' @param exportPKML logical. Whether to export the PKML files. Default is FALSE.
+#' @export
+#' @examples
+#' # Create compounds
+#' midazolam <- compound("Midazolam")
+#' itraconazole <- compound("Itraconazole")
+#'
+#' # Create a DDI simulation
+#' ddi <- create_ddi(victim = midazolam, itraconazole)
+#'
+#' \dontrun{
+#' # Run simulations without saving results
+#' results <- run_ddi(ddi)
+#'
+#' # Run simulations and save results to a directory
+#' results <- run_ddi(ddi, path = "simulation_results")
+#'
+#' # Run simulations and export PKML files
+#' results <- run_ddi(ddi, path = "simulation_results", exportPKML = TRUE)
+#' }
+run_ddi <- function(ddi, path = NULL, exportPKML = FALSE) {
+  ddi$run_simulations(path, exportPKML)
+  return(ddi$simulation_results)
+}
+
+#' Run Pk-Analysis for DDI simulations defined in the ddi project
+#' @param ddi a DDI object
+#' @param path a character string representing the folder where to save
+#' pk analysis results. Default is NULL. If not NULL, will save the pk analysis
+#' results as .csv files at provided location. If the folder does not exist, it
+#' will be created.
+#' @export
+#' @examples
+#' # Create compounds
+#' midazolam <- compound("Midazolam")
+#' itraconazole <- compound("Itraconazole")
+#'
+#' # Create a DDI simulation
+#' ddi <- create_ddi(victim = midazolam, itraconazole)
+#'
+#' \dontrun{
+#' # Run PK analysis without saving results
+#' pk_results <- run_pk_analysis(ddi)
+#'
+#' # Run PK analysis and save results to a directory
+#' pk_results <- run_pk_analysis(ddi, path = "pk_analysis_results")
+#' }
+run_pk_analysis <- function(ddi, path = NULL) {
+  ddi$run_pk_analysis(path)
+  return(ddi$pk_analysis_results)
+}
+
+#' Plot DDI simulations defined in the ddi project
+#' @param ddi a DDI object
+#' @param simulationNames a character vector of simulation names for which to generate plots.
+#' Default is NULL, i.e. plots will be generated for all simulations.
+#' @param ... additional arguments to pass to the plotPopulationTimeProfile (for example aggregation method)
+#' @return a list of plots
+#' @export
+#' @examples
+#' # Create compounds
+#' midazolam <- compound("Midazolam")
+#' itraconazole <- compound("Itraconazole")
+#'
+#' # Create a DDI simulation
+#' ddi <- create_ddi(victim = midazolam, itraconazole)
+#'
+#' # Plot all simulation results
+#' \dontrun{
+#' plots <- plot_ddi_results(ddi)
+#' }
+plot_ddi_results <- function(ddi, simulationNames = NULL, ...) {
+  ddi$create_plots(...)
+  # By default return all simulations plots
+  if (is.null(simulationNames)) {
+    return(ddi$plots)
+  } else {
+    if (any(!simulationNames %in% ddi$get_names("simulations"))) {
+      cli::cli_alert_warning(
+        "Some simulation names are not found in the DDI project. Returning only found simulations."
+      )
+    }
+    return(purrr::compact(ddi$plots[simulationNames]))
+  }
+}

@@ -11,11 +11,6 @@
       * Processes:
       * Interactions:
       Compound: Itraconazole
-      * Protocol:
-      * Formulations:
-      * Processes:
-      * Interactions:
-      Compound: Test compound 2
       * Protocol: New protocol
       * Formulations:
       * Processes:
@@ -370,6 +365,78 @@
         * End time: 24 h
         * Resolution: 4 pts/h
       Outputs:
+
+# Add a valid simulation works
+
+    Code
+      my_sim
+    Output
+      Simulation name: Test
+      Individual: Woman
+      Compound: Levonorgestrel 1
+      * Protocol: LNG_150 ug_21 Days
+      * Formulations: Microlut
+      * Processes:
+        1. Total Hepatic Clearance-Parameter identification
+        2. CYP3A4-Parameter Identification
+        3. SHBG-Qi-Gui & Humpel 1990
+        4. ALB-Bayer report
+      * Interactions:
+      Compound: Itraconazole
+      * Protocol: ITZ 100mg 21 days
+      * Formulations: IR Dissolved
+      * Processes:
+        1. Glomerular Filtration-GFR
+        2. CYP3A4-Isoherranen 2004
+      * Interactions:
+        1. CYP3A4-Isoherranen, 2004
+        2. ABCB1-Shityakov 2014
+      Output schema:
+      * Interval 1
+        * Start time: 0 h
+        * End time: 24 h
+        * Resolution: 4 pts/h
+      Outputs:
+
+---
+
+    Code
+      my_sim2
+    Output
+      Simulation name: Test 2
+      Individual: Woman
+      Compound: Levonorgestrel 1
+      * Protocol: LNG_150 ug_21 Days
+      * Formulations: Microlut
+      * Processes:
+        1. Total Hepatic Clearance-Parameter identification
+        2. CYP3A4-Parameter Identification
+        3. SHBG-Qi-Gui & Humpel 1990
+        4. ALB-Bayer report
+      * Interactions:
+      Output schema:
+      * Interval 1
+        * Start time: 0 h
+        * End time: 24 h
+        * Resolution: 4 pts/h
+      Outputs:
+
+---
+
+    Code
+      ddi
+    Output
+      DDI project containing:
+      Victim compound:
+      * Levonorgestrel 1
+      Perpetrator compounds:
+      * Itraconazole
+      * Hydroxy-Itraconazole
+      * Keto-Itraconazole
+      * N-desalkyl-Itraconazole
+      Simulations:
+      * Test
+      * Test 2
 
 # Add simulation without compound protocol works
 

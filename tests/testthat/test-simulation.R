@@ -5,6 +5,14 @@ test_that("Simulation can be initialized.", {
     create_simulation(
       simulation_name = "Test",
       victim = "Levonorgestrel 1",
+      individual = "Woman"
+    )
+  )
+
+  expect_no_message(
+    create_simulation(
+      simulation_name = "Test",
+      victim = "Levonorgestrel 1",
       perpetrators = "Itraconazole",
       individual = "Woman"
     )
@@ -17,11 +25,10 @@ test_that("`add_compound` can add compounds to the simulation.", {
   my_sim <- create_simulation(
     simulation_name = "Test",
     victim = "Levonorgestrel 1",
-    perpetrators = "Itraconazole",
     individual = "Woman"
   )
   expect_no_message(my_sim$add_compound(
-    compound = "Test compound 2",
+    compound = "Itraconazole",
     protocol = "New protocol"
   ))
   expect_snapshot(my_sim)
@@ -618,7 +625,7 @@ test_that("Add a valid simulation works", {
   remove_simulation(ddi, sim_to_remove)
 
   my_sim <- create_simulation(
-    simulation_name = "Test8",
+    simulation_name = "Test",
     victim = "Levonorgestrel 1",
     perpetrators = "Itraconazole",
     individual = "Woman"
@@ -636,11 +643,43 @@ test_that("Add a valid simulation works", {
     formulation = "IR Dissolved"
   )
 
-  expect_no_message(add_simulation(
-    ddi,
-    my_sim,
-    options = list(add_interactions = FALSE, add_processes = FALSE)
-  ))
+  # Add a simulation with only victim
+  my_sim2 <- create_simulation(
+    simulation_name = "Test 2",
+    victim = "Levonorgestrel 1",
+    individual = "Woman"
+  )
+
+  set_compound_protocol(
+    my_sim2,
+    compound = "Levonorgestrel 1",
+    protocol = "LNG_150 ug_21 Days",
+    formulation = "Microlut"
+  )
+
+  expect_no_message(
+    suppressWarnings(
+      add_simulation(
+        ddi,
+        my_sim,
+        options = list(add_interactions = TRUE, add_processes = TRUE)
+      )
+    )
+  )
+
+  expect_no_message(
+    suppressWarnings(
+      add_simulation(
+        ddi,
+        my_sim2,
+        options = list(add_interactions = TRUE, add_processes = TRUE)
+      )
+    )
+  )
+
+  expect_snapshot(my_sim)
+  expect_snapshot(my_sim2)
+  expect_snapshot(ddi)
 })
 
 test_that("Add simulation without compound protocol works", {
@@ -654,11 +693,13 @@ test_that("Add simulation without compound protocol works", {
     perpetrators = "Itraconazole",
     individual = "Woman"
   )
-  expect_no_message(add_simulation(
-    ddi,
-    my_sim,
-    options = list(add_interactions = FALSE, add_processes = FALSE)
-  ))
+  expect_no_message(
+    add_simulation(
+      ddi,
+      my_sim,
+      options = list(add_interactions = FALSE, add_processes = FALSE)
+    )
+  )
   expect_snapshot(my_sim)
 })
 

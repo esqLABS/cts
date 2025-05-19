@@ -119,10 +119,13 @@ test_that("Adding and removing formulations works", {
   original_formulations <- temp_snap$get_names("formulations")
 
   # Create a new formulation with required parameters
-  test_formulation <- Formulation$new(
-    name = "TestFormulation",
-    type = "weibull"
-  )
+  suppressWarnings({
+    test_formulation <- Formulation$new(
+      name = "TestFormulation",
+      type = "weibull"
+    )
+  })
+
 
   # Add the formulation to the snapshot
   temp_snap$add_formulation(test_formulation)

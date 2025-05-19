@@ -8,7 +8,7 @@
 #' @param individual Name of the individual to be used in the simulation.
 #' @param population Name of the population to be used in the simulation.
 #' @param victim Name of the victim compound to be used in the simulation
-#' @param perpetrators Vector of names of the compounds to be used as perpetrators in the simulation
+#' @param perpetrators (optional) Vector of names of the compounds to be used as perpetrators in the simulation.
 #' @details Protocols used by each compounds need to be defined afterwards with set_compound_protocol().
 #' New compound can also be added afterwards with add_compound(). Either individual or population should
 #' be set, but not both.
@@ -35,7 +35,7 @@ create_simulation <- function(
   individual = list(),
   population = list(),
   victim,
-  perpetrators
+  perpetrators = NULL
 ) {
   # Combine Compound, Protocol and Formulation
   sim <- Simulation$new(

@@ -23,8 +23,16 @@ try(
 get_test_ddi <- function() {
   if (is.null(the$.test_ddi)) {
     the$.test_ddi <- suppressWarnings(create_ddi(levonorgestrel, itraconazole))
-    run_ddi(the$.test_ddi)
+    the$.test_ddi_results <- run_ddi(the$.test_ddi)
   }
 
   return(the$.test_ddi$clone())
+}
+
+get_test_ddi_results <- function() {
+  if (is.null(the$.test_ddi_results)){
+    get_test_ddi()
+  }
+
+  return(the$.test_ddi_results)
 }
