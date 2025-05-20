@@ -462,6 +462,30 @@
         * Resolution: 4 pts/h
       Outputs:
 
+---
+
+    Code
+      my_sim
+    Output
+      Simulation name: Test
+      Individual: Woman
+      Compound: Levonorgestrel 1
+      * Protocol:
+      * Formulations:
+      * Processes:
+      * Interactions:
+      Compound: Itraconazole
+      * Protocol:
+      * Formulations:
+      * Processes:
+      * Interactions:
+      Output schema:
+      * Interval 1
+        * Start time: 0 h
+        * End time: 24 h
+        * Resolution: 4 pts/h
+      Outputs:
+
 # Add a simulation with an unknown population throws an error
 
     Code

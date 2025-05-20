@@ -629,15 +629,13 @@ test_that("Add a valid simulation works", {
     victim = "Levonorgestrel 1",
     perpetrators = "Itraconazole",
     individual = "Woman"
-  )
+  ) |>
   set_compound_protocol(
-    my_sim,
     compound = "Levonorgestrel 1",
     protocol = "LNG_150 ug_21 Days",
     formulation = "Microlut"
-  )
+  ) |>
   set_compound_protocol(
-    my_sim,
     compound = "Itraconazole",
     protocol = "ITZ 100mg 21 days",
     formulation = "IR Dissolved"
@@ -648,10 +646,8 @@ test_that("Add a valid simulation works", {
     simulation_name = "Test 2",
     victim = "Levonorgestrel 1",
     individual = "Woman"
-  )
-
-  set_compound_protocol(
-    my_sim2,
+  ) |>
+    set_compound_protocol(
     compound = "Levonorgestrel 1",
     protocol = "LNG_150 ug_21 Days",
     formulation = "Microlut"
@@ -681,6 +677,8 @@ test_that("Add a valid simulation works", {
   expect_snapshot(my_sim2)
   expect_snapshot(ddi)
 })
+
+
 
 test_that("Add simulation without compound protocol works", {
   ddi <- levo_itra_ddi$clone()

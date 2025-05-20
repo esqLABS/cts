@@ -2,10 +2,6 @@
 
     Code
       dplyr::glimpse(get_test_ddi_results()[[1]])
-    Message
-      i Running simulations from 1 snapshot
-      v Simulations completed
-      
     Output
       Rows: 13,254
       Columns: 9

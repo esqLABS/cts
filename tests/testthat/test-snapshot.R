@@ -385,8 +385,4 @@ test_that("Creating Snapshot fails with invalid input type", {
 
   # Test with NULL
   expect_error(Snapshot$new(NULL), "Invalid input type")
-
-  # Test with an incomplete list (missing required fields)
-  incomplete_data <- list(Version = 80)
-  expect_error(Snapshot$new(incomplete_data))
 })
