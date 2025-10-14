@@ -14,6 +14,8 @@
 #'  - 6-6-12
 #' @param dose a numeric value representing the dose.
 #' @param dose_unit a character string representing the dose unit. Default is "mg".
+#' @param start_time a numeric value representing the start time of the protocol. Default is 0.
+#' @param start_time_unit a character string representing the start time unit. Default is "h".
 #' @param end_time a numeric value representing the end time of the protocol. Default is 24.
 #' @param end_time_unit a character string representing the end time unit. Default is "h".
 #' @param ... additional parameters that depends on the `type` of administration:
@@ -52,6 +54,8 @@ create_protocol <- function(
     interval,
     dose,
     dose_unit = "mg",
+    start_time = 0,
+    start_time_unit = "h",
     end_time = 24,
     end_time_unit = "h",
     ...) {
@@ -61,6 +65,8 @@ create_protocol <- function(
     interval,
     dose,
     dose_unit = dose_unit,
+    start_time = start_time,
+    start_time_unit = start_time_unit,
     end_time = end_time,
     end_time_unit = end_time_unit,
     ...
@@ -150,6 +156,8 @@ Protocol <- R6::R6Class(
                           interval,
                           dose,
                           dose_unit = "mg",
+                          start_time = 0,
+                          start_time_unit = "h",
                           end_time = 24,
                           end_time_unit = "h",
                           ...) {
@@ -162,6 +170,8 @@ Protocol <- R6::R6Class(
       self$interval <- interval
       self$dose <- dose
       self$dose_unit <- dose_unit
+      self$start_time <- start_time
+      self$start_time_unit <- start_time_unit
       self$end_time <- end_time
       self$end_time_unit <- end_time_unit
 
@@ -197,6 +207,11 @@ Protocol <- R6::R6Class(
       if (!is.null(self$infusion_time) & is.null(self$infusion_time_unit)) {
         self$infusion_time_unit <- "min"
       }
+      
+      # Validate that end_time is after start_time for non-single protocols
+      if (self$interval != "single") {
+        private$.validate_time_order()
+      }
     },
     format_method = function(advanced = FALSE) {
       cli::cli({
@@ -210,6 +225,10 @@ Protocol <- R6::R6Class(
           }
         }
         cli_li("Dose: {self$dose} {self$dose_unit}")
+        if (!(self$start_time == 0 & self$start_time_unit == "h")) {
+          cli_li("Start Time: {self$start_time} {self$start_time_unit}")
+        }
+        # Always show end time for non-single doses
         if (self$interval != "single") {
           cli_li("End Time: {self$end_time} {self$end_time_unit}")
         }
@@ -235,13 +254,45 @@ Protocol <- R6::R6Class(
     .interval = NULL,
     .dose = NULL,
     .dose_unit = NULL,
+    .start_time = NULL,
+    .start_time_unit = NULL,
     .end_time = NULL,
     .end_time_unit = NULL,
     .infusion_time = NULL,
     .infusion_time_unit = NULL,
     .water_vol_per_body_weight = NULL,
     .water_vol_per_body_weight_unit = NULL,
-    .formulation_key = NULL
+    .formulation_key = NULL,
+    # Validate that end_time is after start_time
+    .validate_time_order = function() {
+      if (is.null(private$.start_time) || is.null(private$.end_time) ||
+          is.null(private$.start_time_unit) || is.null(private$.end_time_unit)) {
+        return(invisible(NULL))
+      }
+      
+      # Convert both times to hours for comparison
+      start_in_hours <- ospsuite::toUnit(
+        quantityOrDimension = "Time",
+        values = private$.start_time,
+        sourceUnit = private$.start_time_unit,
+        targetUnit = "h"
+      )
+      
+      end_in_hours <- ospsuite::toUnit(
+        quantityOrDimension = "Time",
+        values = private$.end_time,
+        sourceUnit = private$.end_time_unit,
+        targetUnit = "h"
+      )
+      
+      if (end_in_hours <= start_in_hours) {
+        cli::cli_abort(c(
+          "x" = "End time must be after start time.",
+          "i" = "Start time: {private$.start_time} {private$.start_time_unit} ({round(start_in_hours, 2)} h)",
+          "i" = "End time: {private$.end_time} {private$.end_time_unit} ({round(end_in_hours, 2)} h)"
+        ))
+      }
+    }
   ),
   active = list(
     data = function() {
@@ -253,8 +304,8 @@ Protocol <- R6::R6Class(
         Parameters = list(
           list(
             Name = "Start time",
-            Value = 0,
-            Unit = "h"
+            Value = self$start_time,
+            Unit = self$start_time_unit
           ),
           list(
             Name = "InputDose",
@@ -356,12 +407,79 @@ Protocol <- R6::R6Class(
 
       return(private$.dose_unit)
     },
+    start_time = function(value) {
+      if (!missing(value)) {
+        if (!is.numeric(value)) {
+          cli::cli_abort(c("x" = "start_time should be numeric value."))
+        }
+        # Validate time order BEFORE setting for non-single protocols
+        if (!is.null(self$interval) && self$interval != "single") {
+          # Temporarily store old value
+          old_value <- private$.start_time
+          private$.start_time <- value
+          # Validate, and restore if it fails
+          tryCatch(
+            private$.validate_time_order(),
+            error = function(e) {
+              private$.start_time <- old_value
+              stop(e)
+            }
+          )
+        } else {
+          private$.start_time <- value
+        }
+      }
+
+      return(private$.start_time)
+    },
+    start_time_unit = function(value) {
+      if (!missing(value)) {
+        rlang::arg_match(
+          value,
+          values = unlist(ospsuite::ospUnits$Time),
+          error_arg = "start_time_unit"
+        )
+        # Validate time order BEFORE setting for non-single protocols
+        if (!is.null(self$interval) && self$interval != "single") {
+          # Temporarily store old value
+          old_value <- private$.start_time_unit
+          private$.start_time_unit <- value
+          # Validate, and restore if it fails
+          tryCatch(
+            private$.validate_time_order(),
+            error = function(e) {
+              private$.start_time_unit <- old_value
+              stop(e)
+            }
+          )
+        } else {
+          private$.start_time_unit <- value
+        }
+      }
+
+      return(private$.start_time_unit)
+    },
     end_time = function(value) {
       if (!missing(value)) {
         if (!is.numeric(value)) {
           cli::cli_abort(c("x" = "end_time should be numeric value."))
         }
-        private$.end_time <- value
+        # Validate time order BEFORE setting for non-single protocols
+        if (!is.null(self$interval) && self$interval != "single") {
+          # Temporarily store old value
+          old_value <- private$.end_time
+          private$.end_time <- value
+          # Validate, and restore if it fails
+          tryCatch(
+            private$.validate_time_order(),
+            error = function(e) {
+              private$.end_time <- old_value
+              stop(e)
+            }
+          )
+        } else {
+          private$.end_time <- value
+        }
       }
 
       return(private$.end_time)
@@ -373,7 +491,22 @@ Protocol <- R6::R6Class(
           values = unlist(ospsuite::ospUnits$Time),
           error_arg = "end_time_unit"
         )
-        private$.end_time_unit <- value
+        # Validate time order BEFORE setting for non-single protocols
+        if (!is.null(self$interval) && self$interval != "single") {
+          # Temporarily store old value
+          old_value <- private$.end_time_unit
+          private$.end_time_unit <- value
+          # Validate, and restore if it fails
+          tryCatch(
+            private$.validate_time_order(),
+            error = function(e) {
+              private$.end_time_unit <- old_value
+              stop(e)
+            }
+          )
+        } else {
+          private$.end_time_unit <- value
+        }
       }
 
       return(private$.end_time_unit)

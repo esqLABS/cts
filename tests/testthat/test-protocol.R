@@ -347,3 +347,234 @@ test_that("Protocol with default values formats correctly", {
   expect_equal(end_time_param$Value, 48)
   expect_equal(end_time_param$Unit, "h")
 })
+
+test_that("Protocol supports custom start_time", {
+  # Create a protocol with default start time
+  protocol_default <- create_protocol(
+    name = "Default Start",
+    type = "oral",
+    interval = "single",
+    dose = 100
+  )
+
+  # Check default start time
+  expect_equal(protocol_default$start_time, 0)
+  expect_equal(protocol_default$start_time_unit, "h")
+
+  # Create a protocol with custom start time
+  protocol_custom <- create_protocol(
+    name = "Custom Start",
+    type = "oral",
+    interval = "24",
+    dose = 100,
+    start_time = 24,
+    start_time_unit = "h",
+    end_time = 72,
+    end_time_unit = "h"
+  )
+
+  # Check custom start time
+  expect_equal(protocol_custom$start_time, 24)
+  expect_equal(protocol_custom$start_time_unit, "h")
+})
+
+test_that("Protocol start_time appears in data structure", {
+  # Create a protocol with custom start time
+  protocol <- create_protocol(
+    name = "Delayed Protocol",
+    type = "iv",
+    interval = "single",
+    dose = 200,
+    start_time = 48,
+    start_time_unit = "h"
+  )
+
+  # Get data representation
+  data <- protocol$data
+
+  # Check start time is in parameters
+  param_names <- sapply(data$Parameters, function(p) p$Name)
+  expect_true("Start time" %in% param_names)
+
+  # Find the start time parameter
+  start_time_param <- data$Parameters[sapply(
+    data$Parameters,
+    function(p) p$Name == "Start time"
+  )][[1]]
+  expect_equal(start_time_param$Value, 48)
+  expect_equal(start_time_param$Unit, "h")
+})
+
+test_that("Protocol start_time setters and getters work correctly", {
+  # Create a protocol
+  protocol <- create_protocol(
+    name = "Test Protocol",
+    type = "oral",
+    interval = "24",
+    dose = 500
+  )
+
+  # Test start_time setter
+  protocol$start_time <- 12
+  expect_equal(protocol$start_time, 12)
+
+  # Test start_time validation
+  expect_error(protocol$start_time <- "not a number")
+
+  # Test start_time_unit setter
+  protocol$start_time_unit <- "min"
+  expect_equal(protocol$start_time_unit, "min")
+
+  # Test start_time_unit validation
+  expect_error(protocol$start_time_unit <- "invalid_unit")
+})
+
+test_that("Protocol start_time with different units", {
+  # Create a protocol with start time in minutes
+  protocol_min <- create_protocol(
+    name = "Start in Minutes",
+    type = "ivb",
+    interval = "single",
+    dose = 100,
+    start_time = 30,
+    start_time_unit = "min"
+  )
+
+  expect_equal(protocol_min$start_time, 30)
+  expect_equal(protocol_min$start_time_unit, "min")
+
+  # Check it appears correctly in data
+  data <- protocol_min$data
+  start_time_param <- data$Parameters[sapply(
+    data$Parameters,
+    function(p) p$Name == "Start time"
+  )][[1]]
+  expect_equal(start_time_param$Value, 30)
+  expect_equal(start_time_param$Unit, "min")
+})
+
+test_that("Protocol with non-default start_time prints correctly", {
+  # Create a protocol with custom start time
+  protocol <- create_protocol(
+    name = "Delayed Start Protocol",
+    type = "oral",
+    interval = "24",
+    dose = 500,
+    start_time = 192,
+    start_time_unit = "h",
+    end_time = 216,
+    end_time_unit = "h"
+  )
+
+  # Test that print produces expected output using snapshot
+  expect_snapshot(protocol)
+})
+
+test_that("Protocol validates that end_time is after start_time", {
+  # Should error when end_time is before start_time
+  expect_error(
+    create_protocol(
+      name = "Invalid Protocol",
+      type = "oral",
+      interval = "24",
+      dose = 500,
+      start_time = 48,
+      start_time_unit = "h",
+      end_time = 24,
+      end_time_unit = "h"
+    ),
+    "End time must be after start time"
+  )
+
+  # Should error when end_time equals start_time
+  expect_error(
+    create_protocol(
+      name = "Invalid Protocol 2",
+      type = "oral",
+      interval = "24",
+      dose = 500,
+      start_time = 24,
+      start_time_unit = "h",
+      end_time = 24,
+      end_time_unit = "h"
+    ),
+    "End time must be after start time"
+  )
+
+  # Should work when end_time is after start_time
+  expect_no_error(
+    create_protocol(
+      name = "Valid Protocol",
+      type = "oral",
+      interval = "24",
+      dose = 500,
+      start_time = 24,
+      start_time_unit = "h",
+      end_time = 48,
+      end_time_unit = "h"
+    )
+  )
+
+  # Should work with different units
+  expect_no_error(
+    create_protocol(
+      name = "Valid Protocol Mixed Units",
+      type = "oral",
+      interval = "24",
+      dose = 500,
+      start_time = 30,
+      start_time_unit = "min",
+      end_time = 2,
+      end_time_unit = "h"
+    )
+  )
+})
+
+test_that("Protocol time validation works with setters", {
+  # Create a valid protocol
+  protocol <- create_protocol(
+    name = "Test Protocol",
+    type = "oral",
+    interval = "24",
+    dose = 500,
+    start_time = 0,
+    start_time_unit = "h",
+    end_time = 48,
+    end_time_unit = "h"
+  )
+
+  # Should error when setting start_time after end_time
+  expect_error(
+    protocol$start_time <- 72,
+    "End time must be after start time"
+  )
+
+  # Should error when setting end_time before start_time
+  expect_error(
+    protocol$end_time <- 0,
+    "End time must be after start time"
+  )
+
+  # Should work when times are valid
+  expect_no_error(protocol$start_time <- 12)
+  expect_equal(protocol$start_time, 12)
+
+  expect_no_error(protocol$end_time <- 96)
+  expect_equal(protocol$end_time, 96)
+})
+
+test_that("Protocol time validation does not apply to single dose", {
+  # Single dose protocols should not validate time order
+  expect_no_error(
+    create_protocol(
+      name = "Single Dose",
+      type = "oral",
+      interval = "single",
+      dose = 500,
+      start_time = 48,
+      start_time_unit = "h",
+      end_time = 24,  # This would be invalid for non-single, but OK for single
+      end_time_unit = "h"
+    )
+  )
+})

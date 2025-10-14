@@ -30,3 +30,16 @@
       * End Time: 24 h
       * Volume of water/body weight: 3.5 ml/kg
 
+# Protocol with non-default start_time prints correctly
+
+    Code
+      protocol
+    Output
+      Delayed Start Protocol
+      * Application Type: Oral
+      * Dosing Interval: Once each 24 hours
+      * Dose: 500 mg
+      * Start Time: 192 h
+      * End Time: 216 h
+      * Volume of water/body weight: 3.5 ml/kg
+

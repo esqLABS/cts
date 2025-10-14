@@ -5,3 +5,4 @@ vignettes/**/*.pdf
 vignettes/**/*.html
 vignettes/**/*.docx
 vignettes/**/*.zip
+.cursor/*
