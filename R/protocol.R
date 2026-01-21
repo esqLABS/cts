@@ -1081,7 +1081,18 @@ protocol_from_data <- function(protocol_data) {
   name <- protocol_data$Name
   # If the imported file contains an advanced protocol
   if (!is.null(protocol_data$Schemas)) {
-    types <- purrr::map_chr(protocol_data$Schemas, \(x) {purrr::map_chr(x$SchemaItems, \(y){y$ApplicationType})})
+    types <- purrr::list_c(
+      purrr::map(
+        protocol_data$Schemas, \(x) {
+          purrr::map_chr(
+            x$SchemaItems,
+            \(y){
+              y$ApplicationType
+            }
+          )
+        }
+      )
+    )
     # Skip protocol if it contains UserDefined application
     if (any(types == "UserDefined")) {
       cli::cli_warn(
