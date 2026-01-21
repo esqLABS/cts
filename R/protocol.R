@@ -207,7 +207,7 @@ Protocol <- R6::R6Class(
       if (!is.null(self$infusion_time) & is.null(self$infusion_time_unit)) {
         self$infusion_time_unit <- "min"
       }
-      
+
       # Validate that end_time is after start_time for non-single protocols
       if (self$interval != "single") {
         private$.validate_time_order()
@@ -269,7 +269,7 @@ Protocol <- R6::R6Class(
           is.null(private$.start_time_unit) || is.null(private$.end_time_unit)) {
         return(invisible(NULL))
       }
-      
+
       # Convert both times to hours for comparison
       start_in_hours <- ospsuite::toUnit(
         quantityOrDimension = "Time",
@@ -277,14 +277,14 @@ Protocol <- R6::R6Class(
         sourceUnit = private$.start_time_unit,
         targetUnit = "h"
       )
-      
+
       end_in_hours <- ospsuite::toUnit(
         quantityOrDimension = "Time",
         values = private$.end_time,
         sourceUnit = private$.end_time_unit,
         targetUnit = "h"
       )
-      
+
       if (end_in_hours <= start_in_hours) {
         cli::cli_abort(c(
           "x" = "End time must be after start time.",
@@ -1081,6 +1081,15 @@ protocol_from_data <- function(protocol_data) {
   name <- protocol_data$Name
   # If the imported file contains an advanced protocol
   if (!is.null(protocol_data$Schemas)) {
+    types <- purrr::map_chr(protocol_data$Schemas, \(x) {purrr::map_chr(x$SchemaItems, \(y){y$ApplicationType})})
+    # Skip protocol if it contains UserDefined application
+    if (any(types == "UserDefined")) {
+      cli::cli_warn(
+        message = c(i = glue::glue("UserDefined administration is not allowed. Protocol `{name}` will be skipped."))
+      )
+      return(NULL)
+    }
+
     protocol <- AdvancedProtocol$new(
       name = name,
       time_unit = protocol_data$TimeUnit
@@ -1129,6 +1138,14 @@ protocol_from_data <- function(protocol_data) {
   } else {
     # Otherwise, it is a simple protocol
     type <- protocol_data$ApplicationType
+    # Skip protocol if it contains UserDefined application
+    if (type == "UserDefined") {
+      cli::cli_warn(
+        message = c(i = glue::glue("UserDefined administration is not allowed. Protocol `{name}` will be skipped."))
+      )
+      return(NULL)
+    }
+
     interval <- protocol_data$DosingInterval
 
     start_time_data <- purrr::keep(
