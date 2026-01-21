@@ -1,3 +1,5 @@
+^renv$
+^renv\.lock$
 ^cts\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
