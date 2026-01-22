@@ -646,31 +646,35 @@ get_source <- function(input) {
 
 
 update_snapshots <- function(snapshots) {
-  paths <- list_c(map(to_list(snapshots), ~ .x$source))
+  temp_dir_in <- tempfile()
+  dir.create(temp_dir_in)
 
-  temp_dir <- tempfile()
-  dir.create(temp_dir)
+  temp_dir_out <- tempfile()
+  dir.create(temp_dir_out)
+
+  # export snapshot to temp_dir_in to ensure even snasphot from url get converted
+  map(to_list(snapshots), ~ .x$export(path = tempfile(tmpdir = temp_dir_in, fileext = ".json")))
 
   suppressMessages({
     # Convert snapshot to project to upgrade them to latest version
     ospsuite::convertSnapshot(
-      paths,
+      temp_dir_in,
       format = "project",
-      output = temp_dir,
+      output = temp_dir_out,
       runSimulations = FALSE
     )
 
     # Convert back to snapshot to get json format
     ospsuite::convertSnapshot(
-      temp_dir,
+      temp_dir_out,
       format = "snapshot",
-      output = temp_dir
+      output = temp_dir_out
     )
   })
 
   # Create Snapshots/Compounds objects from new jsons.
   snapshots <- map(
-    list.files(temp_dir, pattern = ".json", full.names = TRUE),
+    list.files(temp_dir_out, pattern = ".json", full.names = TRUE),
     ~ Compound$new(input = .x)
   )
   if (length(snapshots) == 1) {
