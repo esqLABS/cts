@@ -10,6 +10,8 @@ create_protocol(
   interval,
   dose,
   dose_unit = "mg",
+  start_time = 0,
+  start_time_unit = "h",
   end_time = 24,
   end_time_unit = "h",
   ...
@@ -38,6 +40,10 @@ create_protocol(
 \item{dose}{a numeric value representing the dose.}
 
 \item{dose_unit}{a character string representing the dose unit. Default is "mg".}
+
+\item{start_time}{a numeric value representing the start time of the protocol. Default is 0.}
+
+\item{start_time_unit}{a character string representing the start time unit. Default is "h".}
 
 \item{end_time}{a numeric value representing the end time of the protocol. Default is 24.}
 
