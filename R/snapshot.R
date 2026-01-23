@@ -126,6 +126,419 @@ Snapshot <- R6::R6Class(
       private$add_item("simulations", simulation)
     },
     #' @description
+    #' add a simulation interactively to the snapshot.
+    add_simulation_interactive = function() {
+      if (!interactive()) {
+        cli::cli_abort(c("x" = "Interactive simulation creation not available."))
+      }
+
+      cli::cli_text("Add a new simulation to the snapshot.")
+      cli::cli_text("To exit press 'Esc' or 'Ctrl + C' at any time depending on your platform.")
+      name <- readline(prompt = "Enter simulation name: ")
+
+      # all the `while` are to re-ask until correct input is supplied
+
+      available_type <- c("Individual", "Population")
+      ind_vs_pop <- NA
+      while (is.na(ind_vs_pop)) {
+        cli::cli_text("Chose simulation type: ")
+        cli::cli_ol(available_type)
+
+        ind_vs_pop <- as.integer(readline(prompt = "Selection: "))
+        if (is.na(ind_vs_pop) || !(ind_vs_pop %in% seq_along(available_type))) {
+          cli::cli_inform(c(x = "Invalid selection."))
+          ind_vs_pop <- NA
+          next()
+        }
+      }
+
+      if (ind_vs_pop == "1") {
+        ind_idx <- NA
+        available_individuals <- self$get_names("individuals")
+
+        while (is.na(ind_idx)) {
+          cli::cli_text("Chose individual: ")
+          if (length(available_individuals) == 0) {
+            cli::cli_abort(c("x" = "No individuals available in snapshot."))
+          }
+
+          cli::cli_ol(available_individuals)
+          ind_idx <- as.integer(readline(prompt = "Selection: "))
+          if (is.na(ind_idx) || !(ind_idx %in% seq_along(available_individuals))) {
+            cli::cli_inform(c(x = "Invalid selection."))
+            ind_idx <- NA
+            next()
+          }
+        }
+
+        simulation <- create_simulation(simulation_name = name, individual = available_individuals[ind_idx], victim = NULL, perpetrators = NULL)
+
+      } else if (ind_vs_pop == "2") {
+        pop_idx <- NA
+        available_populations <- self$get_names("populations")
+
+        while (is.na(pop_idx)) {
+          cli::cli_text("Chose population: ")
+          if (length(available_populations) == 0) {
+            cli::cli_abort(c("x" = "No populations available in snapshot."))
+          }
+
+          cli::cli_ol(available_populations)
+          pop_idx <- as.integer(readline(prompt = "Selection: "))
+          if (is.na(pop_idx) || !(pop_idx %in% seq_along(available_populations))) {
+            cli::cli_inform(c("x" = "Invalid selection."))
+            pop_idx <- NA
+            next()
+          }
+        }
+
+        simulation <- create_simulation(simulation_name = name, population = available_populations[pop_idx], victim = NULL, perpetrators = NULL)
+      }
+
+      victim_idx <- NA
+      available_compounds <- self$get_names("compounds")
+      while (is.na(victim_idx)) {
+        cli::cli_text("Chose victim name: ")
+        if (length(available_compounds) == 0) {
+          cli::cli_abort(c("x" = "No compounds available in snapshot."))
+        }
+        cli::cli_ol(available_compounds)
+        victim_idx <- as.integer(readline(prompt = "Selection: "))
+        if (is.na(victim_idx) || !(victim_idx %in% seq_along(available_compounds))) {
+          cli::cli_inform(c("x" = "Invalid selection."))
+          victim_idx <- NA
+          next()
+        }
+      }
+      victim <- available_compounds[victim_idx]
+
+      perp_idx <- NA
+      while (any(is.na(perp_idx))) {
+        cli::cli_text("Chose perpetrators compound name: ")
+        cli::cli_ol(c("None", available_compounds))
+
+        perp_idx <- readline(prompt = "Selection (separate by ',' for multiple selections): ")
+        perp_idx <- as.integer(stringr::str_split_1(perp_idx, ", *")) - 1
+        if (any(is.na(perp_idx) | perp_idx > length(available_compounds) | perp_idx < 0)) {
+          cli::cli_inform(c("x" = "Invalid selection."))
+          perp_idx <- NA
+          next()
+        }
+        if (length(perp_idx) > 1 && any(perp_idx == 0)) {
+          cli::cli_inform(c("x" = "Invalid selection. Can not select 'None' and other compounds."))
+          perp_idx <- NA
+          next()
+        }
+      }
+
+      if (all(perp_idx != 0)) {
+        perpetrators <- available_compounds[perp_idx]
+      } else {
+        perpetrators <- c()
+      }
+
+      available_protocols <- self$get_names("protocols")
+      available_formulations <- self$get_names("formulations")
+
+      if (length(available_protocols) == 0) {
+        cli::cli_inform(c("x" = "No protocols available in snapshot."))
+      } else {
+        for (compound in c(victim, perpetrators)) {
+          proto_idx <- NA
+          while (is.na(proto_idx)) {
+            cli::cli_text("Chose protocol for compound {.code {compound}}: ")
+            cli::cli_ol(c("None", available_protocols))
+            proto_idx <- as.integer(readline(prompt = "Selection: ")) - 1
+
+            if (is.na(proto_idx) || proto_idx > length(available_protocols) || proto_idx < 0) {
+              cli::cli_inform(c(x = "Invalid selection."))
+              proto_idx <- NA
+              next()
+            }
+          }
+
+          if (proto_idx == 0) {
+            protocol_name <- NULL
+          } else {
+            protocol_name <- available_protocols[proto_idx]
+
+            # check if protocol requires formulation
+            protocol <- self$protocols[[proto_idx]]
+            formulation <- list()
+
+            if ("Protocol" %in% class(protocol) && protocol$type == "oral") {
+              form_idx <- NA
+
+              while (is.na(form_idx)) {
+                cli::cli_text("Chose formulation for protocol {.code {protocol_name}}: ")
+                cli::cli_ol(available_formulations)
+                form_idx <- as.integer(readline(prompt = "Selection: "))
+                if (is.na(form_idx) || !(form_idx %in% seq_along(available_formulations))) {
+                  cli::cli_inform(c("x" = "Invalid selection."))
+                  form_idx <- NA
+                  next()
+                }
+              }
+              formulation_name <- available_formulations[form_idx]
+              formulation <- list(list(Key = "Formulation", Name = formulation_name))
+            } else if ("AdvancedProtocol" %in% class(protocol)) {
+              required_formulations_key <- unique(
+                unlist(
+                  purrr::map(protocol$schemas, \(x) {
+                    purrr::map(x$SchemaItems, \(y) {
+                      y$formulation_key
+                    })
+                  }),
+                  recursive = TRUE
+               )
+              )
+              formulation <- vector(mode = "list", length = length(required_formulations_key))
+              if (length(required_formulations_key) > 0) {
+                cli::cli_text("{length(required_formulations_key)} formulations required for protocol {.code {protocol_name}}: ")
+              }
+
+              for (form_key_idx in seq_along(required_formulations_key)) {
+                form_idx <- NA
+                while (is.na(form_idx)) {
+                  cli::cli_text("Chose formulation for formulation_key {.code {required_formulations_key[form_key_idx]}}: ")
+                  cli::cli_ol(available_formulations)
+                  form_idx <- as.integer(readline(prompt = "Selection: "))
+                  if (is.na(form_idx) || !(form_idx %in% seq_along(available_formulations))) {
+                    cli::cli_inform(c("x" = "Invalid selection."))
+                    form_idx <- NA
+                    next()
+                  }
+                }
+                formulation_name <- available_formulations[form_idx]
+                formulation[[form_key_idx]] <- list(Key = required_formulations_key[form_key_idx], Name = formulation_name)
+              }
+            }
+          }
+
+          add_compound(simulation, compound = compound, protocol = protocol_name, formulation = formulation)
+
+          # add process for compound
+          available_processes <- unlist(purrr::map(extract_processes(self, compounds = compound, quietly = TRUE)[[compound]], ~.x$Name))
+          if (length(available_processes) > 0) {
+            proc_idx <- NA
+            while (any(is.na(proc_idx))) {
+              cli::cli_text("Chose processes for compound {.code {compound}}: ")
+              cli::cli_ol(c("None", available_processes))
+              proc_idx <- readline(prompt = "Selection (separate by ',' for multiple selections): ")
+              proc_idx <- as.integer(stringr::str_split_1(proc_idx, ", *")) - 1
+
+              if (any(is.na(proc_idx) | proc_idx > length(available_processes) | proc_idx < 0)) {
+                cli::cli_inform(c("x" = "Invalid selection."))
+                proc_idx <- NA
+                next()
+              }
+
+              if (length(proc_idx) > 1 && any(proc_idx == 0)) {
+                cli::cli_inform(c("x" = "Invalid selection. Can not select 'None' and other processes"))
+                proc_idx <- NA
+                next()
+              }
+            }
+
+            if (all(proc_idx != 0)) {
+              processes <- available_processes[proc_idx]
+              add_processes(simulation, compound = compound, processes = processes)
+            }
+          }
+
+          # add interaction for compound
+          available_interactions <- unlist(purrr::map(extract_interactions(snapshot = self, compounds = compound, quietly = TRUE)[[compound]], ~.x$Name))
+          if (length(available_interactions) > 0) {
+            inter_idx <- NA
+
+            while (any(is.na(inter_idx))) {
+              cli::cli_text("Chose interactions for compound {.code {compound}}: ")
+              cli::cli_ol(c("None", available_interactions))
+              inter_idx <- readline(prompt = "Selection (separate by ',' for multiple selections): ")
+              inter_idx <- as.integer(stringr::str_split_1(inter_idx, ", *")) - 1
+
+              if (any(is.na(inter_idx) | inter_idx > length(available_interactions) | inter_idx < 0)) {
+                cli::cli_inform(c("x" = "Invalid selection."))
+                inter_idx <- NA
+                next()
+              }
+
+              if (length(inter_idx) > 1 && any(inter_idx == 0)) {
+                cli::cli_inform(c(x = "Invalid selection. Can not select 'None' and other interactions"))
+                inter_idx <- NA
+                next()
+              }
+            }
+
+            if (all(inter_idx != 0)) {
+              interactions <- available_interactions[inter_idx]
+              add_interactions(simulation, compound = compound, interactions = interactions)
+            }
+          }
+        }
+      }
+
+      # set output schema
+      outputschema_idx <- NA
+      while (!isTRUE(outputschema_idx == 1)) {
+        cli::cli_text("Outputs interval schema set to: ")
+        simulation$output_schema$print()
+        cli::cli_text("What do you want to do?")
+        cli::cli_ol(c("Done", "Reset interval schema", "Add new interval to existing schema"))
+        outputschema_idx <- as.integer(readline(prompt = "Selection: "))
+
+        if (isTRUE(outputschema_idx == 1)) {
+          break()
+        }
+
+        if (isTRUE(outputschema_idx == 2)) {
+          cli::cli_text("Create new schema")
+        }
+
+        if (!is.na(outputschema_idx)) {
+          cli::cli_text("Add interval")
+
+          time_unit_idx <- NA
+          time_units <- ospsuite::getUnitsForDimension("Time")
+          while (is.na(time_unit_idx)) {
+            cli::cli_text("Select time unit: ")
+            cli::cli_ol(time_units)
+            time_unit_idx <- as.integer(readline(prompt = "Selection: "))
+            if (is.na(time_unit_idx) || time_unit_idx > length(time_units) || time_unit_idx < 1) {
+              cli::cli_inform(c(x = "Invalid selection."))
+              time_unit_idx <- NA
+            }
+          }
+
+          start_time <- NA
+          while (is.na(start_time)) {
+            cli::cli_text("Select start time  in {time_units[time_unit_idx]}: ")
+            start_time <- as.numeric(readline(prompt = "Selection: "))
+            if (is.na(start_time) || start_time < 0) {
+              cli::cli_inform(c(x = "Invalid selection."))
+              start_time <- NA
+            }
+          }
+
+          end_time <- NA
+          while (is.na(end_time)) {
+            cli::cli_text("Select end time in {time_units[time_unit_idx]}: ")
+            end_time <- as.numeric(readline(prompt = "Selection: "))
+            if (is.na(end_time) || end_time < start_time) {
+              cli::cli_inform(c(x = "Invalid selection."))
+              end_time <- NA
+            }
+          }
+
+          resolution_unit_idx <- NA
+          resolution_units <- ospsuite::getUnitsForDimension("Resolution")
+          while (is.na(resolution_unit_idx)) {
+            cli::cli_text("Select resolution unit: ")
+            cli::cli_ol(resolution_units)
+            resolution_unit_idx <- as.integer(readline(prompt = "Selection: "))
+            if (is.na(resolution_unit_idx) || !(resolution_unit_idx %in% seq_along(resolution_units))) {
+              cli::cli_inform(c(x = "Invalid selection."))
+              resolution_unit_idx <- NA
+            }
+          }
+
+          resolution <- NA
+          while (is.na(resolution)) {
+            cli::cli_text("Select resolution in {resolution_units[resolution_unit_idx]}: ")
+            resolution <- as.numeric(readline(prompt = "Selection: "))
+            if (is.na(resolution) || resolution < 0) {
+              cli::cli_inform(c(x = "Invalid selection."))
+              resolution <- NA
+            }
+          }
+
+          # convert resolution/time to unit h if not matching
+          wanted_res_unit <- paste0("pts/", time_units[time_unit_idx])
+          if (resolution_units[resolution_unit_idx] != wanted_res_unit) {
+            start_time <- ospsuite::toUnit(
+              quantityOrDimension = "Time",
+              values = start_time,
+              sourceUnit = time_units[time_unit_idx],
+              targetUnit = "h"
+            )
+            end_time <- ospsuite::toUnit(
+              quantityOrDimension = "Time",
+              values = end_time,
+              sourceUnit = time_units[time_unit_idx],
+              targetUnit = "h"
+            )
+
+            time_unit_idx <- which(time_units == "h")
+
+            resolution <- ospsuite::toUnit(
+              quantityOrDimension = "Resolution",
+              values = resolution,
+              sourceUnit = resolution_units[resolution_unit_idx],
+              targetUnit = "pts/h"
+            )
+          }
+
+          if (outputschema_idx == 2) {
+            set_output_interval(
+              simulation,
+              unit = time_units[time_unit_idx],
+              start_time = start_time,
+              end_time = end_time,
+              resolution = resolution
+            )
+          } else if (outputschema_idx == 3) {
+            add_output_interval(
+              simulation,
+              unit = time_units[time_unit_idx],
+              start_time = start_time,
+              end_time = end_time,
+              resolution = resolution
+            )
+          }
+        } else {
+          cli::cli_inform(c("x" = "Invalid selection."))
+        }
+      }
+
+      # set/add output_selections
+      outputselection_idx <- NA
+      while (!isTRUE(outputselection_idx == 1)) {
+        cli::cli_text("Output selections set to: ")
+        cli::cli_li(simulation$output_selections)
+        cli::cli_ol(c("Done", "Reset outputs selection", "Add output to existing outputs selection"))
+        outputselection_idx <- as.integer(readline(prompt = "Selection: "))
+
+        if (isTRUE(outputselection_idx == 1)) {
+          break()
+        }
+
+        if (isTRUE(outputselection_idx == 2)) {
+          cli::cli_text("Reset outputs selection")
+        }
+
+        if (!is.na(outputselection_idx)) {
+          cli::cli_text("Add outputs")
+
+          paths <- readline(prompt = "Selection: ")
+
+          if (outputselection_idx == 2) {
+            set_outputs(simulation, paths = paths)
+          } else if (outputselection_idx == 3) {
+            add_outputs(simulation, paths = paths)
+          }
+        } else {
+          cli::cli_inform(c(x = "Invalid selection."))
+        }
+      }
+
+      cli::cli_text("All done!")
+      cli::cli_text("Summary of setup simulation")
+      simulation$print()
+
+      add_simulation(snapshot = self, simulation = simulation, options = list(add_interactions = FALSE, add_processes = FALSE))
+    },
+
+    #' @description
     #' remove a simulation from the snapshot.
     #' @param simulation_name name(s) of the simulation(s) to remove
     remove_simulation = function(simulation_name) {
