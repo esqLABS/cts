@@ -396,7 +396,9 @@ Snapshot <- R6::R6Class(
       individualTimeProfileConfiguration$yAxisScale <- "log"
       individualTimeProfileConfiguration$legendPosition <- "outsideTopRight"
 
-      for (simulationName in simulationNames) {
+      for (simulationIdx in seq_along(simulationNames)) {
+        simulationName <- simulationNames[simulationIdx]
+
         # get all paths
         paths <- purrr::map_chr(
           private$.sim_results_obj[[
@@ -414,7 +416,7 @@ Snapshot <- R6::R6Class(
           container = private$.sim_results_obj[[simulationName]]$simulation
         )
         dimensions <- purrr::map(quantities, "dimension") %>% list_c()
-        names(dimensions) <- map(quantities, "path") %>% list_c()
+        names(dimensions) <- purrr::map(quantities, "path") %>% list_c()
 
         # initialize one plot per dimension
         plotLists[[simulationName]] <- vector(
@@ -429,6 +431,42 @@ Snapshot <- R6::R6Class(
             simulationResults = private$.sim_results_obj[[simulationName]],
             quantitiesOrPaths = names(dimensions)[dimensions == dimension]
           )
+
+          # add observed data if linked to the simulation
+          if (!is.null(self$simulations[[simulationIdx]]$ObservedData)) {
+            for (obs_data_name in unlist(self$simulations[[simulationIdx]]$ObservedData)){
+              obs_data <- self$observed_data[[which(self$get_names("observed_data") == obs_data_name)]]
+
+              # need to convert json as loaded slightly differently in osp.snapshots
+              obs_data_snap <- jsonlite::fromJSON(
+                jsonlite::toJSON(obs_data, digits = NA, auto_unbox = TRUE),
+                simplifyVector = TRUE,
+                simplifyDataFrame = FALSE
+              )
+
+              # check for compatible y dimension first
+              if (obs_data_snap$Columns[[1]]$Dimension != dimension) {
+                comp_dim <- tryCatch(
+                  expr = ospsuite::toUnit(
+                    quantityOrDimension = dimension,
+                    values = obs_data_snap$Columns[[1]]$Values,
+                    targetUnit = ospsuite::getBaseUnit(quantityOrDimension = dimension),
+                    sourceUnit = obs_data_snap$Columns[[1]]$Unit,
+                    molWeight = obs_data_snap$Columns[[1]]$DataInfo$MolWeight
+                  ),
+                  error=function(e) {return(NULL)}
+                )
+
+                if (is.null(comp_dim)) {
+                  next()
+                }
+              }
+
+              dts <- osp.snapshots::loadDataSetFromSnapshot(obs_data_snap)
+              dataCombined$addDataSets(dts)
+            }
+          }
+
           if (
             length(
               private$.sim_results_obj[[simulationName]]$allIndividualIds
