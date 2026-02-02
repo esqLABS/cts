@@ -120,6 +120,18 @@ Snapshot <- R6::R6Class(
       private$remove_item("formulations", formulation_name)
     },
     #' @description
+    #' add an observed dataset to the snapshot.
+    #' @param observed_data the observed data set to add
+    add_observed_data = function(observed_data) {
+      private$add_item("observed_data", observed_data)
+    },
+    #' @description
+    #' remove an observed dataset from the snapshot.
+    #' @param observed_data_name name(s) of the observed dataset(s) to remove
+    remove_observed_data = function(observed_data_name) {
+      private$remove_item("observed_data", observed_data_name)
+    },
+    #' @description
     #' add a simulation to the snapshot.
     #' @param simulation the simulation to add
     add_simulation = function(simulation) {
