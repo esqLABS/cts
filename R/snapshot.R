@@ -872,3 +872,39 @@ extract_processes <- function(snapshot, compounds = NULL, quietly = FALSE) {
   }
   return(invisible(all_processes))
 }
+
+
+#' Add an observed dataset to a `Snapshot` or DDI object
+#'
+#' This function adds an observed dataset to a `Snapshot` or `DDI` object.
+#' @param snapshot The `Snapshot` or `DDI` object to which the observed dataset will be added.
+#' @param observed_data Either a `DataSet` object or the path to an excel file containing observed data
+#' to be added to the `Snapshot` or `DDI` object.
+#' @param importer_configuration Either a DataImporterConfiguration object as defined in `{ospsuite}` or
+#' the path to a compatible DataImporterConfiguration.
+#' @return The `Snapshot` or `DDI` object with the simulation added.
+#' @export
+add_observed_data <- function(snapshot, observed_data, importer_configuration = NULL, ...) {
+  # if excel files
+  if (is.character(observed_data) && length(observed_data) == 1 && (endsWith(observed_data, ".xls") || endsWith(observed_data, ".xlsx"))) {
+    if (!is.null(importer_configuration) && is.character(importer_configuration) && endsWith(importer_configuration, ".xml")) {
+      config <- ospsuite::loadDataImporterConfiguration(importer_configuration)
+    } else if ("DataImporterConfiguration" %in% class(importer_configuration)) {
+      config <- importer_configuration
+    } else {
+      cli::cli_warn(message = "`importer_configuration` not given or not valid. Trying to create one automatically.")
+      # if importer config not given or valid try to create it automatically
+      config <- ospsuite::createImporterConfigurationForFile(observed_data)
+    }
+
+    dts <- ospsuite::loadDataSetsFromExcel(xlsFilePath = observed_data, importerConfigurationOrPath = config, ...)
+  } else if (class(observed_data) == "dataSet") {
+    # import from dataSet object or xls files
+    dts <- observed_data
+  } else {
+    cli::cli_abort("`observed_data` is not supported. Only dataSet object or excel files are supported")
+  }
+
+  snapshot$add_observed_data(dataSetToSnapshot(dts))
+  return(invisible(snapshot))
+}

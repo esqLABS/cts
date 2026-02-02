@@ -157,3 +157,64 @@ translate_end_time_unit <- function(end_time_unit) {
     "year(s)" = 31536000
   )
 }
+
+#' Convert a DataSet object to an observed data building block
+#'
+#' @param dataset A DataSet object
+#'
+#' @return A json representation of the DataSet object
+#'
+#' @keywords internal
+dataSetToSnapshot <- function(dataset) {
+  ospsuite.utils::validateIsOfType(dataset, "DataSet")
+
+  data <- list(
+    Name = dataset$name,
+    ExtendedProperties = unname(purrr::map2(dataset$metaData, names(dataset$metaData), \(x,y){list(Name = y, Value = x)})),
+    Columns = list(
+      list(
+        Name = dataset$yDimension,
+        DataInfo = list(
+          Origin = "Observation",
+          AuxiliaryType = "Undefined",
+          MolWeight = dataset$molWeight
+        ),
+        Values = as.list(dataset$yValues),
+        Dimension = dataset$yDimension,
+        Unit = dataset$yUnit
+      )
+    ),
+    BaseGrid = list(
+      Name = dataset$xDimension,
+      DataInfo = list(
+        Origin = "BaseGrid",
+        AuxiliaryType = "Undefined"
+      ),
+      Values = as.list(dataset$xValues),
+      Dimension = dataset$xDimension,
+      Unit = dataset$xUnit
+    )
+  )
+
+  if (!is.null(dataset$LLOQ)) {
+    data$Columns[[1]]$DataInfo$LLOQ <- dataset$LLOQ
+  }
+
+  if (!is.null(dts$yErrorType)) {
+    data$Columns[[1]]$RelatedColumns = list(
+      list(
+        Name = dataset$yErrorType,
+        DataInfo = list(
+          Origin = "ObservationAuxiliary",
+          AuxiliaryType = dataset$yErrorType,
+          MolWeight = dataset$molWeight
+        ),
+        Values = as.list(dataset$yErrorValues),
+        Dimension = dataset$yDimension,
+        Unit = dataset$yErrorUnit
+      )
+    )
+  }
+
+  return(data)
+}
