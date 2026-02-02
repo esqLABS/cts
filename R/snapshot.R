@@ -898,7 +898,7 @@ add_observed_data <- function(snapshot, observed_data, importer_configuration = 
     }
 
     dts <- ospsuite::loadDataSetsFromExcel(xlsFilePath = observed_data, importerConfigurationOrPath = config, ...)
-  } else if (class(observed_data) == "dataSet") {
+  } else if (class(observed_data) == "DataSet") {
     # import from dataSet object or xls files
     dts <- observed_data
   } else {
@@ -907,4 +907,17 @@ add_observed_data <- function(snapshot, observed_data, importer_configuration = 
 
   snapshot$add_observed_data(dataSetToSnapshot(dts))
   return(invisible(snapshot))
+}
+
+#' Remove observed dataset(s) from a `Snapshot` or DDI object
+#'
+#' This function removes an observed dataset from a `Snapshot` or `DDI` object.
+#' @param snapshot The `Snapshot` or `DDI` object to which the observed dataset(s) should be removed.
+#' @param observed_data_name Name(s) of the observed datasets to be removed from the `Snapshot` or `DDI` object
+#'
+#' @return The `Snapshot` or `DDI` object with the observed dataset(s) removed
+#' @export
+remove_observed_data <- function(snapshot, observed_data_name) {
+  snapshot$remove_observed_data(observed_data_name)
+  invisible(snapshot)
 }
