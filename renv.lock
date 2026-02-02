@@ -2551,6 +2551,52 @@
       "Maintainer": "Gergely Daróczi <daroczig@rapporter.net>",
       "Repository": "CRAN"
     },
+    "lubridate": {
+      "Package": "lubridate",
+      "Version": "1.9.4",
+      "Source": "Repository",
+      "Type": "Package",
+      "Title": "Make Dealing with Dates a Little Easier",
+      "Authors@R": "c( person(\"Vitalie\", \"Spinu\", , \"spinuvit@gmail.com\", role = c(\"aut\", \"cre\")), person(\"Garrett\", \"Grolemund\", role = \"aut\"), person(\"Hadley\", \"Wickham\", role = \"aut\"), person(\"Davis\", \"Vaughan\", role = \"ctb\"), person(\"Ian\", \"Lyttle\", role = \"ctb\"), person(\"Imanuel\", \"Costigan\", role = \"ctb\"), person(\"Jason\", \"Law\", role = \"ctb\"), person(\"Doug\", \"Mitarotonda\", role = \"ctb\"), person(\"Joseph\", \"Larmarange\", role = \"ctb\"), person(\"Jonathan\", \"Boiser\", role = \"ctb\"), person(\"Chel Hee\", \"Lee\", role = \"ctb\") )",
+      "Maintainer": "Vitalie Spinu <spinuvit@gmail.com>",
+      "Description": "Functions to work with date-times and time-spans: fast and user friendly parsing of date-time data, extraction and updating of components of a date-time (years, months, days, hours, minutes, and seconds), algebraic manipulation on date-time and time-span objects. The 'lubridate' package has a consistent and memorable syntax that makes working with dates easy and fun.",
+      "License": "GPL (>= 2)",
+      "URL": "https://lubridate.tidyverse.org, https://github.com/tidyverse/lubridate",
+      "BugReports": "https://github.com/tidyverse/lubridate/issues",
+      "Depends": [
+        "methods",
+        "R (>= 3.2)"
+      ],
+      "Imports": [
+        "generics",
+        "timechange (>= 0.3.0)"
+      ],
+      "Suggests": [
+        "covr",
+        "knitr",
+        "rmarkdown",
+        "testthat (>= 2.1.0)",
+        "vctrs (>= 0.6.5)"
+      ],
+      "Enhances": [
+        "chron",
+        "data.table",
+        "timeDate",
+        "tis",
+        "zoo"
+      ],
+      "VignetteBuilder": "knitr",
+      "Config/Needs/website": "tidyverse/tidytemplate",
+      "Config/testthat/edition": "3",
+      "Encoding": "UTF-8",
+      "LazyData": "true",
+      "RoxygenNote": "7.2.3",
+      "SystemRequirements": "C++11, A system with zoneinfo data (e.g. /usr/share/zoneinfo). On Windows the zoneinfo included with R is used.",
+      "Collate": "'Dates.r' 'POSIXt.r' 'util.r' 'parse.r' 'timespans.r' 'intervals.r' 'difftimes.r' 'durations.r' 'periods.r' 'accessors-date.R' 'accessors-day.r' 'accessors-dst.r' 'accessors-hour.r' 'accessors-minute.r' 'accessors-month.r' 'accessors-quarter.r' 'accessors-second.r' 'accessors-tz.r' 'accessors-week.r' 'accessors-year.r' 'am-pm.r' 'time-zones.r' 'numeric.r' 'coercion.r' 'constants.r' 'cyclic_encoding.r' 'data.r' 'decimal-dates.r' 'deprecated.r' 'format_ISO8601.r' 'guess.r' 'hidden.r' 'instants.r' 'leap-years.r' 'ops-addition.r' 'ops-compare.r' 'ops-division.r' 'ops-integer-division.r' 'ops-m+.r' 'ops-modulo.r' 'ops-multiplication.r' 'ops-subtraction.r' 'package.r' 'pretty.r' 'round.r' 'stamp.r' 'tzdir.R' 'update.r' 'vctrs.R' 'zzz.R'",
+      "NeedsCompilation": "yes",
+      "Author": "Vitalie Spinu [aut, cre], Garrett Grolemund [aut], Hadley Wickham [aut], Davis Vaughan [ctb], Ian Lyttle [ctb], Imanuel Costigan [ctb], Jason Law [ctb], Doug Mitarotonda [ctb], Joseph Larmarange [ctb], Jonathan Boiser [ctb], Chel Hee Lee [ctb]",
+      "Repository": "CRAN"
+    },
     "magrittr": {
       "Package": "magrittr",
       "Version": "2.0.4",
@@ -2858,9 +2904,57 @@
       "Maintainer": "Jan Marvin Garbuszus <jan.garbuszus@ruhr-uni-bochum.de>",
       "Repository": "CRAN"
     },
+    "osp.snapshots": {
+      "Package": "osp.snapshots",
+      "Version": "0.2.1.9003",
+      "Source": "GitHub",
+      "Type": "Package",
+      "Title": "Import and Manipulate Open Systems Pharmacology Project Snapshots",
+      "Authors@R": "c( person( \"Felix\", \"MIL\", email = \"felix.mil@esqlabs.com\", role = c(\"aut\", \"cre\") ), person( \"ESQlabs, GmbH\",  role = c(\"cph\", \"fnd\") ) )",
+      "Description": "Provides a convenient R interface for working with PKSIM project  snapshots exported as JSON files. You provide the snapshot file, and  'osp.snapshots' handles the complex nested structure, allowing you to  easily import, navigate, modify, and export snapshot data. Building  blocks can be converted to data frames for integration with the  'ospsuite' R framework and broader R ecosystem.",
+      "License": "MIT + file LICENSE",
+      "Encoding": "UTF-8",
+      "LazyData": "true",
+      "URL": "https://esqlabs.github.io/osp.snapshots/",
+      "RoxygenNote": "7.3.3",
+      "Depends": [
+        "R (>= 4.1.0)"
+      ],
+      "Imports": [
+        "R6",
+        "jsonlite",
+        "cli",
+        "fs",
+        "ospsuite (>= 12.2.0)",
+        "purrr",
+        "tibble",
+        "dplyr",
+        "glue",
+        "lubridate",
+        "stringr"
+      ],
+      "Suggests": [
+        "devtools",
+        "knitr",
+        "quarto",
+        "testthat (>= 3.0.0)",
+        "withr"
+      ],
+      "Config/testthat/edition": "3",
+      "Config/Needs/website": "quarto",
+      "Author": "Felix MIL [aut, cre], ESQlabs, GmbH [cph, fnd]",
+      "Maintainer": "Felix MIL <felix.mil@esqlabs.com>",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "esqLABS",
+      "RemoteRepo": "osp.snapshots",
+      "RemoteRef": "main",
+      "RemoteSha": "83584f65138b1478c14bcdf0d067d0f346bdb798",
+      "Remotes": "ospsuite=Open-Systems-Pharmacology/OSPSuite-R"
+    },
     "ospsuite": {
       "Package": "ospsuite",
-      "Version": "12.4.1.9001",
+      "Version": "12.4.1.9002",
       "Source": "git",
       "Type": "Package",
       "Title": "R package to manipulate OSPSuite Models",
@@ -2916,7 +3010,7 @@
       "RemoteUsername": "Open-Systems-Pharmacology",
       "RemoteRepo": "OSPSuite-R",
       "RemoteRef": "main",
-      "RemoteSha": "4d8ba9a58e29453649d737e2991b76a50fa06dcf",
+      "RemoteSha": "446ef9a2656f7aec0a3007c0d5c537f01dac0745",
       "Remotes": "Open-Systems-Pharmacology/rSharp, ospsuite.utils=Open-Systems-Pharmacology/OSPSuite.RUtils, tlf=Open-Systems-Pharmacology/TLF-Library"
     },
     "ospsuite.utils": {
@@ -2956,15 +3050,14 @@
       "RoxygenNote": "7.3.3",
       "Collate": "'enum.R' 'formatNumerics.R' 'logger.R' 'messages.R' 'objectCount.R' 'osp_print.R' 'utilities.R' 'ospsuite.utils-env.R' 'printable.R' 'utilities-conditional.R' 'utilities-logger.R' 'utilities-validation.R' 'validation-emptiness.R' 'validation-enum.R' 'validation-expected-length.R' 'validation-file-extensions.R' 'validation-inclusion.R' 'validation-options.R' 'validation-paths.R' 'validation-same-length.R' 'validation-type.R' 'validation-uniqueness.R' 'validation-utf.R' 'validation-vector.R'",
       "VignetteBuilder": "knitr",
+      "Author": "Open-Systems-Pharmacology Community [cph, fnd], Michael Sevestre [aut, cre], Pavel Balazki [aut], Juri Solodenko [aut], Indrajeet Patil [aut] (ORCID: <https://orcid.org/0000-0003-1995-6531>, Twitter: @patilindrajeets)",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "OSPSuite.RUtils",
       "RemoteUsername": "Open-Systems-Pharmacology",
       "RemotePkgRef": "ospsuite.utils=Open-Systems-Pharmacology/OSPSuite.RUtils",
       "RemoteRef": "HEAD",
-      "RemoteSha": "483895b2c925ffc99308f81884588715f26213c6",
-      "NeedsCompilation": "no",
-      "Author": "Open-Systems-Pharmacology Community [cph, fnd], Michael Sevestre [aut, cre], Pavel Balazki [aut], Juri Solodenko [aut], Indrajeet Patil [aut] (ORCID: <https://orcid.org/0000-0003-1995-6531>, Twitter: @patilindrajeets)"
+      "RemoteSha": "483895b2c925ffc99308f81884588715f26213c6"
     },
     "otel": {
       "Package": "otel",
@@ -5028,6 +5121,34 @@
       "NeedsCompilation": "yes",
       "Author": "Lionel Henry [aut, cre], Hadley Wickham [aut], Posit Software, PBC [cph, fnd]",
       "Maintainer": "Lionel Henry <lionel@posit.co>",
+      "Repository": "CRAN"
+    },
+    "timechange": {
+      "Package": "timechange",
+      "Version": "0.4.0",
+      "Source": "Repository",
+      "Title": "Efficient Manipulation of Date-Times",
+      "Authors@R": "c(person(\"Vitalie\", \"Spinu\", email = \"spinuvit@gmail.com\", role = c(\"aut\", \"cre\")), person(\"Google Inc.\", role = c(\"ctb\", \"cph\")))",
+      "Description": "Efficient routines for manipulation of date-time objects while accounting for time-zones and daylight saving times. The package includes utilities for updating of date-time components (year, month, day etc.), modification of time-zones, rounding of date-times, period addition and subtraction etc. Parts of the 'CCTZ' source code, released under the Apache 2.0 License, are included in this package. See <https://github.com/google/cctz> for more details.",
+      "Depends": [
+        "R (>= 3.3)"
+      ],
+      "License": "GPL (>= 3)",
+      "Encoding": "UTF-8",
+      "LinkingTo": [
+        "cpp11 (>= 0.2.7)"
+      ],
+      "Suggests": [
+        "testthat (>= 0.7.1.99)",
+        "knitr"
+      ],
+      "SystemRequirements": "A system with zoneinfo data (e.g. /usr/share/zoneinfo). On Windows the zoneinfo included with R is used.",
+      "BugReports": "https://github.com/vspinu/timechange/issues",
+      "URL": "https://github.com/vspinu/timechange/",
+      "RoxygenNote": "7.2.1",
+      "NeedsCompilation": "yes",
+      "Author": "Vitalie Spinu [aut, cre], Google Inc. [ctb, cph]",
+      "Maintainer": "Vitalie Spinu <spinuvit@gmail.com>",
       "Repository": "CRAN"
     },
     "tinytex": {
