@@ -255,10 +255,15 @@ Snapshot <- R6::R6Class(
       # create a temporary directory
       temp_dir <- tempfile()
       dir.create(temp_dir)
+
+      # remove PI that could make import fail if some simulation or data have been removed
+      snap_wo_pi <- self$data
+      snap_wo_pi[["ParameterIdentifications"]] <- NULL
+
       # write $data to a temporary file
       temp_file <- tempfile(fileext = ".json", tmpdir = temp_dir)
       temp_file_name <- basename(fs::path_ext_remove(temp_file))
-      private$write_json(self$data, temp_file)
+      private$write_json(snap_wo_pi, temp_file)
       # run simulations
       ospsuite::runSimulationsFromSnapshot(
         temp_file,
