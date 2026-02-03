@@ -144,6 +144,38 @@ pivot_pk_analysis <- function(df, compound_names) {
     dplyr::relocate(QuantityPath)
 }
 
+#' Pretty print PK Analysis Data
+#'
+#' Print PK analysis data to a pretty table
+#'
+#' @param snapshot A snapshot or ddi object for which to make a pretty table of PK result
+#' @param simulation_name Optional for which simulation(s) to print the pk analysis result in pretty format
+#' @param compound_name Optional for which molecule(s) to print the pk analysis result in pretty format
+pretty_pk <- function(snapshot, simulation_name = NULL, compound_name = NULL) {
+  pkresult <- snapshot$pk_analysis_results
+
+  if (is.null(simulation_name)) {
+    simulation_name <- snapshot$get_names("simulations")
+  }
+
+  for (name in simulation_name) {
+    cat(
+      cli::cli_format_method({
+        name
+        cli::cli_ul()
+        for (cpd_name in compound_name) {
+          cli::cli_ul()
+          cli::cli_ul()
+
+        }
+
+      })
+
+    )
+  }
+}
+
+
 translate_end_time_unit <- function(end_time_unit) {
   switch(
     end_time_unit,
