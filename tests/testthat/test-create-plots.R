@@ -6,6 +6,14 @@ test_that("Plotting simulation results work", {
   plots <- suppressWarnings(plot_ddi_results(my_ddi))
 
   expect_s3_class(plots[[1]][[1]], "ggplot")
+
+  # test plots with observed data too
+  rif <- compound(test_path("data/Rifampicin-Model.json"))
+  rif_sim <- rif$get_names(rif, "simulations")
+  remove_simulation(rif, rif_sim[-1])
+  plots <- suppressWarnings(rif$create_plots())
+
+  expect_s3_class(plots[[1]][[1]], "ggplot")
 })
 
 test_that("Plotting population simulation results work.", {

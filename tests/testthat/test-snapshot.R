@@ -188,8 +188,8 @@ test_that("Adding and removing observed data works", {
 
   dts <- loadDataSetFromSnapshot(rif_snap$observed_data[[1]])
 
-  # Remove the simulation
-  rif_snap$remove_observed_data(original_obs_data[1])
+  # Remove the observed data
+  remove_observed_data(rif_snap, original_obs_data[1])
 
   # Check that the simulation was removed
   expect_equal(length(rif_snap$observed_data), length(original_obs_data)-1)
