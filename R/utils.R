@@ -166,11 +166,15 @@ translate_end_time_unit <- function(end_time_unit) {
 #'
 #' @keywords internal
 dataSetToSnapshot <- function(dataset) {
-  ospsuite.utils::validateIsOfType(dataset, "DataSet")
+  isDS <- ospsuite.utils::isOfType(dataset, "DataSet")
+
+  if (!isDS) {
+    cli::cli_abort(message = "Invalid `dataset` argument. Must be a (list of) `DataSet` object(s) from `{ospsuite}`")
+  }
 
   data <- list(
     Name = dataset$name,
-    ExtendedProperties = unname(purrr::map2(dataset$metaData, names(dataset$metaData), \(x,y){list(Name = y, Value = x)})),
+    ExtendedProperties = unname(purrr::map2(dataset$metaData, names(dataset$metaData), \(x1, x2){list(Name = x2, Value = x1)})),
     Columns = list(
       list(
         Name = dataset$yDimension,
@@ -200,7 +204,7 @@ dataSetToSnapshot <- function(dataset) {
     data$Columns[[1]]$DataInfo$LLOQ <- dataset$LLOQ
   }
 
-  if (!is.null(dts$yErrorType)) {
+  if (!is.null(dataset$yErrorType)) {
     data$Columns[[1]]$RelatedColumns = list(
       list(
         Name = dataset$yErrorType,
@@ -217,4 +221,29 @@ dataSetToSnapshot <- function(dataset) {
   }
 
   return(data)
+}
+
+
+#' Load DataSet from OSP snapshot observed data
+#'
+#' @description
+#' Creates a DataSet object (from ospsuite package) from observed data in a snapshot or ddi.
+#' This function converts snapshot observed data format to the standardized DataSet format
+#' used throughout the OSP ecosystem.
+#'
+#' @param observed_data_structure Raw observed data structure from a snapshot JSON
+#' @return A DataSet object from the ospsuite package
+#' @importFrom ospsuite DataSet
+#' @keywords internal
+loadDataSetFromSnapshot <- function(observed_data_structure) {
+  # need to convert json as loaded slightly differently in osp.snapshots
+  observed_data_snap <- jsonlite::fromJSON(
+    jsonlite::toJSON(observed_data_structure, digits = NA, auto_unbox = TRUE),
+    simplifyVector = TRUE,
+    simplifyDataFrame = FALSE
+  )
+
+  dts <- osp.snapshots::loadDataSetFromSnapshot(observed_data_snap)
+
+  return(dts)
 }

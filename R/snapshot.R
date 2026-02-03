@@ -437,22 +437,15 @@ Snapshot <- R6::R6Class(
             for (obs_data_name in unlist(self$simulations[[simulationIdx]]$ObservedData)){
               obs_data <- self$observed_data[[which(self$get_names("observed_data") == obs_data_name)]]
 
-              # need to convert json as loaded slightly differently in osp.snapshots
-              obs_data_snap <- jsonlite::fromJSON(
-                jsonlite::toJSON(obs_data, digits = NA, auto_unbox = TRUE),
-                simplifyVector = TRUE,
-                simplifyDataFrame = FALSE
-              )
-
               # check for compatible y dimension first
-              if (obs_data_snap$Columns[[1]]$Dimension != dimension) {
+              if (obs_data$Columns[[1]]$Dimension != dimension) {
                 comp_dim <- tryCatch(
                   expr = ospsuite::toUnit(
                     quantityOrDimension = dimension,
-                    values = obs_data_snap$Columns[[1]]$Values,
+                    values = unlist(obs_data$Columns[[1]]$Values),
                     targetUnit = ospsuite::getBaseUnit(quantityOrDimension = dimension),
-                    sourceUnit = obs_data_snap$Columns[[1]]$Unit,
-                    molWeight = obs_data_snap$Columns[[1]]$DataInfo$MolWeight
+                    sourceUnit = obs_data$Columns[[1]]$Unit,
+                    molWeight = obs_data$Columns[[1]]$DataInfo$MolWeight
                   ),
                   error=function(e) {return(NULL)}
                 )
@@ -462,7 +455,8 @@ Snapshot <- R6::R6Class(
                 }
               }
 
-              dts <- osp.snapshots::loadDataSetFromSnapshot(obs_data_snap)
+              # use this package function that already include json conversion
+              dts <- loadDataSetFromSnapshot(obs_data_snap)
               dataCombined$addDataSets(dts)
             }
           }
@@ -898,14 +892,25 @@ add_observed_data <- function(snapshot, observed_data, importer_configuration = 
     }
 
     dts <- ospsuite::loadDataSetsFromExcel(xlsFilePath = observed_data, importerConfigurationOrPath = config, ...)
-  } else if (class(observed_data) == "DataSet") {
+  } else if ("DataSet" %in% class(observed_data)) {
     # import from dataSet object or xls files
     dts <- observed_data
   } else {
     cli::cli_abort("`observed_data` is not supported. Only dataSet object or excel files are supported")
   }
 
-  snapshot$add_observed_data(dataSetToSnapshot(dts))
+  if (!is.list(dts)) {
+    dts <- list(dts)
+  }
+
+  # check that all list element ar DS objects
+  isDS <- purrr::map_lgl(dts, \(x) {ospsuite.utils::isOfType(x, "DataSet")})
+
+  if (!all(isDS)) {
+    cli::cli_abort(message = "Invalid `dataset` argument. Must be a (list of) `DataSet` object(s) from `{ospsuite}`")
+  }
+
+  purrr::map(dts, ~ snapshot$add_observed_data(dataSetToSnapshot(.x)))
   return(invisible(snapshot))
 }
 
@@ -921,3 +926,5 @@ remove_observed_data <- function(snapshot, observed_data_name) {
   snapshot$remove_observed_data(observed_data_name)
   invisible(snapshot)
 }
+
+
