@@ -456,7 +456,7 @@ Snapshot <- R6::R6Class(
               }
 
               # use this package function that already include json conversion
-              dts <- loadDataSetFromSnapshot(obs_data_snap)
+              dts <- loadDataSetFromSnapshot(obs_data)
               dataCombined$addDataSets(dts)
             }
           }
