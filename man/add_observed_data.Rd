@@ -14,6 +14,8 @@ to be added to the \code{Snapshot} or \code{DDI} object.}
 
 \item{importer_configuration}{Either a DataImporterConfiguration object as defined in \code{{ospsuite}} or
 the path to a compatible DataImporterConfiguration.}
+
+\item{...}{additional arguments passed to ospsuite::loadDataSetsFromExcel}
 }
 \value{
 The \code{Snapshot} or \code{DDI} object with the simulation added.

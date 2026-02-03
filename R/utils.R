@@ -233,7 +233,6 @@ dataSetToSnapshot <- function(dataset) {
 #'
 #' @param observed_data_structure Raw observed data structure from a snapshot JSON
 #' @return A DataSet object from the ospsuite package
-#' @importFrom ospsuite DataSet
 #' @keywords internal
 loadDataSetFromSnapshot <- function(observed_data_structure) {
   # need to convert json as loaded slightly differently in osp.snapshots
