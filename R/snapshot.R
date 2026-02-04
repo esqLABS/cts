@@ -245,7 +245,7 @@ Snapshot <- R6::R6Class(
 
         snap_protocol <- self$protocols[[which(
           self$get_names("protocols") == protocol_name
-        )]]
+        )[1]]]
         needed_formulation_keys <- c()
 
         if ("Protocol" %in% class(snap_protocol)) {
