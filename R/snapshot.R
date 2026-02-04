@@ -361,6 +361,44 @@ Snapshot <- R6::R6Class(
         }
       }
     },
+    #' @description
+    #' get pk results of the simulation and aggregate for population simulation
+    #' @param aggregation character string either mean or median for the type of aggregation
+    #' @param digits number of significant digits to show
+    get_pk_analysis = function(aggregation = NULL, digits = 3) {
+      if (is.null(private$.pk_analysis_results)) {
+        self$run_pk_analysis()
+      }
+      if(!is.null(aggregation)) {
+        if (aggregation == "mean") {
+          pk <- lapply(
+            private$.pk_analysis_results,
+            \(l) {
+              l %>% dplyr::mutate_if(is.list, .funs = \(x) {
+                sapply( x, \(y) {sprintf(paste0("%", digits, "g +/- %",digits ,"g"), mean(y), sd(y))})
+              })
+            }
+          )
+        } else if (aggregation == "median") {
+          pk <- lapply(
+            private$.pk_analysis_results,
+            \(l) {
+              l %>% dplyr::mutate_if(is.list, .funs = \(x) {
+                sapply( x, \(y) {
+                  q <- quantile(y, probs = c(0.5, 0.25, 0.75), na.rm = TRUE);
+                  sprintf(paste0("%", digits, "g (%",digits ,"g \u2013 %", digits, "g)"), q[1],q[2],q[3])
+                })
+              })
+            }
+          )
+        } else {
+          pk <- private$.pk_analysis_results %>% mutate_if(is.numeric, signif, digits = digits)
+        }
+      } else {
+        pk <- private$.pk_analysis_results %>% mutate_if(is.numeric, signif, digits = digits)
+      }
+      return(pk)
+    },
     #' Plot Time profile of DDI simulations defined in the ddi project
     #' @param ... additional arguments to pass to the plotPopulationTimeProfile (for example aggregation method)
     #' @return a list of plots
