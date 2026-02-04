@@ -435,6 +435,11 @@ Snapshot <- R6::R6Class(
           # add observed data if linked to the simulation
           if (!is.null(self$simulations[[simulationIdx]]$ObservedData)) {
             for (obs_data_name in unlist(self$simulations[[simulationIdx]]$ObservedData)){
+              # Ensure observed data is found
+              if (length(which(self$get_names("observed_data") == obs_data_name)) == 0) {
+                cli::cli_warn("Linked observed data {obs_data_name} was not found in snapshot.")
+                next()
+              }
               obs_data <- self$observed_data[[which(self$get_names("observed_data") == obs_data_name)]]
 
               # check for compatible y dimension first
