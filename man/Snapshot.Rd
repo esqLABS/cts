@@ -62,6 +62,8 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item \href{#method-Snapshot-remove_protocol}{\code{Snapshot$remove_protocol()}}
 \item \href{#method-Snapshot-add_formulation}{\code{Snapshot$add_formulation()}}
 \item \href{#method-Snapshot-remove_formulation}{\code{Snapshot$remove_formulation()}}
+\item \href{#method-Snapshot-add_observed_data}{\code{Snapshot$add_observed_data()}}
+\item \href{#method-Snapshot-remove_observed_data}{\code{Snapshot$remove_observed_data()}}
 \item \href{#method-Snapshot-add_simulation}{\code{Snapshot$add_simulation()}}
 \item \href{#method-Snapshot-remove_simulation}{\code{Snapshot$remove_simulation()}}
 \item \href{#method-Snapshot-check_simulation}{\code{Snapshot$check_simulation()}}
@@ -205,6 +207,40 @@ remove a formulation from the snapshot.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{formulation_name}}{name(s) of the formulation(s) to remove}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-add_observed_data"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-add_observed_data}{}}}
+\subsection{Method \code{add_observed_data()}}{
+add an observed dataset to the snapshot.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$add_observed_data(observed_data)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{observed_data}}{the observed data set to add}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-remove_observed_data"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-remove_observed_data}{}}}
+\subsection{Method \code{remove_observed_data()}}{
+remove an observed dataset from the snapshot.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$remove_observed_data(observed_data_name)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{observed_data_name}}{name(s) of the observed dataset(s) to remove}
 }
 \if{html}{\out{</div>}}
 }
