@@ -99,7 +99,7 @@ Snapshot <- R6::R6Class(
       }
 
       # Safely extract names from R6 objects or lists
-      names <- purrr::map_chr(items, function(x) {
+      extracted_names <- purrr::map_chr(items, function(x) {
         if (inherits(x, "R6")) {
           # R6 objects: use $ accessor which handles active bindings
           # Try lowercase 'name' first (Protocol/Formulation), then uppercase 'Name'
@@ -113,7 +113,7 @@ Snapshot <- R6::R6Class(
       })
 
       # Remove NAs and return
-      names[!is.na(names)]
+      extracted_names[!is.na(extracted_names)]
     },
     #' @description
     #' add a protocol to the snapshot.
