@@ -877,7 +877,7 @@ extract_processes <- function(snapshot, compounds = NULL, quietly = FALSE) {
 #' @param importer_configuration Either a DataImporterConfiguration object as defined in `{ospsuite}` or
 #' the path to a compatible DataImporterConfiguration.
 #' @param ... additional arguments passed to ospsuite::loadDataSetsFromExcel
-#' @return The `Snapshot` or `DDI` object with the simulation added.
+#' @return The `Snapshot` or `DDI` object with the observed dataset added.
 #' @export
 add_observed_data <- function(snapshot, observed_data, importer_configuration = NULL, ...) {
   # if excel files
