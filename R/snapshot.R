@@ -93,7 +93,27 @@ Snapshot <- R6::R6Class(
     #' get_names the names of a field in the snapshot.
     #' @param field the field to get the names from.
     get_names = function(field) {
-      list_c(map(self[[field]], "Name")) %||% list_c(map(self[[field]], "name"))
+      items <- self[[field]]
+      if (is.null(items) || length(items) == 0) {
+        return(character(0))
+      }
+
+      # Safely extract names from R6 objects or lists
+      extracted_names <- purrr::map_chr(items, function(x) {
+        if (inherits(x, "R6")) {
+          # R6 objects: use $ accessor which handles active bindings
+          # Try lowercase 'name' first (Protocol/Formulation), then uppercase 'Name'
+          x$name %||% x$Name %||% NA_character_
+        } else if (is.list(x)) {
+          # Plain lists: try both Name and name
+          x[["Name"]] %||% x[["name"]] %||% NA_character_
+        } else {
+          NA_character_
+        }
+      })
+
+      # Remove NAs and return
+      extracted_names[!is.na(extracted_names)]
     },
     #' @description
     #' add a protocol to the snapshot.
@@ -225,7 +245,7 @@ Snapshot <- R6::R6Class(
 
         snap_protocol <- self$protocols[[which(
           self$get_names("protocols") == protocol_name
-        )]]
+        )[1]]]
         needed_formulation_keys <- c()
 
         if ("Protocol" %in% class(snap_protocol)) {
