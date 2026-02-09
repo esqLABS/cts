@@ -336,13 +336,13 @@ Snapshot <- R6::R6Class(
         ospsuite::pkAnalysesToTibble
       )
 
-      compound_names <- self$get_names("compounds")
+      molecule_names <- unique(unlist(sapply(private$.sim_results_obj, \(s){c(s$simulation$allFloatingMoleculeNames(), s$simulation$allStationaryMoleculeNames())})))
 
       # PK analysis results to wider
       private$.pk_analysis_results <- lapply(
         private$.pk_analysis_results_raw,
         pivot_pk_analysis,
-        compound_names
+        molecule_names
       )
 
       if (!is.null(path)) {
@@ -369,35 +369,66 @@ Snapshot <- R6::R6Class(
       if (is.null(private$.pk_analysis_results)) {
         self$run_pk_analysis()
       }
+      pk <- private$.pk_analysis_results
+
+      # merge Parameter and unit column
+      pk <- lapply(
+        pk,
+        \(l) {
+          l$Unit[!is.na(l$Unit)] <- paste0("[", l$Unit[!is.na(l$Unit)], "]")
+          l$Unit[is.na(l$Unit)] <- ""
+          l$Parameter <- paste(l$Parameter,l$Unit)
+
+          l <- l %>% dplyr::select(-"Unit")
+          return(l)
+        }
+      )
+
       if(!is.null(aggregation)) {
         if (aggregation == "mean") {
           pk <- lapply(
-            private$.pk_analysis_results,
+            pk,
             \(l) {
               l %>% dplyr::mutate_if(is.list, .funs = \(x) {
-                sapply( x, \(y) {sprintf(paste0("%", digits, "g +/- %",digits ,"g"), mean(y), sd(y))})
+                sapply( x, \(y) {
+                  if(!is.null(y)) {
+                    y <- sprintf(paste0("%.", digits, "g +/- %.",digits ,"g"), mean(y), sd(y))
+                  } else {
+                    y <- ""
+                  }
+                })
               })
             }
           )
         } else if (aggregation == "median") {
           pk <- lapply(
-            private$.pk_analysis_results,
+            pk,
             \(l) {
               l %>% dplyr::mutate_if(is.list, .funs = \(x) {
                 sapply( x, \(y) {
-                  q <- quantile(y, probs = c(0.5, 0.25, 0.75), na.rm = TRUE);
-                  sprintf(paste0("%", digits, "g (%",digits ,"g \u2013 %", digits, "g)"), q[1],q[2],q[3])
+                  if(!is.null(y)) {
+                    q <- quantile(y, probs = c(0.5, 0.25, 0.75), na.rm = TRUE);
+                    y <- sprintf(paste0("%.", digits, "g (%.",digits ,"g \u2013 %.", digits, "g)"), q[1], q[2], q[3])
+                  } else {
+                    y <- ""
+                  }
                 })
               })
             }
           )
-        } else {
-          pk <- private$.pk_analysis_results %>% mutate_if(is.numeric, signif, digits = digits)
         }
-      } else {
-        pk <- private$.pk_analysis_results %>% mutate_if(is.numeric, signif, digits = digits)
       }
+
+      pk <- lapply(
+          pk,
+          \(l) {
+            l <- l %>%  dplyr::mutate_if(is.numeric, .funs = \(x) {sprintf(paste0("%.", digits, "g"), x)})
+            return(l)
+          }
+      )
+
       return(pk)
+
     },
     #' Plot Time profile of DDI simulations defined in the ddi project
     #' @param ... additional arguments to pass to the plotPopulationTimeProfile (for example aggregation method)
