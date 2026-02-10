@@ -125,6 +125,7 @@ pivot_pk_analysis <- function(df, molecule_names) {
         1
       )
     ) %>%
+    dplyr::arrange("IndividualId") %>%
     dplyr::select(-dplyr::any_of(c("IndividualId", "QuantityPath")))
 
   df %>%
