@@ -67,6 +67,7 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item \href{#method-Snapshot-check_simulation}{\code{Snapshot$check_simulation()}}
 \item \href{#method-Snapshot-run_simulations}{\code{Snapshot$run_simulations()}}
 \item \href{#method-Snapshot-run_pk_analysis}{\code{Snapshot$run_pk_analysis()}}
+\item \href{#method-Snapshot-get_pk_analysis}{\code{Snapshot$get_pk_analysis()}}
 \item \href{#method-Snapshot-create_plots}{\code{Snapshot$create_plots()}}
 \item \href{#method-Snapshot-clone}{\code{Snapshot$clone()}}
 }
@@ -291,7 +292,26 @@ run simulations defined in the snapshot
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{path}}{character string to the folder where to export pk analysis as csv file
+\item{\code{path}}{character string to the folder where to export pk analysis as csv file}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-get_pk_analysis"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-get_pk_analysis}{}}}
+\subsection{Method \code{get_pk_analysis()}}{
+get pk results of the simulation and aggregate for population simulation
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$get_pk_analysis(aggregation = NULL, digits = 3)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{aggregation}}{character string either mean or median for the type of aggregation}
+
+\item{\code{digits}}{number of significant digits to show
 Plot Time profile of DDI simulations defined in the ddi project}
 }
 \if{html}{\out{</div>}}

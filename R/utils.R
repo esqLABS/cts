@@ -126,16 +126,28 @@ pivot_pk_analysis <- function(df, molecule_names) {
       )
     ) %>%
     dplyr::arrange("IndividualId") %>%
-    dplyr::select(-dplyr::any_of(c("IndividualId", "QuantityPath")))
+    dplyr::select(-"QuantityPath")
 
-  df %>%
-    dplyr::rename(QuantityPath = UniqueQuantityPath) %>%
-    tidyr::pivot_wider(
+
+  df <- df %>%
+    dplyr::rename(QuantityPath = UniqueQuantityPath)
+
+  # for pop sim
+  if (length(unique(df$IndividualId)) > 1 ) {
+    df <- df %>%
+      dplyr::group_by(QuantityPath, Parameter, Unit, Molecule) %>%
+      dplyr::summarize_at(.vars = c("Value", "IndividualId"), .funs = list) %>%
+      dplyr::ungroup()
+  }
+  # if all value in columns are length one remove the list
+
+  df<- df %>% tidyr::pivot_wider(
       names_from = Molecule,
-      values_from = Value,
-      values_fn = list
+      values_from = Value
     ) %>%
     dplyr::relocate(QuantityPath)
+
+  return(df)
 }
 
 #' Pretty print PK Analysis Data
@@ -148,7 +160,9 @@ pivot_pk_analysis <- function(df, molecule_names) {
 #' @param pk_parameter Optional for which PK parameters to print the pk analysis result in pretty format
 #' @param aggregation character string either mean or median for the type of aggregation
 #' @param digits number of significant digits to show
+#' @export
 pretty_pk <- function(snapshot, simulation_name = NULL, molecule_name = NULL, pk_parameter = NULL, aggregation = "mean", digits = 3) {
+  ospsuite.utils::validateIsOfType(snapshot, "Snapshot")
   pkresult <- snapshot$pk_analysis_results
 
   if (is.null(simulation_name)) {
@@ -225,6 +239,7 @@ pretty_pk <- function(snapshot, simulation_name = NULL, molecule_name = NULL, pk
 #' analysis result.
 #' @param aggregation character string either mean or median for the type of aggregation
 #' @param digits number of significant digits to show
+#' @export
 compare_pk <- function(
     snapshot,
     simulation_name = NULL,
@@ -234,6 +249,7 @@ compare_pk <- function(
     aggregation = "mean",
     digits = 3
   ) {
+  ospsuite.utils::validateIsOfType(snapshot, "Snapshot")
   pkresult <- snapshot$pk_analysis_results
 
   # Create a single table for all simulations

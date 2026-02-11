@@ -371,7 +371,7 @@ Snapshot <- R6::R6Class(
       }
       pk <- private$.pk_analysis_results
 
-      # merge Parameter and unit column
+      # merge Parameter and unit column and remove IndividualId
       pk <- lapply(
         pk,
         \(l) {
@@ -379,7 +379,7 @@ Snapshot <- R6::R6Class(
           l$Unit[is.na(l$Unit)] <- ""
           l$Parameter <- paste(l$Parameter,l$Unit)
 
-          l <- l %>% dplyr::select(-"Unit")
+          l <- l %>% dplyr::select(-"Unit", - "IndividualId")
           return(l)
         }
       )
