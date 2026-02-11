@@ -1,4 +1,4 @@
-# get_pk_analysis works for single simulation
+# for_single_sim
 
     Code
       my_ddi$get_pk_analysis()
@@ -20,57 +20,7 @@
       # i 15 more rows
       
 
-# get_pk_analysis works for pop simulation
-
-    Code
-      lng$get_pk_analysis(aggregation = "median", digits = 5)
-    Message
-      i DDI simulations results were not found. Running them.
-      i Running simulations from 1 snapshot
-      v Simulations completed
-      
-    Output
-      $`Bayer Study 19604 - control Day 1`
-      # A tibble: 56 x 9
-         QuantityPath          Parameter Levonorgestrel 1-ALB~1 Levonorgestrel 1-CYP~2
-         <chr>                 <chr>     <chr>                  <chr>                 
-       1 Organism|Total fract~ "AUC_inf~ 15.337 (14.093 – 20.5~ 0 (0 – 0)             
-       2 Organism|Total fract~ "AUC_inf~ NA (NA – NA)           NA (NA – NA)          
-       3 Organism|Total fract~ "AUC_tEn~ 13.334 (11.666 – 16.1~ 1849.9 (1674.8 – 1985~
-       4 Organism|Total fract~ "AUC_tEn~ NA (NA – NA)           NA (NA – NA)          
-       5 Organism|Total fract~ "CL [ml/~ 0 (0 – 0)              NA (NA – NA)          
-       6 Organism|Total fract~ "C_max [~ 0.033258 (0.032697 – ~ 0.52511 (0.49419 – 0.~
-       7 Organism|Total fract~ "C_max_n~ NA (NA – NA)           NA (NA – NA)          
-       8 Organism|Total fract~ "C_tEnd ~ 0.0008211 (0.00080927~ 0.52511 (0.49419 – 0.~
-       9 Organism|Total fract~ "Fractio~ 0.22199 (0.17629 – 0.~ NA (NA – NA)          
-      10 Organism|Total fract~ "MRT [h]" 45.1 (38.296 – 48.671) NA (NA – NA)          
-      # i 46 more rows
-      # i abbreviated names: 1: `Levonorgestrel 1-ALB-Bayer report Complex`,
-      #   2: `Levonorgestrel 1-CYP3A4-Parameter Identification Metabolite`
-      # i 5 more variables:
-      #   `Levonorgestrel 1-SHBG-Qi-Gui & Humpel 1990 Complex` <chr>, ALB <chr>,
-      #   ATP1A2 <chr>, SHBG <chr>, `Levonorgestrel 1` <chr>
-      
-      $`LNG 0.09 mg IV - Bayer Study A229`
-      # A tibble: 28 x 4
-         QuantityPath              Parameter Levonorgestrel 1-CYP~1 `Levonorgestrel 1`
-         <chr>                     <chr>     <chr>                  <chr>             
-       1 Organism|Liver|Intracell~ "AUC_inf~ 0 (0 – 0)              ""                
-       2 Organism|Liver|Intracell~ "AUC_inf~ NA (NA – NA)           ""                
-       3 Organism|Liver|Intracell~ "AUC_tEn~ 1561.8 (1532.6 – 1634~ ""                
-       4 Organism|Liver|Intracell~ "AUC_tEn~ NA (NA – NA)           ""                
-       5 Organism|Liver|Intracell~ "CL [ml/~ NA (NA – NA)           ""                
-       6 Organism|Liver|Intracell~ "C_max [~ 0.49562 (0.49061 – 0.~ ""                
-       7 Organism|Liver|Intracell~ "C_max_n~ NA (NA – NA)           ""                
-       8 Organism|Liver|Intracell~ "C_tEnd ~ 0.49562 (0.49061 – 0.~ ""                
-       9 Organism|Liver|Intracell~ "Fractio~ NA (NA – NA)           ""                
-      10 Organism|Liver|Intracell~ "MRT [h]" NA (NA – NA)           ""                
-      # i 18 more rows
-      # i abbreviated name:
-      #   1: `Levonorgestrel 1-CYP3A4-Parameter Identification Metabolite`
-      
-
-# pretty_pk works for single simulation
+---
 
     Code
       pretty_pk(my_ddi, molecule_name = "Levonorgestrel 1", pk_parameter = c("C_max",
@@ -85,34 +35,7 @@
       * C_max: 4.41e-05 µmol/l
       * C_tEnd: 5.04e-06 µmol/l
 
-# pretty_pk works for pop simulation
-
-    Code
-      pretty_pk(lng, molecule_name = "Levonorgestrel 1", pk_parameter = c("AUC_tEnd",
-        "C_tEnd"))
-    Message
-      
-      -- LNG 0.09 mg IV - Bayer Study A229 -------------------------------------------
-      
-      -- Levonorgestrel 1 --
-      
-      -- Organism|VenousBlood|Plasma|Sum_LNG_species 
-      * AUC_tEnd: 4.42 +/- 0.614 µmol*min/l
-      * C_tEnd: 0.000268 +/- 9.23e-05 µmol/l
-      
-      -- Bayer Study 19604 - control Day 1 -------------------------------------------
-      
-      -- Levonorgestrel 1 --
-      
-      -- Organism|VenousBlood|Plasma|Plasma Unbound 
-      * AUC_tEnd: 0.00412 +/- 0.00158 µmol*min/l
-      * C_tEnd: 3.5e-07 +/- 1.8e-07 µmol/l
-      
-      -- Organism|VenousBlood|Plasma|Sum_LNG_species 
-      * AUC_tEnd: 1 +/- 0.477 µmol*min/l
-      * C_tEnd: 8.59e-05 +/- 5.3e-05 µmol/l
-
-# compare_pk for single simulation
+---
 
     Code
       compare_pk(my_ddi)
@@ -213,7 +136,84 @@
                                        Thalf [h]                   22.9
                            Thalf_tDLast_tEnd [h]                   30.3
 
-# compare_pk works for pop simulation
+# for pop simulation
+
+    Code
+      lng$get_pk_analysis(aggregation = "median", digits = 5)
+    Message
+      i DDI simulations results were not found. Running them.
+      i Running simulations from 1 snapshot
+      v Simulations completed
+      
+    Output
+      $`Bayer Study 19604 - control Day 1`
+      # A tibble: 56 x 9
+         QuantityPath          Parameter Levonorgestrel 1-ALB~1 Levonorgestrel 1-CYP~2
+         <chr>                 <chr>     <chr>                  <chr>                 
+       1 Organism|Total fract~ "AUC_inf~ 15.337 (14.093 – 20.5~ 0 (0 – 0)             
+       2 Organism|Total fract~ "AUC_inf~ NA (NA – NA)           NA (NA – NA)          
+       3 Organism|Total fract~ "AUC_tEn~ 13.334 (11.666 – 16.1~ 1849.9 (1674.8 – 1985~
+       4 Organism|Total fract~ "AUC_tEn~ NA (NA – NA)           NA (NA – NA)          
+       5 Organism|Total fract~ "CL [ml/~ 0 (0 – 0)              NA (NA – NA)          
+       6 Organism|Total fract~ "C_max [~ 0.033258 (0.032697 – ~ 0.52511 (0.49419 – 0.~
+       7 Organism|Total fract~ "C_max_n~ NA (NA – NA)           NA (NA – NA)          
+       8 Organism|Total fract~ "C_tEnd ~ 0.0008211 (0.00080927~ 0.52511 (0.49419 – 0.~
+       9 Organism|Total fract~ "Fractio~ 0.22199 (0.17629 – 0.~ NA (NA – NA)          
+      10 Organism|Total fract~ "MRT [h]" 45.1 (38.296 – 48.671) NA (NA – NA)          
+      # i 46 more rows
+      # i abbreviated names: 1: `Levonorgestrel 1-ALB-Bayer report Complex`,
+      #   2: `Levonorgestrel 1-CYP3A4-Parameter Identification Metabolite`
+      # i 5 more variables:
+      #   `Levonorgestrel 1-SHBG-Qi-Gui & Humpel 1990 Complex` <chr>, ALB <chr>,
+      #   ATP1A2 <chr>, SHBG <chr>, `Levonorgestrel 1` <chr>
+      
+      $`LNG 0.09 mg IV - Bayer Study A229`
+      # A tibble: 28 x 4
+         QuantityPath              Parameter Levonorgestrel 1-CYP~1 `Levonorgestrel 1`
+         <chr>                     <chr>     <chr>                  <chr>             
+       1 Organism|Liver|Intracell~ "AUC_inf~ 0 (0 – 0)              ""                
+       2 Organism|Liver|Intracell~ "AUC_inf~ NA (NA – NA)           ""                
+       3 Organism|Liver|Intracell~ "AUC_tEn~ 1561.8 (1532.6 – 1634~ ""                
+       4 Organism|Liver|Intracell~ "AUC_tEn~ NA (NA – NA)           ""                
+       5 Organism|Liver|Intracell~ "CL [ml/~ NA (NA – NA)           ""                
+       6 Organism|Liver|Intracell~ "C_max [~ 0.49562 (0.49061 – 0.~ ""                
+       7 Organism|Liver|Intracell~ "C_max_n~ NA (NA – NA)           ""                
+       8 Organism|Liver|Intracell~ "C_tEnd ~ 0.49562 (0.49061 – 0.~ ""                
+       9 Organism|Liver|Intracell~ "Fractio~ NA (NA – NA)           ""                
+      10 Organism|Liver|Intracell~ "MRT [h]" NA (NA – NA)           ""                
+      # i 18 more rows
+      # i abbreviated name:
+      #   1: `Levonorgestrel 1-CYP3A4-Parameter Identification Metabolite`
+      
+
+---
+
+    Code
+      pretty_pk(lng, molecule_name = "Levonorgestrel 1", pk_parameter = c("AUC_tEnd",
+        "C_tEnd"))
+    Message
+      
+      -- LNG 0.09 mg IV - Bayer Study A229 -------------------------------------------
+      
+      -- Levonorgestrel 1 --
+      
+      -- Organism|VenousBlood|Plasma|Sum_LNG_species 
+      * AUC_tEnd: 4.42 +/- 0.614 µmol*min/l
+      * C_tEnd: 0.000268 +/- 9.23e-05 µmol/l
+      
+      -- Bayer Study 19604 - control Day 1 -------------------------------------------
+      
+      -- Levonorgestrel 1 --
+      
+      -- Organism|VenousBlood|Plasma|Plasma Unbound 
+      * AUC_tEnd: 0.00412 +/- 0.00158 µmol*min/l
+      * C_tEnd: 3.5e-07 +/- 1.8e-07 µmol/l
+      
+      -- Organism|VenousBlood|Plasma|Sum_LNG_species 
+      * AUC_tEnd: 1 +/- 0.477 µmol*min/l
+      * C_tEnd: 8.59e-05 +/- 5.3e-05 µmol/l
+
+---
 
     Code
       compare_pk(lng)

@@ -126,7 +126,7 @@ pivot_pk_analysis <- function(df, molecule_names) {
       )
     ) %>%
     dplyr::arrange("IndividualId") %>%
-    dplyr::select(-"QuantityPath")
+    dplyr::select(-dplyr::any_of(c("QuantityPath")))
 
 
   df <- df %>%
@@ -170,7 +170,7 @@ pretty_pk <- function(snapshot, simulation_name = NULL, molecule_name = NULL, pk
   }
 
   if (is.null(molecule_name)) {
-    molecule_name <- unique(unlist(sapply(pkresult, \(pk) {pk %>% dplyr::select(-c("QuantityPath", "Parameter", "Unit")) %>% names()})))
+    molecule_name <- unique(unlist(sapply(pkresult, \(pk) {pk %>% dplyr::select(-dplyr::any_of(c("QuantityPath", "Parameter", "Unit"))) %>% names()})))
   }
 
   for (sim_name in simulation_name) {
@@ -184,7 +184,7 @@ pretty_pk <- function(snapshot, simulation_name = NULL, molecule_name = NULL, pk
       for (cpd_name in molecule_name) {
         if(cpd_name %in% colnames(pkresult[[sim_name]])) {
           cli::cli_h2(cpd_name)
-          quantity <- unique(unlist(pkresult[[sim_name]] %>% dplyr::filter(!is.na(cpd_name)) %>% dplyr::select("QuantityPath")))
+          quantity <- unique(unlist(pkresult[[sim_name]] %>% dplyr::filter(!is.na(cpd_name)) %>% dplyr::select(dplyr::any_of("QuantityPath"))))
 
           for (qp in quantity) {
             pk_subset <- pkresult[[sim_name]] %>% dplyr::filter(QuantityPath == qp, Parameter %in% pk_parameter)
@@ -266,7 +266,7 @@ compare_pk <- function(
   pkresult <- pkresult %>% dplyr::filter(Simulation %in% c(simulation_name, reference_simulation_name))
 
   # get compounds and filter
-  pk_molecules_names <- pkresult %>% dplyr::select(-c("Simulation", "QuantityPath", "Parameter", "Unit")) %>% names()
+  pk_molecules_names <- pkresult %>% dplyr::select(-dplyr::any_of(c("Simulation", "QuantityPath", "Parameter", "Unit"))) %>% names()
   if (is.null(molecule_name)) {
     molecule_name <- pk_molecules_names
   } else {
@@ -274,7 +274,7 @@ compare_pk <- function(
   }
 
   pkresult <- pkresult %>%
-    dplyr::select(any_of(c("QuantityPath", "Parameter", "Unit", "Simulation", molecule_name)))
+    dplyr::select(dplyr::any_of(c("QuantityPath", "Parameter", "Unit", "Simulation", molecule_name)))
 
   # get pk_parameter and filter
   if (is.null(pk_parameter)) {
@@ -298,7 +298,7 @@ compare_pk <- function(
     for (quantity in quantities) {
       pk_subset <- pkresult %>%
         dplyr::filter(QuantityPath == quantity) %>%
-        dplyr::select(any_of(c(compound, "Simulation", "Parameter", "Unit"))) %>%
+        dplyr::select(dplyr::any_of(c(compound, "Simulation", "Parameter", "Unit"))) %>%
         dplyr::filter(!is.na(compound), Parameter %in% pk_parameter)
       pk_subset <- tidyr::pivot_wider(data = pk_subset, names_from = Simulation, values_from = compound)
 
@@ -363,7 +363,7 @@ compare_pk <- function(
           pk_subset <- pk_subset %>% dplyr::mutate_if(is.numeric, .funs = \(x) {
             sprintf(paste0("%.", digits, "g"), x)
           })
-          pk_subset <- pk_subset %>% dplyr::select(-reference_simulation_name)
+          pk_subset <- pk_subset %>% dplyr::select(-dplyr::any_of(reference_simulation_name))
 
           # add ratio to param name
           pk_subset$Parameter <- paste0(pk_subset$Parameter, "_ratio")
@@ -376,7 +376,7 @@ compare_pk <- function(
         pk_subset$Unit[is.na(pk_subset$Unit)] <- ""
         pk_subset$Parameter <- paste(pk_subset$Parameter, pk_subset$Unit)
 
-        pk_subset <- pk_subset %>% dplyr::select(-"Unit")
+        pk_subset <- pk_subset %>% dplyr::select(-dplyr::any_of("Unit"))
 
         res[[compound]][[quantity]] <- pk_subset
 

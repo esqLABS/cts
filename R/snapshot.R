@@ -416,7 +416,7 @@ Snapshot <- R6::R6Class(
           l$Unit[is.na(l$Unit)] <- ""
           l$Parameter <- paste(l$Parameter,l$Unit)
 
-          l <- l %>% dplyr::select(-"Unit", - "IndividualId")
+          l <- l %>% dplyr::select(-dplyr::any_of(c("Unit", "IndividualId")))
           return(l)
         }
       )
