@@ -93,7 +93,27 @@ Snapshot <- R6::R6Class(
     #' get_names the names of a field in the snapshot.
     #' @param field the field to get the names from.
     get_names = function(field) {
-      list_c(map(self[[field]], "Name")) %||% list_c(map(self[[field]], "name"))
+      items <- self[[field]]
+      if (is.null(items) || length(items) == 0) {
+        return(character(0))
+      }
+
+      # Safely extract names from R6 objects or lists
+      extracted_names <- purrr::map_chr(items, function(x) {
+        if (inherits(x, "R6")) {
+          # R6 objects: use $ accessor which handles active bindings
+          # Try lowercase 'name' first (Protocol/Formulation), then uppercase 'Name'
+          x$name %||% x$Name %||% NA_character_
+        } else if (is.list(x)) {
+          # Plain lists: try both Name and name
+          x[["Name"]] %||% x[["name"]] %||% NA_character_
+        } else {
+          NA_character_
+        }
+      })
+
+      # Remove NAs and return
+      extracted_names[!is.na(extracted_names)]
     },
     #' @description
     #' add a protocol to the snapshot.
@@ -118,6 +138,18 @@ Snapshot <- R6::R6Class(
     #' @param formulation_name name(s) of the formulation(s) to remove
     remove_formulation = function(formulation_name) {
       private$remove_item("formulations", formulation_name)
+    },
+    #' @description
+    #' add an observed dataset to the snapshot.
+    #' @param observed_data the observed data set to add
+    add_observed_data = function(observed_data) {
+      private$add_item("observed_data", observed_data)
+    },
+    #' @description
+    #' remove an observed dataset from the snapshot.
+    #' @param observed_data_name name(s) of the observed dataset(s) to remove
+    remove_observed_data = function(observed_data_name) {
+      private$remove_item("observed_data", observed_data_name)
     },
     #' @description
     #' add a simulation to the snapshot.
@@ -213,7 +245,7 @@ Snapshot <- R6::R6Class(
 
         snap_protocol <- self$protocols[[which(
           self$get_names("protocols") == protocol_name
-        )]]
+        )[1]]]
         needed_formulation_keys <- c()
 
         if ("Protocol" %in% class(snap_protocol)) {
@@ -255,10 +287,15 @@ Snapshot <- R6::R6Class(
       # create a temporary directory
       temp_dir <- tempfile()
       dir.create(temp_dir)
+
+      # remove PI that could make import fail if some simulation or data have been removed
+      snap_wo_pi <- self$data
+      snap_wo_pi[["ParameterIdentifications"]] <- NULL
+
       # write $data to a temporary file
       temp_file <- tempfile(fileext = ".json", tmpdir = temp_dir)
       temp_file_name <- basename(fs::path_ext_remove(temp_file))
-      private$write_json(self$data, temp_file)
+      private$write_json(snap_wo_pi, temp_file)
       # run simulations
       ospsuite::runSimulationsFromSnapshot(
         temp_file,
@@ -448,7 +485,9 @@ Snapshot <- R6::R6Class(
       individualTimeProfileConfiguration$yAxisScale <- "log"
       individualTimeProfileConfiguration$legendPosition <- "outsideTopRight"
 
-      for (simulationName in simulationNames) {
+      for (simulationIdx in seq_along(simulationNames)) {
+        simulationName <- simulationNames[simulationIdx]
+
         # get all paths
         paths <- purrr::map_chr(
           private$.sim_results_obj[[
@@ -466,7 +505,7 @@ Snapshot <- R6::R6Class(
           container = private$.sim_results_obj[[simulationName]]$simulation
         )
         dimensions <- purrr::map(quantities, "dimension") %>% list_c()
-        names(dimensions) <- map(quantities, "path") %>% list_c()
+        names(dimensions) <- purrr::map(quantities, "path") %>% list_c()
 
         # initialize one plot per dimension
         plotLists[[simulationName]] <- vector(
@@ -481,6 +520,41 @@ Snapshot <- R6::R6Class(
             simulationResults = private$.sim_results_obj[[simulationName]],
             quantitiesOrPaths = names(dimensions)[dimensions == dimension]
           )
+
+          # add observed data if linked to the simulation
+          if (!is.null(self$simulations[[simulationIdx]]$ObservedData)) {
+            for (obs_data_name in unlist(self$simulations[[simulationIdx]]$ObservedData)){
+              # Ensure observed data is found
+              if (length(which(self$get_names("observed_data") == obs_data_name)) == 0) {
+                cli::cli_warn("Linked observed data {obs_data_name} was not found in snapshot.")
+                next()
+              }
+              obs_data <- self$observed_data[[which(self$get_names("observed_data") == obs_data_name)]]
+
+              # check for compatible y dimension first
+              if (obs_data$Columns[[1]]$Dimension != dimension) {
+                comp_dim <- tryCatch(
+                  expr = ospsuite::toUnit(
+                    quantityOrDimension = dimension,
+                    values = unlist(obs_data$Columns[[1]]$Values),
+                    targetUnit = ospsuite::getBaseUnit(quantityOrDimension = dimension),
+                    sourceUnit = obs_data$Columns[[1]]$Unit,
+                    molWeight = obs_data$Columns[[1]]$DataInfo$MolWeight
+                  ),
+                  error=function(e) {return(NULL)}
+                )
+
+                if (is.null(comp_dim)) {
+                  next()
+                }
+              }
+
+              # use this package function that already include json conversion
+              dts <- loadDataSetFromSnapshot(obs_data)
+              dataCombined$addDataSets(dts)
+            }
+          }
+
           if (
             length(
               private$.sim_results_obj[[simulationName]]$allIndividualIds
@@ -886,3 +960,66 @@ extract_processes <- function(snapshot, compounds = NULL, quietly = FALSE) {
   }
   return(invisible(all_processes))
 }
+
+
+#' Add an observed dataset to a `Snapshot` or DDI object
+#'
+#' This function adds an observed dataset to a `Snapshot` or `DDI` object.
+#' @param snapshot The `Snapshot` or `DDI` object to which the observed dataset will be added.
+#' @param observed_data Either a `DataSet` object or the path to an excel file containing observed data
+#' to be added to the `Snapshot` or `DDI` object.
+#' @param importer_configuration Either a DataImporterConfiguration object as defined in `{ospsuite}` or
+#' the path to a compatible DataImporterConfiguration.
+#' @param ... additional arguments passed to ospsuite::loadDataSetsFromExcel
+#' @return The `Snapshot` or `DDI` object with the observed dataset added.
+#' @export
+add_observed_data <- function(snapshot, observed_data, importer_configuration = NULL, ...) {
+  # if excel files
+  if (is.character(observed_data) && length(observed_data) == 1 && (endsWith(observed_data, ".xls") || endsWith(observed_data, ".xlsx"))) {
+    if (!is.null(importer_configuration) && is.character(importer_configuration) && endsWith(importer_configuration, ".xml")) {
+      config <- ospsuite::loadDataImporterConfiguration(importer_configuration)
+    } else if ("DataImporterConfiguration" %in% class(importer_configuration)) {
+      config <- importer_configuration
+    } else {
+      cli::cli_warn(message = "`importer_configuration` not given or not valid. Trying to create one automatically.")
+      # if importer config not given or valid try to create it automatically
+      config <- ospsuite::createImporterConfigurationForFile(observed_data)
+    }
+
+    dts <- ospsuite::loadDataSetsFromExcel(xlsFilePath = observed_data, importerConfigurationOrPath = config, ...)
+  } else if ("DataSet" %in% class(observed_data)) {
+    # import from dataSet object or xls files
+    dts <- observed_data
+  } else {
+    cli::cli_abort("`observed_data` is not supported. Only dataSet object or excel files are supported")
+  }
+
+  if (!is.list(dts)) {
+    dts <- list(dts)
+  }
+
+  # check that all list element ar DS objects
+  isDS <- purrr::map_lgl(dts, \(x) {ospsuite.utils::isOfType(x, "DataSet")})
+
+  if (!all(isDS)) {
+    cli::cli_abort(message = "Invalid `dataset` argument. Must be a (list of) `DataSet` object(s) from `{ospsuite}`")
+  }
+
+  purrr::map(dts, ~ snapshot$add_observed_data(dataSetToSnapshot(.x)))
+  return(invisible(snapshot))
+}
+
+#' Remove observed dataset(s) from a `Snapshot` or DDI object
+#'
+#' This function removes an observed dataset from a `Snapshot` or `DDI` object.
+#' @param snapshot The `Snapshot` or `DDI` object to which the observed dataset(s) should be removed.
+#' @param observed_data_name Name(s) of the observed datasets to be removed from the `Snapshot` or `DDI` object
+#'
+#' @return The `Snapshot` or `DDI` object with the observed dataset(s) removed
+#' @export
+remove_observed_data <- function(snapshot, observed_data_name) {
+  snapshot$remove_observed_data(observed_data_name)
+  invisible(snapshot)
+}
+
+

@@ -1,6 +1,6 @@
 Package: cts
 Title: What the Package Does (One Line, Title Case)
-Version: 1.1.0.9011
+Version: 1.1.0.9013
 Authors@R: 
     person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
@@ -37,7 +37,8 @@ Suggests:
     vdiffr,
     withr
 Remotes:  
-    ospsuite=Open-Systems-Pharmacology/OSPSuite-R
+    ospsuite=Open-Systems-Pharmacology/OSPSuite-R,
+    osp.snapshots=esqLABS/osp.snapshots
 Config/Needs/website: rmarkdown
 Config/testthat/edition: 3
 Encoding: UTF-8

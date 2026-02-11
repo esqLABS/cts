@@ -179,6 +179,41 @@ test_that("Adding and removing simulations works", {
   }
 })
 
+test_that("Adding and removing observed data works", {
+  # Make a temporary copy of the rifampicin snapshot
+  rif_snap <- Snapshot$new(rifampicin$source)
+
+  # Get original observed data names
+  original_obs_data <- rif_snap$get_names("observed_data")
+
+  dts <- loadDataSetFromSnapshot(rif_snap$observed_data[[1]])
+
+  # Remove the observed data
+  remove_observed_data(rif_snap, original_obs_data[1])
+
+  # Check that the simulation was removed
+  expect_equal(length(rif_snap$observed_data), length(original_obs_data)-1)
+
+  # Add the simulation to the snapshot using the dataset to snapshot functionality
+  add_observed_data(rif_snap, dts)
+
+  # Check that the simulation was added
+  expect_equal(length(rif_snap$observed_data), length(original_obs_data))
+
+  # Add the simulation to the snapshot from excel files
+  xlsFilePath <- system.file(
+    "extdata", "CompiledDataSet.xlsx",
+    package = "ospsuite"
+  )
+
+  importerConfiguration <- ospsuite::createImporterConfigurationForFile(xlsFilePath)
+  importerConfiguration$sheets <- "TestSheet_1"
+
+  add_observed_data(rif_snap, xlsFilePath, importerConfiguration)
+
+  expect_equal(length(rif_snap$observed_data), length(original_obs_data) + 4 )
+})
+
 test_that("Simulation structure can be examined", {
   # This test just examines what's in the simulations to help understand the structure
   # for future test development

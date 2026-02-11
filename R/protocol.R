@@ -924,7 +924,7 @@ AdvancedProtocol <- R6::R6Class(
       }
       private$.schemas[[schema_index]]$SchemaItems <- c(
         private$.schemas[[schema_index]]$SchemaItems,
-        protocol
+        list(protocol)
       )
       invisible(self)
     },

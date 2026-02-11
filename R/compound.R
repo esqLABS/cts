@@ -24,6 +24,7 @@ compound <- function(input) {
 #' @description
 #' A snapshot is a JSON file that contains all the information about a model.
 #' This class is used to import, access and manipulate the data from a compound snapshot.
+#' @noRd
 Compound <- R6::R6Class(
   classname = "Compound",
   class = TRUE,
