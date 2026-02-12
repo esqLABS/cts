@@ -1,7 +1,7 @@
 # for_single_sim
 
     Code
-      my_ddi$get_pk_analysis()
+      suppressWarnings(my_ddi$get_pk_analysis())
     Output
       $`Generic DDI simulation`
       # A tibble: 25 x 4
@@ -23,8 +23,8 @@
 ---
 
     Code
-      pretty_pk(my_ddi, molecule_name = "Levonorgestrel 1", pk_parameter = c("C_max",
-        "C_tEnd"))
+      suppressWarnings(pretty_pk(my_ddi, molecule_name = "Levonorgestrel 1",
+        pk_parameter = c("C_max", "C_tEnd")))
     Message
       
       -- Generic DDI simulation ------------------------------------------------------
@@ -38,7 +38,7 @@
 ---
 
     Code
-      compare_pk(my_ddi)
+      suppressWarnings(compare_pk(my_ddi))
     Message
       
       -- IndividualId --
@@ -139,7 +139,7 @@
 # for pop simulation
 
     Code
-      lng$get_pk_analysis(aggregation = "median", digits = 5)
+      suppressWarnings(lng$get_pk_analysis(aggregation = "median", digits = 5))
     Message
       i DDI simulations results were not found. Running them.
       i Running simulations from 1 snapshot
@@ -189,8 +189,8 @@
 ---
 
     Code
-      pretty_pk(lng, molecule_name = "Levonorgestrel 1", pk_parameter = c("AUC_tEnd",
-        "C_tEnd"))
+      suppressWarnings(pretty_pk(lng, molecule_name = "Levonorgestrel 1",
+        pk_parameter = c("AUC_tEnd", "C_tEnd")))
     Message
       
       -- LNG 0.09 mg IV - Bayer Study A229 -------------------------------------------
@@ -216,7 +216,7 @@
 ---
 
     Code
-      compare_pk(lng)
+      suppressWarnings(compare_pk(lng))
     Message
       
       -- IndividualId --
@@ -533,7 +533,7 @@
 ---
 
     Code
-      compare_pk(lng, reference_simulation = "Bayer Study 19604 - control Day 1")
+      suppressWarnings(compare_pk(lng, reference_simulation = "Bayer Study 19604 - control Day 1"))
     Message
       
       -- Reference simulation: Bayer Study 19604 - control Day 1 ---------------------
