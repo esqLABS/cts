@@ -289,7 +289,7 @@ compare_pk <- function(
   # pretty print by compound and quantity
   # make table with results for all simulations as columns
   # if reference simulation is given calculate ratio relative to that simulation
-  if(!is.null(reference_simulation_name) && is.character(reference_simulation_name) && length(reference_simulation_name) == 1) {
+  if (!is.null(reference_simulation_name) && is.character(reference_simulation_name) && length(reference_simulation_name) == 1) {
     cli::cli_h1(paste0("Reference simulation: ", reference_simulation_name))
   }
 
@@ -305,14 +305,14 @@ compare_pk <- function(
       pk_subset <- pk_subset %>%
         dplyr::select_if(.predicate = \(x){any(!is.null(unlist(x)))})
 
-      if(ncol(pk_subset) > 2) {
-        if (is.null(reference_simulation_name)){
+      if (ncol(pk_subset) > 2) {
+        if (is.null(reference_simulation_name)) {
           if (aggregation == "mean") {
             pk_subset <- pk_subset %>% dplyr::mutate_if(is.list, .funs = \(x) {
               sapply( x, \(y) {
-                if(length(y) > 1) {
+                if (length(y) > 1) {
                   y <- sprintf(paste0("%.", digits, "g +/- %.",digits ,"g"), mean(y), sd(y))
-                } else if (length(y) == 1){
+                } else if (length(y) == 1) {
                   y <- sprintf(paste0("%.", digits, "g"), y)
                 } else {
                   y <- ""
@@ -322,7 +322,7 @@ compare_pk <- function(
           } else if (aggregation == "median") {
             pk_subset <- pk_subset %>% dplyr::mutate_if(is.list, .funs = \(x) {
               sapply( x, \(y) {
-                if(length(y) > 1) {
+                if (length(y) > 1) {
                   q <- quantile(y, probs = c(0.5, 0.25, 0.75), na.rm = TRUE);
                   y <- sprintf(paste0("%.", digits, "g (%.",digits ,"g \u2013 %.", digits, "g)"), q[1], q[2], q[3])
                 } else if (length(y) == 1) {
