@@ -247,7 +247,7 @@ DDI <- R6::R6Class(
             ],
             victim_protocol = self$metadata$protocols$victim[1],
             perpetrator_protocol = self$metadata$protocols$perpetrators[1],
-            individual = self$individuals[[1]]$Name
+            individual = self$individuals[[1]]$name
           )
 
         self$add_simulation(generic_simulation[[1]])

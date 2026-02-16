@@ -95,7 +95,7 @@
       "Parameters": [],
       "OutputSelections": [
         "Organism|PeripheralVenousBlood|${victim}$|Plasma (Peripheral Venous Blood)",
-        "Organism|PeripheralVenousBlood|${victim}$|Plasma Unbound (Peripheral Venous Blood)",
+        "Organism|PeripheralVenousBlood|${victim}$|Plasma Unbound (Peripheral Venous Blood)"
       ],
       "Individual": "${individual}$",
       "Compounds": [
