@@ -31,8 +31,28 @@ SnapshotOutputSchema <- R6::R6Class(
             ),
             list(
               Name = "Resolution",
-              Value = x$resolution,
-              Unit = paste0("pts/", x$unit)
+              Value = switch(
+                x$unit,
+                "s" = x$resolution,
+                "min" = x$resolution,
+                "h" = x$resolution,
+                "day(s)" = x$resolution,
+                "week(s)" = x$resolution / 7,
+                "month(s)" = x$resolution / ospsuite::toUnit("Time", 1, sourceUnit = "month(s)", targetUnit = "day(s)"),
+                "year(s)" = x$resolution / ospsuite::toUnit("Time", 1, sourceUnit = "year(s)", targetUnit = "day(s)"),
+                "ks" = x$resolution / 1000
+              ),
+              Unit =  switch(
+                x$unit,
+                "s" = "pts/s",
+                "min" = "pts/min",
+                "h" = "pts/h",
+                "day(s)" = "pts/day",
+                "week(s)" = "pts/day",
+                "month(s)" = "pts/day",
+                "year(s)" = "pts/day",
+                "ks" = "pts/s"
+              )
             )
           )
         )
