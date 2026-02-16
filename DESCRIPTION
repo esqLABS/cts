@@ -16,6 +16,7 @@ Imports:
     glue,
     jsonlite,
     magrittr,
+    osp.snapshots,
     ospsuite (>= 12.1.0),
     ospsuite.utils,
     purrr,
@@ -36,7 +37,7 @@ Suggests:
     testthat (>= 3.0.0),
     vdiffr,
     withr
-Remotes:  
+Remotes: 
     ospsuite=Open-Systems-Pharmacology/OSPSuite-R,
     osp.snapshots=esqLABS/osp.snapshots
 Config/Needs/website: rmarkdown
