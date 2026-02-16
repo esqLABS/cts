@@ -685,6 +685,14 @@ Simulation <- R6::R6Class(
       } else if (length(population) > 0) {
         self$population <- population
       }
+
+      # initialize with default outputs paths PVB bound and unbound
+      self$set_output_selections(
+        c(
+          paste0("Organism|PeripheralVenousBlood|", unlist(compounds), "|Plasma Unbound (Peripheral Venous Blood)"),
+          paste0("Organism|PeripheralVenousBlood|", unlist(compounds), "|Plasma (Peripheral Venous Blood)")
+        )
+      )
     },
     #' @description
     #' Set the individual to be used in the simulation.
