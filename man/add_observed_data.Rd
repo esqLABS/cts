@@ -18,7 +18,7 @@ the path to a compatible DataImporterConfiguration.}
 \item{...}{additional arguments passed to ospsuite::loadDataSetsFromExcel}
 }
 \value{
-The \code{Snapshot} or \code{DDI} object with the simulation added.
+The \code{Snapshot} or \code{DDI} object with the observed dataset added.
 }
 \description{
 This function adds an observed dataset to a \code{Snapshot} or \code{DDI} object.

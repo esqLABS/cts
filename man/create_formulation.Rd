@@ -11,28 +11,49 @@ create_formulation(name, type, ...)
 
 \item{type}{Type of the formulation to create}
 
-\item{...}{additional parameters that depends on the \code{type} of formulation:
+\item{...}{additional parameters that depends on the \code{type} of formulation.}
+}
+\value{
+A new \code{Formulation} object.
+}
+\description{
+Create a formulation
+}
+\section{Weibull formulation}{
+
 \itemize{
-\item for weibull formulation:
 \item dissolution_time: Time to achieve 80\% dissolution (default 240)
 \item dissolution_time_unit: Time unit for dissolution_time (default min)
 \item lag_time: lag time before dissolution starts (default 0)
 \item lag_time_unit: Time unit for lag_time (default min)
 \item dissolution_shape: dissolution shape parameter (default 0.92)
 \item suspension: Boolean, whether to use as suspension (default True)
-\item for lint80 formulation:
+}
+}
+
+\section{lint80 formulation}{
+
+\itemize{
 \item dissolution_time: Time to achieve 80\% dissolution (default 240)
 \item dissolution_time_unit: Time unit for dissolution_time (default min)
 \item lag_time: lag time before dissolution starts (default 0)
 \item lag_time_unit: Time unit for lag_time (default min)
 \item suspension: Boolean, whether to use as suspension (default True)
-\item for particle formulation:
+}
+}
+
+\section{Particle formulation}{
+
+\itemize{
 \item thickness: Thickness of unstirred water layer (default 30)
 \item thickness_unit: Unit for thickness of unstirred water layer (default µm)
 \item distribution_type: Type of distribution, either "mono" or "poly" (default "mono")
 \item radius: Particle distribution radius, mean or geomean depending on distribution (default 10)
 \item radius_unit: Unit for particle distribution radius (default µm)#'
-\item for polydisperse formulation:
+}
+
+For polydisperse formulation (when type = "poly"):
+\itemize{
 \item particle_size_distribution: either 'normal' (default) or 'lognormal'.
 \item radius_sd: radius standard deviation for polydisperse normal only (default 3)
 \item radius_sd_unit: Unit of radius_sd for polydisperse normal only (default µm)
@@ -42,24 +63,34 @@ create_formulation(name, type, ...)
 \item radius_max: maximum particle radius for polydispersed only (default 19)
 \item radius_max_unit: unit of the maximum particle radius for polydispersed only (default µm)
 \item n_bins: number of bins for polydispersed only (default 3)
-\item for table formulation:
+}
+}
+
+\section{Table formulation}{
+
+\itemize{
 \item tableX: Vector of time points for the release profile in hours
 \item tableY: Vector of fraction of dose at each time point
 \item suspension: Boolean, whether to use as suspension (default True)
-\item for zero order formulation:
+}
+}
+
+\section{Zero order formulation}{
+
+\itemize{
 \item end_time: Time of administration end (default 60)
 \item end_time_unit: Unit for time of administration end (default min)
-\item for first order formulation:
+}
+}
+
+\section{First order formulation}{
+
+\itemize{
 \item thalf: Half-life of the drug release process (default 0.01)
 \item thalf_unit: Unit of half-life of the drug release process (default min)
-}}
 }
-\value{
-A new \code{Formulation} object.
 }
-\description{
-Create a formulation
-}
+
 \examples{
 # Create a dissolved formulation (simplest type)
 dissolved_form <- create_formulation(

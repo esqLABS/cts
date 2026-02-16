@@ -62,6 +62,8 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item \href{#method-Snapshot-remove_protocol}{\code{Snapshot$remove_protocol()}}
 \item \href{#method-Snapshot-add_formulation}{\code{Snapshot$add_formulation()}}
 \item \href{#method-Snapshot-remove_formulation}{\code{Snapshot$remove_formulation()}}
+\item \href{#method-Snapshot-add_individual}{\code{Snapshot$add_individual()}}
+\item \href{#method-Snapshot-remove_individual}{\code{Snapshot$remove_individual()}}
 \item \href{#method-Snapshot-add_observed_data}{\code{Snapshot$add_observed_data()}}
 \item \href{#method-Snapshot-remove_observed_data}{\code{Snapshot$remove_observed_data()}}
 \item \href{#method-Snapshot-add_simulation}{\code{Snapshot$add_simulation()}}
@@ -207,6 +209,40 @@ remove a formulation from the snapshot.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{formulation_name}}{name(s) of the formulation(s) to remove}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-add_individual"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-add_individual}{}}}
+\subsection{Method \code{add_individual()}}{
+add an individual to the snapshot.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$add_individual(individual)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{individual}}{the individual object to add}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-remove_individual"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-remove_individual}{}}}
+\subsection{Method \code{remove_individual()}}{
+remove an individual from the snapshot.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$remove_individual(individual_name)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{individual_name}}{name(s) of the formulation(s) to remove}
 }
 \if{html}{\out{</div>}}
 }
