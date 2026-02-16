@@ -850,27 +850,28 @@ Formulation <- R6::R6Class(
 #' Create a formulation
 #' @param name Name of the formulation to create
 #' @param type Type of the formulation to create
-#' @param ... additional parameters that depends on the `type` of formulation:
-#' - for weibull formulation:
+#' @param ... additional parameters that depends on the `type` of formulation.
+#' @section Weibull formulation:
 #'  - dissolution_time: Time to achieve 80% dissolution (default 240)
 #'  - dissolution_time_unit: Time unit for dissolution_time (default min)
 #'  - lag_time: lag time before dissolution starts (default 0)
 #'  - lag_time_unit: Time unit for lag_time (default min)
 #'  - dissolution_shape: dissolution shape parameter (default 0.92)
 #'  - suspension: Boolean, whether to use as suspension (default True)
-#' - for lint80 formulation:
+#' @section lint80 formulation:
 #'  - dissolution_time: Time to achieve 80% dissolution (default 240)
 #'  - dissolution_time_unit: Time unit for dissolution_time (default min)
 #'  - lag_time: lag time before dissolution starts (default 0)
 #'  - lag_time_unit: Time unit for lag_time (default min)
 #'  - suspension: Boolean, whether to use as suspension (default True)
-#' - for particle formulation:
+#' @section Particle formulation:
 #'  - thickness: Thickness of unstirred water layer (default 30)
 #'  - thickness_unit: Unit for thickness of unstirred water layer (default µm)
 #'  - distribution_type: Type of distribution, either "mono" or "poly" (default "mono")
 #'  - radius: Particle distribution radius, mean or geomean depending on distribution (default 10)
 #'  - radius_unit: Unit for particle distribution radius (default µm)#'
-#'  - for polydisperse formulation:
+#'
+#' For polydisperse formulation (when type = "poly"):
 #'   - particle_size_distribution: either 'normal' (default) or 'lognormal'.
 #'   - radius_sd: radius standard deviation for polydisperse normal only (default 3)
 #'   - radius_sd_unit: Unit of radius_sd for polydisperse normal only (default µm)
@@ -880,14 +881,15 @@ Formulation <- R6::R6Class(
 #'   - radius_max: maximum particle radius for polydispersed only (default 19)
 #'   - radius_max_unit: unit of the maximum particle radius for polydispersed only (default µm)
 #'   - n_bins: number of bins for polydispersed only (default 3)
-#' - for table formulation:
+#'
+#' @section Table formulation:
 #'  - tableX: Vector of time points for the release profile in hours
 #'  - tableY: Vector of fraction of dose at each time point
 #'  - suspension: Boolean, whether to use as suspension (default True)
-#' - for zero order formulation:
+#' @section Zero order formulation:
 #'  - end_time: Time of administration end (default 60)
 #'  - end_time_unit: Unit for time of administration end (default min)
-#' - for first order formulation:
+#' @section First order formulation:
 #'  - thalf: Half-life of the drug release process (default 0.01)
 #'  - thalf_unit: Unit of half-life of the drug release process (default min)
 #' @return A new `Formulation` object.
