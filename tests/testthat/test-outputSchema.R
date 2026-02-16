@@ -12,7 +12,7 @@ test_that("OutputSchema print method works.", {
 
 test_that("`set_interval` can clear and add intervals to the schema.", {
   output_schema <- SnapshotOutputSchema$new()
-  output_schema$set_interval(start_time = 0, end_time = 60, resolution = 1, unit = "min")
+  output_schema$set_interval(start_time = 0, end_time = 6, resolution = 30, unit = "month(s)")
 
   expect_snapshot(output_schema)
 })
@@ -28,7 +28,7 @@ test_that("`add_interval` works", {
 test_that("`set interval` check numeric value of input.", {
   output_schema <- SnapshotOutputSchema$new()
   expect_error(
-    output_schema$set_interval(start_time = "a", end_time = 60, resolution = 1, unit = "min"),
+    output_schema$set_interval(start_time = "a", end_time = 10, resolution = 1, unit = "week(s)"),
     "`start_time`, `end_time` and `resolution` must be numeric."
   )
 })
