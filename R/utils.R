@@ -170,7 +170,7 @@ pretty_pk <- function(snapshot, simulation_name = NULL, molecule_name = NULL, pk
   }
 
   if (is.null(molecule_name)) {
-    molecule_name <- unique(unlist(sapply(pkresult, \(pk) {pk %>% dplyr::select(-dplyr::any_of(c("QuantityPath", "Parameter", "Unit"))) %>% names()})))
+    molecule_name <- unique(unlist(sapply(pkresult, \(pk) {pk %>% dplyr::select(-dplyr::any_of(c("QuantityPath", "Parameter", "Unit", "IndividualId"))) %>% names()})))
   }
 
   for (sim_name in simulation_name) {
@@ -266,7 +266,7 @@ compare_pk <- function(
   pkresult <- pkresult %>% dplyr::filter(Simulation %in% c(simulation_name, reference_simulation_name))
 
   # get compounds and filter
-  pk_molecules_names <- pkresult %>% dplyr::select(-dplyr::any_of(c("Simulation", "QuantityPath", "Parameter", "Unit"))) %>% names()
+  pk_molecules_names <- pkresult %>% dplyr::select(-dplyr::any_of(c("Simulation", "QuantityPath", "Parameter", "Unit", "IndividualId"))) %>% names()
   if (is.null(molecule_name)) {
     molecule_name <- pk_molecules_names
   } else {

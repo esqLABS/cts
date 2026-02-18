@@ -28,35 +28,6 @@
       
       -- Generic DDI simulation ------------------------------------------------------
       
-      -- IndividualId --
-      
-      -- Organism|PeripheralVenousBlood|Plasma (Peripheral Venous Blood) 
-      * C_max: 0 µmol/l
-      * C_max_norm: 0 mg/l
-      * C_max_tD1_tD2: 0 µmol/l
-      * C_max_tD1_tD2_norm: 0 mg/l
-      * C_max_tDLast_tEnd: 0 µmol/l
-      * C_max_tDLast_tEnd_norm: 0 mg/l
-      * t_max: 0 h
-      * t_max_tD1_tD2: 0 h
-      * t_max_tDLast_tEnd: 0 h
-      * C_tEnd: 0 µmol/l
-      * C_trough_tD2: 0 µmol/l
-      * C_trough_tDLast: 0 µmol/l
-      * AUC_tEnd: 0 µmol*min/l
-      * AUC_tEnd_norm: 0 µg*min/l
-      * AUC_tD1_tD2: 0 µmol*min/l
-      * AUC_tD1_tD2_norm: 0 µg*min/l
-      * AUC_tDLast_minus_1_tDLast: 0 µmol*min/l
-      * AUC_tDLast_minus_1_tDLast_norm: 0 µg*min/l
-      * AUC_inf_tD1: 0 µmol*min/l
-      * AUC_inf_tD1_norm: 0 µg*min/l
-      * AUC_inf_tDLast: 0 µmol*min/l
-      * AUC_inf_tDLast_norm: 0 µg*min/l
-      * MRT: 0 h
-      * Thalf: 0 h
-      * Thalf_tDLast_tEnd: 0 h
-      
       -- Levonorgestrel 1 --
       
       -- Organism|PeripheralVenousBlood|Plasma (Peripheral Venous Blood) 
@@ -134,38 +105,6 @@
 
     Code
       suppressWarnings(compare_pk(my_ddi, aggregation = "median"))
-    Message
-      
-      -- IndividualId --
-      
-      -- Organism|PeripheralVenousBlood|Plasma (Peripheral Venous Blood) 
-    Output
-                                       Parameter Generic DDI simulation
-                                  C_max [µmol/l]                      0
-                               C_max_norm [mg/l]                      0
-                          C_max_tD1_tD2 [µmol/l]                      0
-                       C_max_tD1_tD2_norm [mg/l]                      0
-                      C_max_tDLast_tEnd [µmol/l]                      0
-                   C_max_tDLast_tEnd_norm [mg/l]                      0
-                                       t_max [h]                      0
-                               t_max_tD1_tD2 [h]                      0
-                           t_max_tDLast_tEnd [h]                      0
-                                 C_tEnd [µmol/l]                      0
-                           C_trough_tD2 [µmol/l]                      0
-                        C_trough_tDLast [µmol/l]                      0
-                           AUC_tEnd [µmol*min/l]                      0
-                        AUC_tEnd_norm [µg*min/l]                      0
-                        AUC_tD1_tD2 [µmol*min/l]                      0
-                     AUC_tD1_tD2_norm [µg*min/l]                      0
-          AUC_tDLast_minus_1_tDLast [µmol*min/l]                      0
-       AUC_tDLast_minus_1_tDLast_norm [µg*min/l]                      0
-                        AUC_inf_tD1 [µmol*min/l]                      0
-                     AUC_inf_tD1_norm [µg*min/l]                      0
-                     AUC_inf_tDLast [µmol*min/l]                      0
-                  AUC_inf_tDLast_norm [µg*min/l]                      0
-                                         MRT [h]                      0
-                                       Thalf [h]                      0
-                           Thalf_tDLast_tEnd [h]                      0
     Message
       
       -- Levonorgestrel 1 --
@@ -334,40 +273,6 @@
       
       -- LNG 0.09 mg IV - Bayer Study A229 -------------------------------------------
       
-      -- IndividualId --
-      
-      -- Organism|Liver|Intracellular|Fraction of dose-Levonorgestrel 1-Liver-Intracellular 
-      * AUC_inf: 1 (0.5 – 1.5) µmol*min/l
-      * AUC_inf_norm: 1 (0.5 – 1.5) µg*min/l
-      * AUC_tEnd: 1 (0.5 – 1.5) µmol*min/l
-      * AUC_tEnd_norm: 1 (0.5 – 1.5) µg*min/l
-      * CL: 1 (0.5 – 1.5) ml/min/kg
-      * C_max: 1 (0.5 – 1.5) µmol/l
-      * C_max_norm: 1 (0.5 – 1.5) mg/l
-      * C_tEnd: 1 (0.5 – 1.5) µmol/l
-      * FractionAucLastToInf: 1 (0.5 – 1.5)
-      * MRT: 1 (0.5 – 1.5) h
-      * Thalf: 1 (0.5 – 1.5) h
-      * Vd: 1 (0.5 – 1.5) ml/kg
-      * Vss: 1 (0.5 – 1.5) ml/kg
-      * t_max: 1 (0.5 – 1.5) h
-      
-      -- Organism|VenousBlood|Plasma|Sum_LNG_species 
-      * AUC_inf: 1 (0.5 – 1.5) µmol*min/l
-      * AUC_inf_norm: 1 (0.5 – 1.5) µg*min/l
-      * AUC_tEnd: 1 (0.5 – 1.5) µmol*min/l
-      * AUC_tEnd_norm: 1 (0.5 – 1.5) µg*min/l
-      * CL: 1 (0.5 – 1.5) ml/min/kg
-      * C_max: 1 (0.5 – 1.5) µmol/l
-      * C_max_norm: 1 (0.5 – 1.5) mg/l
-      * C_tEnd: 1 (0.5 – 1.5) µmol/l
-      * FractionAucLastToInf: 1 (0.5 – 1.5)
-      * MRT: 1 (0.5 – 1.5) h
-      * Thalf: 1 (0.5 – 1.5) h
-      * Vd: 1 (0.5 – 1.5) ml/kg
-      * Vss: 1 (0.5 – 1.5) ml/kg
-      * t_max: 1 (0.5 – 1.5) h
-      
       -- Levonorgestrel 1-CYP3A4-Parameter Identification Metabolite --
       
       -- Organism|Liver|Intracellular|Fraction of dose-Levonorgestrel 1-Liver-Intracellular 
@@ -405,72 +310,6 @@
       * t_max: 0.08 (0.08 – 0.08) h
       
       -- Bayer Study 19604 - control Day 1 -------------------------------------------
-      
-      -- IndividualId --
-      
-      -- Organism|Total fraction of dose-Levonorgestrel 1 
-      * AUC_inf: 1 (0.5 – 1.5) µmol*min/l
-      * AUC_inf_norm: 1 (0.5 – 1.5) µg*min/l
-      * AUC_tEnd: 1 (0.5 – 1.5) µmol*min/l
-      * AUC_tEnd_norm: 1 (0.5 – 1.5) µg*min/l
-      * CL: 1 (0.5 – 1.5) ml/min/kg
-      * C_max: 1 (0.5 – 1.5) µmol/l
-      * C_max_norm: 1 (0.5 – 1.5) mg/l
-      * C_tEnd: 1 (0.5 – 1.5) µmol/l
-      * FractionAucLastToInf: 1 (0.5 – 1.5)
-      * MRT: 1 (0.5 – 1.5) h
-      * Thalf: 1 (0.5 – 1.5) h
-      * Vd: 1 (0.5 – 1.5) ml/kg
-      * Vss: 1 (0.5 – 1.5) ml/kg
-      * t_max: 1 (0.5 – 1.5) h
-      
-      -- Organism|VenousBlood|Plasma|Concentration in container 
-      * AUC_inf: 1 (0.5 – 1.5) µmol*min/l
-      * AUC_inf_norm: 1 (0.5 – 1.5) µg*min/l
-      * AUC_tEnd: 1 (0.5 – 1.5) µmol*min/l
-      * AUC_tEnd_norm: 1 (0.5 – 1.5) µg*min/l
-      * CL: 1 (0.5 – 1.5) ml/min/kg
-      * C_max: 1 (0.5 – 1.5) µmol/l
-      * C_max_norm: 1 (0.5 – 1.5) mg/l
-      * C_tEnd: 1 (0.5 – 1.5) µmol/l
-      * FractionAucLastToInf: 1 (0.5 – 1.5)
-      * MRT: 1 (0.5 – 1.5) h
-      * Thalf: 1 (0.5 – 1.5) h
-      * Vd: 1 (0.5 – 1.5) ml/kg
-      * Vss: 1 (0.5 – 1.5) ml/kg
-      * t_max: 1 (0.5 – 1.5) h
-      
-      -- Organism|VenousBlood|Plasma|Plasma Unbound 
-      * AUC_inf: 1 (0.5 – 1.5) µmol*min/l
-      * AUC_inf_norm: 1 (0.5 – 1.5) µg*min/l
-      * AUC_tEnd: 1 (0.5 – 1.5) µmol*min/l
-      * AUC_tEnd_norm: 1 (0.5 – 1.5) µg*min/l
-      * CL: 1 (0.5 – 1.5) ml/min/kg
-      * C_max: 1 (0.5 – 1.5) µmol/l
-      * C_max_norm: 1 (0.5 – 1.5) mg/l
-      * C_tEnd: 1 (0.5 – 1.5) µmol/l
-      * FractionAucLastToInf: 1 (0.5 – 1.5)
-      * MRT: 1 (0.5 – 1.5) h
-      * Thalf: 1 (0.5 – 1.5) h
-      * Vd: 1 (0.5 – 1.5) ml/kg
-      * Vss: 1 (0.5 – 1.5) ml/kg
-      * t_max: 1 (0.5 – 1.5) h
-      
-      -- Organism|VenousBlood|Plasma|Sum_LNG_species 
-      * AUC_inf: 1 (0.5 – 1.5) µmol*min/l
-      * AUC_inf_norm: 1 (0.5 – 1.5) µg*min/l
-      * AUC_tEnd: 1 (0.5 – 1.5) µmol*min/l
-      * AUC_tEnd_norm: 1 (0.5 – 1.5) µg*min/l
-      * CL: 1 (0.5 – 1.5) ml/min/kg
-      * C_max: 1 (0.5 – 1.5) µmol/l
-      * C_max_norm: 1 (0.5 – 1.5) mg/l
-      * C_tEnd: 1 (0.5 – 1.5) µmol/l
-      * FractionAucLastToInf: 1 (0.5 – 1.5)
-      * MRT: 1 (0.5 – 1.5) h
-      * Thalf: 1 (0.5 – 1.5) h
-      * Vd: 1 (0.5 – 1.5) ml/kg
-      * Vss: 1 (0.5 – 1.5) ml/kg
-      * t_max: 1 (0.5 – 1.5) h
       
       -- Levonorgestrel 1-ALB-Bayer report Complex --
       
@@ -647,84 +486,6 @@
       suppressWarnings(compare_pk(lng, aggregation = "median", simulation_name = "Bayer Study 19604 - control Day 1"))
     Message
       
-      -- IndividualId --
-      
-      -- Organism|Total fraction of dose-Levonorgestrel 1 
-    Output
-                      Parameter Bayer Study 19604 - control Day 1
-           AUC_inf [µmol*min/l]                     1 (0.5 – 1.5)
-        AUC_inf_norm [µg*min/l]                     1 (0.5 – 1.5)
-          AUC_tEnd [µmol*min/l]                     1 (0.5 – 1.5)
-       AUC_tEnd_norm [µg*min/l]                     1 (0.5 – 1.5)
-                 CL [ml/min/kg]                     1 (0.5 – 1.5)
-                 C_max [µmol/l]                     1 (0.5 – 1.5)
-              C_max_norm [mg/l]                     1 (0.5 – 1.5)
-                C_tEnd [µmol/l]                     1 (0.5 – 1.5)
-          FractionAucLastToInf                      1 (0.5 – 1.5)
-                        MRT [h]                     1 (0.5 – 1.5)
-                      Thalf [h]                     1 (0.5 – 1.5)
-                     Vd [ml/kg]                     1 (0.5 – 1.5)
-                    Vss [ml/kg]                     1 (0.5 – 1.5)
-                      t_max [h]                     1 (0.5 – 1.5)
-    Message
-      
-      -- Organism|VenousBlood|Plasma|Concentration in container 
-    Output
-                      Parameter Bayer Study 19604 - control Day 1
-           AUC_inf [µmol*min/l]                     1 (0.5 – 1.5)
-        AUC_inf_norm [µg*min/l]                     1 (0.5 – 1.5)
-          AUC_tEnd [µmol*min/l]                     1 (0.5 – 1.5)
-       AUC_tEnd_norm [µg*min/l]                     1 (0.5 – 1.5)
-                 CL [ml/min/kg]                     1 (0.5 – 1.5)
-                 C_max [µmol/l]                     1 (0.5 – 1.5)
-              C_max_norm [mg/l]                     1 (0.5 – 1.5)
-                C_tEnd [µmol/l]                     1 (0.5 – 1.5)
-          FractionAucLastToInf                      1 (0.5 – 1.5)
-                        MRT [h]                     1 (0.5 – 1.5)
-                      Thalf [h]                     1 (0.5 – 1.5)
-                     Vd [ml/kg]                     1 (0.5 – 1.5)
-                    Vss [ml/kg]                     1 (0.5 – 1.5)
-                      t_max [h]                     1 (0.5 – 1.5)
-    Message
-      
-      -- Organism|VenousBlood|Plasma|Plasma Unbound 
-    Output
-                      Parameter Bayer Study 19604 - control Day 1
-           AUC_inf [µmol*min/l]                     1 (0.5 – 1.5)
-        AUC_inf_norm [µg*min/l]                     1 (0.5 – 1.5)
-          AUC_tEnd [µmol*min/l]                     1 (0.5 – 1.5)
-       AUC_tEnd_norm [µg*min/l]                     1 (0.5 – 1.5)
-                 CL [ml/min/kg]                     1 (0.5 – 1.5)
-                 C_max [µmol/l]                     1 (0.5 – 1.5)
-              C_max_norm [mg/l]                     1 (0.5 – 1.5)
-                C_tEnd [µmol/l]                     1 (0.5 – 1.5)
-          FractionAucLastToInf                      1 (0.5 – 1.5)
-                        MRT [h]                     1 (0.5 – 1.5)
-                      Thalf [h]                     1 (0.5 – 1.5)
-                     Vd [ml/kg]                     1 (0.5 – 1.5)
-                    Vss [ml/kg]                     1 (0.5 – 1.5)
-                      t_max [h]                     1 (0.5 – 1.5)
-    Message
-      
-      -- Organism|VenousBlood|Plasma|Sum_LNG_species 
-    Output
-                      Parameter Bayer Study 19604 - control Day 1
-           AUC_inf [µmol*min/l]                     1 (0.5 – 1.5)
-        AUC_inf_norm [µg*min/l]                     1 (0.5 – 1.5)
-          AUC_tEnd [µmol*min/l]                     1 (0.5 – 1.5)
-       AUC_tEnd_norm [µg*min/l]                     1 (0.5 – 1.5)
-                 CL [ml/min/kg]                     1 (0.5 – 1.5)
-                 C_max [µmol/l]                     1 (0.5 – 1.5)
-              C_max_norm [mg/l]                     1 (0.5 – 1.5)
-                C_tEnd [µmol/l]                     1 (0.5 – 1.5)
-          FractionAucLastToInf                      1 (0.5 – 1.5)
-                        MRT [h]                     1 (0.5 – 1.5)
-                      Thalf [h]                     1 (0.5 – 1.5)
-                     Vd [ml/kg]                     1 (0.5 – 1.5)
-                    Vss [ml/kg]                     1 (0.5 – 1.5)
-                      t_max [h]                     1 (0.5 – 1.5)
-    Message
-      
       -- Levonorgestrel 1-ALB-Bayer report Complex --
       
       -- Organism|Total fraction of dose-Levonorgestrel 1 
@@ -899,27 +660,6 @@
       
       -- Reference simulation: Bayer Study 19604 - control Day 1 ---------------------
       
-      -- IndividualId --
-      
-      -- Organism|VenousBlood|Plasma|Sum_LNG_species 
-    Output
-                            Parameter LNG 0.09 mg IV - Bayer Study A229
-           AUC_inf_ratio [µmol*min/l]                                 1
-        AUC_inf_norm_ratio [µg*min/l]                                 1
-          AUC_tEnd_ratio [µmol*min/l]                                 1
-       AUC_tEnd_norm_ratio [µg*min/l]                                 1
-                 CL_ratio [ml/min/kg]                                 1
-                 C_max_ratio [µmol/l]                                 1
-              C_max_norm_ratio [mg/l]                                 1
-                C_tEnd_ratio [µmol/l]                                 1
-          FractionAucLastToInf_ratio                                  1
-                        MRT_ratio [h]                                 1
-                      Thalf_ratio [h]                                 1
-                     Vd_ratio [ml/kg]                                 1
-                    Vss_ratio [ml/kg]                                 1
-                      t_max_ratio [h]                                 1
-    Message
-      
       -- Levonorgestrel 1 --
       
       -- Organism|VenousBlood|Plasma|Sum_LNG_species 
@@ -948,27 +688,6 @@
     Message
       
       -- Reference simulation: Bayer Study 19604 - control Day 1 ---------------------
-      
-      -- IndividualId --
-      
-      -- Organism|VenousBlood|Plasma|Sum_LNG_species 
-    Output
-                            Parameter LNG 0.09 mg IV - Bayer Study A229
-           AUC_inf_ratio [µmol*min/l]                                 1
-        AUC_inf_norm_ratio [µg*min/l]                                 1
-          AUC_tEnd_ratio [µmol*min/l]                                 1
-       AUC_tEnd_norm_ratio [µg*min/l]                                 1
-                 CL_ratio [ml/min/kg]                                 1
-                 C_max_ratio [µmol/l]                                 1
-              C_max_norm_ratio [mg/l]                                 1
-                C_tEnd_ratio [µmol/l]                                 1
-          FractionAucLastToInf_ratio                                  1
-                        MRT_ratio [h]                                 1
-                      Thalf_ratio [h]                                 1
-                     Vd_ratio [ml/kg]                                 1
-                    Vss_ratio [ml/kg]                                 1
-                      t_max_ratio [h]                                 1
-    Message
       
       -- Levonorgestrel 1 --
       
