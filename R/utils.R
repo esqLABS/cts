@@ -139,7 +139,8 @@ pivot_pk_analysis <- function(df, compound_names) {
     dplyr::rename(QuantityPath = UniqueQuantityPath) %>%
     tidyr::pivot_wider(
       names_from = Compound,
-      values_from = Value
+      values_from = Value,
+      values_fn = list
     ) %>%
     dplyr::relocate(QuantityPath)
 }
