@@ -153,11 +153,12 @@ Snapshot <- R6::R6Class(
     #' add an individual to the snapshot.
     #' @param individual the individual object to add
     add_individual = function(individual) {
+      ospsuite.utils::validateIsOfType(individual, type = "Individual")
       private$add_item("individuals", individual)
     },
     #' @description
     #' remove an individual from the snapshot.
-    #' @param individual_name name(s) of the formulation(s) to remove
+    #' @param individual_name name(s) of the individual(s) to remove
     remove_individual = function(individual_name) {
       private$remove_item("individuals", individual_name)
     },
@@ -569,7 +570,7 @@ Snapshot <- R6::R6Class(
       self[[target]] <- c(self[[target]], list(item))
     },
     remove_item = function(target, name) {
-      if (target %in% c("protocols", "formulations")) {
+      if (target %in% c("protocols", "formulations", "individuals")) {
         self[[target]] <- purrr::discard(self[[target]], ~ .x$name %in% name)
       } else {
         self[[target]] <- purrr::discard(self[[target]], ~ .x$Name %in% name)

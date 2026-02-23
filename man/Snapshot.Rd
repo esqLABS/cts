@@ -242,7 +242,7 @@ remove an individual from the snapshot.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{individual_name}}{name(s) of the formulation(s) to remove}
+\item{\code{individual_name}}{name(s) of the individual(s) to remove}
 }
 \if{html}{\out{</div>}}
 }
