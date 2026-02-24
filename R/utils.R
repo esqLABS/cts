@@ -98,50 +98,300 @@ with_json_suffix <- function(path) {
 
 #' Format PK Analysis Data
 #'
-#' Transforms PK analysis data by removing compound names from `QuantityPath`,
-#' identifying compounds, and pivoting to a wide format with columns for each
-#' compound.
+#' Transforms PK analysis data by removing molecules names from `QuantityPath`,
+#' identifying molecules, and pivoting to a wide format with columns for each
+#' molecule.
 #'
 #' @param df A data frame or tibble containing PK analysis data returned by
 #' `ospsuite::calculatePKAnalyses`.
-#' @param compound_names A character vector of compound names.
+#' @param molecule_names A character vector of molecules names.
 #'
-#' @return A tibble with individual columns for each compound.
+#' @return A tibble with individual columns for each molecule.
 #'
 #' @keywords internal
-pivot_pk_analysis <- function(df, compound_names) {
-  compound_pattern <- paste(compound_names, collapse = "|")
+pivot_pk_analysis <- function(df, molecule_names) {
+  molecule_pattern <- paste(molecule_names, collapse = "|")
 
   df <- df %>%
     dplyr::mutate(
       UniqueQuantityPath = stringr::str_replace(
         QuantityPath,
-        paste0("\\|(", compound_pattern, ")\\|"),
+        paste0("\\|(", molecule_pattern, ")\\|"),
         "|"
-      )
-    ) %>%
-    dplyr::mutate(
-      df,
-      Compound = purrr::map_chr(
+      ),
+      Molecule = stringr::str_extract(
         QuantityPath,
-        ~ {
-          match <- compound_names[stringr::str_detect(
-            .x,
-            stringr::regex(compound_names, ignore_case = TRUE)
-          )]
-          if (length(match) > 0) match[1] else NA_character_
-        }
+        paste0("\\|(", molecule_pattern, ")\\|"),
+        1
       )
     ) %>%
-    dplyr::select(-dplyr::any_of(c("IndividualId", "QuantityPath")))
+    dplyr::arrange("IndividualId") %>%
+    dplyr::select(-dplyr::any_of(c("QuantityPath")))
 
-  df %>%
-    dplyr::rename(QuantityPath = UniqueQuantityPath) %>%
-    tidyr::pivot_wider(
-      names_from = Compound,
+
+  df <- df %>%
+    dplyr::rename(QuantityPath = UniqueQuantityPath)
+
+  # for pop sim
+  if (length(unique(df$IndividualId)) > 1 ) {
+    df <- df %>%
+      dplyr::group_by(QuantityPath, Parameter, Unit, Molecule) %>%
+      dplyr::summarize_at(.vars = c("Value", "IndividualId"), .funs = list) %>%
+      dplyr::ungroup()
+  }
+  # if all value in columns are length one remove the list
+
+  df<- df %>% tidyr::pivot_wider(
+      names_from = Molecule,
       values_from = Value
     ) %>%
     dplyr::relocate(QuantityPath)
+
+  return(df)
+}
+
+#' Pretty print PK Analysis Data
+#'
+#' Print PK analysis data to a pretty table
+#'
+#' @param snapshot A snapshot or ddi object for which to make a pretty table of PK result
+#' @param simulation_name Optional for which simulation(s) to print the pk analysis result in pretty format
+#' @param molecule_name Optional for which molecule(s) to print the pk analysis result in pretty format
+#' @param pk_parameter Optional for which PK parameters to print the pk analysis result in pretty format
+#' @param aggregation character string either mean or median for the type of aggregation
+#' @param digits number of significant digits to show
+#' @export
+pretty_pk <- function(snapshot, simulation_name = NULL, molecule_name = NULL, pk_parameter = NULL, aggregation = "mean", digits = 3) {
+  ospsuite.utils::validateIsOfType(snapshot, "Snapshot")
+  pkresult <- snapshot$pk_analysis_results
+
+  if (is.null(simulation_name)) {
+    simulation_name <- snapshot$get_names("simulations")
+  }
+
+  if (is.null(molecule_name)) {
+    molecule_name <- unique(unlist(sapply(pkresult, \(pk) {pk %>% dplyr::select(-dplyr::any_of(c("QuantityPath", "Parameter", "Unit", "IndividualId"))) %>% names()})))
+  }
+
+  for (sim_name in simulation_name) {
+    if (is.null(pk_parameter)) {
+      pk_parameter <- unique(unlist(pkresult[[sim_name]]$Parameter))
+    }
+
+    if (sim_name %in% names(pkresult)) {
+      cli::cli_h1(sim_name)
+
+      for (cpd_name in molecule_name) {
+        if(cpd_name %in% colnames(pkresult[[sim_name]])) {
+          cli::cli_h2(cpd_name)
+          quantity <- unique(unlist(pkresult[[sim_name]] %>% dplyr::filter(!is.na(cpd_name)) %>% dplyr::select(dplyr::any_of("QuantityPath"))))
+
+          for (qp in quantity) {
+            pk_subset <- pkresult[[sim_name]] %>% dplyr::filter(QuantityPath == qp, Parameter %in% pk_parameter)
+
+            tmp <- c()
+            for (i in seq_len(nrow(pk_subset))) {
+              values <- (pk_subset %>%  dplyr::pull(cpd_name))[[i]]
+              param <- pk_subset[[i,"Parameter"]]
+              unit <- pk_subset[[i,"Unit"]]
+
+              if(is.na(unit)) {
+                unit <- ""
+              }
+
+              if (is.null(values)) {
+                next()
+              } else if (length(values) > 1) {
+                if (aggregation == "mean") {
+                  tmp <- c(tmp, sprintf(paste0("%s: %.", digits, "g +/- %.", digits,"g %s"), param, mean(values), sd(values), unit))
+                } else if (aggregation == "median") {
+                  q <- quantile(values, probs = c(0.5, 0.25, 0.75), na.rm = TRUE);
+                  tmp <- c(tmp, sprintf(paste0("%s: %.", digits, "g (%.", digits,"g \u2013 %.", digits, "g) %s"), param, q[1], q[2], q[3], unit))
+                }
+              } else {
+                tmp <- c(tmp, sprintf(paste0("%s: %.", digits, "g %s"), param, values, unit))
+              }
+            }
+            if (length(tmp) > 0) {
+              cli::cli_h3(id = "qp_ul", qp)
+              cli::cli_ul(id = "pk_par", tmp)
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#' Make a comparison table across simulations of the PK parameters
+#'
+#' Make a comparison table across simulations of the PK parameters
+#'
+#' @param snapshot A snapshot or ddi object for which to make a comparison
+#' table of PK result.
+#' @param simulation_name Optional. Simulation(s) for which to print the pk
+#' analysis result.
+#' @param reference_simulation_name  Optional. Reference simulation name against which
+#' the other simulation(s) will be compared to.
+#' @param molecule_name Optional. Molecule(s) for which to print the pk
+#' analysis result.
+#' @param pk_parameter Optional. PK parameter(s) for which to print the pk
+#' analysis result.
+#' @param aggregation character string either mean or median for the type of aggregation
+#' @param digits number of significant digits to show
+#' @export
+compare_pk <- function(
+    snapshot,
+    simulation_name = NULL,
+    reference_simulation_name = NULL,
+    molecule_name = NULL,
+    pk_parameter = NULL,
+    aggregation = "mean",
+    digits = 3
+  ) {
+  ospsuite.utils::validateIsOfType(snapshot, "Snapshot")
+  pkresult <- snapshot$pk_analysis_results
+
+  # Create a single table for all simulations
+  pkresult <- purrr::map2(pkresult, names(pkresult), \(pk, sim_name) {pk$Simulation <- sim_name; return(pk)})
+
+  pkresult <- dplyr::bind_rows(pkresult)
+
+  # get simulations and filter
+  if (is.null(simulation_name)) {
+    simulation_name <- unique(pkresult$Simulation)
+  } else {
+    simulation_name <- intersect(unique(pkresult$Simulation), simulation_name)
+  }
+  pkresult <- pkresult %>% dplyr::filter(Simulation %in% c(simulation_name, reference_simulation_name))
+
+  # get compounds and filter
+  pk_molecules_names <- pkresult %>% dplyr::select(-dplyr::any_of(c("Simulation", "QuantityPath", "Parameter", "Unit", "IndividualId"))) %>% names()
+  if (is.null(molecule_name)) {
+    molecule_name <- pk_molecules_names
+  } else {
+    molecule_name <- intersect(pk_molecules_names, molecule_name)
+  }
+
+  pkresult <- pkresult %>%
+    dplyr::select(dplyr::any_of(c("QuantityPath", "Parameter", "Unit", "Simulation", molecule_name)))
+
+  # get pk_parameter and filter
+  if (is.null(pk_parameter)) {
+    pk_parameter <- unique(pkresult$Parameter)
+  } else {
+    pk_parameter <- intersect(unique(pkresult$Parameter), pk_parameter)
+  }
+  pkresult <- pkresult %>% dplyr::filter(Parameter %in% pk_parameter)
+
+  quantities <- unique(pkresult$QuantityPath)
+
+  # pretty print by compound and quantity
+  # make table with results for all simulations as columns
+  # if reference simulation is given calculate ratio relative to that simulation
+  if (!is.null(reference_simulation_name) && is.character(reference_simulation_name) && length(reference_simulation_name) == 1) {
+    cli::cli_h1(paste0("Reference simulation: ", reference_simulation_name))
+  }
+
+  res <- list()
+  for (compound  in molecule_name) {
+    for (quantity in quantities) {
+      pk_subset <- pkresult %>%
+        dplyr::filter(QuantityPath == quantity) %>%
+        dplyr::select(dplyr::any_of(c(compound, "Simulation", "Parameter", "Unit"))) %>%
+        dplyr::filter(!is.na(compound), Parameter %in% pk_parameter)
+      pk_subset <- tidyr::pivot_wider(data = pk_subset, names_from = Simulation, values_from = compound)
+
+      pk_subset <- pk_subset %>%
+        dplyr::select_if(.predicate = \(x){any(!is.null(unlist(x)))})
+
+      if (ncol(pk_subset) > 2) {
+        if (is.null(reference_simulation_name)) {
+          if (aggregation == "mean") {
+            pk_subset <- pk_subset %>% dplyr::mutate_if(is.list, .funs = \(x) {
+              sapply( x, \(y) {
+                if (length(y) > 1) {
+                  y <- sprintf(paste0("%.", digits, "g +/- %.",digits ,"g"), mean(y), sd(y))
+                } else if (length(y) == 1) {
+                  y <- sprintf(paste0("%.", digits, "g"), y)
+                } else {
+                  y <- ""
+                }
+              })
+            })
+          } else if (aggregation == "median") {
+            pk_subset <- pk_subset %>% dplyr::mutate_if(is.list, .funs = \(x) {
+              sapply( x, \(y) {
+                if (length(y) > 1) {
+                  q <- quantile(y, probs = c(0.5, 0.25, 0.75), na.rm = TRUE);
+                  y <- sprintf(paste0("%.", digits, "g (%.",digits ,"g \u2013 %.", digits, "g)"), q[1], q[2], q[3])
+                } else if (length(y) == 1) {
+                  y <- sprintf(paste0("%.", digits, "g"), y)
+                } else {
+                  y <- ""
+                }
+              })
+            })
+          }
+        } else {
+          valid_ref <- is.character(reference_simulation_name)
+          valid_ref <- valid_ref && length(reference_simulation_name) == 1
+          valid_ref <- valid_ref && reference_simulation_name %in% colnames(pk_subset)
+
+          # if only ref sim skip
+          if (ncol(pk_subset) == 3) {
+            res[[compound]][[quantity]] <- NULL
+            next()
+          }
+
+          if (aggregation == "mean") {
+            pk_subset <- pk_subset %>%
+              dplyr::mutate_if(is.list, .funs = \(x) {
+                sapply(x, mean)
+              })
+          } else if (aggregation == "median") {
+            pk_subset <- pk_subset %>%
+              dplyr::mutate_if(is.list, .funs = \(x) {
+                sapply(x, median)
+              })
+          }
+
+          sim_to_compare <- simulation_name[simulation_name != reference_simulation_name]
+          pk_subset <- pk_subset %>%
+            dplyr::mutate_at(dplyr::vars(dplyr::any_of(sim_to_compare)), ~ .x / get(reference_simulation_name))
+
+          pk_subset <- pk_subset %>% dplyr::mutate_if(is.numeric, .funs = \(x) {
+            sprintf(paste0("%.", digits, "g"), x)
+          })
+          pk_subset <- pk_subset %>% dplyr::select(-dplyr::any_of(reference_simulation_name))
+
+          # add ratio to param name
+          pk_subset$Parameter <- paste0(pk_subset$Parameter, "_ratio")
+        }
+
+        pk_subset <- pk_subset %>%  dplyr::mutate_if(is.numeric, .funs = \(x) {sprintf(paste0("%.", digits, "g"), x)})
+
+        # add unit to param column
+        pk_subset$Unit[!is.na(pk_subset$Unit)] <- paste0("[", pk_subset$Unit[!is.na(pk_subset$Unit)], "]")
+        pk_subset$Unit[is.na(pk_subset$Unit)] <- ""
+        pk_subset$Parameter <- paste(pk_subset$Parameter, pk_subset$Unit)
+
+        pk_subset <- pk_subset %>% dplyr::select(-dplyr::any_of("Unit"))
+
+        res[[compound]][[quantity]] <- pk_subset
+
+      }
+    }
+  }
+
+  for (compound in names(res)) {
+    cli::cli_h2(compound)
+
+    for (quantity in names(res[[compound]])) {
+      cli::cli_h3(quantity)
+      print.data.frame(res[[compound]][[quantity]], row.names = FALSE)
+    }
+  }
 }
 
 translate_end_time_unit <- function(end_time_unit) {

@@ -76,7 +76,7 @@ You can include multiple perpetrator compounds in a DDI project:
 
 ```{r multi-perpetrator, eval=FALSE}
 # Import another compound model
-ketoconazole <- compound("Ketoconazole")
+ketoconazole <- compound("ketoconazole")
 
 # Create a DDI project with multiple perpetrators
 multiDDI <- create_ddi(
@@ -121,10 +121,7 @@ You can calculate pharmacokinetic (PK) parameters from the simulation results us
 
 ```{r pk-analysis, eval=FALSE}
 # Calculate PK parameters
-pk_analysis <- run_pk_analysis(myDDI)
-
-# Access PK parameters for a specific simulation
-head(pk_analysis$`Generic DDI simulation`)
+run_pk_analysis(myDDI)
 ```
 
 You can also export the PK analysis results to files:
@@ -132,6 +129,25 @@ You can also export the PK analysis results to files:
 ```{r export-pk, eval=FALSE}
 # Calculate and export PK parameters
 pk_analysis <- run_pk_analysis(myDDI, path = "pk_results/")
+```
+
+You can also get print ready PK results through the `get_pk_analysis` method, that allows to specify the number 
+of significant digits and aggregation method (mean +/- sd or median (IQR)) for population simulations.
+
+```{r get-pk-analysis, eval=FALSE}
+# Extract PK parameter in a ready to print format
+pk_analysis <- myDDI$get_pk_analysis(digits = 3)
+
+# Access PK parameters for a specific simulation
+head(pk_analysis$`Generic DDI simulation`)
+```
+
+Additionally `pretty_pk` function can show the PK results per Compound and Path for each simulation, 
+while `compare_pk` can show the PK results per Compound and Path across simulations.
+
+```{r compare-pk-analysis, eval=FALSE}
+# Compare PK parameters across simulations
+compare_pk(myDDI, molecule_name = "Rifampicin")
 ```
 
 ### Plotting DDI Simulation Results
