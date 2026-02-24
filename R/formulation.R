@@ -869,7 +869,7 @@ Formulation <- R6::R6Class(
 #'  - thickness_unit: Unit for thickness of unstirred water layer (default µm)
 #'  - distribution_type: Type of distribution, either "mono" or "poly" (default "mono")
 #'  - radius: Particle distribution radius, mean or geomean depending on distribution (default 10)
-#'  - radius_unit: Unit for particle distribution radius (default µm)#'
+#'  - radius_unit: Unit for particle distribution radius (default µm)
 #'
 #' For polydisperse formulation (when type = "poly"):
 #'   - particle_size_distribution: either 'normal' (default) or 'lognormal'.
