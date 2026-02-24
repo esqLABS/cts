@@ -16,6 +16,7 @@ Imports:
     glue,
     jsonlite,
     magrittr,
+    osp.snapshots,
     ospsuite (>= 12.1.0),
     ospsuite.utils,
     purrr,
