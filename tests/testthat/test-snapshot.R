@@ -425,7 +425,7 @@ test_that("Creating Snapshot fails with invalid input type", {
 test_that("Adding and removing individual works", {
   rif_clone <- rifampicin$clone()
 
-  # From osp.snasphots test
+  # From osp.snapshots test
   individual <- osp.snapshots::create_individual(
     name = "John Doe",
     species = ospsuite::Species[1],
