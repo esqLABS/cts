@@ -421,3 +421,193 @@ test_that("Creating Snapshot fails with invalid input type", {
   # Test with NULL
   expect_error(Snapshot$new(NULL), "Invalid input type")
 })
+
+test_that("get_names handles R6 objects with lowercase 'name' field", {
+  # Create a minimal snapshot
+  minimal_data <- list(
+    Version = 80,
+    Compounds = list(),
+    Formulations = list(),
+    Protocols = list()
+  )
+  temp_snap <- Snapshot$new(minimal_data)
+
+  # Create R6 Protocol objects with lowercase 'name' field
+  protocol1 <- Protocol$new(
+    name = "TestProtocol1",
+    type = "oral",
+    interval = "single",
+    dose = 100
+  )
+  protocol2 <- Protocol$new(
+    name = "TestProtocol2",
+    type = "oral",
+    interval = "single",
+    dose = 200
+  )
+
+  # Add protocols to the snapshot
+  temp_snap$add_protocol(protocol1)
+  temp_snap$add_protocol(protocol2)
+
+  # Test get_names extracts lowercase 'name' field correctly
+  protocol_names <- temp_snap$get_names("protocols")
+  expect_equal(length(protocol_names), 2)
+  expect_true("TestProtocol1" %in% protocol_names)
+  expect_true("TestProtocol2" %in% protocol_names)
+})
+
+test_that("get_names handles R6 objects with uppercase 'Name' field via active binding", {
+  # Create a minimal snapshot
+  minimal_data <- list(
+    Version = 80,
+    Compounds = list(),
+    Formulations = list()
+  )
+  temp_snap <- Snapshot$new(minimal_data)
+
+  # Create R6 Formulation objects with active binding 'name'
+  suppressWarnings({
+    formulation1 <- Formulation$new(
+      name = "TestFormulation1",
+      type = "weibull"
+    )
+    formulation2 <- Formulation$new(
+      name = "TestFormulation2",
+      type = "weibull"
+    )
+  })
+
+  # Add formulations to the snapshot
+  temp_snap$add_formulation(formulation1)
+  temp_snap$add_formulation(formulation2)
+
+  # Test get_names extracts name correctly from active binding
+  formulation_names <- temp_snap$get_names("formulations")
+  expect_equal(length(formulation_names), 2)
+  expect_true("TestFormulation1" %in% formulation_names)
+  expect_true("TestFormulation2" %in% formulation_names)
+})
+
+test_that("get_names handles plain lists with uppercase 'Name' field", {
+  # Create a minimal snapshot
+  minimal_data <- list(
+    Version = 80,
+    Compounds = list(),
+    Simulations = list()
+  )
+  temp_snap <- Snapshot$new(minimal_data)
+
+  # Add plain list simulations with uppercase 'Name' field
+  sim1 <- list(Name = "Simulation1")
+  sim2 <- list(Name = "Simulation2")
+  temp_snap$add_simulation(sim1)
+  temp_snap$add_simulation(sim2)
+
+  # Test get_names extracts uppercase 'Name' field from plain lists
+  sim_names <- temp_snap$get_names("simulations")
+  expect_equal(length(sim_names), 2)
+  expect_true("Simulation1" %in% sim_names)
+  expect_true("Simulation2" %in% sim_names)
+})
+
+test_that("get_names handles plain lists with lowercase 'name' field", {
+  # Create a minimal snapshot
+  minimal_data <- list(
+    Version = 80,
+    Compounds = list(),
+    Events = list()
+  )
+  temp_snap <- Snapshot$new(minimal_data)
+
+  # Manually add plain list events with lowercase 'name' field
+  temp_snap$events <- list(
+    list(name = "Event1", type = "test"),
+    list(name = "Event2", type = "test")
+  )
+
+  # Test get_names extracts lowercase 'name' field from plain lists
+  event_names <- temp_snap$get_names("events")
+  expect_equal(length(event_names), 2)
+  expect_true("Event1" %in% event_names)
+  expect_true("Event2" %in% event_names)
+})
+
+test_that("get_names handles mixed types and objects without name fields", {
+  # Create a minimal snapshot
+  minimal_data <- list(
+    Version = 80,
+    Compounds = list(),
+    Protocols = list(),
+    Events = list()
+  )
+  temp_snap <- Snapshot$new(minimal_data)
+
+  # Create a mix of R6 objects and plain lists
+  protocol1 <- Protocol$new(
+    name = "NamedProtocol",
+    type = "oral",
+    interval = "single",
+    dose = 100
+  )
+  temp_snap$add_protocol(protocol1)
+
+  # Manually set up a mixed events list with:
+  # - Plain list with lowercase 'name'
+  # - Plain list with uppercase 'Name'
+  # - Object without name field
+  # - R6 object (although unusual for events, testing the logic)
+  temp_snap$events <- list(
+    list(name = "Event1", type = "test"),
+    list(Name = "Event2", type = "test"),
+    list(type = "unnamed_event"),  # No name field
+    protocol1  # R6 object with lowercase 'name'
+  )
+
+  # Test get_names filters out objects without name fields
+  event_names <- temp_snap$get_names("events")
+  expect_equal(length(event_names), 3)  # Should get 3 names, skipping the unnamed one
+  expect_true("Event1" %in% event_names)
+  expect_true("Event2" %in% event_names)
+  expect_true("NamedProtocol" %in% event_names)
+  expect_false(NA %in% event_names)  # NAs should be filtered out
+})
+
+test_that("get_names returns empty character vector for NULL or empty fields", {
+  # Create a minimal snapshot
+  minimal_data <- list(
+    Version = 80,
+    Compounds = list()
+  )
+  temp_snap <- Snapshot$new(minimal_data)
+
+  # Test with NULL field
+  temp_snap$protocols <- NULL
+  expect_equal(temp_snap$get_names("protocols"), character(0))
+
+  # Test with empty list
+  temp_snap$protocols <- list()
+  expect_equal(temp_snap$get_names("protocols"), character(0))
+})
+
+test_that("get_names returns empty when all objects lack name fields", {
+  # Create a minimal snapshot
+  minimal_data <- list(
+    Version = 80,
+    Compounds = list(),
+    Events = list()
+  )
+  temp_snap <- Snapshot$new(minimal_data)
+
+  # Add events without name fields
+  temp_snap$events <- list(
+    list(type = "test1"),
+    list(type = "test2"),
+    list(data = "test3")
+  )
+
+  # Test get_names returns empty when no names are found
+  event_names <- temp_snap$get_names("events")
+  expect_equal(event_names, character(0))
+  expect_equal(length(event_names), 0)
+})
