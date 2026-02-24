@@ -4,20 +4,20 @@
 \alias{pivot_pk_analysis}
 \title{Format PK Analysis Data}
 \usage{
-pivot_pk_analysis(df, compound_names)
+pivot_pk_analysis(df, molecule_names)
 }
 \arguments{
 \item{df}{A data frame or tibble containing PK analysis data returned by
 \code{ospsuite::calculatePKAnalyses}.}
 
-\item{compound_names}{A character vector of compound names.}
+\item{molecule_names}{A character vector of molecules names.}
 }
 \value{
-A tibble with individual columns for each compound.
+A tibble with individual columns for each molecule.
 }
 \description{
-Transforms PK analysis data by removing compound names from \code{QuantityPath},
-identifying compounds, and pivoting to a wide format with columns for each
-compound.
+Transforms PK analysis data by removing molecules names from \code{QuantityPath},
+identifying molecules, and pivoting to a wide format with columns for each
+molecule.
 }
 \keyword{internal}

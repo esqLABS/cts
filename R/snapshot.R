@@ -38,8 +38,18 @@ Snapshot <- R6::R6Class(
       }
       self$version <- self$source_data$Version
       self$compounds <- self$source_data$Compounds
-      self$individuals <- self$source_data$Individuals
-      self$populations <- self$source_data$Populations
+      self$individuals <- lapply(
+        self$source_data$Individuals,
+        function(individual_data) {
+          Individual$new(individual_data)
+        }
+      )
+      self$populations <- lapply(
+        self$source_data$Populations,
+        function(population_data) {
+          Population$new(population_data)
+        }
+      )
       self$formulations <- purrr::map(
         self$source_data$Formulations,
         formulation_from_data
@@ -138,6 +148,19 @@ Snapshot <- R6::R6Class(
     #' @param formulation_name name(s) of the formulation(s) to remove
     remove_formulation = function(formulation_name) {
       private$remove_item("formulations", formulation_name)
+    },
+    #' @description
+    #' add an individual to the snapshot.
+    #' @param individual the individual object to add
+    add_individual = function(individual) {
+      ospsuite.utils::validateIsOfType(individual, type = "Individual")
+      private$add_item("individuals", individual)
+    },
+    #' @description
+    #' remove an individual from the snapshot.
+    #' @param individual_name name(s) of the individual(s) to remove
+    remove_individual = function(individual_name) {
+      private$remove_item("individuals", individual_name)
     },
     #' @description
     #' add an observed dataset to the snapshot.
@@ -373,13 +396,13 @@ Snapshot <- R6::R6Class(
         ospsuite::pkAnalysesToTibble
       )
 
-      compound_names <- self$get_names("compounds")
+      molecule_names <- unique(unlist(sapply(private$.sim_results_obj, \(s){c(s$simulation$allFloatingMoleculeNames(), s$simulation$allStationaryMoleculeNames())})))
 
       # PK analysis results to wider
       private$.pk_analysis_results <- lapply(
         private$.pk_analysis_results_raw,
         pivot_pk_analysis,
-        compound_names
+        molecule_names
       )
 
       if (!is.null(path)) {
@@ -397,6 +420,75 @@ Snapshot <- R6::R6Class(
           )
         }
       }
+    },
+    #' @description
+    #' get pk results of the simulation and aggregate for population simulation
+    #' @param aggregation character string either mean or median for the type of aggregation
+    #' @param digits number of significant digits to show
+    get_pk_analysis = function(aggregation = NULL, digits = 3) {
+      if (is.null(private$.pk_analysis_results)) {
+        self$run_pk_analysis()
+      }
+      pk <- private$.pk_analysis_results
+
+      # merge Parameter and unit column and remove IndividualId
+      pk <- lapply(
+        pk,
+        \(l) {
+          l$Unit[!is.na(l$Unit)] <- paste0("[", l$Unit[!is.na(l$Unit)], "]")
+          l$Unit[is.na(l$Unit)] <- ""
+          l$Parameter <- paste(l$Parameter,l$Unit)
+
+          l <- l %>% dplyr::select(-dplyr::any_of(c("Unit", "IndividualId")))
+          return(l)
+        }
+      )
+
+      if(!is.null(aggregation)) {
+        if (aggregation == "mean") {
+          pk <- lapply(
+            pk,
+            \(l) {
+              l %>% dplyr::mutate_if(is.list, .funs = \(x) {
+                sapply( x, \(y) {
+                  if(!is.null(y)) {
+                    y <- sprintf(paste0("%.", digits, "g +/- %.",digits ,"g"), mean(y), sd(y))
+                  } else {
+                    y <- ""
+                  }
+                })
+              })
+            }
+          )
+        } else if (aggregation == "median") {
+          pk <- lapply(
+            pk,
+            \(l) {
+              l %>% dplyr::mutate_if(is.list, .funs = \(x) {
+                sapply( x, \(y) {
+                  if(!is.null(y)) {
+                    q <- quantile(y, probs = c(0.5, 0.25, 0.75), na.rm = TRUE);
+                    y <- sprintf(paste0("%.", digits, "g (%.",digits ,"g \u2013 %.", digits, "g)"), q[1], q[2], q[3])
+                  } else {
+                    y <- ""
+                  }
+                })
+              })
+            }
+          )
+        }
+      }
+
+      pk <- lapply(
+          pk,
+          \(l) {
+            l <- l %>%  dplyr::mutate_if(is.numeric, .funs = \(x) {sprintf(paste0("%.", digits, "g"), x)})
+            return(l)
+          }
+      )
+
+      return(pk)
+
     },
     #' Plot Time profile of DDI simulations defined in the ddi project
     #' @param ... additional arguments to pass to the plotPopulationTimeProfile (for example aggregation method)
@@ -547,7 +639,7 @@ Snapshot <- R6::R6Class(
       self[[target]] <- c(self[[target]], list(item))
     },
     remove_item = function(target, name) {
-      if (target %in% c("protocols", "formulations")) {
+      if (target %in% c("protocols", "formulations", "individuals")) {
         self[[target]] <- purrr::discard(self[[target]], ~ .x$name %in% name)
       } else {
         self[[target]] <- purrr::discard(self[[target]], ~ .x$Name %in% name)
@@ -576,8 +668,8 @@ Snapshot <- R6::R6Class(
 
       data[["Version"]] <- self$version
       data[["Compounds"]] <- self$compounds
-      data[["Individuals"]] <- self$individuals
-      data[["Populations"]] <- self$populations
+      data[["Individuals"]] <- purrr::map(self$individuals, ~ .x$data)
+      data[["Populations"]] <- purrr::map(self$populations, ~ .x$data)
       data[["Formulations"]] <- purrr::map(self$formulations, ~ .x$data)
       data[["Protocols"]] <- purrr::map(self$protocols, ~ .x$data)
       data[["ExpressionProfiles"]] <- self$expression_profiles

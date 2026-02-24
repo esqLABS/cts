@@ -21,6 +21,10 @@
         * End time: 24 h
         * Resolution: 4 pts/h
       Outputs:
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma Unbound (Peripheral
+      Venous Blood)
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma (Peripheral Venous
+      Blood)
 
 # Adding population to a simulation compound works.
 
@@ -45,6 +49,13 @@
         * End time: 24 h
         * Resolution: 4 pts/h
       Outputs:
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma Unbound (Peripheral
+      Venous Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma Unbound (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma (Peripheral Venous Blood)
 
 # Setting a population in a simulation remove defined individual and vice versa.
 
@@ -69,6 +80,13 @@
         * End time: 24 h
         * Resolution: 4 pts/h
       Outputs:
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma Unbound (Peripheral
+      Venous Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma Unbound (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma (Peripheral Venous Blood)
 
 ---
 
@@ -93,6 +111,13 @@
         * End time: 24 h
         * Resolution: 4 pts/h
       Outputs:
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma Unbound (Peripheral
+      Venous Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma Unbound (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma (Peripheral Venous Blood)
 
 # Adding/setting outptuts to a simulation object works.
 
@@ -117,6 +142,13 @@
         * End time: 24 h
         * Resolution: 4 pts/h
       Outputs:
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma Unbound (Peripheral
+      Venous Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma Unbound (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma (Peripheral Venous Blood)
 
 ---
 
@@ -141,6 +173,13 @@
         * End time: 24 h
         * Resolution: 4 pts/h
       Outputs:
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma Unbound (Peripheral
+      Venous Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma Unbound (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma (Peripheral Venous Blood)
       * Organism|ArterialBlood|Plasma|Levonorgestrel 1|Concentration in container
 
 ---
@@ -196,6 +235,13 @@
         * End time: 48 h
         * Resolution: 1 pts/h
       Outputs:
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma Unbound (Peripheral
+      Venous Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma Unbound (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma (Peripheral Venous Blood)
 
 ---
 
@@ -237,6 +283,13 @@
         * End time: 24 h
         * Resolution: 4 pts/h
       Outputs:
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma Unbound (Peripheral
+      Venous Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma Unbound (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma (Peripheral Venous Blood)
 
 # Adding unknown interactions throws a warning.
 
@@ -261,6 +314,13 @@
         * End time: 24 h
         * Resolution: 4 pts/h
       Outputs:
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma Unbound (Peripheral
+      Venous Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma Unbound (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma (Peripheral Venous Blood)
 
 # Adding default processes works.
 
@@ -291,6 +351,13 @@
         * End time: 24 h
         * Resolution: 4 pts/h
       Outputs:
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma Unbound (Peripheral
+      Venous Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma Unbound (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma (Peripheral Venous Blood)
 
 # Adding processes to a simulation compound works.
 
@@ -315,6 +382,13 @@
         * End time: 24 h
         * Resolution: 4 pts/h
       Outputs:
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma Unbound (Peripheral
+      Venous Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma Unbound (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma (Peripheral Venous Blood)
 
 ---
 
@@ -341,6 +415,13 @@
         * End time: 24 h
         * Resolution: 4 pts/h
       Outputs:
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma Unbound (Peripheral
+      Venous Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma Unbound (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma (Peripheral Venous Blood)
 
 # Adding unknown processes throws a warning.
 
@@ -365,6 +446,13 @@
         * End time: 24 h
         * Resolution: 4 pts/h
       Outputs:
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma Unbound (Peripheral
+      Venous Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma Unbound (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma (Peripheral Venous Blood)
 
 # Add a valid simulation works
 
@@ -397,6 +485,13 @@
         * End time: 24 h
         * Resolution: 4 pts/h
       Outputs:
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma Unbound (Peripheral
+      Venous Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma Unbound (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma (Peripheral Venous Blood)
 
 ---
 
@@ -420,6 +515,10 @@
         * End time: 24 h
         * Resolution: 4 pts/h
       Outputs:
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma Unbound (Peripheral
+      Venous Blood)
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma (Peripheral Venous
+      Blood)
 
 ---
 
@@ -461,6 +560,13 @@
         * End time: 24 h
         * Resolution: 4 pts/h
       Outputs:
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma Unbound (Peripheral
+      Venous Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma Unbound (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma (Peripheral Venous Blood)
 
 # Add a simulation with an unknown population throws an error
 
@@ -485,4 +591,11 @@
         * End time: 24 h
         * Resolution: 4 pts/h
       Outputs:
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma Unbound (Peripheral
+      Venous Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma Unbound (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Levonorgestrel 1|Plasma (Peripheral Venous
+      Blood)
+      * Organism|PeripheralVenousBlood|Itraconazole|Plasma (Peripheral Venous Blood)
 

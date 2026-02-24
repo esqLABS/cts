@@ -50,6 +50,7 @@ test_that("pivot_pk_analysis works correctly", {
       "Path|CompoundB|More",
       "Path|CompoundA|Other"
     ),
+    Unit = c("umol/l", "umol/l", NA),
     Value = c(1.5, 2.5, 3.5),
     IndividualId = c(1, 1, 1)
   )

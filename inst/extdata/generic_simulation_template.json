@@ -27,7 +27,9 @@
       "Parameters": [],
       "OutputSelections": [
         "Organism|PeripheralVenousBlood|${victim}$|Plasma (Peripheral Venous Blood)",
-        "Organism|PeripheralVenousBlood|${perpetrator}$|Plasma (Peripheral Venous Blood)"
+        "Organism|PeripheralVenousBlood|${victim}$|Plasma Unbound (Peripheral Venous Blood)",
+        "Organism|PeripheralVenousBlood|${perpetrator}$|Plasma (Peripheral Venous Blood)",
+        "Organism|PeripheralVenousBlood|${perpetrator}$|Plasma Unbound (Peripheral Venous Blood)"
       ],
       "Individual": "${individual}$",
       "Compounds": [
@@ -56,6 +58,57 @@
             "Formulations": [
               {
                 "Name": "${perpetrator_formulation}$",
+                "Key": "Formulation"
+              }
+            ]
+          }
+        }
+      ],
+      "Interactions": [],
+      "HasResults": false
+    },
+    {
+      "Name": "Generic victim only simulation",
+      "Model": "4Comp",
+      "Solver": {},
+      "OutputSchema": [
+        {
+          "Parameters": [
+            {
+              "Name": "Start time",
+              "Value": 0.0,
+              "Unit": "h"
+            },
+            {
+              "Name": "End time",
+              "Value": ${max_protocol_duration}$,
+              "Unit": "s"
+            },
+            {
+              "Name": "Resolution",
+              "Value": 4.0,
+              "Unit": "pts/h"
+            }
+          ]
+        }
+      ],
+      "Parameters": [],
+      "OutputSelections": [
+        "Organism|PeripheralVenousBlood|${victim}$|Plasma (Peripheral Venous Blood)",
+        "Organism|PeripheralVenousBlood|${victim}$|Plasma Unbound (Peripheral Venous Blood)"
+      ],
+      "Individual": "${individual}$",
+      "Compounds": [
+        {
+          "Name": "${victim}$",
+          "CalculationMethods": [],
+          "Alternatives": [],
+          "Processes": [],
+          "Protocol": {
+            "Name": "${victim_protocol}$",
+            "Formulations": [
+              {
+                "Name": "${victim_formulation}$",
                 "Key": "Formulation"
               }
             ]

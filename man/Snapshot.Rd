@@ -62,6 +62,8 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item \href{#method-Snapshot-remove_protocol}{\code{Snapshot$remove_protocol()}}
 \item \href{#method-Snapshot-add_formulation}{\code{Snapshot$add_formulation()}}
 \item \href{#method-Snapshot-remove_formulation}{\code{Snapshot$remove_formulation()}}
+\item \href{#method-Snapshot-add_individual}{\code{Snapshot$add_individual()}}
+\item \href{#method-Snapshot-remove_individual}{\code{Snapshot$remove_individual()}}
 \item \href{#method-Snapshot-add_observed_data}{\code{Snapshot$add_observed_data()}}
 \item \href{#method-Snapshot-remove_observed_data}{\code{Snapshot$remove_observed_data()}}
 \item \href{#method-Snapshot-add_simulation}{\code{Snapshot$add_simulation()}}
@@ -69,6 +71,7 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item \href{#method-Snapshot-check_simulation}{\code{Snapshot$check_simulation()}}
 \item \href{#method-Snapshot-run_simulations}{\code{Snapshot$run_simulations()}}
 \item \href{#method-Snapshot-run_pk_analysis}{\code{Snapshot$run_pk_analysis()}}
+\item \href{#method-Snapshot-get_pk_analysis}{\code{Snapshot$get_pk_analysis()}}
 \item \href{#method-Snapshot-create_plots}{\code{Snapshot$create_plots()}}
 \item \href{#method-Snapshot-clone}{\code{Snapshot$clone()}}
 }
@@ -212,6 +215,40 @@ remove a formulation from the snapshot.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-add_individual"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-add_individual}{}}}
+\subsection{Method \code{add_individual()}}{
+add an individual to the snapshot.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$add_individual(individual)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{individual}}{the individual object to add}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-remove_individual"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-remove_individual}{}}}
+\subsection{Method \code{remove_individual()}}{
+remove an individual from the snapshot.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$remove_individual(individual_name)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{individual_name}}{name(s) of the individual(s) to remove}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-add_observed_data"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-add_observed_data}{}}}
 \subsection{Method \code{add_observed_data()}}{
@@ -327,7 +364,26 @@ run simulations defined in the snapshot
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{path}}{character string to the folder where to export pk analysis as csv file
+\item{\code{path}}{character string to the folder where to export pk analysis as csv file}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-get_pk_analysis"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-get_pk_analysis}{}}}
+\subsection{Method \code{get_pk_analysis()}}{
+get pk results of the simulation and aggregate for population simulation
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$get_pk_analysis(aggregation = NULL, digits = 3)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{aggregation}}{character string either mean or median for the type of aggregation}
+
+\item{\code{digits}}{number of significant digits to show
 Plot Time profile of DDI simulations defined in the ddi project}
 }
 \if{html}{\out{</div>}}
