@@ -38,8 +38,18 @@ Snapshot <- R6::R6Class(
       }
       self$version <- self$source_data$Version
       self$compounds <- self$source_data$Compounds
-      self$individuals <- self$source_data$Individuals
-      self$populations <- self$source_data$Populations
+      self$individuals <- lapply(
+        self$source_data$Individuals,
+        function(individual_data) {
+          Individual$new(individual_data)
+        }
+      )
+      self$populations <- lapply(
+        self$source_data$Populations,
+        function(population_data) {
+          Population$new(population_data)
+        }
+      )
       self$formulations <- purrr::map(
         self$source_data$Formulations,
         formulation_from_data
@@ -138,6 +148,19 @@ Snapshot <- R6::R6Class(
     #' @param formulation_name name(s) of the formulation(s) to remove
     remove_formulation = function(formulation_name) {
       private$remove_item("formulations", formulation_name)
+    },
+    #' @description
+    #' add an individual to the snapshot.
+    #' @param individual the individual object to add
+    add_individual = function(individual) {
+      ospsuite.utils::validateIsOfType(individual, type = "Individual")
+      private$add_item("individuals", individual)
+    },
+    #' @description
+    #' remove an individual from the snapshot.
+    #' @param individual_name name(s) of the individual(s) to remove
+    remove_individual = function(individual_name) {
+      private$remove_item("individuals", individual_name)
     },
     #' @description
     #' add an observed dataset to the snapshot.
@@ -616,7 +639,7 @@ Snapshot <- R6::R6Class(
       self[[target]] <- c(self[[target]], list(item))
     },
     remove_item = function(target, name) {
-      if (target %in% c("protocols", "formulations")) {
+      if (target %in% c("protocols", "formulations", "individuals")) {
         self[[target]] <- purrr::discard(self[[target]], ~ .x$name %in% name)
       } else {
         self[[target]] <- purrr::discard(self[[target]], ~ .x$Name %in% name)
@@ -645,8 +668,8 @@ Snapshot <- R6::R6Class(
 
       data[["Version"]] <- self$version
       data[["Compounds"]] <- self$compounds
-      data[["Individuals"]] <- self$individuals
-      data[["Populations"]] <- self$populations
+      data[["Individuals"]] <- purrr::map(self$individuals, ~ .x$data)
+      data[["Populations"]] <- purrr::map(self$populations, ~ .x$data)
       data[["Formulations"]] <- purrr::map(self$formulations, ~ .x$data)
       data[["Protocols"]] <- purrr::map(self$protocols, ~ .x$data)
       data[["ExpressionProfiles"]] <- self$expression_profiles

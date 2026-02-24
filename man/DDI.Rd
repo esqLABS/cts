@@ -40,6 +40,7 @@ This class is used to import, access and manipulate the data from a DDI snapshot
 <details><summary>Inherited methods</summary>
 <ul>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_formulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_formulation'><code>cts::Snapshot$add_formulation()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_individual"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_individual'><code>cts::Snapshot$add_individual()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_observed_data"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_observed_data'><code>cts::Snapshot$add_observed_data()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_protocol"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_protocol'><code>cts::Snapshot$add_protocol()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_simulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_simulation'><code>cts::Snapshot$add_simulation()</code></a></span></li>
@@ -49,6 +50,7 @@ This class is used to import, access and manipulate the data from a DDI snapshot
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="get_names"><a href='../../cts/html/Snapshot.html#method-Snapshot-get_names'><code>cts::Snapshot$get_names()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="get_pk_analysis"><a href='../../cts/html/Snapshot.html#method-Snapshot-get_pk_analysis'><code>cts::Snapshot$get_pk_analysis()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_formulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_formulation'><code>cts::Snapshot$remove_formulation()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_individual"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_individual'><code>cts::Snapshot$remove_individual()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_observed_data"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_observed_data'><code>cts::Snapshot$remove_observed_data()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_protocol"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_protocol'><code>cts::Snapshot$remove_protocol()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_simulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_simulation'><code>cts::Snapshot$remove_simulation()</code></a></span></li>

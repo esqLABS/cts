@@ -421,3 +421,27 @@ test_that("Creating Snapshot fails with invalid input type", {
   # Test with NULL
   expect_error(Snapshot$new(NULL), "Invalid input type")
 })
+
+test_that("Adding and removing individual works", {
+  rif_clone <- rifampicin$clone()
+
+  # From osp.snapshots test
+  individual <- osp.snapshots::create_individual(
+    name = "John Doe",
+    species = ospsuite::Species[1],
+    population = ospsuite::HumanPopulation[1],
+    gender = ospsuite::Gender[1],
+    age = 30,
+    weight = 70,
+    height = 175,
+    seed = 12345
+  )
+
+  nind <- length(rif_clone$individuals)
+  expect_no_error(osp.snapshots::add_individual(rif_clone, individual))
+  expect_equal(length(rif_clone$individuals), nind + 1)
+
+  expect_no_error(rif_clone$remove_individual("European (P-gp modified, CYP3A4 36 h, EHC off)"))
+  expect_equal(length(rif_clone$individuals), nind)
+
+})

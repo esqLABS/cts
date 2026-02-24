@@ -16,9 +16,9 @@
     Output
       Output schema:
       * Interval 1
-        * Start time: 0 min
-        * End time: 60 min
-        * Resolution: 1 pts/min
+        * Start time: 0 month(s)
+        * End time: 6 month(s)
+        * Resolution: 30 pts/month(s)
 
 # `add_interval` works
 

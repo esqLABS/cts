@@ -4,7 +4,7 @@
       suppressWarnings(my_ddi$get_pk_analysis())
     Output
       $`Generic DDI simulation`
-      # A tibble: 25 x 4
+      # A tibble: 50 x 4
          QuantityPath                        Parameter `Levonorgestrel 1` Itraconazole
          <chr>                               <chr>     <chr>              <chr>       
        1 Organism|PeripheralVenousBlood|Pla~ C_max [µ~ 4.41e-05           0.0597      
@@ -17,7 +17,7 @@
        8 Organism|PeripheralVenousBlood|Pla~ t_max_tD~ 1.25               4.5         
        9 Organism|PeripheralVenousBlood|Pla~ t_max_tD~ 505                508         
       10 Organism|PeripheralVenousBlood|Pla~ C_tEnd [~ 5.04e-06           0.02        
-      # i 15 more rows
+      # i 40 more rows
       
 
 ---
@@ -31,6 +31,33 @@
       -- Levonorgestrel 1 --
       
       -- Organism|PeripheralVenousBlood|Plasma (Peripheral Venous Blood) 
+      * C_max: 4.41e-05 µmol/l
+      * C_max_norm: 250 mg/l
+      * C_max_tD1_tD2: 3.41e-05 µmol/l
+      * C_max_tD1_tD2_norm: 4.26e+03 mg/l
+      * C_max_tDLast_tEnd: 4.41e-05 µmol/l
+      * C_max_tDLast_tEnd_norm: 5.51e+03 mg/l
+      * t_max: 505 h
+      * t_max_tD1_tD2: 1.25 h
+      * t_max_tDLast_tEnd: 505 h
+      * C_tEnd: 5.04e-06 µmol/l
+      * C_trough_tD2: 4.56e-06 µmol/l
+      * C_trough_tDLast: 9.87e-06 µmol/l
+      * AUC_tEnd: 0.54 µmol*min/l
+      * AUC_tEnd_norm: 3.07e+09 µg*min/l
+      * AUC_tD1_tD2: 0.0144 µmol*min/l
+      * AUC_tD1_tD2_norm: 1.8e+09 µg*min/l
+      * AUC_tDLast_minus_1_tDLast: 0.0252 µmol*min/l
+      * AUC_tDLast_minus_1_tDLast_norm: 3.15e+09 µg*min/l
+      * AUC_inf_tD1: 0.0225 µmol*min/l
+      * AUC_inf_tD1_norm: 2.81e+09 µg*min/l
+      * AUC_inf_tDLast: 0.0465 µmol*min/l
+      * AUC_inf_tDLast_norm: 5.81e+09 µg*min/l
+      * MRT: 24.9 h
+      * Thalf: 20.6 h
+      * Thalf_tDLast_tEnd: 25.3 h
+      
+      -- Organism|PeripheralVenousBlood|Plasma Unbound (Peripheral Venous Blood) 
       * C_max: 4.41e-05 µmol/l
       * C_max_norm: 250 mg/l
       * C_max_tD1_tD2: 3.41e-05 µmol/l
@@ -85,6 +112,33 @@
       * MRT: 35.2 h
       * Thalf: 22.9 h
       * Thalf_tDLast_tEnd: 30.3 h
+      
+      -- Organism|PeripheralVenousBlood|Plasma Unbound (Peripheral Venous Blood) 
+      * C_max: 0.000359 µmol/l
+      * C_max_norm: 6.91 mg/l
+      * C_max_tD1_tD2: 0.000153 µmol/l
+      * C_max_tD1_tD2_norm: 65 mg/l
+      * C_max_tDLast_tEnd: 0.000359 µmol/l
+      * C_max_tDLast_tEnd_norm: 152 mg/l
+      * t_max: 508 h
+      * t_max_tD1_tD2: 4.5 h
+      * t_max_tDLast_tEnd: 508 h
+      * C_tEnd: 0.00012 µmol/l
+      * C_trough_tD2: 9.57e-05 µmol/l
+      * C_trough_tDLast: 0.000219 µmol/l
+      * AUC_tEnd: 8.8 µmol*min/l
+      * AUC_tEnd_norm: 1.69e+08 µg*min/l
+      * AUC_tD1_tD2: 0.177 µmol*min/l
+      * AUC_tD1_tD2_norm: 7.48e+07 µg*min/l
+      * AUC_tDLast_minus_1_tDLast: 0.42 µmol*min/l
+      * AUC_tDLast_minus_1_tDLast_norm: 1.78e+08 µg*min/l
+      * AUC_inf_tD1: 0.366 µmol*min/l
+      * AUC_inf_tD1_norm: 1.55e+08 µg*min/l
+      * AUC_inf_tDLast: 0.97 µmol*min/l
+      * AUC_inf_tDLast_norm: 4.11e+08 µg*min/l
+      * MRT: 35.2 h
+      * Thalf: 22.9 h
+      * Thalf_tDLast_tEnd: 30.3 h
 
 ---
 
@@ -100,6 +154,13 @@
                    Parameter Generic DDI simulation
              C_tEnd [µmol/l]               5.04e-06
        AUC_tEnd [µmol*min/l]                   0.54
+    Message
+      
+      -- Organism|PeripheralVenousBlood|Plasma Unbound (Peripheral Venous Blood) 
+    Output
+                   Parameter Generic DDI simulation
+             C_tEnd [µmol/l]               5.04e-06
+       AUC_tEnd [µmol*min/l]                   0.54
 
 ---
 
@@ -110,6 +171,36 @@
       -- Levonorgestrel 1 --
       
       -- Organism|PeripheralVenousBlood|Plasma (Peripheral Venous Blood) 
+    Output
+                                       Parameter Generic DDI simulation
+                                  C_max [µmol/l]               4.41e-05
+                               C_max_norm [mg/l]                    250
+                          C_max_tD1_tD2 [µmol/l]               3.41e-05
+                       C_max_tD1_tD2_norm [mg/l]               4.26e+03
+                      C_max_tDLast_tEnd [µmol/l]               4.41e-05
+                   C_max_tDLast_tEnd_norm [mg/l]               5.51e+03
+                                       t_max [h]                    505
+                               t_max_tD1_tD2 [h]                   1.25
+                           t_max_tDLast_tEnd [h]                    505
+                                 C_tEnd [µmol/l]               5.04e-06
+                           C_trough_tD2 [µmol/l]               4.56e-06
+                        C_trough_tDLast [µmol/l]               9.87e-06
+                           AUC_tEnd [µmol*min/l]                   0.54
+                        AUC_tEnd_norm [µg*min/l]               3.07e+09
+                        AUC_tD1_tD2 [µmol*min/l]                 0.0144
+                     AUC_tD1_tD2_norm [µg*min/l]                1.8e+09
+          AUC_tDLast_minus_1_tDLast [µmol*min/l]                 0.0252
+       AUC_tDLast_minus_1_tDLast_norm [µg*min/l]               3.15e+09
+                        AUC_inf_tD1 [µmol*min/l]                 0.0225
+                     AUC_inf_tD1_norm [µg*min/l]               2.81e+09
+                     AUC_inf_tDLast [µmol*min/l]                 0.0465
+                  AUC_inf_tDLast_norm [µg*min/l]               5.81e+09
+                                         MRT [h]                   24.9
+                                       Thalf [h]                   20.6
+                           Thalf_tDLast_tEnd [h]                   25.3
+    Message
+      
+      -- Organism|PeripheralVenousBlood|Plasma Unbound (Peripheral Venous Blood) 
     Output
                                        Parameter Generic DDI simulation
                                   C_max [µmol/l]               4.41e-05
@@ -166,6 +257,36 @@
                      AUC_inf_tD1_norm [µg*min/l]               2.58e+10
                      AUC_inf_tDLast [µmol*min/l]                    161
                   AUC_inf_tDLast_norm [µg*min/l]               6.83e+10
+                                         MRT [h]                   35.2
+                                       Thalf [h]                   22.9
+                           Thalf_tDLast_tEnd [h]                   30.3
+    Message
+      
+      -- Organism|PeripheralVenousBlood|Plasma Unbound (Peripheral Venous Blood) 
+    Output
+                                       Parameter Generic DDI simulation
+                                  C_max [µmol/l]               0.000359
+                               C_max_norm [mg/l]                   6.91
+                          C_max_tD1_tD2 [µmol/l]               0.000153
+                       C_max_tD1_tD2_norm [mg/l]                     65
+                      C_max_tDLast_tEnd [µmol/l]               0.000359
+                   C_max_tDLast_tEnd_norm [mg/l]                    152
+                                       t_max [h]                    508
+                               t_max_tD1_tD2 [h]                    4.5
+                           t_max_tDLast_tEnd [h]                    508
+                                 C_tEnd [µmol/l]                0.00012
+                           C_trough_tD2 [µmol/l]               9.57e-05
+                        C_trough_tDLast [µmol/l]               0.000219
+                           AUC_tEnd [µmol*min/l]                    8.8
+                        AUC_tEnd_norm [µg*min/l]               1.69e+08
+                        AUC_tD1_tD2 [µmol*min/l]                  0.177
+                     AUC_tD1_tD2_norm [µg*min/l]               7.48e+07
+          AUC_tDLast_minus_1_tDLast [µmol*min/l]                   0.42
+       AUC_tDLast_minus_1_tDLast_norm [µg*min/l]               1.78e+08
+                        AUC_inf_tD1 [µmol*min/l]                  0.366
+                     AUC_inf_tD1_norm [µg*min/l]               1.55e+08
+                     AUC_inf_tDLast [µmol*min/l]                   0.97
+                  AUC_inf_tDLast_norm [µg*min/l]               4.11e+08
                                          MRT [h]                   35.2
                                        Thalf [h]                   22.9
                            Thalf_tDLast_tEnd [h]                   30.3

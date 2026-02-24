@@ -5,6 +5,11 @@
 #' @import cli
 
 ## usethis namespace: start
+#' @importFrom glue glue
+#' @importFrom osp.snapshots AdvancedParameter
+#' @importFrom osp.snapshots create_individual
+#' @importFrom osp.snapshots Individual
+#' @importFrom osp.snapshots Population
 #' @importFrom purrr keep
 #' @importFrom purrr list_c
 #' @importFrom purrr list_flatten
@@ -12,6 +17,5 @@
 #' @importFrom purrr map_int
 #' @importFrom purrr map_vec
 #' @importFrom purrr walk
-#' @importFrom glue glue
 ## usethis namespace: end
 NULL
