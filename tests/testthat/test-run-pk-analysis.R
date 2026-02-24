@@ -2,8 +2,8 @@ lng <- levonorgestrel$clone()
 # keep 2 pop sim
 remove_simulation(lng, simulation_name = lng$get_names("simulations")[-c(1,3)])
 # reduce n_individual for tests
-lng$populations[[1]]$Settings$NumberOfIndividuals <- 3
-lng$populations[[3]]$Settings$NumberOfIndividuals <- 3
+lng$populations[[1]]$number_of_individuals <- 3
+lng$populations[[3]]$number_of_individuals <- 3
 
 test_that("for_single_sim", {
   testthat::skip_on_os("mac")

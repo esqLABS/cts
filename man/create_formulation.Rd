@@ -49,7 +49,7 @@ Create a formulation
 \item thickness_unit: Unit for thickness of unstirred water layer (default µm)
 \item distribution_type: Type of distribution, either "mono" or "poly" (default "mono")
 \item radius: Particle distribution radius, mean or geomean depending on distribution (default 10)
-\item radius_unit: Unit for particle distribution radius (default µm)#'
+\item radius_unit: Unit for particle distribution radius (default µm)
 }
 
 For polydisperse formulation (when type = "poly"):
