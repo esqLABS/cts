@@ -1,9 +1,10 @@
 Package: cts
 Title: What the Package Does (One Line, Title Case)
 Version: 1.1.0.9014
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+Authors@R: c(
+    person("Felix", "Mil", , "felix.mil@esqlabs.com", role = c("aut", "cre")),
+    person("Diane", "Lefaudeux", ,"diane.lefaudeux@esqlabs.com", role = c("aut","ctb"))
+  )
 Description: What the package does (one paragraph).
 License: file LICENSE
 Depends:
