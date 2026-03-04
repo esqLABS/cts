@@ -69,6 +69,7 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item \href{#method-Snapshot-add_simulation}{\code{Snapshot$add_simulation()}}
 \item \href{#method-Snapshot-remove_simulation}{\code{Snapshot$remove_simulation()}}
 \item \href{#method-Snapshot-check_simulation}{\code{Snapshot$check_simulation()}}
+\item \href{#method-Snapshot-validate_simulation}{\code{Snapshot$validate_simulation()}}
 \item \href{#method-Snapshot-run_simulations}{\code{Snapshot$run_simulations()}}
 \item \href{#method-Snapshot-run_pk_analysis}{\code{Snapshot$run_pk_analysis()}}
 \item \href{#method-Snapshot-get_pk_analysis}{\code{Snapshot$get_pk_analysis()}}
@@ -329,6 +330,25 @@ check that a simulation is valid
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{simulation}}{simulation object to check for validity}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-validate_simulation"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-validate_simulation}{}}}
+\subsection{Method \code{validate_simulation()}}{
+Validate that a simulation has all required building blocks defined
+in the snapshot. Unlike \code{check_simulation}, this method throws errors
+and should be called before running simulations.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$validate_simulation(simulation)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{simulation}}{simulation object to validate}
 }
 \if{html}{\out{</div>}}
 }

@@ -169,14 +169,14 @@ add_simulation <- function(
                 ~ .x$name == formulation_name
               ))
               if (!exists) {
-                cli_abort(
+                cli::cli_warn(
                   "Formulation `{formulation_name}` not found in snapshot."
                 )
               }
             }
           } else if (length(formulation_keys) > 0) {
             # No formulations provided but they are required by the protocol
-            cli_abort(
+            cli::cli_warn(
               "Missing formulation key(s) `{paste(formulation_keys, collapse = '`, `')}` for protocol `{protocol_name}`."
             )
           }
@@ -186,7 +186,7 @@ add_simulation <- function(
       }
 
       if (!protocol_found) {
-        cli_abort(
+        cli::cli_warn(
           "Protocol {.val {protocol_name}} not found in snapshot for compound {.val {compound$Name}}."
         )
       }

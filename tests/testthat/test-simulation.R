@@ -744,7 +744,7 @@ test_that("Add simulation with identical name throws an error.", {
   )
 })
 
-test_that("Add simulation with inexistant individual throws an error.", {
+test_that("Add simulation with inexistant individual throws a warning.", {
   ddi <- levo_itra_ddi$clone()
   sim_to_remove <- ddi$get_names("simulations")
   remove_simulation(ddi, sim_to_remove)
@@ -755,7 +755,7 @@ test_that("Add simulation with inexistant individual throws an error.", {
     perpetrators = "Itraconazole",
     individual = "Human"
   )
-  expect_error(
+  expect_warning(
     add_simulation(
       ddi,
       my_sim,
@@ -766,7 +766,7 @@ test_that("Add simulation with inexistant individual throws an error.", {
   )
 })
 
-test_that("Add a simulation with inexistant protocol throws an error.", {
+test_that("Add a simulation with inexistant protocol throws a warning.", {
   ddi <- levo_itra_ddi$clone()
   sim_to_remove <- ddi$get_names("simulations")
   remove_simulation(ddi, sim_to_remove)
@@ -788,7 +788,7 @@ test_that("Add a simulation with inexistant protocol throws an error.", {
     protocol = "Inexistant Protocol2"
   )
 
-  expect_error(
+  expect_warning(
     add_simulation(
       ddi,
       my_sim,
@@ -797,7 +797,7 @@ test_that("Add a simulation with inexistant protocol throws an error.", {
   )
 })
 
-test_that("Add a simulation with inexistant formulation throws an error.", {
+test_that("Add a simulation with inexistant formulation throws a warning.", {
   ddi <- levo_itra_ddi$clone()
   sim_to_remove <- ddi$get_names("simulations")
   remove_simulation(ddi, sim_to_remove)
@@ -820,14 +820,14 @@ test_that("Add a simulation with inexistant formulation throws an error.", {
     protocol = "ITZ 100mg 21 days",
     formulation = "Inexistant Formulation"
   )
-  expect_error(
+  expect_warning(
     add_simulation(ddi, my_sim),
     "Formulations `Inexistant Formulation` not found in snapshot.",
     fixed = TRUE
   )
 })
 
-test_that("Add a simulation with missing formulation for a protocol throws an error.", {
+test_that("Add a simulation with missing formulation for a protocol throws a warning.", {
   ddi <- levo_itra_ddi$clone()
   sim_to_remove <- ddi$get_names("simulations")
   remove_simulation(ddi, sim_to_remove)
@@ -850,14 +850,13 @@ test_that("Add a simulation with missing formulation for a protocol throws an er
     compound = "Itraconazole",
     protocol = "ITZ 100mg 21 days"
   )
-  expect_error(
+  expect_warning(
     add_simulation(ddi, my_sim),
-    "Missing formulation key(s) `Formulation` for protocol `ITZ 100mg 21 days`.",
-    fixed = TRUE
+    "Missing formulation key\\(s\\) `Formulation` for protocol `ITZ 100mg 21 days`."
   )
 })
 
-test_that("Add a simulation with an unknown population throws an error", {
+test_that("Add a simulation with an unknown population throws a warning", {
   ddi <- levo_itra_ddi$clone()
   sim_to_remove <- ddi$get_names("simulations")
   remove_simulation(ddi, sim_to_remove)
@@ -883,7 +882,7 @@ test_that("Add a simulation with an unknown population throws an error", {
 
   expect_snapshot(my_sim)
 
-  expect_error(
+  expect_warning(
     add_simulation(
       ddi,
       my_sim,
@@ -891,4 +890,134 @@ test_that("Add a simulation with an unknown population throws an error", {
     ),
     "Population `UnknowPop` not found in snapshot."
   )
+})
+
+# validate_simulation tests (Issue #68) ------------------------------------
+
+test_that("validate_simulation errors for missing individual", {
+  ddi <- levo_itra_ddi$clone()
+  # Create a simulation data list with a non-existent individual
+  sim_data <- list(
+    Individual = "NonExistent",
+    Compounds = list(list(
+      Name = "Levonorgestrel 1",
+      Protocol = list(
+        Name = "LNG_150 ug_21 Days",
+        Formulations = list(list(Key = "Formulation", Name = "Microlut"))
+      )
+    ))
+  )
+  expect_error(
+    ddi$validate_simulation(sim_data),
+    "Individual.*NonExistent.*not found in snapshot"
+  )
+})
+
+test_that("validate_simulation errors for missing protocol", {
+  ddi <- levo_itra_ddi$clone()
+  sim_data <- list(
+    Individual = "Woman",
+    Compounds = list(list(
+      Name = "Levonorgestrel 1",
+      Protocol = list(
+        Name = "NonExistentProtocol",
+        Formulations = list(list(Key = "Formulation", Name = "Microlut"))
+      )
+    ))
+  )
+  expect_error(
+    ddi$validate_simulation(sim_data),
+    "Protocols.*NonExistentProtocol.*not found in snapshot"
+  )
+})
+
+test_that("validate_simulation errors when no individual or population defined", {
+  ddi <- levo_itra_ddi$clone()
+  sim_data <- list(
+    Compounds = list(list(
+      Name = "Levonorgestrel 1",
+      Protocol = list(
+        Name = "LNG_150 ug_21 Days",
+        Formulations = list(list(Key = "Formulation", Name = "Microlut"))
+      )
+    ))
+  )
+  expect_error(
+    ddi$validate_simulation(sim_data),
+    "No individual or population defined"
+  )
+})
+
+# Output selections / observers tests (Issue #93) --------------------------
+
+test_that("Simulation has default output selections after creation", {
+  sim <- create_simulation(
+    simulation_name = "TestOutputs",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
+  )
+  expect_true(length(sim$output_selections) > 0)
+  expect_true(any(grepl("Plasma Unbound", sim$output_selections)))
+  expect_true(any(grepl("Plasma \\(Peripheral", sim$output_selections)))
+})
+
+test_that("set_output_selections replaces existing selections", {
+  sim <- create_simulation(
+    simulation_name = "TestOutputs2",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
+  )
+  custom_paths <- c("Organism|Liver|MyObserver", "Organism|Kidney|MyObserver")
+  sim$set_output_selections(custom_paths)
+  expect_equal(length(sim$output_selections), 2)
+  expect_true("Organism|Liver|MyObserver" %in% unlist(sim$output_selections))
+  expect_true("Organism|Kidney|MyObserver" %in% unlist(sim$output_selections))
+  # Original defaults should be gone
+  expect_false(any(grepl("Plasma Unbound", sim$output_selections)))
+})
+
+test_that("add_output_selections appends to existing selections", {
+  sim <- create_simulation(
+    simulation_name = "TestOutputs3",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
+  )
+  original_count <- length(sim$output_selections)
+  sim$add_output_selections("Organism|Liver|CustomObserver")
+  expect_equal(length(sim$output_selections), original_count + 1)
+  expect_true("Organism|Liver|CustomObserver" %in% unlist(sim$output_selections))
+})
+
+test_that("Output selections are included in simulation data", {
+  sim <- create_simulation(
+    simulation_name = "TestOutputs4",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
+  )
+  sim$set_output_selections(c("Organism|Liver|Observer1"))
+  sim_data <- sim$data
+  expect_true("OutputSelections" %in% names(sim_data))
+  expect_true("Organism|Liver|Observer1" %in% unlist(sim_data$OutputSelections))
+})
+
+test_that("Observer output selections survive add_simulation to snapshot", {
+  ddi <- get_test_ddi()
+  sim <- create_simulation(
+    simulation_name = "ObserverTest",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
+  )
+  sim$add_output_selections("Organism|Liver|FractionUnbound")
+  set_compound_protocol(sim, "Levonorgestrel 1", "LNG_150 ug_21 Days", "Microlut")
+  set_compound_protocol(sim, "Itraconazole", "ITZ 100mg 21 days", "IR Dissolved")
+  add_simulation(ddi, sim, options = list(add_interactions = FALSE, add_processes = FALSE))
+
+  # Verify the simulation's output selections are preserved in the snapshot
+  added_sim <- ddi$simulations[[length(ddi$simulations)]]
+  expect_true("Organism|Liver|FractionUnbound" %in% unlist(added_sim$OutputSelections))
 })

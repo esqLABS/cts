@@ -56,6 +56,7 @@ This class is used to import, access and manipulate the data from a DDI snapshot
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_simulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_simulation'><code>cts::Snapshot$remove_simulation()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="run_pk_analysis"><a href='../../cts/html/Snapshot.html#method-Snapshot-run_pk_analysis'><code>cts::Snapshot$run_pk_analysis()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="run_simulations"><a href='../../cts/html/Snapshot.html#method-Snapshot-run_simulations'><code>cts::Snapshot$run_simulations()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="validate_simulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-validate_simulation'><code>cts::Snapshot$validate_simulation()</code></a></span></li>
 </ul>
 </details>
 }}
