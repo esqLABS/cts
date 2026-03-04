@@ -126,6 +126,14 @@ Snapshot <- R6::R6Class(
       extracted_names[!is.na(extracted_names)]
     },
     #' @description
+    #' Get the names of all observers defined in the snapshot's ObserverSets.
+    #' These names can be used in output selections to include observer outputs
+    #' in simulation results.
+    #' @return A character vector of observer set names.
+    get_observer_names = function() {
+      self$get_names("observer_sets")
+    },
+    #' @description
     #' add a protocol to the snapshot.
     #' @param protocol the protocol object to add
     add_protocol = function(protocol) {
@@ -211,17 +219,17 @@ Snapshot <- R6::R6Class(
       if (length(simulation$individual) > 0) {
         if (!(simulation$individual %in% self$get_names("individuals"))) {
           cli::cli_warn(
-            "Individual {.code {simulation$individual}} not found in snapshot."
+            "Simulation {.code {simulation$name}}: Individual {.code {simulation$individual}} not found in snapshot."
           )
         }
       } else if (length(simulation$population) > 0) {
         if (!(simulation$population %in% self$get_names("populations"))) {
           cli::cli_warn(
-            "Population {.code {simulation$population}} not found in snapshot."
+            "Simulation {.code {simulation$name}}: Population {.code {simulation$population}} not found in snapshot."
           )
         }
       } else {
-        cli::cli_warn("No individual or population defined in simulation.")
+        cli::cli_warn("Simulation {.code {simulation$name}}: No individual or population defined.")
       }
       # check that protocols are defined
       sim_protocols <- purrr::list_c(purrr::map(
@@ -234,7 +242,7 @@ Snapshot <- R6::R6Class(
           !(sim_protocols %in% self$get_names("protocols"))
         ]
         cli::cli_warn(
-          "Protocols {.code {missing_protocols}} not found in snapshot."
+          "Simulation {.code {simulation$name}}: Protocols {.code {missing_protocols}} not found in snapshot."
         )
       }
       # check that formulations are defined
@@ -247,7 +255,7 @@ Snapshot <- R6::R6Class(
           !(sim_formulations %in% self$get_names("formulations"))
         ]
         cli::cli_warn(
-          "Formulations {.code {missing_formulations}} not found in snapshot."
+          "Simulation {.code {simulation$name}}: Formulations {.code {missing_formulations}} not found in snapshot."
         )
       }
 
@@ -297,7 +305,7 @@ Snapshot <- R6::R6Class(
             !needed_formulation_keys %in% given_formulation_keys
           ]
           cli::cli_warn(
-            "Missing formulation key(s) {.code {missing_formulation_keys}} for protocol {.code {protocol_name}}."
+            "Simulation {.code {simulation$name}}: Missing formulation key(s) {.code {missing_formulation_keys}} for protocol {.code {protocol_name}}."
           )
         }
       }
@@ -312,17 +320,17 @@ Snapshot <- R6::R6Class(
       if (length(simulation$Individual) > 0) {
         if (!(simulation$Individual %in% self$get_names("individuals"))) {
           cli_abort(
-            "Individual {.code {simulation$Individual}} not found in snapshot."
+            "Simulation {.code {simulation$Name}}: Individual {.code {simulation$Individual}} not found in snapshot."
           )
         }
       } else if (length(simulation$Population) > 0) {
         if (!(simulation$Population %in% self$get_names("populations"))) {
           cli_abort(
-            "Population {.code {simulation$Population}} not found in snapshot."
+            "Simulation {.code {simulation$Name}}: Population {.code {simulation$Population}} not found in snapshot."
           )
         }
       } else {
-        cli_abort("No individual or population defined in simulation.")
+        cli_abort("Simulation {.code {simulation$Name}}: No individual or population defined.")
       }
 
       # check that protocols are defined
@@ -335,7 +343,7 @@ Snapshot <- R6::R6Class(
           !(sim_protocols %in% self$get_names("protocols"))
         ]
         cli_abort(
-          "Protocols {.code {missing_protocols}} not found in snapshot."
+          "Simulation {.code {simulation$Name}}: Protocols {.code {missing_protocols}} not found in snapshot."
         )
       }
 
@@ -349,7 +357,7 @@ Snapshot <- R6::R6Class(
           !(sim_formulations %in% self$get_names("formulations"))
         ]
         cli_abort(
-          "Formulations {.code {missing_formulations}} not found in snapshot."
+          "Simulation {.code {simulation$Name}}: Formulations {.code {missing_formulations}} not found in snapshot."
         )
       }
     },

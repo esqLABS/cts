@@ -58,6 +58,7 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item \href{#method-Snapshot-print}{\code{Snapshot$print()}}
 \item \href{#method-Snapshot-export}{\code{Snapshot$export()}}
 \item \href{#method-Snapshot-get_names}{\code{Snapshot$get_names()}}
+\item \href{#method-Snapshot-get_observer_names}{\code{Snapshot$get_observer_names()}}
 \item \href{#method-Snapshot-add_protocol}{\code{Snapshot$add_protocol()}}
 \item \href{#method-Snapshot-remove_protocol}{\code{Snapshot$remove_protocol()}}
 \item \href{#method-Snapshot-add_formulation}{\code{Snapshot$add_formulation()}}
@@ -145,6 +146,21 @@ get_names the names of a field in the snapshot.
 \item{\code{field}}{the field to get the names from.}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-get_observer_names"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-get_observer_names}{}}}
+\subsection{Method \code{get_observer_names()}}{
+Get the names of all observers defined in the snapshot's ObserverSets.
+These names can be used in output selections to include observer outputs
+in simulation results.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$get_observer_names()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A character vector of observer set names.
 }
 }
 \if{html}{\out{<hr>}}

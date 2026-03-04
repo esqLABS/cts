@@ -170,14 +170,14 @@ add_simulation <- function(
               ))
               if (!exists) {
                 cli::cli_warn(
-                  "Formulation `{formulation_name}` not found in snapshot."
+                  "Simulation `{simulation$name}`: Formulation `{formulation_name}` not found in snapshot."
                 )
               }
             }
           } else if (length(formulation_keys) > 0) {
             # No formulations provided but they are required by the protocol
             cli::cli_warn(
-              "Missing formulation key(s) `{paste(formulation_keys, collapse = '`, `')}` for protocol `{protocol_name}`."
+              "Simulation `{simulation$name}`: Missing formulation key(s) `{paste(formulation_keys, collapse = '`, `')}` for protocol `{protocol_name}`."
             )
           }
 
@@ -187,7 +187,7 @@ add_simulation <- function(
 
       if (!protocol_found) {
         cli::cli_warn(
-          "Protocol {.val {protocol_name}} not found in snapshot for compound {.val {compound$Name}}."
+          "Simulation {.val {simulation$name}}: Protocol {.val {protocol_name}} not found in snapshot for compound {.val {compound$Name}}."
         )
       }
     }
@@ -647,6 +647,28 @@ add_outputs <- function(simulation, paths) {
   invisible(simulation)
 }
 
+#' Get observer names from a snapshot
+#'
+#' @description
+#' Returns the names of all observer sets defined in the snapshot.
+#' Observer outputs can be used as output selections in simulations
+#' to include custom calculated quantities (e.g., sum of species,
+#' fold-change in concentration) in simulation results.
+#' @param snapshot A `Snapshot` or `DDI` object.
+#' @return A character vector of observer set names.
+#' @export
+#' @examples
+#' \dontrun{
+#' ddi <- create_ddi("path/to/snapshot.json")
+#' # List available observers
+#' get_observer_names(ddi)
+#' # Use observer name in output selections
+#' sim <- create_simulation("my_sim", victim = "Drug", individual = "Human")
+#' add_outputs(sim, "Organism|VenousBlood|Plasma|Drug|Sum_species")
+#' }
+get_observer_names <- function(snapshot) {
+  snapshot$get_observer_names()
+}
 
 # Object definition -------------------------------------------------------
 

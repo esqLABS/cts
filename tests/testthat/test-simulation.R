@@ -761,7 +761,7 @@ test_that("Add simulation with inexistant individual throws a warning.", {
       my_sim,
       options = list(add_interactions = FALSE, add_processes = FALSE)
     ),
-    "Individual `Human` not found in snapshot.",
+    "Simulation `Test`: Individual `Human` not found in snapshot.",
     fixed = TRUE
   )
 })
@@ -822,7 +822,7 @@ test_that("Add a simulation with inexistant formulation throws a warning.", {
   )
   expect_warning(
     add_simulation(ddi, my_sim),
-    "Formulations `Inexistant Formulation` not found in snapshot.",
+    "Simulation `Test10`: Formulations `Inexistant Formulation` not found in snapshot.",
     fixed = TRUE
   )
 })
@@ -852,7 +852,7 @@ test_that("Add a simulation with missing formulation for a protocol throws a war
   )
   expect_warning(
     add_simulation(ddi, my_sim),
-    "Missing formulation key\\(s\\) `Formulation` for protocol `ITZ 100mg 21 days`."
+    "Simulation `Test11`: Missing formulation key\\(s\\) `Formulation` for protocol `ITZ 100mg 21 days`."
   )
 })
 
@@ -888,7 +888,7 @@ test_that("Add a simulation with an unknown population throws a warning", {
       my_sim,
       options = list(add_interactions = FALSE, add_processes = FALSE)
     ),
-    "Population `UnknowPop` not found in snapshot."
+    "Simulation `Test`: Population `UnknowPop` not found in snapshot."
   )
 })
 
@@ -898,6 +898,7 @@ test_that("validate_simulation errors for missing individual", {
   ddi <- levo_itra_ddi$clone()
   # Create a simulation data list with a non-existent individual
   sim_data <- list(
+    Name = "TestSim",
     Individual = "NonExistent",
     Compounds = list(list(
       Name = "Levonorgestrel 1",
@@ -909,13 +910,14 @@ test_that("validate_simulation errors for missing individual", {
   )
   expect_error(
     ddi$validate_simulation(sim_data),
-    "Individual.*NonExistent.*not found in snapshot"
+    "Simulation.*TestSim.*Individual.*NonExistent.*not found in snapshot"
   )
 })
 
 test_that("validate_simulation errors for missing protocol", {
   ddi <- levo_itra_ddi$clone()
   sim_data <- list(
+    Name = "TestSim",
     Individual = "Woman",
     Compounds = list(list(
       Name = "Levonorgestrel 1",
@@ -927,13 +929,14 @@ test_that("validate_simulation errors for missing protocol", {
   )
   expect_error(
     ddi$validate_simulation(sim_data),
-    "Protocols.*NonExistentProtocol.*not found in snapshot"
+    "Simulation.*TestSim.*Protocols.*NonExistentProtocol.*not found in snapshot"
   )
 })
 
 test_that("validate_simulation errors when no individual or population defined", {
   ddi <- levo_itra_ddi$clone()
   sim_data <- list(
+    Name = "TestSim",
     Compounds = list(list(
       Name = "Levonorgestrel 1",
       Protocol = list(
@@ -944,7 +947,7 @@ test_that("validate_simulation errors when no individual or population defined",
   )
   expect_error(
     ddi$validate_simulation(sim_data),
-    "No individual or population defined"
+    "Simulation.*TestSim.*No individual or population defined"
   )
 })
 
@@ -1020,4 +1023,78 @@ test_that("Observer output selections survive add_simulation to snapshot", {
   # Verify the simulation's output selections are preserved in the snapshot
   added_sim <- ddi$simulations[[length(ddi$simulations)]]
   expect_true("Organism|Liver|FractionUnbound" %in% unlist(added_sim$OutputSelections))
+})
+
+# Observer building block integration tests (Issue #93) --------------------
+
+test_that("get_observer_names returns observer set names from snapshot", {
+  ddi <- levo_itra_ddi$clone()
+  observer_names <- get_observer_names(ddi)
+  expect_true(length(observer_names) > 0)
+  expect_true("Sum_LNG_species" %in% observer_names)
+})
+
+test_that("Observer paths from ObserverSets can be used as output selections", {
+  ddi <- levo_itra_ddi$clone()
+  sim_to_remove <- ddi$get_names("simulations")
+  remove_simulation(ddi, sim_to_remove)
+
+  # Get actual observer name from the snapshot
+  observer_names <- get_observer_names(ddi)
+  expect_true("Sum_LNG_species" %in% observer_names)
+
+  # Create simulation using an observer-based output path
+  sim <- create_simulation(
+    simulation_name = "ObserverOutputTest",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
+  )
+  set_compound_protocol(sim, "Levonorgestrel 1", "LNG_150 ug_21 Days", "Microlut")
+  set_compound_protocol(sim, "Itraconazole", "ITZ 100mg 21 days", "IR Dissolved")
+
+  # Add an observer path as output selection
+  observer_output <- "Organism|VenousBlood|Plasma|Levonorgestrel 1|Sum_LNG_species"
+  add_outputs(sim, observer_output)
+  expect_true(observer_output %in% unlist(sim$output_selections))
+
+  # Add simulation to snapshot and verify observer output survives
+  add_simulation(ddi, sim, options = list(add_interactions = FALSE, add_processes = FALSE))
+  added_sim <- ddi$simulations[[length(ddi$simulations)]]
+  expect_true(observer_output %in% unlist(added_sim$OutputSelections))
+})
+
+test_that("Observer paths can replace default output selections", {
+  sim <- create_simulation(
+    simulation_name = "ObserverReplaceTest",
+    victim = "Levonorgestrel 1",
+    perpetrators = "Itraconazole",
+    individual = "Woman"
+  )
+
+  # Replace defaults with observer-based outputs only
+  observer_outputs <- c(
+    "Organism|VenousBlood|Plasma|Levonorgestrel 1|Sum_LNG_species",
+    "Organism|VenousBlood|Plasma|Levonorgestrel 1|Plasma Unbound"
+  )
+  set_outputs(sim, observer_outputs)
+
+  expect_equal(length(sim$output_selections), 2)
+  expect_true("Organism|VenousBlood|Plasma|Levonorgestrel 1|Sum_LNG_species" %in%
+    unlist(sim$output_selections))
+  # Default PVB outputs should be gone
+  expect_false(any(grepl("Peripheral Venous Blood", sim$output_selections)))
+})
+
+test_that("Existing simulations in snapshot preserve observer output selections", {
+  ddi <- levo_itra_ddi$clone()
+  # The DDI test data already has simulations with observer-based outputs
+  sim_names <- ddi$get_names("simulations")
+  expect_true(length(sim_names) > 0)
+
+  # Check that at least one simulation uses the Sum_LNG_species observer output
+  has_observer_output <- any(purrr::map_lgl(ddi$simulations, function(sim) {
+    any(grepl("Sum_LNG_species", unlist(sim$OutputSelections)))
+  }))
+  expect_true(has_observer_output)
 })
