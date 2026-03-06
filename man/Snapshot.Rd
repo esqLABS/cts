@@ -58,6 +58,7 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item \href{#method-Snapshot-print}{\code{Snapshot$print()}}
 \item \href{#method-Snapshot-export}{\code{Snapshot$export()}}
 \item \href{#method-Snapshot-get_names}{\code{Snapshot$get_names()}}
+\item \href{#method-Snapshot-get_observer_names}{\code{Snapshot$get_observer_names()}}
 \item \href{#method-Snapshot-add_protocol}{\code{Snapshot$add_protocol()}}
 \item \href{#method-Snapshot-remove_protocol}{\code{Snapshot$remove_protocol()}}
 \item \href{#method-Snapshot-add_formulation}{\code{Snapshot$add_formulation()}}
@@ -69,6 +70,7 @@ This class is used to import, access and manipulate the data from a snapshot.
 \item \href{#method-Snapshot-add_simulation}{\code{Snapshot$add_simulation()}}
 \item \href{#method-Snapshot-remove_simulation}{\code{Snapshot$remove_simulation()}}
 \item \href{#method-Snapshot-check_simulation}{\code{Snapshot$check_simulation()}}
+\item \href{#method-Snapshot-validate_simulation}{\code{Snapshot$validate_simulation()}}
 \item \href{#method-Snapshot-run_simulations}{\code{Snapshot$run_simulations()}}
 \item \href{#method-Snapshot-run_pk_analysis}{\code{Snapshot$run_pk_analysis()}}
 \item \href{#method-Snapshot-get_pk_analysis}{\code{Snapshot$get_pk_analysis()}}
@@ -144,6 +146,21 @@ get_names the names of a field in the snapshot.
 \item{\code{field}}{the field to get the names from.}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-get_observer_names"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-get_observer_names}{}}}
+\subsection{Method \code{get_observer_names()}}{
+Get the names of all observers defined in the snapshot's ObserverSets.
+These names can be used in output selections to include observer outputs
+in simulation results.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$get_observer_names()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A character vector of observer set names.
 }
 }
 \if{html}{\out{<hr>}}
@@ -329,6 +346,25 @@ check that a simulation is valid
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{simulation}}{simulation object to check for validity}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Snapshot-validate_simulation"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-validate_simulation}{}}}
+\subsection{Method \code{validate_simulation()}}{
+Validate that a simulation has all required building blocks defined
+in the snapshot. Unlike \code{check_simulation}, this method throws errors
+and should be called before running simulations.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Snapshot$validate_simulation(simulation)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{simulation}}{simulation object to validate}
 }
 \if{html}{\out{</div>}}
 }

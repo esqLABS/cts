@@ -126,6 +126,14 @@ Snapshot <- R6::R6Class(
       extracted_names[!is.na(extracted_names)]
     },
     #' @description
+    #' Get the names of all observers defined in the snapshot's ObserverSets.
+    #' These names can be used in output selections to include observer outputs
+    #' in simulation results.
+    #' @return A character vector of observer set names.
+    get_observer_names = function() {
+      self$get_names("observer_sets")
+    },
+    #' @description
     #' add a protocol to the snapshot.
     #' @param protocol the protocol object to add
     add_protocol = function(protocol) {
@@ -210,18 +218,18 @@ Snapshot <- R6::R6Class(
       # check that individual or population is defined
       if (length(simulation$individual) > 0) {
         if (!(simulation$individual %in% self$get_names("individuals"))) {
-          cli_abort(
-            "Individual {.code {simulation$individual}} not found in snapshot."
+          cli::cli_warn(
+            "Simulation {.code {simulation$name}}: Individual {.code {simulation$individual}} not found in snapshot."
           )
         }
       } else if (length(simulation$population) > 0) {
         if (!(simulation$population %in% self$get_names("populations"))) {
-          cli_abort(
-            "Population {.code {simulation$population}} not found in snapshot."
+          cli::cli_warn(
+            "Simulation {.code {simulation$name}}: Population {.code {simulation$population}} not found in snapshot."
           )
         }
       } else {
-        cli_abort("No individual or population defined in simulation.")
+        cli::cli_warn("Simulation {.code {simulation$name}}: No individual or population defined.")
       }
       # check that protocols are defined
       sim_protocols <- purrr::list_c(purrr::map(
@@ -233,8 +241,8 @@ Snapshot <- R6::R6Class(
         missing_protocols <- sim_protocols[
           !(sim_protocols %in% self$get_names("protocols"))
         ]
-        cli_abort(
-          "Protocols {.code {missing_protocols}} not found in snapshot."
+        cli::cli_warn(
+          "Simulation {.code {simulation$name}}: Protocols {.code {missing_protocols}} not found in snapshot."
         )
       }
       # check that formulations are defined
@@ -246,8 +254,8 @@ Snapshot <- R6::R6Class(
         missing_formulations <- sim_formulations[
           !(sim_formulations %in% self$get_names("formulations"))
         ]
-        cli_abort(
-          "Formulations {.code {missing_formulations}} not found in snapshot."
+        cli::cli_warn(
+          "Simulation {.code {simulation$name}}: Formulations {.code {missing_formulations}} not found in snapshot."
         )
       }
 
@@ -296,10 +304,61 @@ Snapshot <- R6::R6Class(
           missing_formulation_keys <- needed_formulation_keys[
             !needed_formulation_keys %in% given_formulation_keys
           ]
-          cli_abort(
-            "Missing formulation key(s) {.code {missing_formulation_keys}} for protocol {.code {protocol_name}}."
+          cli::cli_warn(
+            "Simulation {.code {simulation$name}}: Missing formulation key(s) {.code {missing_formulation_keys}} for protocol {.code {protocol_name}}."
           )
         }
+      }
+    },
+    #' @description
+    #' Validate that a simulation has all required building blocks defined
+    #' in the snapshot. Unlike `check_simulation`, this method throws errors
+    #' and should be called before running simulations.
+    #' @param simulation simulation object to validate
+    validate_simulation = function(simulation) {
+      # check that individual or population is defined
+      if (length(simulation$Individual) > 0) {
+        if (!(simulation$Individual %in% self$get_names("individuals"))) {
+          cli_abort(
+            "Simulation {.code {simulation$Name}}: Individual {.code {simulation$Individual}} not found in snapshot."
+          )
+        }
+      } else if (length(simulation$Population) > 0) {
+        if (!(simulation$Population %in% self$get_names("populations"))) {
+          cli_abort(
+            "Simulation {.code {simulation$Name}}: Population {.code {simulation$Population}} not found in snapshot."
+          )
+        }
+      } else {
+        cli_abort("Simulation {.code {simulation$Name}}: No individual or population defined.")
+      }
+
+      # check that protocols are defined
+      sim_protocols <- purrr::list_c(purrr::map(
+        simulation$Compounds,
+        ~ .x$Protocol$Name
+      ))
+      if (!all(sim_protocols %in% self$get_names("protocols"))) {
+        missing_protocols <- sim_protocols[
+          !(sim_protocols %in% self$get_names("protocols"))
+        ]
+        cli_abort(
+          "Simulation {.code {simulation$Name}}: Protocols {.code {missing_protocols}} not found in snapshot."
+        )
+      }
+
+      # check that formulations are defined
+      sim_formulations <- purrr::list_c(purrr::map(
+        simulation$Compounds,
+        ~ purrr::list_c(purrr::map(.x$Protocol$Formulations, ~ .x$Name))
+      ))
+      if (!all(sim_formulations %in% self$get_names("formulations"))) {
+        missing_formulations <- sim_formulations[
+          !(sim_formulations %in% self$get_names("formulations"))
+        ]
+        cli_abort(
+          "Simulation {.code {simulation$Name}}: Formulations {.code {missing_formulations}} not found in snapshot."
+        )
       }
     },
     #' @description
@@ -307,6 +366,11 @@ Snapshot <- R6::R6Class(
     #' @param path character string that is the path to the output directory.
     #' @param exportPKML logical that indicates if the PKML files should be exported.
     run_simulations = function(path = NULL, exportPKML = FALSE) {
+      # validate all simulations before running
+      for (sim in self$simulations) {
+        self$validate_simulation(sim)
+      }
+
       # create a temporary directory
       temp_dir <- tempfile()
       dir.create(temp_dir)

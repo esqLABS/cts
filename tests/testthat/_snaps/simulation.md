@@ -568,7 +568,7 @@
       Blood)
       * Organism|PeripheralVenousBlood|Itraconazole|Plasma (Peripheral Venous Blood)
 
-# Add a simulation with an unknown population throws an error
+# Add a simulation with an unknown population throws a warning
 
     Code
       my_sim
