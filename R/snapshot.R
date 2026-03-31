@@ -400,8 +400,13 @@ Snapshot <- R6::R6Class(
         gsub(glue("-Results"), "", .) %>%
         fs::path_ext_remove()
 
+      # sim_names correspond to the original simulations names but if it contains "/" it has been replaced by "_"
+      # create mapping to ensure returned list name correspond to the original simulation names
+      original_sim_names <- self$get_names("simulations")
+      names(original_sim_names) <- gsub("/", "_", original_sim_names)
+
       results_obj <- results_tibble <- vector("list", length(sim_results_files))
-      names(results_obj) <- names(results_tibble) <- sim_names
+      names(results_obj) <- names(results_tibble) <- original_sim_names[sim_names]
 
       for (i in seq_along(sim_results_files)) {
         sim_name <- sim_names[i]
