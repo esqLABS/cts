@@ -414,13 +414,13 @@ Snapshot <- R6::R6Class(
           temp_dir,
           glue(temp_file_name, "-", sim_name, ".pkml")
         ))
-        results_obj[[sim_name]] <- ospsuite::importResultsFromCSV(
+        results_obj[[original_sim_names[sim_name]]] <- ospsuite::importResultsFromCSV(
           simulation,
           file.path(temp_dir, sim_results_files[i])
         )
         results_tibble[[
           sim_name
-        ]] <- ospsuite::simulationResultsToTibble(results_obj[[sim_name]])
+        ]] <- ospsuite::simulationResultsToTibble(results_obj[[original_sim_names[sim_name]]])
       }
 
       private$.sim_results_obj <- results_obj
