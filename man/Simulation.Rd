@@ -9,337 +9,348 @@ A simulation is a JSON file that contains all the information about a a simulati
 This class is used to create the json corresponding to a simulation.
 }
 \section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{name}}{Name of the simulation}
-}
-\if{html}{\out{</div>}}
+  \if{html}{\out{<div class="r6-fields">}}
+  \describe{
+    \item{\code{name}}{Name of the simulation}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{data}}{dynamic json representation of the simulation object}
+  \if{html}{\out{<div class="r6-active-bindings">}}
+  \describe{
+    \item{\code{data}}{dynamic json representation of the simulation object}
 
-\item{\code{model}}{model used in the simulation}
+    \item{\code{model}}{model used in the simulation}
 
-\item{\code{solver}}{solver setting used in the simulation}
+    \item{\code{solver}}{solver setting used in the simulation}
 
-\item{\code{output_schema}}{Output time intervals setting used in the simulation}
+    \item{\code{output_schema}}{Output time intervals setting used in the simulation}
 
-\item{\code{output_selections}}{Output to be returned when running the simulation}
+    \item{\code{output_selections}}{Output to be returned when running the simulation}
 
-\item{\code{individual}}{Individual used in the simulation}
+    \item{\code{individual}}{Individual used in the simulation}
 
-\item{\code{population}}{Population used in the simulation}
+    \item{\code{population}}{Population used in the simulation}
 
-\item{\code{compounds}}{Compounds used in the simulation}
+    \item{\code{compounds}}{Compounds used in the simulation}
 
-\item{\code{interactions}}{Interactions used in the simulation}
+    \item{\code{interactions}}{Interactions used in the simulation}
 
-\item{\code{has_results}}{wether or not the simulation has results}
-}
-\if{html}{\out{</div>}}
+    \item{\code{has_results}}{wether or not the simulation has results}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-Simulation-new}{\code{Simulation$new()}}
-\item \href{#method-Simulation-set_individual}{\code{Simulation$set_individual()}}
-\item \href{#method-Simulation-set_population}{\code{Simulation$set_population()}}
-\item \href{#method-Simulation-add_compound}{\code{Simulation$add_compound()}}
-\item \href{#method-Simulation-set_compound_protocol}{\code{Simulation$set_compound_protocol()}}
-\item \href{#method-Simulation-set_output_interval}{\code{Simulation$set_output_interval()}}
-\item \href{#method-Simulation-add_output_interval}{\code{Simulation$add_output_interval()}}
-\item \href{#method-Simulation-add_compound_interactions}{\code{Simulation$add_compound_interactions()}}
-\item \href{#method-Simulation-add_compound_processes}{\code{Simulation$add_compound_processes()}}
-\item \href{#method-Simulation-set_output_selections}{\code{Simulation$set_output_selections()}}
-\item \href{#method-Simulation-add_output_selections}{\code{Simulation$add_output_selections()}}
-\item \href{#method-Simulation-print}{\code{Simulation$print()}}
-\item \href{#method-Simulation-clone}{\code{Simulation$clone()}}
-}
+  \itemize{
+    \item \href{#method-Simulation-initialize}{\code{Simulation$new()}}
+    \item \href{#method-Simulation-set_individual}{\code{Simulation$set_individual()}}
+    \item \href{#method-Simulation-set_population}{\code{Simulation$set_population()}}
+    \item \href{#method-Simulation-add_compound}{\code{Simulation$add_compound()}}
+    \item \href{#method-Simulation-set_compound_protocol}{\code{Simulation$set_compound_protocol()}}
+    \item \href{#method-Simulation-set_output_interval}{\code{Simulation$set_output_interval()}}
+    \item \href{#method-Simulation-add_output_interval}{\code{Simulation$add_output_interval()}}
+    \item \href{#method-Simulation-add_compound_interactions}{\code{Simulation$add_compound_interactions()}}
+    \item \href{#method-Simulation-add_compound_processes}{\code{Simulation$add_compound_processes()}}
+    \item \href{#method-Simulation-set_output_selections}{\code{Simulation$set_output_selections()}}
+    \item \href{#method-Simulation-add_output_selections}{\code{Simulation$add_output_selections()}}
+    \item \href{#method-Simulation-print}{\code{Simulation$print()}}
+    \item \href{#method-Simulation-clone}{\code{Simulation$clone()}}
+  }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Simulation-new"></a>}}
-\if{latex}{\out{\hypertarget{method-Simulation-new}{}}}
-\subsection{Method \code{new()}}{
-Create a Simulation object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Simulation$new(
+\if{html}{\out{<a id="method-Simulation-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-Simulation-initialize}{}}}
+\subsection{\code{Simulation$new()}}{
+  Create a Simulation object.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Simulation$new(
   name,
   compounds = list(),
   individual = list(),
   population = list()
-)}\if{html}{\out{</div>}}
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{name}}{character string corresponding to the simulation name.}
+      \item{\code{compounds}}{list of compounds names used in the simulation.}
+      \item{\code{individual}}{name of the individual used in the simulation.}
+      \item{\code{population}}{name of the population used in the simulation.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A new \code{Simulation} object.
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{name}}{character string corresponding to the simulation name.}
-
-\item{\code{compounds}}{list of compounds names used in the simulation.}
-
-\item{\code{individual}}{name of the individual used in the simulation.}
-
-\item{\code{population}}{name of the population used in the simulation.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A new \code{Simulation} object.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Simulation-set_individual"></a>}}
 \if{latex}{\out{\hypertarget{method-Simulation-set_individual}{}}}
-\subsection{Method \code{set_individual()}}{
-Set the individual to be used in the simulation.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Simulation$set_individual(individual)}\if{html}{\out{</div>}}
+\subsection{\code{Simulation$set_individual()}}{
+  Set the individual to be used in the simulation.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Simulation$set_individual(individual)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{individual}}{name of the individual used in the simulation.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    The updated \code{Simulation} object.
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{individual}}{name of the individual used in the simulation.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-The updated \code{Simulation} object.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Simulation-set_population"></a>}}
 \if{latex}{\out{\hypertarget{method-Simulation-set_population}{}}}
-\subsection{Method \code{set_population()}}{
-Set the individual to be used in the simulation.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Simulation$set_population(population)}\if{html}{\out{</div>}}
+\subsection{\code{Simulation$set_population()}}{
+  Set the individual to be used in the simulation.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Simulation$set_population(population)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{population}}{name of the individual used in the simulation.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    The updated \code{Simulation} object.
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{population}}{name of the individual used in the simulation.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-The updated \code{Simulation} object.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Simulation-add_compound"></a>}}
 \if{latex}{\out{\hypertarget{method-Simulation-add_compound}{}}}
-\subsection{Method \code{add_compound()}}{
-Add the compounds to be used in the simulation.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Simulation$add_compound(compound, protocol = NULL, formulation = list())}\if{html}{\out{</div>}}
+\subsection{\code{Simulation$add_compound()}}{
+  Add the compounds to be used in the simulation.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Simulation$add_compound(compound, protocol = NULL, formulation = list())}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{compound}}{name of the compound to be added in the simulation.}
+      \item{\code{protocol}}{name of the protocol used for the compound.}
+      \item{\code{formulation}}{character string or vector of formulation names to use with the protocol.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    The updated \code{Simulation} object.
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{compound}}{name of the compound to be added in the simulation.}
-
-\item{\code{protocol}}{name of the protocol used for the compound.}
-
-\item{\code{formulation}}{character string or vector of formulation names to use with the protocol.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-The updated \code{Simulation} object.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Simulation-set_compound_protocol"></a>}}
 \if{latex}{\out{\hypertarget{method-Simulation-set_compound_protocol}{}}}
-\subsection{Method \code{set_compound_protocol()}}{
-Set the protocol to be used in for a given compound.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Simulation$set_compound_protocol(compound, protocol, formulation = list())}\if{html}{\out{</div>}}
+\subsection{\code{Simulation$set_compound_protocol()}}{
+  Set the protocol to be used in for a given compound.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Simulation$set_compound_protocol(compound, protocol, formulation = list())}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{compound}}{name of the compound for which to set the protocol.}
+      \item{\code{protocol}}{name of the protocol used for the compound.}
+      \item{\code{formulation}}{oral formulation key mapping for the protocol if needed,}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    The updated \code{Simulation} object.
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{compound}}{name of the compound for which to set the protocol.}
-
-\item{\code{protocol}}{name of the protocol used for the compound.}
-
-\item{\code{formulation}}{oral formulation key mapping for the protocol if needed,}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-The updated \code{Simulation} object.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Simulation-set_output_interval"></a>}}
 \if{latex}{\out{\hypertarget{method-Simulation-set_output_interval}{}}}
-\subsection{Method \code{set_output_interval()}}{
-Clears the output interval from the simulation and adds a new one.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Simulation$set_output_interval(startTime, endTime, resolution, unit)}\if{html}{\out{</div>}}
+\subsection{\code{Simulation$set_output_interval()}}{
+  Clears the output interval from the simulation and adds a new one.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Simulation$set_output_interval(startTime, endTime, resolution, unit)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{startTime}}{Start time of the interval in \code{unit}}
+      \item{\code{endTime}}{End time of the interval in \code{unit}}
+      \item{\code{resolution}}{resolution in points per \code{unit}}
+      \item{\code{unit}}{time unit for the interval.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    The updated \code{Simulation} object.
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{startTime}}{Start time of the interval in \code{unit}}
-
-\item{\code{endTime}}{End time of the interval in \code{unit}}
-
-\item{\code{resolution}}{resolution in points per \code{unit}}
-
-\item{\code{unit}}{time unit for the interval.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-The updated \code{Simulation} object.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Simulation-add_output_interval"></a>}}
 \if{latex}{\out{\hypertarget{method-Simulation-add_output_interval}{}}}
-\subsection{Method \code{add_output_interval()}}{
-Adds an interval to the output schema of the simulation
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Simulation$add_output_interval(startTime, endTime, resolution, unit)}\if{html}{\out{</div>}}
+\subsection{\code{Simulation$add_output_interval()}}{
+  Adds an interval to the output schema of the simulation
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Simulation$add_output_interval(startTime, endTime, resolution, unit)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{startTime}}{Start time of the interval in \code{unit}}
+      \item{\code{endTime}}{End time of the interval in \code{unit}}
+      \item{\code{resolution}}{resolution in points per \code{unit}}
+      \item{\code{unit}}{time unit for the interval.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    The updated \code{Simulation} object.
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{startTime}}{Start time of the interval in \code{unit}}
-
-\item{\code{endTime}}{End time of the interval in \code{unit}}
-
-\item{\code{resolution}}{resolution in points per \code{unit}}
-
-\item{\code{unit}}{time unit for the interval.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-The updated \code{Simulation} object.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Simulation-add_compound_interactions"></a>}}
 \if{latex}{\out{\hypertarget{method-Simulation-add_compound_interactions}{}}}
-\subsection{Method \code{add_compound_interactions()}}{
-Add the interactions to be used in for a given compound.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Simulation$add_compound_interactions(compound, interactions)}\if{html}{\out{</div>}}
+\subsection{\code{Simulation$add_compound_interactions()}}{
+  Add the interactions to be used in for a given compound.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Simulation$add_compound_interactions(compound, interactions)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{compound}}{name of the compound for which to add interaction}
+      \item{\code{interactions}}{name of the molecule with which the compound interacts.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    The updated \code{Simulation} object.
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{compound}}{name of the compound for which to add interaction}
-
-\item{\code{interactions}}{name of the molecule with which the compound interacts.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-The updated \code{Simulation} object.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Simulation-add_compound_processes"></a>}}
 \if{latex}{\out{\hypertarget{method-Simulation-add_compound_processes}{}}}
-\subsection{Method \code{add_compound_processes()}}{
-Add the interactions to be used in for a given compound.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Simulation$add_compound_processes(compound, processes)}\if{html}{\out{</div>}}
+\subsection{\code{Simulation$add_compound_processes()}}{
+  Add the interactions to be used in for a given compound.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Simulation$add_compound_processes(compound, processes)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{compound}}{name of the compound for which to add interaction}
+      \item{\code{processes}}{name of the molecule with which the compound interacts.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    The updated \code{Simulation} object.
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{compound}}{name of the compound for which to add interaction}
-
-\item{\code{processes}}{name of the molecule with which the compound interacts.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-The updated \code{Simulation} object.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Simulation-set_output_selections"></a>}}
 \if{latex}{\out{\hypertarget{method-Simulation-set_output_selections}{}}}
-\subsection{Method \code{set_output_selections()}}{
-Set the outputs to be used for plotting.
+\subsection{\code{Simulation$set_output_selections()}}{
+  Set the outputs to be used for plotting.
 This removes any previously set outputs.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Simulation$set_output_selections(paths)}\if{html}{\out{</div>}}
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Simulation$set_output_selections(paths)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{paths}}{path of the output to use for plotting}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    The updated \code{Simulation} object.
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{paths}}{path of the output to use for plotting}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-The updated \code{Simulation} object.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Simulation-add_output_selections"></a>}}
 \if{latex}{\out{\hypertarget{method-Simulation-add_output_selections}{}}}
-\subsection{Method \code{add_output_selections()}}{
-Add some outputs to be used for plotting.
+\subsection{\code{Simulation$add_output_selections()}}{
+  Add some outputs to be used for plotting.
 This add the output to any previously set outputs.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Simulation$add_output_selections(paths)}\if{html}{\out{</div>}}
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Simulation$add_output_selections(paths)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{paths}}{path of the output to add for plotting}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    The updated \code{Simulation} object.
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{paths}}{path of the output to add for plotting}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-The updated \code{Simulation} object.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Simulation-print"></a>}}
 \if{latex}{\out{\hypertarget{method-Simulation-print}{}}}
-\subsection{Method \code{print()}}{
-Pretty print the simulation object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Simulation$print()}\if{html}{\out{</div>}}
+\subsection{\code{Simulation$print()}}{
+  Pretty print the simulation object.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Simulation$print()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Simulation-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-Simulation-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Simulation$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{Simulation$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Simulation$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

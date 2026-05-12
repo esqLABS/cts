@@ -400,22 +400,29 @@ Snapshot <- R6::R6Class(
         gsub(glue("-Results"), "", .) %>%
         fs::path_ext_remove()
 
+      # sim_names correspond to the original simulations names but if it contains "/" it has been replaced by "_"
+      # create mapping to ensure returned list name correspond to the original simulation names
+      original_sim_names <- self$get_names("simulations")
+      names(original_sim_names) <- gsub("/", "_", original_sim_names, fixed = TRUE)
+
       results_obj <- results_tibble <- vector("list", length(sim_results_files))
-      names(results_obj) <- names(results_tibble) <- sim_names
+      names(results_obj) <- names(results_tibble) <- original_sim_names[sim_names]
 
       for (i in seq_along(sim_results_files)) {
         sim_name <- sim_names[i]
+        original_name <- unname(original_sim_names[sim_name])
+
         simulation <- ospsuite::loadSimulation(file.path(
           temp_dir,
           glue(temp_file_name, "-", sim_name, ".pkml")
         ))
-        results_obj[[sim_name]] <- ospsuite::importResultsFromCSV(
+        results_obj[[original_name]] <- ospsuite::importResultsFromCSV(
           simulation,
           file.path(temp_dir, sim_results_files[i])
         )
-        results_tibble[[
-          sim_name
-        ]] <- ospsuite::simulationResultsToTibble(results_obj[[sim_name]])
+        results_tibble[[original_name]] <- ospsuite::simulationResultsToTibble(
+          results_obj[[original_name]]
+        )
       }
 
       private$.sim_results_obj <- results_obj
