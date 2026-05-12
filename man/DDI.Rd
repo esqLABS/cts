@@ -8,110 +8,111 @@ A snapshot is a JSON file that contains all the information about a model.
 This class is used to import, access and manipulate the data from a DDI snapshot.
 }
 \section{Super class}{
-\code{\link[cts:Snapshot]{cts::Snapshot}} -> \code{DDI}
+\code{\link[cts:Snapshot]{Snapshot}} -> \code{DDI}
 }
 \section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{options}}{options to customize the DDI simulation. see \code{create_ddi()}.}
+  \if{html}{\out{<div class="r6-fields">}}
+  \describe{
+    \item{\code{options}}{options to customize the DDI simulation. see \code{create_ddi()}.}
 
-\item{\code{metadata}}{a list to store information useful for developers.}
-}
-\if{html}{\out{</div>}}
+    \item{\code{metadata}}{a list to store information useful for developers.}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{victim}}{returns the victim compound of the ddi project}
+  \if{html}{\out{<div class="r6-active-bindings">}}
+  \describe{
+    \item{\code{victim}}{returns the victim compound of the ddi project}
 
-\item{\code{perpetrators}}{returns the names of all perpetrators compounds of the ddi project}
-}
-\if{html}{\out{</div>}}
+    \item{\code{perpetrators}}{returns the names of all perpetrators compounds of the ddi project}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-DDI-new}{\code{DDI$new()}}
-\item \href{#method-DDI-print}{\code{DDI$print()}}
-\item \href{#method-DDI-clone}{\code{DDI$clone()}}
+  \itemize{
+    \item \href{#method-DDI-initialize}{\code{DDI$new()}}
+    \item \href{#method-DDI-print}{\code{DDI$print()}}
+    \item \href{#method-DDI-clone}{\code{DDI$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details><summary>Inherited methods</summary>
+\if{html}{\out{<details><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_formulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_formulation'><code>cts::Snapshot$add_formulation()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_individual"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_individual'><code>cts::Snapshot$add_individual()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_observed_data"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_observed_data'><code>cts::Snapshot$add_observed_data()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_protocol"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_protocol'><code>cts::Snapshot$add_protocol()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_simulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_simulation'><code>cts::Snapshot$add_simulation()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="check_simulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-check_simulation'><code>cts::Snapshot$check_simulation()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="create_plots"><a href='../../cts/html/Snapshot.html#method-Snapshot-create_plots'><code>cts::Snapshot$create_plots()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="export"><a href='../../cts/html/Snapshot.html#method-Snapshot-export'><code>cts::Snapshot$export()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="get_names"><a href='../../cts/html/Snapshot.html#method-Snapshot-get_names'><code>cts::Snapshot$get_names()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="get_observer_names"><a href='../../cts/html/Snapshot.html#method-Snapshot-get_observer_names'><code>cts::Snapshot$get_observer_names()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="get_pk_analysis"><a href='../../cts/html/Snapshot.html#method-Snapshot-get_pk_analysis'><code>cts::Snapshot$get_pk_analysis()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_formulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_formulation'><code>cts::Snapshot$remove_formulation()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_individual"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_individual'><code>cts::Snapshot$remove_individual()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_observed_data"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_observed_data'><code>cts::Snapshot$remove_observed_data()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_protocol"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_protocol'><code>cts::Snapshot$remove_protocol()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_simulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_simulation'><code>cts::Snapshot$remove_simulation()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="run_pk_analysis"><a href='../../cts/html/Snapshot.html#method-Snapshot-run_pk_analysis'><code>cts::Snapshot$run_pk_analysis()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="run_simulations"><a href='../../cts/html/Snapshot.html#method-Snapshot-run_simulations'><code>cts::Snapshot$run_simulations()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="validate_simulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-validate_simulation'><code>cts::Snapshot$validate_simulation()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_formulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_formulation'><code>Snapshot$add_formulation()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_individual"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_individual'><code>Snapshot$add_individual()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_observed_data"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_observed_data'><code>Snapshot$add_observed_data()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_protocol"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_protocol'><code>Snapshot$add_protocol()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="add_simulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-add_simulation'><code>Snapshot$add_simulation()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="check_simulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-check_simulation'><code>Snapshot$check_simulation()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="create_plots"><a href='../../cts/html/Snapshot.html#method-Snapshot-create_plots'><code>Snapshot$create_plots()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="export"><a href='../../cts/html/Snapshot.html#method-Snapshot-export'><code>Snapshot$export()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="get_names"><a href='../../cts/html/Snapshot.html#method-Snapshot-get_names'><code>Snapshot$get_names()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="get_observer_names"><a href='../../cts/html/Snapshot.html#method-Snapshot-get_observer_names'><code>Snapshot$get_observer_names()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="get_pk_analysis"><a href='../../cts/html/Snapshot.html#method-Snapshot-get_pk_analysis'><code>Snapshot$get_pk_analysis()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_formulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_formulation'><code>Snapshot$remove_formulation()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_individual"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_individual'><code>Snapshot$remove_individual()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_observed_data"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_observed_data'><code>Snapshot$remove_observed_data()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_protocol"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_protocol'><code>Snapshot$remove_protocol()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="remove_simulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-remove_simulation'><code>Snapshot$remove_simulation()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="run_pk_analysis"><a href='../../cts/html/Snapshot.html#method-Snapshot-run_pk_analysis'><code>Snapshot$run_pk_analysis()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="run_simulations"><a href='../../cts/html/Snapshot.html#method-Snapshot-run_simulations'><code>Snapshot$run_simulations()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="cts" data-topic="Snapshot" data-id="validate_simulation"><a href='../../cts/html/Snapshot.html#method-Snapshot-validate_simulation'><code>Snapshot$validate_simulation()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DDI-new"></a>}}
-\if{latex}{\out{\hypertarget{method-DDI-new}{}}}
-\subsection{Method \code{new()}}{
-Create a DDI object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DDI$new(victim = NULL, ..., file = NULL, options = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<a id="method-DDI-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-DDI-initialize}{}}}
+\subsection{\code{DDI$new()}}{
+  Create a DDI object.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DDI$new(victim = NULL, ..., file = NULL, options = NULL)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{victim}}{a \code{Compound} object representing the victim compound.}
+      \item{\code{...}}{a list of \code{Compound} objects representing the perpetrator compounds.}
+      \item{\code{file}}{a character string representing the path to the snapshot file to import.}
+      \item{\code{options}}{a named list of options to customize the DDI simulation. Default is to use \code{default_options}.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A new \code{DDI} object.
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{victim}}{a \code{Compound} object representing the victim compound.}
-
-\item{\code{...}}{a list of \code{Compound} objects representing the perpetrator compounds.}
-
-\item{\code{file}}{a character string representing the path to the snapshot file to import.}
-
-\item{\code{options}}{a named list of options to customize the DDI simulation. Default is to use \code{default_options}.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A new \code{DDI} object.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DDI-print"></a>}}
 \if{latex}{\out{\hypertarget{method-DDI-print}{}}}
-\subsection{Method \code{print()}}{
-Nicely print the DDI object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DDI$print()}\if{html}{\out{</div>}}
+\subsection{\code{DDI$print()}}{
+  Nicely print the DDI object.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DDI$print()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DDI-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-DDI-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DDI$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{DDI$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{DDI$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

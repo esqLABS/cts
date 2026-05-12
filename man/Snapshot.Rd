@@ -8,457 +8,499 @@ A snapshot is a JSON file that contains all the information about a model.
 This class is used to import, access and manipulate the data from a snapshot.
 }
 \section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{source}}{The source of the snapshot (local file, url, ...)}
+  \if{html}{\out{<div class="r6-fields">}}
+  \describe{
+    \item{\code{source}}{The source of the snapshot (local file, url, ...)}
 
-\item{\code{source_data}}{The input data of the snapshot}
+    \item{\code{source_data}}{The input data of the snapshot}
 
-\item{\code{version}}{version The version of the snapshot}
-}
-\if{html}{\out{</div>}}
+    \item{\code{version}}{version The version of the snapshot}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{data}}{dynamic json representation of the snapshot object}
+  \if{html}{\out{<div class="r6-active-bindings">}}
+  \describe{
+    \item{\code{data}}{dynamic json representation of the snapshot object}
 
-\item{\code{compounds}}{Access the compounds data from the snapshot.}
+    \item{\code{compounds}}{Access the compounds data from the snapshot.}
 
-\item{\code{individuals}}{Access the individuals data from the snapshot.}
+    \item{\code{individuals}}{Access the individuals data from the snapshot.}
 
-\item{\code{populations}}{Access the populations data from the snapshot.}
+    \item{\code{populations}}{Access the populations data from the snapshot.}
 
-\item{\code{formulations}}{Access the formulations data from the snapshot.}
+    \item{\code{formulations}}{Access the formulations data from the snapshot.}
 
-\item{\code{protocols}}{Access the protocols data from the snapshot.}
+    \item{\code{protocols}}{Access the protocols data from the snapshot.}
 
-\item{\code{expression_profiles}}{Access the expression profiles data from the snapshot.}
+    \item{\code{expression_profiles}}{Access the expression profiles data from the snapshot.}
 
-\item{\code{observer_sets}}{Access the observer sets data from the snapshot.}
+    \item{\code{observer_sets}}{Access the observer sets data from the snapshot.}
 
-\item{\code{events}}{Access the events data from the snapshot.}
+    \item{\code{events}}{Access the events data from the snapshot.}
 
-\item{\code{simulations}}{Access the simulations data from the snapshot.}
+    \item{\code{simulations}}{Access the simulations data from the snapshot.}
 
-\item{\code{observed_data}}{Access the observed data.}
+    \item{\code{observed_data}}{Access the observed data.}
 
-\item{\code{simulation_results}}{Access the simulations results.}
+    \item{\code{simulation_results}}{Access the simulations results.}
 
-\item{\code{pk_analysis_results}}{Formatted pk-analyses results of the simulations}
+    \item{\code{pk_analysis_results}}{Formatted pk-analyses results of the simulations}
 
-\item{\code{plots}}{Access plots for snapshot simulations.}
-}
-\if{html}{\out{</div>}}
+    \item{\code{plots}}{Access plots for snapshot simulations.}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-Snapshot-new}{\code{Snapshot$new()}}
-\item \href{#method-Snapshot-print}{\code{Snapshot$print()}}
-\item \href{#method-Snapshot-export}{\code{Snapshot$export()}}
-\item \href{#method-Snapshot-get_names}{\code{Snapshot$get_names()}}
-\item \href{#method-Snapshot-get_observer_names}{\code{Snapshot$get_observer_names()}}
-\item \href{#method-Snapshot-add_protocol}{\code{Snapshot$add_protocol()}}
-\item \href{#method-Snapshot-remove_protocol}{\code{Snapshot$remove_protocol()}}
-\item \href{#method-Snapshot-add_formulation}{\code{Snapshot$add_formulation()}}
-\item \href{#method-Snapshot-remove_formulation}{\code{Snapshot$remove_formulation()}}
-\item \href{#method-Snapshot-add_individual}{\code{Snapshot$add_individual()}}
-\item \href{#method-Snapshot-remove_individual}{\code{Snapshot$remove_individual()}}
-\item \href{#method-Snapshot-add_observed_data}{\code{Snapshot$add_observed_data()}}
-\item \href{#method-Snapshot-remove_observed_data}{\code{Snapshot$remove_observed_data()}}
-\item \href{#method-Snapshot-add_simulation}{\code{Snapshot$add_simulation()}}
-\item \href{#method-Snapshot-remove_simulation}{\code{Snapshot$remove_simulation()}}
-\item \href{#method-Snapshot-check_simulation}{\code{Snapshot$check_simulation()}}
-\item \href{#method-Snapshot-validate_simulation}{\code{Snapshot$validate_simulation()}}
-\item \href{#method-Snapshot-run_simulations}{\code{Snapshot$run_simulations()}}
-\item \href{#method-Snapshot-run_pk_analysis}{\code{Snapshot$run_pk_analysis()}}
-\item \href{#method-Snapshot-get_pk_analysis}{\code{Snapshot$get_pk_analysis()}}
-\item \href{#method-Snapshot-create_plots}{\code{Snapshot$create_plots()}}
-\item \href{#method-Snapshot-clone}{\code{Snapshot$clone()}}
-}
+  \itemize{
+    \item \href{#method-Snapshot-initialize}{\code{Snapshot$new()}}
+    \item \href{#method-Snapshot-print}{\code{Snapshot$print()}}
+    \item \href{#method-Snapshot-export}{\code{Snapshot$export()}}
+    \item \href{#method-Snapshot-get_names}{\code{Snapshot$get_names()}}
+    \item \href{#method-Snapshot-get_observer_names}{\code{Snapshot$get_observer_names()}}
+    \item \href{#method-Snapshot-add_protocol}{\code{Snapshot$add_protocol()}}
+    \item \href{#method-Snapshot-remove_protocol}{\code{Snapshot$remove_protocol()}}
+    \item \href{#method-Snapshot-add_formulation}{\code{Snapshot$add_formulation()}}
+    \item \href{#method-Snapshot-remove_formulation}{\code{Snapshot$remove_formulation()}}
+    \item \href{#method-Snapshot-add_individual}{\code{Snapshot$add_individual()}}
+    \item \href{#method-Snapshot-remove_individual}{\code{Snapshot$remove_individual()}}
+    \item \href{#method-Snapshot-add_observed_data}{\code{Snapshot$add_observed_data()}}
+    \item \href{#method-Snapshot-remove_observed_data}{\code{Snapshot$remove_observed_data()}}
+    \item \href{#method-Snapshot-add_simulation}{\code{Snapshot$add_simulation()}}
+    \item \href{#method-Snapshot-remove_simulation}{\code{Snapshot$remove_simulation()}}
+    \item \href{#method-Snapshot-check_simulation}{\code{Snapshot$check_simulation()}}
+    \item \href{#method-Snapshot-validate_simulation}{\code{Snapshot$validate_simulation()}}
+    \item \href{#method-Snapshot-run_simulations}{\code{Snapshot$run_simulations()}}
+    \item \href{#method-Snapshot-run_pk_analysis}{\code{Snapshot$run_pk_analysis()}}
+    \item \href{#method-Snapshot-get_pk_analysis}{\code{Snapshot$get_pk_analysis()}}
+    \item \href{#method-Snapshot-create_plots}{\code{Snapshot$create_plots()}}
+    \item \href{#method-Snapshot-clone}{\code{Snapshot$clone()}}
+  }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Snapshot-new"></a>}}
-\if{latex}{\out{\hypertarget{method-Snapshot-new}{}}}
-\subsection{Method \code{new()}}{
-Create a Snapshot object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$new(input)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{input}}{character string that is wether
+\if{html}{\out{<a id="method-Snapshot-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-Snapshot-initialize}{}}}
+\subsection{\code{Snapshot$new()}}{
+  Create a Snapshot object.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$new(input)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{input}}{character string that is wether
 \itemize{
 \item a compound name from the list of available compounds \code{list_compounds()}.
 \item a URL to a compound building block.
 \item a Path to a local file.
 OR an R list containing snapshot data
 }}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A new \code{Snapshot} object.
+  }
 }
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A new \code{Snapshot} object.
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-print"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-print}{}}}
-\subsection{Method \code{print()}}{
-Pretty print the snapshot data.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$print()}\if{html}{\out{</div>}}
+\subsection{\code{Snapshot$print()}}{
+  Pretty print the snapshot data.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$print()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-export"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-export}{}}}
-\subsection{Method \code{export()}}{
-Export a DDI simulation to a JSON file.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$export(path)}\if{html}{\out{</div>}}
+\subsection{\code{Snapshot$export()}}{
+  Export a DDI simulation to a JSON file.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$export(path)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{path}}{character string that is the path to the output file.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{path}}{character string that is the path to the output file.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-get_names"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-get_names}{}}}
-\subsection{Method \code{get_names()}}{
-get_names the names of a field in the snapshot.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$get_names(field)}\if{html}{\out{</div>}}
+\subsection{\code{Snapshot$get_names()}}{
+  get_names the names of a field in the snapshot.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$get_names(field)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{field}}{the field to get the names from.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{field}}{the field to get the names from.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-get_observer_names"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-get_observer_names}{}}}
-\subsection{Method \code{get_observer_names()}}{
-Get the names of all observers defined in the snapshot's ObserverSets.
+\subsection{\code{Snapshot$get_observer_names()}}{
+  Get the names of all observers defined in the snapshot's ObserverSets.
 These names can be used in output selections to include observer outputs
 in simulation results.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$get_observer_names()}\if{html}{\out{</div>}}
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$get_observer_names()}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A character vector of observer set names.
+  }
 }
 
-\subsection{Returns}{
-A character vector of observer set names.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-add_protocol"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-add_protocol}{}}}
-\subsection{Method \code{add_protocol()}}{
-add a protocol to the snapshot.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$add_protocol(protocol)}\if{html}{\out{</div>}}
+\subsection{\code{Snapshot$add_protocol()}}{
+  add a protocol to the snapshot.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$add_protocol(protocol)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{protocol}}{the protocol object to add}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{protocol}}{the protocol object to add}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-remove_protocol"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-remove_protocol}{}}}
-\subsection{Method \code{remove_protocol()}}{
-remove a protocol from the snapshot.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$remove_protocol(protocol_name)}\if{html}{\out{</div>}}
+\subsection{\code{Snapshot$remove_protocol()}}{
+  remove a protocol from the snapshot.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$remove_protocol(protocol_name)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{protocol_name}}{name(s) of the protocol(s) to remove}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{protocol_name}}{name(s) of the protocol(s) to remove}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-add_formulation"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-add_formulation}{}}}
-\subsection{Method \code{add_formulation()}}{
-add a formulation to the snapshot.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$add_formulation(formulation)}\if{html}{\out{</div>}}
+\subsection{\code{Snapshot$add_formulation()}}{
+  add a formulation to the snapshot.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$add_formulation(formulation)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{formulation}}{the formulation object to add}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{formulation}}{the formulation object to add}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-remove_formulation"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-remove_formulation}{}}}
-\subsection{Method \code{remove_formulation()}}{
-remove a formulation from the snapshot.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$remove_formulation(formulation_name)}\if{html}{\out{</div>}}
+\subsection{\code{Snapshot$remove_formulation()}}{
+  remove a formulation from the snapshot.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$remove_formulation(formulation_name)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{formulation_name}}{name(s) of the formulation(s) to remove}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{formulation_name}}{name(s) of the formulation(s) to remove}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-add_individual"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-add_individual}{}}}
-\subsection{Method \code{add_individual()}}{
-add an individual to the snapshot.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$add_individual(individual)}\if{html}{\out{</div>}}
+\subsection{\code{Snapshot$add_individual()}}{
+  add an individual to the snapshot.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$add_individual(individual)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{individual}}{the individual object to add}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{individual}}{the individual object to add}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-remove_individual"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-remove_individual}{}}}
-\subsection{Method \code{remove_individual()}}{
-remove an individual from the snapshot.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$remove_individual(individual_name)}\if{html}{\out{</div>}}
+\subsection{\code{Snapshot$remove_individual()}}{
+  remove an individual from the snapshot.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$remove_individual(individual_name)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{individual_name}}{name(s) of the individual(s) to remove}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{individual_name}}{name(s) of the individual(s) to remove}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-add_observed_data"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-add_observed_data}{}}}
-\subsection{Method \code{add_observed_data()}}{
-add an observed dataset to the snapshot.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$add_observed_data(observed_data)}\if{html}{\out{</div>}}
+\subsection{\code{Snapshot$add_observed_data()}}{
+  add an observed dataset to the snapshot.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$add_observed_data(observed_data)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{observed_data}}{the observed data set to add}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{observed_data}}{the observed data set to add}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-remove_observed_data"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-remove_observed_data}{}}}
-\subsection{Method \code{remove_observed_data()}}{
-remove an observed dataset from the snapshot.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$remove_observed_data(observed_data_name)}\if{html}{\out{</div>}}
+\subsection{\code{Snapshot$remove_observed_data()}}{
+  remove an observed dataset from the snapshot.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$remove_observed_data(observed_data_name)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{observed_data_name}}{name(s) of the observed dataset(s) to remove}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{observed_data_name}}{name(s) of the observed dataset(s) to remove}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-add_simulation"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-add_simulation}{}}}
-\subsection{Method \code{add_simulation()}}{
-add a simulation to the snapshot.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$add_simulation(simulation)}\if{html}{\out{</div>}}
+\subsection{\code{Snapshot$add_simulation()}}{
+  add a simulation to the snapshot.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$add_simulation(simulation)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{simulation}}{the simulation to add}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{simulation}}{the simulation to add}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-remove_simulation"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-remove_simulation}{}}}
-\subsection{Method \code{remove_simulation()}}{
-remove a simulation from the snapshot.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$remove_simulation(simulation_name)}\if{html}{\out{</div>}}
+\subsection{\code{Snapshot$remove_simulation()}}{
+  remove a simulation from the snapshot.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$remove_simulation(simulation_name)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{simulation_name}}{name(s) of the simulation(s) to remove}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{simulation_name}}{name(s) of the simulation(s) to remove}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-check_simulation"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-check_simulation}{}}}
-\subsection{Method \code{check_simulation()}}{
-check that a simulation is valid
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$check_simulation(simulation)}\if{html}{\out{</div>}}
+\subsection{\code{Snapshot$check_simulation()}}{
+  check that a simulation is valid
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$check_simulation(simulation)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{simulation}}{simulation object to check for validity}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{simulation}}{simulation object to check for validity}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-validate_simulation"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-validate_simulation}{}}}
-\subsection{Method \code{validate_simulation()}}{
-Validate that a simulation has all required building blocks defined
+\subsection{\code{Snapshot$validate_simulation()}}{
+  Validate that a simulation has all required building blocks defined
 in the snapshot. Unlike \code{check_simulation}, this method throws errors
 and should be called before running simulations.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$validate_simulation(simulation)}\if{html}{\out{</div>}}
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$validate_simulation(simulation)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{simulation}}{simulation object to validate}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{simulation}}{simulation object to validate}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-run_simulations"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-run_simulations}{}}}
-\subsection{Method \code{run_simulations()}}{
-run simulations defined in the snapshot
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$run_simulations(path = NULL, exportPKML = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{Snapshot$run_simulations()}}{
+  run simulations defined in the snapshot
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$run_simulations(path = NULL, exportPKML = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{path}}{character string that is the path to the output directory.}
+      \item{\code{exportPKML}}{logical that indicates if the PKML files should be exported.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{path}}{character string that is the path to the output directory.}
-
-\item{\code{exportPKML}}{logical that indicates if the PKML files should be exported.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-run_pk_analysis"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-run_pk_analysis}{}}}
-\subsection{Method \code{run_pk_analysis()}}{
-run simulations defined in the snapshot
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$run_pk_analysis(path = NULL)}\if{html}{\out{</div>}}
+\subsection{\code{Snapshot$run_pk_analysis()}}{
+  run simulations defined in the snapshot
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$run_pk_analysis(path = NULL)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{path}}{character string to the folder where to export pk analysis as csv file}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{path}}{character string to the folder where to export pk analysis as csv file}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-get_pk_analysis"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-get_pk_analysis}{}}}
-\subsection{Method \code{get_pk_analysis()}}{
-get pk results of the simulation and aggregate for population simulation
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$get_pk_analysis(aggregation = NULL, digits = 3)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{aggregation}}{character string either mean or median for the type of aggregation}
-
-\item{\code{digits}}{number of significant digits to show
+\subsection{\code{Snapshot$get_pk_analysis()}}{
+  get pk results of the simulation and aggregate for population simulation
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$get_pk_analysis(aggregation = NULL, digits = 3)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{aggregation}}{character string either mean or median for the type of aggregation}
+      \item{\code{digits}}{number of significant digits to show
 Plot Time profile of DDI simulations defined in the ddi project}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-create_plots"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-create_plots}{}}}
-\subsection{Method \code{create_plots()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$create_plots(...)}\if{html}{\out{</div>}}
+\subsection{\code{Snapshot$create_plots()}}{
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$create_plots(...)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{...}}{additional arguments to pass to the plotPopulationTimeProfile (for example aggregation method)}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    a list of plots
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{additional arguments to pass to the plotPopulationTimeProfile (for example aggregation method)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-a list of plots
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Snapshot-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-Snapshot-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Snapshot$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{Snapshot$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Snapshot$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }
